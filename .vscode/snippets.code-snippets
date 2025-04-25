@@ -1,0 +1,156 @@
+{
+	"Part statement": {
+		"prefix": "pts",
+		"body": [
+			"part '${TM_FILENAME_BASE}.g.dart';"
+		],
+		"description": "Creates a filled-in part statement"
+	},
+	"Part 'Freezed' statement": {
+		"prefix": "ptf",
+		"body": [
+			"part '${TM_FILENAME_BASE}.freezed.dart';"
+		],
+		"description": "Creates a filled-in freezed part statement"
+	},
+	"Part 'Generated' statement": {
+		"prefix": "ptg",
+		"body": [
+			"part '${TM_FILENAME_BASE}.g.dart';"
+		],
+		"description": "Creates a filled-in freezed part statement"
+	},
+	"Freezed Model Class": {
+		"prefix": "fmodel",
+		"body": [
+			"import 'package:freezed_annotation/freezed_annotation.dart';",
+			"",
+			"part '${TM_FILENAME_BASE}.freezed.dart';",
+			"part '${TM_FILENAME_BASE}.g.dart';",
+			"",
+			"@freezed",
+			"class ${1:DataClass} with _$${1:DataClass} {",
+			"  const factory ${1:DataClass}({",
+			"required String id,",
+			"",
+			"}) = _${1:DataClass};",
+			"}",
+			""
+		],
+		"description": "Freezed Data Class"
+	},
+	"Freezed Entity Class": {
+		"prefix": "fentity",
+		"body": [
+			"import 'package:freezed_annotation/freezed_annotation.dart';",
+			"",
+			"part '${TM_FILENAME_BASE}.freezed.dart';",
+			"",
+			"@freezed",
+			"class ${1:DataClass} with _$${1:DataClass} {",
+			"  const factory ${1:DataClass}({",
+			"required String id,",
+			"",
+			"}) = _${1:DataClass};",
+			"}",
+			""
+		],
+		"description": "Freezed Data Class"
+	},
+	"Freezed Union": {
+		"prefix": "funion",
+		"body": [
+			"import 'package:freezed_annotation/freezed_annotation.dart';",
+			"",
+			"part '${TM_FILENAME_BASE}.freezed.dart';",
+			"",
+			"@freezed",
+			"class ${1:Union} with _$${1:Union} {",
+			"  const factory ${1:Union}(${4}) = _${1:Union};",
+			"}"
+		],
+		"description": "Freezed Union"
+	},
+	"Freezed Union Case": {
+		"prefix": "fcase",
+		"body": [
+			"const factory ${1:Union}.${2}(${3}) = _${4};"
+		],
+		"description": "Freezed Union Case"
+	},
+	"Value Object": {
+		"prefix": "vaobj",
+		"body": [
+			"class ${1:DataClass} extends ValueObject<${2:DataType}> {",
+			"  factory ${1:DataClass}(String input) {",
+			"    return ${1:DataClass}._(",
+			"    );",
+			"  }",
+			"",
+			"  const ${1:DataClass}._(Either<ValueFailure<${2:DataType}>, ${2:DataType}> value) : super(value);",
+			"}"
+		]
+	},
+	"toString": {
+		"prefix": "toStr",
+		"body": [
+			"@override",
+			"String toString() {",
+			"  return ${1:toString};",
+			"}"
+		],
+		"description": "Returns a string representation of this object."
+	},
+	"ListView.Builder": {
+		"prefix": "listViewB",
+		"body": [
+			"ListView.builder(",
+			"  itemCount: ${1:1},",
+			"  itemBuilder: (BuildContext context, int index) {",
+			"    return ${2:};",
+			"  },",
+			"),"
+		],
+		"description": "Creates a scrollable, linear array of widgets that are created on demand.Providing a non-null itemCount improves the ability of the [ListView] to estimate the maximum scroll extent."
+	},
+	"InitState ": {
+		"prefix": "initS",
+		"body": [
+			"@override",
+			"void initState() {",
+			"  super.initState();",
+			"  ${0:}",
+			"}"
+		],
+		"description": "Called when this object is inserted into the tree. The framework will call this method exactly once for each State object it creates."
+	},
+	"Dispose": {
+		"prefix": "dis",
+		"body": [
+			"@override",
+			"void dispose() {",
+			"  ${0:}",
+			"  super.dispose();",
+			"}"
+		],
+		"description": "Called when this object is removed from the tree permanently. The framework calls this method when this State object will never build again."
+	},
+	"Build Method": {
+		"prefix": "build",
+		"body": [
+			"@override",
+			"Widget build(BuildContext context) {",
+			"  return ${0:};",
+			"}"
+		],
+		"description": "Describes the part of the user interface represented by this widget."
+	},
+	
+	"FromJson": {
+		"prefix": "fromjson",
+		"body": [
+			"factory ${1:name}.fromJson(Map<String, dynamic> json)",
+			"  => _$${1:name}FromJson(json);"
+		]
+	},
+}

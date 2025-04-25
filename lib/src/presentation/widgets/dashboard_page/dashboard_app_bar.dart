@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated_box_size.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/images.dart';
+
+class DashboardAppBar extends StatelessWidget {
+  const DashboardAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<ScrollCubit, ScrollState>(
+      buildWhen: (p, c) => p.showAppBar != c.showAppBar,
+      builder: (context, state) {
+        return AnimatedBoxSize(
+          isChildVisible: state.showAppBar,
+          collapsedChild: const SizedBox(height: Dimensions.appBarHeight),
+          child: PreferredSize(
+            preferredSize: const Size.fromHeight(
+              Dimensions.appBarHeight,
+            ),
+            child: AppBar(
+              titleSpacing: Dimensions.mediumPadding,
+              backgroundColor: theme.colorScheme.surface,
+              foregroundColor: theme.colorScheme.surface,
+              surfaceTintColor: theme.colorScheme.surface,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BlocBuilder<RouterCubit, RouterState>(
+                    buildWhen: (p, c) => p.isMainPage != c.isMainPage,
+                    builder: (context, state) {
+                      return AnimatedOpacity(
+                        duration: const Duration(milliseconds: 200),
+                        opacity: state.isMainPage ? 0 : 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            right: Dimensions.mediumPadding,
+                          ),
+                          child: SizedBox.square(
+                            dimension: Dimensions.elementHeight,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.borderRadiusOfCircle,
+                              ),
+                              onTap: () {
+                                if (state.isMainPage) return;
+                                router.pop();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 6),
+                                child: Icon(
+                                  Icons.arrow_back_ios,
+                                  color: theme.colorScheme.onSurface,
+                                  size: 22,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  Expanded(
+                    child: SvgPicture.asset(
+                      Images.logo,
+                      width: 165,
+                    ),
+                  ),
+                  const DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: CustomColors.primaryYellowColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: SizedBox.square(
+                      dimension: Dimensions.elementHeight,
+                      child: Icon(
+                        Icons.search,
+                        color: CustomColors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

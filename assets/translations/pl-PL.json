@@ -1,0 +1,130 @@
+{
+    "dashboard": {
+        "catalogue": "katalog",
+        "donation": "wpłać darowiznę",
+        "last_read": "ostatnio\nczytane",
+        "account_not_logged": "logowanie",
+        "account_logged": "moja\nbiblioteka"
+    },
+    "reading": {
+        "sheet": {
+            "bookmark_add": "dodaj zakładkę",
+            "bookmark_edit": "edytuj zakładkę"
+        },
+        "snackbar": {
+            "bookmark_added_success": "Zakładka dodana",
+            "bookmark_edited_success": "Zakładka edytowana",
+            "bookmark_deleted_success": "Zakładka usunięta",
+            "bookmark_add_error": "Nie udało się dodać zakładki",
+            "bookmark_edit_error": "Nie udało się edytować zakładki",
+            "bookmark_delete_error": "Nie udało się usunąć zakładki"
+        }
+    },
+    "login": {
+        "title": "Zaloguj się",
+        "title_alternative": "Zarejestruj się",
+        "user_name": "nazwa użytkownika lub email",
+        "password": "hasło",
+        "email": "adres email",
+        "login": "Zaloguj się",
+        "register": "Zarejestruj się",
+        "forgot": "Zapomniałeś hasła?",
+        "success": "Zalogowano pomyślnie",
+        "logout": "Wylogowano pomyślnie",
+        "user_name_validation": "pole nie może być puste",
+        "password_validation_empty": "hasło nie może być puste",
+        "email_validation": "nieprawidłowy adres email",
+        "no_account": "Nie masz jeszcze konta?",
+        "has_account": "Masz już konto?",
+        "info": {
+            "mkidn": "Dofinansowano ze środków Ministra Kultury i Dziedzictwa Narodowego pochodzących z Funduszu Promocji Kultury – państwowego funduszu celowego.",
+            "pfron": "Dofinansowano ze środków Państwowego Funduszu Rehabilitacji Osób Niepełnosprawnych."
+        },
+        "errors": {
+            "login": "Nieprawidłowa nazwa użytkownika lub hasło",
+            "register": "Coś poszło nie tak :("
+        },
+        "register_flow_dialog": {
+            "title": "Potwierdź email",
+            "content": "Potwierdź email aby zakończyć rejestrację. Następnie użyj przycisku poniżej aby zalogować się na swoje konto.",
+            "button": "Zaloguj się",
+            "error": "Email nie został jeszcze potwierdzony"
+        },
+        "reset_dialog": {
+            "title": "Resetowanie hasła",
+            "content": "Wprowadź adres e-mail na który wyślemy link do zresetowania hasła",
+            "button": "Wyślij"
+        }
+    },
+    "donation": {
+        "title": "Potrzebujemy twojego wsparcia",
+        "content_1": "Udostępniamy książki i audiobooki za darmo, co jest możliwe dzięki darowiznom od osób takich jak Ty!",
+        "content_2": "Już teraz załóż konto, przekaż nam darowiznę i zanurz się w lekturze bez naszych ciągłych próśb o wsparcie!",
+        "button": "Dorzucam się!"
+    },
+    "audio_dialog": {
+        "part": "Rozdział {part}",
+        "settings": {
+            "sleep_timer": "wyłącz za {time} minut",
+            "speed_selector": "prędkość odtwarzania {speed}",
+            "part_selector": "odtwarzaj do końca"
+        }
+    },
+    "account": {
+        "title": "Witaj, {name}",
+        "email": "Adres email",
+        "password": "Hasło"
+    },
+    "catalogue": {
+        "title": "Katalog"
+    },
+    "reader": {
+        "settings": {
+            "sans": "krój bezszeryfowy",
+            "serif": "krój szeryfowy"
+        }
+    },
+    "book": {
+        "more": "więcej szczegółów"
+    },
+    "book_lists": {
+        "sheet": {
+            "title": "Dodaj książkę\ndo Listy",
+            "add": "dodaj nową listę",
+            "save": "dodaj"
+        }
+    },
+    "settings": {
+        "title": "Ustawienia",
+        "notifications": "Powiadomienia",
+        "change_password": "Zmień hasło",
+        "theme": "Tryb ciemny",
+        "set_theme": {
+            "off": "off",
+            "on": "on",
+            "auto": "auto"
+        },
+        "rate": "Oceń aplikację",
+        "delete": "Usuń konto",
+        "logout": "Wyloguj się"
+    },
+    "common": {
+        "sorting": {
+            "alpha_desc": "Alfabetycznie malejąco",
+            "alpha_asc": "Alfabetycznie rosnąco",
+            "popularity_desc": "Popularność malejąco",
+            "popularity_asc": "Popularność rosnąco"
+        },
+        "icon_button": {
+            "read": "Czytaj",
+            "listen": "Słuchaj",
+            "like": "Polub",
+            "liked": "Polubione",
+            "sort": "Sortuj",
+            "filter": "Filtruj"
+        },
+        "snackbar": {
+            "not_logged": "Musisz być zalogowany aby to zrobić"
+        }
+    }
+}
