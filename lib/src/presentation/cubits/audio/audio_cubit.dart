@@ -18,12 +18,15 @@ class AudioCubit extends SafeCubit<AudioState> {
   final AudiobookRepository _audiobookRepository;
   AudioCubit(this._audiobookRepository) : super(const AudioState());
   Timer? _sleepTimer;
+  Timer? _positionTimeoutTimer;
 
   // This restores player progress if needed
   int _failureCount = 0;
 
   // Audioplayer instance
-  final AudioPlayer _player = AudioPlayer();
+  final AudioPlayer _player = AudioPlayer(
+    androidApplyAudioAttributes: false,
+  );
 
   // Audio session instance
   final CustomAudioSession _audioSession = CustomAudioSession();
@@ -57,6 +60,13 @@ class AudioCubit extends SafeCubit<AudioState> {
 
   // Select book for AudioPlayer
   Future<void> pickBook(BookModel book) async {
+    if (state.book?.slug == book.slug) {
+      return;
+    }
+
+    // New book selected, reset all values
+    await stop();
+
     emit(
       state.copyWith(
         book: book,
@@ -67,7 +77,6 @@ class AudioCubit extends SafeCubit<AudioState> {
     final audiobookResponse = await _audiobookRepository.getAudiobook(
       slug: book.slug,
     );
-    await Future.delayed(const Duration(milliseconds: 2000));
 
     audiobookResponse.when(
       success: (data, _) {
@@ -366,7 +375,10 @@ class AudioCubit extends SafeCubit<AudioState> {
   }
 
   void _attachPositionListener() {
+    _positionController?.cancel();
     _positionController = _player.positionStream.listen((event) {
+      _resetPositionTimeout();
+
       _calculatePosition(
         index: _player.currentIndex ?? 0,
         position: event.inSeconds,
@@ -378,9 +390,23 @@ class AudioCubit extends SafeCubit<AudioState> {
         emit(state.copyWith(isPlaying: false));
         return;
       }
+      // This covers the case when the user is using headphones and resumed the playback
+      // using buttons on the headphones
+      if (event == ProcessingState.ready) {
+        emit(state.copyWith(isPlaying: true));
+      }
       if (event == ProcessingState.idle) {
         stop();
       }
+    });
+  }
+
+  void _resetPositionTimeout() {
+    _positionTimeoutTimer?.cancel();
+    _positionTimeoutTimer = Timer(const Duration(seconds: 1), () {
+      // No events for 1 second, we can assume that the user has stopped the playback
+      // using headphones, pause it in UI as well.
+      pause();
     });
   }
 
@@ -423,6 +449,7 @@ class AudioCubit extends SafeCubit<AudioState> {
   Future<void> close() async {
     emit(state.copyWith(isPlaying: false));
     _sleepTimer?.cancel();
+    _positionTimeoutTimer?.cancel();
     _cancelSubscriptions();
     await _player.dispose();
     await _audioSession.setActive(false);
