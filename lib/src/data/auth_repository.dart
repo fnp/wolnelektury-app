@@ -92,7 +92,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     }
 
     try {
-      final user = UserModel.fromJson(response.data![0]);
+      final user = UserModel.fromJson(response.data!.first);
       return DataState.success(user);
     } catch (e) {
       return const DataState.failed(Failure.badResponse());
@@ -110,7 +110,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     }
 
     try {
-      final agreements = RegisterAgreementModel.fromJson(response.data![0]);
+      final agreements = RegisterAgreementModel.fromJson(response.data!.first);
       return DataState.success(agreements);
     } catch (e) {
       return const DataState.failed(Failure.badResponse());

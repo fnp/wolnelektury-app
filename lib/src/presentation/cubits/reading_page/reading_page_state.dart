@@ -20,10 +20,22 @@ class ReadingPageState with _$ReadingPageState {
     int? selectedIndex,
     ReaderBookModelContent? selectedParagraph,
     @Default(false) bool isAddingBookmark,
+
+    // Progress
+    TextProgressModel? progress,
   }) = _ReadingPageState;
 }
 
 extension ReadingPageStateX on ReadingPageState {
+  int? findElementIndexByParagraphIndex(
+    int paragraphIndex,
+  ) {
+    if (book == null) return null;
+    return book!.contents.indexWhere(
+      (element) => element.paragraphIndex == paragraphIndex,
+    );
+  }
+
   bool shouldRebuild(ReadingPageState state) {
     return textSizeFactor != state.textSizeFactor ||
         book != state.book ||

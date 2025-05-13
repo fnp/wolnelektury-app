@@ -28,7 +28,8 @@ mixin _$ReadingPageState {
   int? get selectedIndex => throw _privateConstructorUsedError;
   ReaderBookModelContent? get selectedParagraph =>
       throw _privateConstructorUsedError;
-  bool get isAddingBookmark => throw _privateConstructorUsedError;
+  bool get isAddingBookmark => throw _privateConstructorUsedError; // Progress
+  TextProgressModel? get progress => throw _privateConstructorUsedError;
 
   /// Create a copy of ReadingPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -54,9 +55,11 @@ abstract class $ReadingPageStateCopyWith<$Res> {
       List<BookmarkModel> bookmarks,
       int? selectedIndex,
       ReaderBookModelContent? selectedParagraph,
-      bool isAddingBookmark});
+      bool isAddingBookmark,
+      TextProgressModel? progress});
 
   $BookmarkModelCopyWith<$Res>? get editingBookmark;
+  $TextProgressModelCopyWith<$Res>? get progress;
 }
 
 /// @nodoc
@@ -85,6 +88,7 @@ class _$ReadingPageStateCopyWithImpl<$Res, $Val extends ReadingPageState>
     Object? selectedIndex = freezed,
     Object? selectedParagraph = freezed,
     Object? isAddingBookmark = null,
+    Object? progress = freezed,
   }) {
     return _then(_value.copyWith(
       currentSlug: freezed == currentSlug
@@ -131,6 +135,10 @@ class _$ReadingPageStateCopyWithImpl<$Res, $Val extends ReadingPageState>
           ? _value.isAddingBookmark
           : isAddingBookmark // ignore: cast_nullable_to_non_nullable
               as bool,
+      progress: freezed == progress
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as TextProgressModel?,
     ) as $Val);
   }
 
@@ -145,6 +153,20 @@ class _$ReadingPageStateCopyWithImpl<$Res, $Val extends ReadingPageState>
 
     return $BookmarkModelCopyWith<$Res>(_value.editingBookmark!, (value) {
       return _then(_value.copyWith(editingBookmark: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ReadingPageState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TextProgressModelCopyWith<$Res>? get progress {
+    if (_value.progress == null) {
+      return null;
+    }
+
+    return $TextProgressModelCopyWith<$Res>(_value.progress!, (value) {
+      return _then(_value.copyWith(progress: value) as $Val);
     });
   }
 }
@@ -168,10 +190,13 @@ abstract class _$$ReadingPageStateImplCopyWith<$Res>
       List<BookmarkModel> bookmarks,
       int? selectedIndex,
       ReaderBookModelContent? selectedParagraph,
-      bool isAddingBookmark});
+      bool isAddingBookmark,
+      TextProgressModel? progress});
 
   @override
   $BookmarkModelCopyWith<$Res>? get editingBookmark;
+  @override
+  $TextProgressModelCopyWith<$Res>? get progress;
 }
 
 /// @nodoc
@@ -198,6 +223,7 @@ class __$$ReadingPageStateImplCopyWithImpl<$Res>
     Object? selectedIndex = freezed,
     Object? selectedParagraph = freezed,
     Object? isAddingBookmark = null,
+    Object? progress = freezed,
   }) {
     return _then(_$ReadingPageStateImpl(
       currentSlug: freezed == currentSlug
@@ -244,6 +270,10 @@ class __$$ReadingPageStateImplCopyWithImpl<$Res>
           ? _value.isAddingBookmark
           : isAddingBookmark // ignore: cast_nullable_to_non_nullable
               as bool,
+      progress: freezed == progress
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as TextProgressModel?,
     ));
   }
 }
@@ -262,7 +292,8 @@ class _$ReadingPageStateImpl implements _ReadingPageState {
       final List<BookmarkModel> bookmarks = const [],
       this.selectedIndex,
       this.selectedParagraph,
-      this.isAddingBookmark = false})
+      this.isAddingBookmark = false,
+      this.progress})
       : _bookmarks = bookmarks;
 
   @override
@@ -300,10 +331,13 @@ class _$ReadingPageStateImpl implements _ReadingPageState {
   @override
   @JsonKey()
   final bool isAddingBookmark;
+// Progress
+  @override
+  final TextProgressModel? progress;
 
   @override
   String toString() {
-    return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarks: $bookmarks, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark)';
+    return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarks: $bookmarks, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress)';
   }
 
   @override
@@ -331,7 +365,9 @@ class _$ReadingPageStateImpl implements _ReadingPageState {
             (identical(other.selectedParagraph, selectedParagraph) ||
                 other.selectedParagraph == selectedParagraph) &&
             (identical(other.isAddingBookmark, isAddingBookmark) ||
-                other.isAddingBookmark == isAddingBookmark));
+                other.isAddingBookmark == isAddingBookmark) &&
+            (identical(other.progress, progress) ||
+                other.progress == progress));
   }
 
   @override
@@ -347,7 +383,8 @@ class _$ReadingPageStateImpl implements _ReadingPageState {
       const DeepCollectionEquality().hash(_bookmarks),
       selectedIndex,
       selectedParagraph,
-      isAddingBookmark);
+      isAddingBookmark,
+      progress);
 
   /// Create a copy of ReadingPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -371,7 +408,8 @@ abstract class _ReadingPageState implements ReadingPageState {
       final List<BookmarkModel> bookmarks,
       final int? selectedIndex,
       final ReaderBookModelContent? selectedParagraph,
-      final bool isAddingBookmark}) = _$ReadingPageStateImpl;
+      final bool isAddingBookmark,
+      final TextProgressModel? progress}) = _$ReadingPageStateImpl;
 
   @override
   String? get currentSlug;
@@ -394,7 +432,9 @@ abstract class _ReadingPageState implements ReadingPageState {
   @override
   ReaderBookModelContent? get selectedParagraph;
   @override
-  bool get isAddingBookmark;
+  bool get isAddingBookmark; // Progress
+  @override
+  TextProgressModel? get progress;
 
   /// Create a copy of ReadingPageState
   /// with the given fields replaced by the non-null parameter values.

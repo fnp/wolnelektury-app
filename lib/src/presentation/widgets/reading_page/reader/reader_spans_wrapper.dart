@@ -7,12 +7,12 @@ import 'package:wolnelektury/src/presentation/widgets/reading_page/paragraph_she
 import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
-class BuildReaderSpansWrapper extends StatelessWidget {
+class ReaderSpansWrapper extends StatelessWidget {
   final ReaderBookModelContent element;
   final String fontFamily;
   final double fontSize;
   final bool debugPrint;
-  const BuildReaderSpansWrapper({
+  const ReaderSpansWrapper({
     super.key,
     required this.element,
     required this.fontFamily,

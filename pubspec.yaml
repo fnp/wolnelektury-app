@@ -54,6 +54,7 @@ dependencies:
   logger: 2.5.0
   url_launcher: 6.3.1
   scroll_to_index: 3.0.1
+  scrollable_positioned_list: 0.3.8
   skeletonizer: 1.4.2
   visibility_detector: 0.4.0+2
   webview_flutter: ^4.10.0

@@ -33,8 +33,6 @@ class FavouritesCubit extends SafeCubit<FavouritesState> {
       targetValue: true,
     );
 
-    print('Add to favourites: $response');
-
     response.when(
       success: (_, __) {},
       failed: (failure) {
@@ -53,7 +51,6 @@ class FavouritesCubit extends SafeCubit<FavouritesState> {
       targetValue: false,
     );
 
-    print('Remove from favourites: $response');
     response.when(
       success: (_, __) {},
       failed: (failure) {

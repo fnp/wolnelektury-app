@@ -238,7 +238,6 @@ class BooksRepositoryImplementation extends BooksRepository {
           '$_likeEndpoint/$slug/',
         );
 
-        print(response);
         if (response.error != null) {
           return const DataState.failed(
             Failure.badResponse(),

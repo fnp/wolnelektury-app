@@ -4,7 +4,9 @@ import 'dart:math';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/data/audiobook_repository.dart';
+import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/enums/audio_player_speed_enum.dart';
@@ -16,12 +18,15 @@ part 'audio_state.dart';
 
 class AudioCubit extends SafeCubit<AudioState> {
   final AudiobookRepository _audiobookRepository;
-  AudioCubit(this._audiobookRepository) : super(const AudioState());
+  final ProgressRepository _progressRepository;
+  AudioCubit(this._audiobookRepository, this._progressRepository)
+      : super(const AudioState());
   Timer? _sleepTimer;
   Timer? _positionTimeoutTimer;
 
   // This restores player progress if needed
   int _failureCount = 0;
+  int _currentlySavingProgress = 0;
 
   // Audioplayer instance
   final AudioPlayer _player = AudioPlayer(
@@ -35,10 +40,12 @@ class AudioCubit extends SafeCubit<AudioState> {
   StreamSubscription<Duration>? _positionController;
   StreamSubscription<ProcessingState>? _playerStateController;
 
+  // This is used to toggle opening settings
   void toggleSettings(bool value) {
     emit(state.copyWith(isSettingsOpened: value));
   }
 
+  // This is setting the sleep timer in the settings
   void changeSleepTimer(int timer, {bool cancelTimer = false}) {
     emit(state.copyWith(sleepTimer: timer, playToPart: 0));
     _sleepTimer?.cancel();
@@ -53,6 +60,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     }
   }
 
+  // This setting changes the speed of the audioplayer
   void changeSpeed(AudioPlayerSpeedEnum speed) {
     emit(state.copyWith(speed: speed));
     _player.setSpeed(speed.value);
@@ -61,6 +69,8 @@ class AudioCubit extends SafeCubit<AudioState> {
   // Select book for AudioPlayer
   Future<void> pickBook(BookModel book) async {
     if (state.book?.slug == book.slug) {
+      // Book already selected, check if we need to set progress
+      await _getAndSetProgress();
       return;
     }
 
@@ -94,7 +104,7 @@ class AudioCubit extends SafeCubit<AudioState> {
       },
       failed: (_) {
         emit(state.copyWith(isLoadingAudiobook: false));
-        //todo handle failure
+        //TODO handle failure
       },
     );
   }
@@ -110,6 +120,8 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(playToPart: 0));
   }
 
+  // This is ussed to set the playToPart value, which is used to
+  // set the sleep timer to the end of the part
   void decreasePlayToPart() {
     final currentlyPlayingPart = _player.currentIndex ?? 0;
     final currentlySetToPart = state.playToPart - 1;
@@ -133,6 +145,8 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(playToPart: currentlySetToPart));
   }
 
+  // This is ussed to set the playToPart value, which is used to
+  // set the sleep timer to the end of the part
   void increasePlayToPart() {
     final currentlyPlayingPart = _player.currentIndex ?? 0;
     if (state.playToPart > state.parts.length - 1) return;
@@ -195,6 +209,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     ]);
   }
 
+  // Completely stops the player and resets the playlist
   Future<void> stop() async {
     _cancelSubscriptions();
     emit(
@@ -215,6 +230,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     ]);
   }
 
+  // This forwards the audiobook by 15 seconds
   Future<void> forward15s() async {
     final currentIndex = _player.currentIndex ?? 0;
     final positionInCurrentPart = _player.position.inSeconds;
@@ -238,6 +254,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     await _player.seek(Duration(seconds: newPosition), index: newIndex);
   }
 
+  // This rewinds the audiobook by 15 seconds
   Future<void> backward15s() async {
     final currentIndex = _player.currentIndex ?? 0;
     final positionInCurrentPart = _player.position.inSeconds;
@@ -275,16 +292,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     }
     // Seeked seconds
     final seconds = optionalSeconds ?? state.localPosition!;
-    int remainingSeconds = seconds;
-    int index = state.parts.length - 1;
-    // Finding correct seconds of correct audiobooks part
-    for (int i = 0; i < state.parts.length; i++) {
-      if (remainingSeconds < state.parts[i].duration) {
-        index = i;
-        break;
-      }
-      remainingSeconds -= state.parts[i].duration.floor();
-    }
+    final foundPosition = _findPositionAndIndex(seconds);
 
     emit(
       state.copyWith(
@@ -302,9 +310,9 @@ class AudioCubit extends SafeCubit<AudioState> {
     // Seek to the found position
     await _player.seek(
       Duration(
-        seconds: remainingSeconds,
+        seconds: foundPosition.$1,
       ),
-      index: index,
+      index: foundPosition.$2,
     );
   }
 
@@ -359,12 +367,19 @@ class AudioCubit extends SafeCubit<AudioState> {
       ).toList(),
     );
 
+    // This gets the progress of the audiobook from the repository
+    // and sets the position in UI as well as in the player
+    (int, int) foundPosition = await _getAndSetProgress();
+    AppLogger.instance.d(
+      'AudioCubit',
+      'Prepared playling for book ${state.book?.title}',
+    );
     await Future.wait([
       _audioSession.initializationFuture,
       _player.setAudioSource(
         playlist,
-        initialIndex: 0,
-        initialPosition: Duration.zero,
+        initialIndex: foundPosition.$2,
+        initialPosition: Duration(seconds: foundPosition.$1),
       ),
       _player.setLoopMode(LoopMode.off),
       _player.setSpeed(AudioPlayerSpeedEnum.x1.value),
@@ -392,7 +407,7 @@ class AudioCubit extends SafeCubit<AudioState> {
       }
       // This covers the case when the user is using headphones and resumed the playback
       // using buttons on the headphones
-      if (event == ProcessingState.ready) {
+      if (event == ProcessingState.ready && _player.playing) {
         emit(state.copyWith(isPlaying: true));
       }
       if (event == ProcessingState.idle) {
@@ -419,6 +434,10 @@ class AudioCubit extends SafeCubit<AudioState> {
     );
 
     final newPosition = previousDuration + position;
+
+    // Saving progress happens here, we save it every 10 seconds
+    _saveProgress(newPosition);
+
     // 1. If we are too far from the current position, we ignore the change, gives
     // really smooth experience for the user
     // 2. If there are a lot of tries, something went wrong, allow the change
@@ -438,6 +457,70 @@ class AudioCubit extends SafeCubit<AudioState> {
         currentlyPlayingPart: index,
       ),
     );
+  }
+
+  // This function finds the position in the index of the audiobook from
+  // given timestamp in seconds
+  (int positionInIndex, int index) _findPositionAndIndex(
+    int position,
+  ) {
+    int index = 0;
+    int remainingSeconds = position;
+
+    for (int i = 0; i < state.parts.length; i++) {
+      if (remainingSeconds < state.parts[i].duration) {
+        index = i;
+        break;
+      }
+      remainingSeconds -= state.parts[i].duration.floor();
+    }
+
+    return (remainingSeconds, index);
+  }
+
+  // This function saves the progress of the audiobook in the repository
+  Future<void> _saveProgress(int position) async {
+    if (position % 10 != 0 || position == 0) return;
+    if (state.book == null) return;
+    if (_currentlySavingProgress == position) {
+      return;
+    }
+    _currentlySavingProgress = position;
+    AppLogger.instance.d(
+      'AudioCubit',
+      'Saving progress at position: $position',
+    );
+    _progressRepository.setAudioProgress(
+      slug: state.book!.slug,
+      position: position,
+    );
+  }
+
+  // This function gets the progress of the audiobook from the repository
+  // and sets the position in UI, used in setting player position as well
+  Future<(int, int)> _getAndSetProgress() async {
+    final existingProgress = await _progressRepository.getAudioProgressByBook(
+      slug: state.book!.slug,
+    );
+    (int, int) foundPosition = (0, 0);
+    existingProgress.when(
+      success: (data, _) {
+        final timestamp = data.audioTimestamp ?? 0;
+        foundPosition = _findPositionAndIndex(timestamp);
+        AppLogger.instance.d(
+          'AudioCubit',
+          'Retrieving progress and setting at: $timestamp',
+        );
+        emit(
+          state.copyWith(
+            statePosition: timestamp,
+            currentlyPlayingPart: foundPosition.$2,
+          ),
+        );
+      },
+      failed: (_) {},
+    );
+    return foundPosition;
   }
 
   void _cancelSubscriptions() {
