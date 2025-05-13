@@ -9,7 +9,7 @@ part of 'progress_model.dart';
 _$ProgressModelImpl _$$ProgressModelImplFromJson(Map<String, dynamic> json) =>
     _$ProgressModelImpl(
       book: json['book'] as String?,
-      slug: json['slug'] as String?,
+      slug: json['book_slug'] as String?,
       lastMode: json['last_mode'] as String?,
       textPercent: (json['text_percent'] as num?)?.toDouble(),
       textAnchor: json['text_anchor'] as String?,
@@ -26,7 +26,7 @@ _$ProgressModelImpl _$$ProgressModelImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ProgressModelImplToJson(_$ProgressModelImpl instance) =>
     <String, dynamic>{
       'book': instance.book,
-      'slug': instance.slug,
+      'book_slug': instance.slug,
       'last_mode': instance.lastMode,
       'text_percent': instance.textPercent,
       'text_anchor': instance.textAnchor,

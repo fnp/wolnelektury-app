@@ -13,7 +13,7 @@ const cataloguePageConfig = _RouteConfig(
   path: '/cataloguePage',
 );
 
-const bookmarkPageConfig = _RouteConfig(
+const lastReadPageConfig = _RouteConfig(
   name: 'bookmarkPage',
   path: '/bookmarkPage',
 );

@@ -6,7 +6,9 @@ import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';
 
 abstract class ProgressRepository {
-  Future<DataState<List<ProgressModel>>> getProgresses();
+  Future<DataState<List<ProgressModel>>> getProgresses({
+    String? url,
+  });
   Future<DataState<TextProgressModel>> getTextProgressByBook({
     required String slug,
   });
@@ -62,10 +64,14 @@ class ProgressRepositoryImplementation extends ProgressRepository {
   }
 
   @override
-  Future<DataState<List<ProgressModel>>> getProgresses() async {
+  Future<DataState<List<ProgressModel>>> getProgresses({
+    String? url,
+  }) async {
     try {
+      final effectiveUrl = url ?? progressEndpoint;
+
       final response = await _apiService.getRequest(
-        progressEndpoint,
+        effectiveUrl,
         useCache: CacheEnum.ignore,
       );
 

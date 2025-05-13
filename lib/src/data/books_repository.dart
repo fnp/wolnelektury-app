@@ -49,6 +49,10 @@ abstract class BooksRepository {
   Future<DataState<ReaderBookModel>> getBookJson({
     required String slug,
   });
+
+  Future<DataState<BookModel>> getBookBySlug({
+    required String slug,
+  });
 }
 
 class BooksRepositoryImplementation extends BooksRepository {
@@ -60,6 +64,30 @@ class BooksRepositoryImplementation extends BooksRepository {
 
   final ApiService _apiService;
   BooksRepositoryImplementation(this._apiService);
+
+  @override
+  Future<DataState<BookModel>> getBookBySlug({
+    required String slug,
+  }) async {
+    try {
+      final response = await _apiService.getRequest(
+        '$_booksEndpoint/$slug/',
+      );
+
+      if (response.hasData) {
+        return DataState.success(
+          BookModel.fromJson(response.data!.first),
+        );
+      }
+      return const DataState.failed(
+        Failure.notFound(),
+      );
+    } catch (e) {
+      return const DataState.failed(
+        Failure.badResponse(),
+      );
+    }
+  }
 
   @override
   Future<DataState<void>> deleteBookmark({required String href}) async {

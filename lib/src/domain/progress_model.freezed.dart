@@ -21,6 +21,7 @@ ProgressModel _$ProgressModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ProgressModel {
   String? get book => throw _privateConstructorUsedError;
+  @JsonKey(name: 'book_slug')
   String? get slug => throw _privateConstructorUsedError;
   @JsonKey(name: 'last_mode')
   String? get lastMode => throw _privateConstructorUsedError;
@@ -59,7 +60,7 @@ abstract class $ProgressModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String? book,
-      String? slug,
+      @JsonKey(name: 'book_slug') String? slug,
       @JsonKey(name: 'last_mode') String? lastMode,
       @JsonKey(name: 'text_percent') double? textPercent,
       @JsonKey(name: 'text_anchor') String? textAnchor,
@@ -158,7 +159,7 @@ abstract class _$$ProgressModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? book,
-      String? slug,
+      @JsonKey(name: 'book_slug') String? slug,
       @JsonKey(name: 'last_mode') String? lastMode,
       @JsonKey(name: 'text_percent') double? textPercent,
       @JsonKey(name: 'text_anchor') String? textAnchor,
@@ -250,7 +251,7 @@ class __$$ProgressModelImplCopyWithImpl<$Res>
 class _$ProgressModelImpl implements _ProgressModel {
   const _$ProgressModelImpl(
       {this.book,
-      this.slug,
+      @JsonKey(name: 'book_slug') this.slug,
       @JsonKey(name: 'last_mode') this.lastMode,
       @JsonKey(name: 'text_percent') this.textPercent,
       @JsonKey(name: 'text_anchor') this.textAnchor,
@@ -267,6 +268,7 @@ class _$ProgressModelImpl implements _ProgressModel {
   @override
   final String? book;
   @override
+  @JsonKey(name: 'book_slug')
   final String? slug;
   @override
   @JsonKey(name: 'last_mode')
@@ -363,7 +365,7 @@ class _$ProgressModelImpl implements _ProgressModel {
 abstract class _ProgressModel implements ProgressModel {
   const factory _ProgressModel(
       {final String? book,
-      final String? slug,
+      @JsonKey(name: 'book_slug') final String? slug,
       @JsonKey(name: 'last_mode') final String? lastMode,
       @JsonKey(name: 'text_percent') final double? textPercent,
       @JsonKey(name: 'text_anchor') final String? textAnchor,
@@ -382,6 +384,7 @@ abstract class _ProgressModel implements ProgressModel {
   @override
   String? get book;
   @override
+  @JsonKey(name: 'book_slug')
   String? get slug;
   @override
   @JsonKey(name: 'last_mode')

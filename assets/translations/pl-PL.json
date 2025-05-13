@@ -78,6 +78,9 @@
     "catalogue": {
         "title": "Katalog"
     },
+    "last_read": {
+        "title": "Ostatnio czytane"
+    },
     "reader": {
         "settings": {
             "sans": "krój bezszeryfowy",

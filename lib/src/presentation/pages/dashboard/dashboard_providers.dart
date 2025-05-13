@@ -5,7 +5,6 @@ import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/minimized_player/minimized_player_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/progress/progress_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -24,10 +23,6 @@ class DashboardProviders extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => FavouritesCubit(get.get()),
-        ),
-        BlocProvider(
-          create: (_) => ProgressCubit(get.get()),
-          lazy: false,
         ),
         BlocProvider(
           create: (_) => AudioCubit(get.get(), get.get()),

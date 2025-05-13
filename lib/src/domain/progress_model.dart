@@ -7,7 +7,7 @@ part 'progress_model.g.dart';
 class ProgressModel with _$ProgressModel {
   const factory ProgressModel({
     String? book,
-    String? slug,
+    @JsonKey(name: 'book_slug') String? slug,
     @JsonKey(name: 'last_mode') String? lastMode,
     @JsonKey(name: 'text_percent') double? textPercent,
     @JsonKey(name: 'text_anchor') String? textAnchor,

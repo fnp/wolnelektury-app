@@ -66,6 +66,8 @@ abstract class  LocaleKeys {
   static const account = 'account';
   static const catalogue_title = 'catalogue.title';
   static const catalogue = 'catalogue';
+  static const last_read_title = 'last_read.title';
+  static const last_read = 'last_read';
   static const reader_settings_sans = 'reader.settings.sans';
   static const reader_settings_serif = 'reader.settings.serif';
   static const reader_settings = 'reader.settings';

@@ -17,7 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ProgressState {
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isLoadingMore => throw _privateConstructorUsedError;
   List<ProgressModel> get progresses => throw _privateConstructorUsedError;
+  ApiResponsePagination get pagination => throw _privateConstructorUsedError;
 
   /// Create a copy of ProgressState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +34,13 @@ abstract class $ProgressStateCopyWith<$Res> {
           ProgressState value, $Res Function(ProgressState) then) =
       _$ProgressStateCopyWithImpl<$Res, ProgressState>;
   @useResult
-  $Res call({bool isLoading, List<ProgressModel> progresses});
+  $Res call(
+      {bool isLoading,
+      bool isLoadingMore,
+      List<ProgressModel> progresses,
+      ApiResponsePagination pagination});
+
+  $ApiResponsePaginationCopyWith<$Res> get pagination;
 }
 
 /// @nodoc
@@ -51,18 +59,38 @@ class _$ProgressStateCopyWithImpl<$Res, $Val extends ProgressState>
   @override
   $Res call({
     Object? isLoading = null,
+    Object? isLoadingMore = null,
     Object? progresses = null,
+    Object? pagination = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoadingMore: null == isLoadingMore
+          ? _value.isLoadingMore
+          : isLoadingMore // ignore: cast_nullable_to_non_nullable
+              as bool,
       progresses: null == progresses
           ? _value.progresses
           : progresses // ignore: cast_nullable_to_non_nullable
               as List<ProgressModel>,
+      pagination: null == pagination
+          ? _value.pagination
+          : pagination // ignore: cast_nullable_to_non_nullable
+              as ApiResponsePagination,
     ) as $Val);
+  }
+
+  /// Create a copy of ProgressState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ApiResponsePaginationCopyWith<$Res> get pagination {
+    return $ApiResponsePaginationCopyWith<$Res>(_value.pagination, (value) {
+      return _then(_value.copyWith(pagination: value) as $Val);
+    });
   }
 }
 
@@ -74,7 +102,14 @@ abstract class _$$ProgressStateImplCopyWith<$Res>
       __$$ProgressStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, List<ProgressModel> progresses});
+  $Res call(
+      {bool isLoading,
+      bool isLoadingMore,
+      List<ProgressModel> progresses,
+      ApiResponsePagination pagination});
+
+  @override
+  $ApiResponsePaginationCopyWith<$Res> get pagination;
 }
 
 /// @nodoc
@@ -91,17 +126,27 @@ class __$$ProgressStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLoading = null,
+    Object? isLoadingMore = null,
     Object? progresses = null,
+    Object? pagination = null,
   }) {
     return _then(_$ProgressStateImpl(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoadingMore: null == isLoadingMore
+          ? _value.isLoadingMore
+          : isLoadingMore // ignore: cast_nullable_to_non_nullable
+              as bool,
       progresses: null == progresses
           ? _value._progresses
           : progresses // ignore: cast_nullable_to_non_nullable
               as List<ProgressModel>,
+      pagination: null == pagination
+          ? _value.pagination
+          : pagination // ignore: cast_nullable_to_non_nullable
+              as ApiResponsePagination,
     ));
   }
 }
@@ -110,12 +155,18 @@ class __$$ProgressStateImplCopyWithImpl<$Res>
 
 class _$ProgressStateImpl implements _ProgressState {
   const _$ProgressStateImpl(
-      {this.isLoading = false, final List<ProgressModel> progresses = const []})
+      {this.isLoading = false,
+      this.isLoadingMore = false,
+      final List<ProgressModel> progresses = const [],
+      this.pagination = const ApiResponsePagination()})
       : _progresses = progresses;
 
   @override
   @JsonKey()
   final bool isLoading;
+  @override
+  @JsonKey()
+  final bool isLoadingMore;
   final List<ProgressModel> _progresses;
   @override
   @JsonKey()
@@ -126,8 +177,12 @@ class _$ProgressStateImpl implements _ProgressState {
   }
 
   @override
+  @JsonKey()
+  final ApiResponsePagination pagination;
+
+  @override
   String toString() {
-    return 'ProgressState(isLoading: $isLoading, progresses: $progresses)';
+    return 'ProgressState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, progresses: $progresses, pagination: $pagination)';
   }
 
   @override
@@ -137,13 +192,17 @@ class _$ProgressStateImpl implements _ProgressState {
             other is _$ProgressStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.isLoadingMore, isLoadingMore) ||
+                other.isLoadingMore == isLoadingMore) &&
             const DeepCollectionEquality()
-                .equals(other._progresses, _progresses));
+                .equals(other._progresses, _progresses) &&
+            (identical(other.pagination, pagination) ||
+                other.pagination == pagination));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, isLoading, const DeepCollectionEquality().hash(_progresses));
+  int get hashCode => Object.hash(runtimeType, isLoading, isLoadingMore,
+      const DeepCollectionEquality().hash(_progresses), pagination);
 
   /// Create a copy of ProgressState
   /// with the given fields replaced by the non-null parameter values.
@@ -157,12 +216,18 @@ class _$ProgressStateImpl implements _ProgressState {
 abstract class _ProgressState implements ProgressState {
   const factory _ProgressState(
       {final bool isLoading,
-      final List<ProgressModel> progresses}) = _$ProgressStateImpl;
+      final bool isLoadingMore,
+      final List<ProgressModel> progresses,
+      final ApiResponsePagination pagination}) = _$ProgressStateImpl;
 
   @override
   bool get isLoading;
   @override
+  bool get isLoadingMore;
+  @override
   List<ProgressModel> get progresses;
+  @override
+  ApiResponsePagination get pagination;
 
   /// Create a copy of ProgressState
   /// with the given fields replaced by the non-null parameter values.

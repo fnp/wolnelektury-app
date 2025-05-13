@@ -6,9 +6,9 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/pages/account_page.dart';
 import 'package:wolnelektury/src/presentation/pages/book_page.dart';
-import 'package:wolnelektury/src/presentation/pages/bookmark_page.dart';
 import 'package:wolnelektury/src/presentation/pages/catalogue_page.dart';
 import 'package:wolnelektury/src/presentation/pages/dashboard/dashboard_wrapper.dart';
+import 'package:wolnelektury/src/presentation/pages/last_read_page.dart';
 import 'package:wolnelektury/src/presentation/pages/not_found_page.dart';
 import 'package:wolnelektury/src/presentation/pages/reading_page.dart';
 import 'package:wolnelektury/src/presentation/pages/settings_page.dart';
@@ -24,7 +24,7 @@ final dashboardNavigationKey = GlobalKey<NavigatorState>();
 /// Main routes order
 final mainPathsOrder = [
   cataloguePageConfig.path,
-  bookmarkPageConfig.path,
+  lastReadPageConfig.path,
   accountPageConfig.path,
 ];
 
@@ -54,8 +54,8 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
-          path: bookmarkPageConfig.path,
-          name: bookmarkPageConfig.name,
+          path: lastReadPageConfig.path,
+          name: lastReadPageConfig.name,
           pageBuilder: (context, state) {
             final RouterCubit routerCubit = context.read<RouterCubit>();
             final reversed = _isReversedTransition(routerCubit);
@@ -63,7 +63,7 @@ final GoRouter router = GoRouter(
             return _slideTransition(
               context: context,
               state: state,
-              child: const BookmarkPage(),
+              child: const LastReadPage(),
               reversed: reversed,
             );
           },

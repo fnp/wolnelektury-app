@@ -66,9 +66,9 @@ class DashboardBottomBar extends StatelessWidget {
                           ),
                           _NavigationItem(
                             onTap: () {
-                              router.goNamed(bookmarkPageConfig.name);
+                              router.goNamed(lastReadPageConfig.name);
                             },
-                            path: bookmarkPageConfig.path,
+                            path: lastReadPageConfig.path,
                             icon: CustomIcons.import_contacts,
                             text: LocaleKeys.dashboard_last_read.tr(),
                           ),
