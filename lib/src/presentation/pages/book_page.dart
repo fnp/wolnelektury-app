@@ -15,6 +15,7 @@ class BookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (book == null) {
+      // todo
       return const Center(child: Text('Error'));
     }
     return _Content(

@@ -84,7 +84,8 @@
     "reader": {
         "settings": {
             "sans": "krój bezszeryfowy",
-            "serif": "krój szeryfowy"
+            "serif": "krój szeryfowy",
+            "dark_mode": "Tryb ciemny"
         }
     },
     "book": {

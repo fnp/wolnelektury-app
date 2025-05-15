@@ -27,6 +27,7 @@ class _ReadingPageState extends State<ReadingPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.book == null) {
+      //TODO
       return const Center(child: Text('Error'));
     }
 
@@ -35,7 +36,10 @@ class _ReadingPageState extends State<ReadingPage> {
         get.get(),
         get.get(),
         get.get(),
-      )..init(book: widget.book!, itemScrollController: itemScrollController),
+      )..init(
+          book: widget.book!,
+          itemScrollController: itemScrollController,
+        ),
       child: Builder(
         builder: (context) {
           final cubit = BlocProvider.of<ReadingPageCubit>(context);

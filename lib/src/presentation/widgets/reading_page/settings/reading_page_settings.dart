@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_font_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_font_style.dart';
+import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_theme.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
@@ -44,6 +45,7 @@ class ReadingPageSettings extends StatelessWidget {
           children: [
             ReadingPageSettingsFontSize(),
             ReadingPageSettingsFontStyle(),
+            ReadingPageSettingsTheme(),
           ],
         ),
       ),

@@ -70,6 +70,7 @@ abstract class  LocaleKeys {
   static const last_read = 'last_read';
   static const reader_settings_sans = 'reader.settings.sans';
   static const reader_settings_serif = 'reader.settings.serif';
+  static const reader_settings_dark_mode = 'reader.settings.dark_mode';
   static const reader_settings = 'reader.settings';
   static const reader = 'reader';
   static const book_more = 'book.more';
