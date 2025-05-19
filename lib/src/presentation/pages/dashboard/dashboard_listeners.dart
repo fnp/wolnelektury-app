@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -26,6 +27,7 @@ class DashboardListeners extends StatelessWidget {
                 context,
                 LocaleKeys.login_success.tr(),
               );
+              BlocProvider.of<FavouritesCubit>(context).init();
             }
             if (state.isLoginSuccess == false) {
               CustomSnackbar.error(

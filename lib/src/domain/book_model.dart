@@ -37,6 +37,7 @@ class BookModel with _$BookModel {
         authors: [
           AuthorModel(
             name: 'There should be an author',
+            slug: '',
           ),
         ],
         url: '',

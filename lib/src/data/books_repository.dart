@@ -298,7 +298,6 @@ class BooksRepositoryImplementation extends BooksRepository {
 
       final response = await _apiService.getRequest(
         effectiveUrl,
-        useCache: CacheEnum.ignore,
       );
 
       return DataState.fromApiResponse(

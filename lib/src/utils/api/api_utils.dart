@@ -16,6 +16,16 @@ class ApiUtils {
     }
   }
 
+  static String applyLimit({
+    required String apiUrl,
+    required int limit,
+  }) {
+    if (apiUrl.contains('?')) {
+      return '$apiUrl&limit=$limit';
+    }
+    return '$apiUrl?limit=$limit';
+  }
+
   static String applyTags({
     required String apiUrl,
     List<TagModel> tags = const <TagModel>[],

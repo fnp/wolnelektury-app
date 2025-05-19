@@ -33,6 +33,11 @@ const bookPageConfig = _RouteConfig(
   path: '/bookPage/:slug',
 );
 
+const authorPageConfig = _RouteConfig(
+  name: 'authorPage',
+  path: '/authorPage/:slug',
+);
+
 const readingPageConfig = _RouteConfig(
   name: 'readingPage',
   path: '/readingPage/:slug',

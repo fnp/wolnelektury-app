@@ -11,7 +11,6 @@ import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_yellow_background.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
-import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class ReaderListViewBuilder extends StatelessWidget {
   final ReadingPageState state;
@@ -70,30 +69,16 @@ class ReaderListViewBuilder extends StatelessWidget {
                 );
               }
             },
-            child: InkWellWrapper(
-              onTap: () {
-                itemScrollController.scrollTo(
-                  index: 0,
-                  duration: const Duration(milliseconds: 500),
-                );
-              },
-              onLongPress: () => onLongPress(
-                cubit: cubit,
-                index: index,
-                element: element,
-                context: context,
-              ),
-              child: Stack(
-                children: [
-                  ReaderYellowBackground(index: index),
-                  ReaderSpansWrapper(
-                    element: element,
-                    fontFamily: state.fontType.familyName,
-                    fontSize: state.getFontSize(theme),
-                    debugPrint: true,
-                  ),
-                ],
-              ),
+            child: Stack(
+              children: [
+                ReaderYellowBackground(index: index),
+                ReaderSpansWrapper(
+                  element: element,
+                  fontFamily: state.fontType.familyName,
+                  fontSize: state.getFontSize(theme),
+                  debugPrint: true,
+                ),
+              ],
             ),
           );
         },

@@ -20,10 +20,8 @@ AuthorModel _$AuthorModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AuthorModel {
-  String? get url => throw _privateConstructorUsedError;
-  String? get name => throw _privateConstructorUsedError;
-  String? get href => throw _privateConstructorUsedError;
-  String? get slug => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get slug => throw _privateConstructorUsedError;
 
   /// Serializes this AuthorModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +39,7 @@ abstract class $AuthorModelCopyWith<$Res> {
           AuthorModel value, $Res Function(AuthorModel) then) =
       _$AuthorModelCopyWithImpl<$Res, AuthorModel>;
   @useResult
-  $Res call({String? url, String? name, String? href, String? slug});
+  $Res call({String name, String slug});
 }
 
 /// @nodoc
@@ -59,28 +57,18 @@ class _$AuthorModelCopyWithImpl<$Res, $Val extends AuthorModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? url = freezed,
-    Object? name = freezed,
-    Object? href = freezed,
-    Object? slug = freezed,
+    Object? name = null,
+    Object? slug = null,
   }) {
     return _then(_value.copyWith(
-      url: freezed == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      href: freezed == href
-          ? _value.href
-          : href // ignore: cast_nullable_to_non_nullable
-              as String?,
-      slug: freezed == slug
+              as String,
+      slug: null == slug
           ? _value.slug
           : slug // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ) as $Val);
   }
 }
@@ -93,7 +81,7 @@ abstract class _$$AuthorModelImplCopyWith<$Res>
       __$$AuthorModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? url, String? name, String? href, String? slug});
+  $Res call({String name, String slug});
 }
 
 /// @nodoc
@@ -109,28 +97,18 @@ class __$$AuthorModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? url = freezed,
-    Object? name = freezed,
-    Object? href = freezed,
-    Object? slug = freezed,
+    Object? name = null,
+    Object? slug = null,
   }) {
     return _then(_$AuthorModelImpl(
-      url: freezed == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      href: freezed == href
-          ? _value.href
-          : href // ignore: cast_nullable_to_non_nullable
-              as String?,
-      slug: freezed == slug
+              as String,
+      slug: null == slug
           ? _value.slug
           : slug // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -138,23 +116,19 @@ class __$$AuthorModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AuthorModelImpl implements _AuthorModel {
-  const _$AuthorModelImpl({this.url, this.name, this.href, this.slug});
+  const _$AuthorModelImpl({required this.name, required this.slug});
 
   factory _$AuthorModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthorModelImplFromJson(json);
 
   @override
-  final String? url;
+  final String name;
   @override
-  final String? name;
-  @override
-  final String? href;
-  @override
-  final String? slug;
+  final String slug;
 
   @override
   String toString() {
-    return 'AuthorModel(url: $url, name: $name, href: $href, slug: $slug)';
+    return 'AuthorModel(name: $name, slug: $slug)';
   }
 
   @override
@@ -162,15 +136,13 @@ class _$AuthorModelImpl implements _AuthorModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AuthorModelImpl &&
-            (identical(other.url, url) || other.url == url) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.href, href) || other.href == href) &&
             (identical(other.slug, slug) || other.slug == slug));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, url, name, href, slug);
+  int get hashCode => Object.hash(runtimeType, name, slug);
 
   /// Create a copy of AuthorModel
   /// with the given fields replaced by the non-null parameter values.
@@ -190,22 +162,16 @@ class _$AuthorModelImpl implements _AuthorModel {
 
 abstract class _AuthorModel implements AuthorModel {
   const factory _AuthorModel(
-      {final String? url,
-      final String? name,
-      final String? href,
-      final String? slug}) = _$AuthorModelImpl;
+      {required final String name,
+      required final String slug}) = _$AuthorModelImpl;
 
   factory _AuthorModel.fromJson(Map<String, dynamic> json) =
       _$AuthorModelImpl.fromJson;
 
   @override
-  String? get url;
+  String get name;
   @override
-  String? get name;
-  @override
-  String? get href;
-  @override
-  String? get slug;
+  String get slug;
 
   /// Create a copy of AuthorModel
   /// with the given fields replaced by the non-null parameter values.

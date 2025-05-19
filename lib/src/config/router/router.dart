@@ -5,6 +5,7 @@ import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/pages/account_page.dart';
+import 'package:wolnelektury/src/presentation/pages/author_page.dart';
 import 'package:wolnelektury/src/presentation/pages/book_page.dart';
 import 'package:wolnelektury/src/presentation/pages/catalogue_page.dart';
 import 'package:wolnelektury/src/presentation/pages/dashboard/dashboard_wrapper.dart';
@@ -105,6 +106,21 @@ final GoRouter router = GoRouter(
               reversed: true,
               child: BookPage(
                 book: book,
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: authorPageConfig.path,
+          name: authorPageConfig.name,
+          pageBuilder: (context, state) {
+            final authorSlug = state.pathParameters['slug'];
+            return _slideTransition(
+              context: context,
+              state: state,
+              reversed: true,
+              child: AuthorPage(
+                authorSlug: authorSlug,
               ),
             );
           },

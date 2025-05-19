@@ -17,6 +17,7 @@ import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
+import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class BookPageCoverWithButtons extends StatelessWidget {
   final BookModel book;
@@ -51,19 +52,38 @@ class BookPageCoverWithButtons extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: Dimensions.smallPadding),
                     ...book.authors.map(
                       (author) {
-                        return author.name == null
-                            ? const SizedBox.shrink()
-                            : Expanded(
-                                child: Text(
-                                  author.name!,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    fontWeight: FontWeight.w500,
+                        return Expanded(
+                          child: Column(
+                            children: [
+                              InkWellWrapper(
+                                borderRadius: BorderRadius.circular(
+                                  5,
+                                ),
+                                onTap: () {
+                                  router.pushNamed(
+                                    authorPageConfig.name,
+                                    pathParameters: {
+                                      'slug': author.slug,
+                                    },
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 5,
+                                  ),
+                                  child: Text(
+                                    author.name,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
-                              );
+                              ),
+                            ],
+                          ),
+                        );
                       },
                     ),
                     TextButtonWithIcon(

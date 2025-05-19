@@ -8,10 +8,10 @@ part 'favourites_state.dart';
 class FavouritesCubit extends SafeCubit<FavouritesState> {
   final BooksRepository _booksRepository;
   FavouritesCubit(this._booksRepository) : super(const FavouritesState()) {
-    _init();
+    init();
   }
 
-  Future<void> _init() async {
+  Future<void> init() async {
     final response = await _booksRepository.getFavourites();
     response.when(
       success: (favourites, _) {

@@ -6,10 +6,8 @@ part 'author_model.g.dart';
 @freezed
 class AuthorModel with _$AuthorModel {
   const factory AuthorModel({
-    String? url,
-    String? name,
-    String? href,
-    String? slug,
+    required String name,
+    required String slug,
   }) = _AuthorModel;
 
   factory AuthorModel.fromJson(Map<String, dynamic> json) =>
