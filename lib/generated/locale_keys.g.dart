@@ -65,6 +65,11 @@ abstract class  LocaleKeys {
   static const account_password = 'account.password';
   static const account = 'account';
   static const catalogue_title = 'catalogue.title';
+  static const catalogue_author_back = 'catalogue.author.back';
+  static const catalogue_author_more = 'catalogue.author.more';
+  static const catalogue_author_load_more = 'catalogue.author.load_more';
+  static const catalogue_author_translations = 'catalogue.author.translations';
+  static const catalogue_author = 'catalogue.author';
   static const catalogue = 'catalogue';
   static const last_read_title = 'last_read.title';
   static const last_read = 'last_read';

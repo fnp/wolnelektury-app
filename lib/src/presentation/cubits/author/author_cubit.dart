@@ -81,4 +81,63 @@ class AuthorCubit extends Cubit<AuthorState> {
       },
     );
   }
+
+  Future<void> getTranslations({
+    required int authorId,
+  }) async {
+    emit(state.copyWith(isLoadingAuthorsTranslations: true));
+
+    final result = await _authorRepository.getAuthorTranslations(
+      authorId: authorId,
+    );
+
+    result.when(
+      success: (books, pagination) {
+        emit(
+          state.copyWith(
+            authorsTranslations: books,
+            authorsTranslationsPagination:
+                pagination ?? state.authorsTranslationsPagination,
+          ),
+        );
+      },
+      failed: (failure) =>
+          emit(state.copyWith(isLoadingAuthorsTranslations: false)),
+    );
+
+    emit(state.copyWith(isLoadingAuthorsTranslations: false));
+  }
+
+  Future<void> loadMoreTranslations() async {
+    if (state.authorsTranslationsPagination.next == null) return;
+
+    emit(state.copyWith(isLoadingAuthorsTranslations: true));
+    final books = await _authorRepository.getAuthorTranslations(
+      authorId: state.author!.id,
+      url: state.authorsTranslationsPagination.next!.removeApiUrl,
+    );
+
+    books.when(
+      success: (books, pagination) {
+        emit(
+          state.copyWith(
+            authorsTranslations: [
+              ...state.authorsTranslations,
+              ...books,
+            ],
+            authorsTranslationsPagination:
+                pagination ?? state.authorsTranslationsPagination,
+            isLoadingAuthorsTranslations: false,
+          ),
+        );
+      },
+      failed: (failure) {
+        emit(
+          state.copyWith(
+            isLoadingAuthorsTranslations: false,
+          ),
+        );
+      },
+    );
+  }
 }

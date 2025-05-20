@@ -76,7 +76,13 @@
         "password": "Hasło"
     },
     "catalogue": {
-        "title": "Katalog"
+        "title": "Katalog",
+        "author": {
+            "back": "Powrót",
+            "more": "Więcej szczegółów",
+            "load_more": "Wczytaj więcej",
+            "translations": "Tłumaczenia"
+        }
     },
     "last_read": {
         "title": "Ostatnio czytane"

@@ -16,6 +16,11 @@ abstract class AuthorRepository {
     required int authorId,
     String? url,
   });
+
+  Future<DataState<List<BookModel>>> getAuthorTranslations({
+    required int authorId,
+    String? url,
+  });
 }
 
 class AuthorRepositoryImplementation extends AuthorRepository {
@@ -24,6 +29,7 @@ class AuthorRepositoryImplementation extends AuthorRepository {
 
   static String _authorEndpoint(String slug) => '/authors/$slug/';
   static const String _booksEndpoint = '/books';
+  static String _translationsEndpoint(String id) => '/books/?translator=$id';
 
   @override
   Future<DataState<DetailedAuthorModel>> getAuthor({
@@ -62,6 +68,34 @@ class AuthorRepositoryImplementation extends AuthorRepository {
 
       effectiveUrl = ApiUtils.applyLimit(
         apiUrl: effectiveUrl,
+        limit: 6,
+      );
+
+      final response = await _apiService.getRequest(
+        effectiveUrl,
+      );
+
+      return DataState.fromApiResponse(
+        response: response,
+        converter: (data) {
+          return serializer(data: data, serializer: BookModel.fromJson);
+        },
+      );
+    } catch (e) {
+      return const DataState.failed(
+        Failure.badResponse(),
+      );
+    }
+  }
+
+  @override
+  Future<DataState<List<BookModel>>> getAuthorTranslations({
+    required int authorId,
+    String? url,
+  }) async {
+    try {
+      String effectiveUrl = ApiUtils.applyLimit(
+        apiUrl: url ?? _translationsEndpoint(authorId.toString()),
         limit: 6,
       );
 
