@@ -3,12 +3,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/detailed_author_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/author/author_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_details_dialog.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
@@ -26,13 +27,12 @@ class AuthorPageTopBar extends StatelessWidget {
           //todo error handling
           return const Text('Nie znaleziono autora');
         }
-        final effAuthor = state.isLoading
-            ? DetailedAuthorModel.skeletonized()
-            : state.author!;
-        return Skeletonizer(
-          enableSwitchAnimation: true,
-          enabled: state.isLoading,
-          child: _Body(author: effAuthor),
+        return AnimatedBoxFade(
+          isChildVisible: !state.isLoading,
+          duration: const Duration(milliseconds: 300),
+          child: state.isLoading
+              ? const CustomLoader()
+              : _Body(author: state.author!),
         );
       },
     );
