@@ -181,7 +181,7 @@ final blueElevatedButton = yellowElevatedButton.copyWith(
   ),
 );
 
-DialogTheme _lightModeDialog = DialogTheme(
+DialogThemeData _lightModeDialog = DialogThemeData(
   backgroundColor: Colors.white,
   barrierColor: CustomColors.secondaryBlueColor.withValues(alpha: 0.5),
   shape: const RoundedRectangleBorder(
@@ -193,7 +193,7 @@ DialogTheme _lightModeDialog = DialogTheme(
   ),
 );
 
-DialogTheme _darkModeDialog = DialogTheme(
+DialogThemeData _darkModeDialog = DialogThemeData(
   backgroundColor: CustomColors.darkGrey,
   barrierColor: CustomColors.secondaryBlueColor.withValues(alpha: 0.5),
   shape: const RoundedRectangleBorder(

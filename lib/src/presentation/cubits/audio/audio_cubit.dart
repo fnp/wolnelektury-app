@@ -221,10 +221,8 @@ class AudioCubit extends SafeCubit<AudioState> {
     Future.wait([
       _player.stop(),
       _player.seek(Duration.zero, index: 0),
-      _player.setAudioSource(
-        ConcatenatingAudioSource(
-          children: [],
-        ),
+      _player.setAudioSources(
+        [],
       ),
       _audioSession.setActive(false),
     ]);
@@ -347,25 +345,22 @@ class AudioCubit extends SafeCubit<AudioState> {
       ),
     );
 
-    final playlist = ConcatenatingAudioSource(
-      useLazyPreparation: true,
-      children: state.audiobook!.parts.map(
-        (part) {
-          return AudioSource.uri(
-            Uri.parse(part.url),
-            tag: MediaItem(
-              // Specify a unique ID for each media item:
-              id: part.name,
-              // Metadata to display in the notification:
-              album: state.book?.title,
-              title: part.name,
-              artUri: Uri.parse(state.book?.coverUrl ?? ''),
-              duration: Duration(seconds: part.duration.floor()),
-            ),
-          );
-        },
-      ).toList(),
-    );
+    final playlist = state.audiobook!.parts.map(
+      (part) {
+        return AudioSource.uri(
+          Uri.parse(part.url),
+          tag: MediaItem(
+            // Specify a unique ID for each media item:
+            id: part.name,
+            // Metadata to display in the notification:
+            album: state.book?.title,
+            title: part.name,
+            artUri: Uri.parse(state.book?.coverUrl ?? ''),
+            duration: Duration(seconds: part.duration.floor()),
+          ),
+        );
+      },
+    ).toList();
 
     // This gets the progress of the audiobook from the repository
     // and sets the position in UI as well as in the player
@@ -376,7 +371,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     );
     await Future.wait([
       _audioSession.initializationFuture,
-      _player.setAudioSource(
+      _player.setAudioSources(
         playlist,
         initialIndex: foundPosition.$2,
         initialPosition: Duration(seconds: foundPosition.$1),
@@ -384,7 +379,6 @@ class AudioCubit extends SafeCubit<AudioState> {
       _player.setLoopMode(LoopMode.off),
       _player.setSpeed(AudioPlayerSpeedEnum.x1.value),
     ]);
-
     _attachPositionListener();
     emit(state.copyWith(isPreparingPlaylist: false));
   }
