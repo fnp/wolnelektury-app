@@ -61,6 +61,14 @@ class CustomIcons {
       IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData stylus_note =
       IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData playlist_add =
+      IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData settings =
+      IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData delete_forever =
+      IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData add =
+      IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData expand_circle_down =
       IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

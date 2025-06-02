@@ -23,7 +23,6 @@ class AnimatedBoxFade extends StatelessWidget {
       child: isChildVisible
           ? child
           : SizedBox(
-              key: ValueKey(collapsedChild.hashCode),
               child: collapsedChild,
             ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated_box_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/donation/donation_dialog.dart';
@@ -17,78 +18,84 @@ class DashboardBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<RouterCubit, RouterState>(
-      buildWhen: (p, c) => p.isMainPage != c.isMainPage,
-      builder: (context, state) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(1),
-          ),
-          child: AnimatedBoxSize(
-            isChildVisible: state.isMainPage,
-            child: Material(
-              child: Ink(
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.tertiaryContainer,
-                  border: Border(
-                    top: BorderSide(
-                      color: theme.colorScheme.surface,
+    return BlocBuilder<AppModeCubit, AppModeState>(
+      buildWhen: (p, c) => p.shouldShowBottomBar != c.shouldShowBottomBar,
+      builder: (context, outerState) {
+        return BlocBuilder<RouterCubit, RouterState>(
+          buildWhen: (p, c) => p.isMainPage != c.isMainPage,
+          builder: (context, state) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: const TextScaler.linear(1),
+              ),
+              child: AnimatedBoxSize(
+                isChildVisible:
+                    state.isMainPage && outerState.shouldShowBottomBar,
+                child: Material(
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.tertiaryContainer,
+                      border: Border(
+                        top: BorderSide(
+                          color: theme.colorScheme.surface,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.smallPadding,
-                    ),
-                    child: SizedBox(
-                      height: Dimensions.bottomBarHeight,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _NavigationItem(
-                            onTap: () {
-                              router.goNamed(cataloguePageConfig.name);
-                            },
-                            shouldCorrectPadding: true,
-                            path: cataloguePageConfig.path,
-                            icon: CustomIcons.globe_book,
-                            text: LocaleKeys.dashboard_catalogue.tr(),
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.smallPadding,
+                        ),
+                        child: SizedBox(
+                          height: Dimensions.bottomBarHeight,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              _NavigationItem(
+                                onTap: () {
+                                  router.goNamed(cataloguePageConfig.name);
+                                },
+                                shouldCorrectPadding: true,
+                                path: cataloguePageConfig.path,
+                                icon: CustomIcons.globe_book,
+                                text: LocaleKeys.dashboard_catalogue.tr(),
+                              ),
+                              _NavigationItem(
+                                onTap: () {
+                                  //TODO Should navigate to dono page when logged in
+                                  DonationDialog.show(context);
+                                },
+                                icon: CustomIcons.savings,
+                                text: LocaleKeys.dashboard_donation.tr(),
+                              ),
+                              _NavigationItem(
+                                onTap: () {
+                                  router.goNamed(lastReadPageConfig.name);
+                                },
+                                path: lastReadPageConfig.path,
+                                icon: CustomIcons.import_contacts,
+                                text: LocaleKeys.dashboard_last_read.tr(),
+                              ),
+                              _NavigationItem(
+                                onTap: () {
+                                  router.goNamed(accountPageConfig.name);
+                                },
+                                shouldCorrectPadding: true,
+                                path: accountPageConfig.path,
+                                icon: CustomIcons.for_you,
+                                text: LocaleKeys.dashboard_account_logged.tr(),
+                              ),
+                            ],
                           ),
-                          _NavigationItem(
-                            onTap: () {
-                              //TODO Should navigate to dono page when logged in
-                              DonationDialog.show(context);
-                            },
-                            icon: CustomIcons.savings,
-                            text: LocaleKeys.dashboard_donation.tr(),
-                          ),
-                          _NavigationItem(
-                            onTap: () {
-                              router.goNamed(lastReadPageConfig.name);
-                            },
-                            path: lastReadPageConfig.path,
-                            icon: CustomIcons.import_contacts,
-                            text: LocaleKeys.dashboard_last_read.tr(),
-                          ),
-                          _NavigationItem(
-                            onTap: () {
-                              router.goNamed(accountPageConfig.name);
-                            },
-                            shouldCorrectPadding: true,
-                            path: accountPageConfig.path,
-                            icon: CustomIcons.for_you,
-                            text: LocaleKeys.dashboard_account_logged.tr(),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

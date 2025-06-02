@@ -10,12 +10,14 @@ class CustomScrollPage extends HookWidget {
   final ScrollController? controller;
 
   final double loadPoint;
+  final bool ignoreTopbar;
 
   const CustomScrollPage({
     required this.builder,
     this.controller,
     this.onLoadMore,
     this.loadPoint = .1,
+    this.ignoreTopbar = false,
     super.key,
   });
 
@@ -65,10 +67,12 @@ class CustomScrollPage extends HookWidget {
     final scrollOffset = scroll.offset;
     final maxOffset = scroll.position.maxScrollExtent;
 
-    if (scroll.position.userScrollDirection == ScrollDirection.reverse) {
-      scrollCubit.hideAppBar();
-    } else {
-      scrollCubit.showAppBar();
+    if (!ignoreTopbar) {
+      if (scroll.position.userScrollDirection == ScrollDirection.reverse) {
+        scrollCubit.hideAppBar();
+      } else {
+        scrollCubit.showAppBar();
+      }
     }
 
     if (onLoadMore == null) return;

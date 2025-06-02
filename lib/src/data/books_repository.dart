@@ -23,7 +23,7 @@ abstract class BooksRepository {
     required bool targetValue,
   });
 
-  Future<DataState<Map<String, List<String>>>> getFavourites();
+  Future<DataState<Map<String, List>>> getFavourites();
 
   Future<DataState<List<BookmarkModel>>> getBookBookmarks({
     required String slug,
@@ -215,7 +215,7 @@ class BooksRepositoryImplementation extends BooksRepository {
   }
 
   @override
-  Future<DataState<Map<String, List<String>>>> getFavourites() async {
+  Future<DataState<Map<String, List>>> getFavourites() async {
     try {
       final response = await _apiService.getRequest(
         _myLikesEndpoint,
@@ -224,10 +224,10 @@ class BooksRepositoryImplementation extends BooksRepository {
 
       if (response.hasData) {
         return DataState.success(
-          response.data!.first.entries.fold<Map<String, List<String>>>(
-            <String, List<String>>{},
+          response.data!.first.entries.fold<Map<String, List>>(
+            <String, List>{},
             (acc, entry) {
-              acc[entry.key] = List<String>.from(entry.value);
+              acc[entry.key] = [];
               return acc;
             },
           ),

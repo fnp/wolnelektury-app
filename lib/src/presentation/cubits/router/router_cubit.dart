@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 
 part 'router_cubit.freezed.dart';

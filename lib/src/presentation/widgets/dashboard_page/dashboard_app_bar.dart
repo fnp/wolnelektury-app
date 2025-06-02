@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated_box_size.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 
@@ -73,17 +76,29 @@ class DashboardAppBar extends StatelessWidget {
                       width: 165,
                     ),
                   ),
-                  const DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: CustomColors.primaryYellowColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: SizedBox.square(
-                      dimension: Dimensions.elementHeight,
-                      child: Icon(
-                        Icons.search,
-                        color: CustomColors.black,
-                      ),
+                  const CustomButton(
+                    icon: Icons.search,
+                    iconColor: CustomColors.black,
+                    backgroundColor: CustomColors.primaryYellowColor,
+                  ),
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.fastOutSlowIn,
+                    child: BlocBuilder<RouterCubit, RouterState>(
+                      buildWhen: (p, c) => p.isAccountPage != c.isAccountPage,
+                      builder: (context, state) {
+                        if (state.isAccountPage) {
+                          return CustomButton(
+                            icon: CustomIcons.settings,
+                            iconColor: CustomColors.black,
+                            backgroundColor: CustomColors.white,
+                            onPressed: () {
+                              router.pushNamed(settingsPageConfig.name);
+                            },
+                          );
+                        }
+                        return const SizedBox();
+                      },
                     ),
                   ),
                 ],

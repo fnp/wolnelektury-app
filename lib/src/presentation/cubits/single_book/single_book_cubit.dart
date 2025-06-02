@@ -1,14 +1,14 @@
-import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 
-part 'last_read_cubit.freezed.dart';
-part 'last_read_state.dart';
+part 'single_book_cubit.freezed.dart';
+part 'single_book_state.dart';
 
-class LastReadCubit extends Cubit<LastReadState> {
+class SingleBookCubit extends SafeCubit<SingleBookState> {
   final BooksRepository _booksRepository;
-  LastReadCubit(this._booksRepository) : super(const LastReadState());
+  SingleBookCubit(this._booksRepository) : super(const SingleBookState());
 
   Future<void> loadBookData({
     required String slug,

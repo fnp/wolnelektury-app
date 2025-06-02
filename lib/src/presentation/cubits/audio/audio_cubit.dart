@@ -393,7 +393,6 @@ class AudioCubit extends SafeCubit<AudioState> {
     _positionController?.cancel();
     _positionController = _player.positionStream.listen((event) {
       _resetPositionTimeout();
-
       _calculatePosition(
         index: _player.currentIndex ?? 0,
         position: event.inSeconds,

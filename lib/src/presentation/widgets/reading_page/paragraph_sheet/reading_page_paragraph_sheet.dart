@@ -170,7 +170,8 @@ class _BookmarkNoteState extends State<_BookmarkNote> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomButton(
-                  icon: isEditing ? Icons.delete_forever : Icons.arrow_back,
+                  icon:
+                      isEditing ? CustomIcons.delete_forever : Icons.arrow_back,
                   iconColor:
                       isEditing ? CustomColors.white : CustomColors.black,
                   backgroundColor:
@@ -224,7 +225,7 @@ class _BookmarkNoteState extends State<_BookmarkNote> {
                     bottom: 0,
                     right: 0,
                     child: CustomButton(
-                      icon: isEditing ? Icons.check : Icons.add,
+                      icon: isEditing ? Icons.check : CustomIcons.add,
                       backgroundColor: CustomColors.green,
                       onPressed: () {
                         if (isEditing) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/login_form.dart';
+import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/my_library_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/register_form.dart';
-import 'package:wolnelektury/src/presentation/widgets/account_page/user_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
 
 class AccountPage extends StatelessWidget {
@@ -12,7 +12,7 @@ class AccountPage extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: AuthWrapper(
-        authChild: (_) => const UserWidget(),
+        authChild: (_) => const MyLibraryPage(),
         nonAuthChild: const _Forms(),
       ),
     );

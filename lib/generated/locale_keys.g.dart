@@ -18,6 +18,16 @@ abstract class  LocaleKeys {
   static const reading_snackbar_bookmark_delete_error = 'reading.snackbar.bookmark_delete_error';
   static const reading_snackbar = 'reading.snackbar';
   static const reading = 'reading';
+  static const my_library_lists_creation_failure = 'my_library.lists.creation_failure';
+  static const my_library_lists_deletion_failure = 'my_library.lists.deletion_failure';
+  static const my_library_lists_book_removal_failure = 'my_library.lists.book_removal_failure';
+  static const my_library_lists_delete_dialog_title = 'my_library.lists.delete_dialog.title';
+  static const my_library_lists_delete_dialog_content = 'my_library.lists.delete_dialog.content';
+  static const my_library_lists_delete_dialog_cancel = 'my_library.lists.delete_dialog.cancel';
+  static const my_library_lists_delete_dialog_delete = 'my_library.lists.delete_dialog.delete';
+  static const my_library_lists_delete_dialog = 'my_library.lists.delete_dialog';
+  static const my_library_lists = 'my_library.lists';
+  static const my_library = 'my_library';
   static const login_title = 'login.title';
   static const login_title_alternative = 'login.title_alternative';
   static const login_user_name = 'login.user_name';
@@ -58,6 +68,7 @@ abstract class  LocaleKeys {
   static const audio_dialog_settings_sleep_timer = 'audio_dialog.settings.sleep_timer';
   static const audio_dialog_settings_speed_selector = 'audio_dialog.settings.speed_selector';
   static const audio_dialog_settings_part_selector = 'audio_dialog.settings.part_selector';
+  static const audio_dialog_settings_part_selector_specific = 'audio_dialog.settings.part_selector_specific';
   static const audio_dialog_settings = 'audio_dialog.settings';
   static const audio_dialog = 'audio_dialog';
   static const account_title = 'account.title';
@@ -65,6 +76,12 @@ abstract class  LocaleKeys {
   static const account_password = 'account.password';
   static const account = 'account';
   static const catalogue_title = 'catalogue.title';
+  static const catalogue_list_creator_failure = 'catalogue.list_creator.failure';
+  static const catalogue_list_creator_success = 'catalogue.list_creator.success';
+  static const catalogue_list_creator_back = 'catalogue.list_creator.back';
+  static const catalogue_list_creator_save = 'catalogue.list_creator.save';
+  static const catalogue_list_creator_load_more = 'catalogue.list_creator.load_more';
+  static const catalogue_list_creator = 'catalogue.list_creator';
   static const catalogue_author_back = 'catalogue.author.back';
   static const catalogue_author_more = 'catalogue.author.more';
   static const catalogue_author_load_more = 'catalogue.author.load_more';
@@ -83,6 +100,8 @@ abstract class  LocaleKeys {
   static const book_lists_sheet_title = 'book_lists.sheet.title';
   static const book_lists_sheet_add = 'book_lists.sheet.add';
   static const book_lists_sheet_save = 'book_lists.sheet.save';
+  static const book_lists_sheet_success = 'book_lists.sheet.success';
+  static const book_lists_sheet_error = 'book_lists.sheet.error';
   static const book_lists_sheet = 'book_lists.sheet';
   static const book_lists = 'book_lists';
   static const settings_title = 'settings.title';

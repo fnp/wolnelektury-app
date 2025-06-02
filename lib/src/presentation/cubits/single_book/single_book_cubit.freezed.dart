@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'last_read_cubit.dart';
+part of 'single_book_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,22 +15,22 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$LastReadState {
+mixin _$SingleBookState {
   bool get isLoading => throw _privateConstructorUsedError;
   BookModel? get book => throw _privateConstructorUsedError;
 
-  /// Create a copy of LastReadState
+  /// Create a copy of SingleBookState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $LastReadStateCopyWith<LastReadState> get copyWith =>
+  $SingleBookStateCopyWith<SingleBookState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LastReadStateCopyWith<$Res> {
-  factory $LastReadStateCopyWith(
-          LastReadState value, $Res Function(LastReadState) then) =
-      _$LastReadStateCopyWithImpl<$Res, LastReadState>;
+abstract class $SingleBookStateCopyWith<$Res> {
+  factory $SingleBookStateCopyWith(
+          SingleBookState value, $Res Function(SingleBookState) then) =
+      _$SingleBookStateCopyWithImpl<$Res, SingleBookState>;
   @useResult
   $Res call({bool isLoading, BookModel? book});
 
@@ -38,16 +38,16 @@ abstract class $LastReadStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LastReadStateCopyWithImpl<$Res, $Val extends LastReadState>
-    implements $LastReadStateCopyWith<$Res> {
-  _$LastReadStateCopyWithImpl(this._value, this._then);
+class _$SingleBookStateCopyWithImpl<$Res, $Val extends SingleBookState>
+    implements $SingleBookStateCopyWith<$Res> {
+  _$SingleBookStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of LastReadState
+  /// Create a copy of SingleBookState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -67,7 +67,7 @@ class _$LastReadStateCopyWithImpl<$Res, $Val extends LastReadState>
     ) as $Val);
   }
 
-  /// Create a copy of LastReadState
+  /// Create a copy of SingleBookState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -83,11 +83,11 @@ class _$LastReadStateCopyWithImpl<$Res, $Val extends LastReadState>
 }
 
 /// @nodoc
-abstract class _$$LastReadStateImplCopyWith<$Res>
-    implements $LastReadStateCopyWith<$Res> {
-  factory _$$LastReadStateImplCopyWith(
-          _$LastReadStateImpl value, $Res Function(_$LastReadStateImpl) then) =
-      __$$LastReadStateImplCopyWithImpl<$Res>;
+abstract class _$$SingleBookStateImplCopyWith<$Res>
+    implements $SingleBookStateCopyWith<$Res> {
+  factory _$$SingleBookStateImplCopyWith(_$SingleBookStateImpl value,
+          $Res Function(_$SingleBookStateImpl) then) =
+      __$$SingleBookStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool isLoading, BookModel? book});
@@ -97,14 +97,14 @@ abstract class _$$LastReadStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$LastReadStateImplCopyWithImpl<$Res>
-    extends _$LastReadStateCopyWithImpl<$Res, _$LastReadStateImpl>
-    implements _$$LastReadStateImplCopyWith<$Res> {
-  __$$LastReadStateImplCopyWithImpl(
-      _$LastReadStateImpl _value, $Res Function(_$LastReadStateImpl) _then)
+class __$$SingleBookStateImplCopyWithImpl<$Res>
+    extends _$SingleBookStateCopyWithImpl<$Res, _$SingleBookStateImpl>
+    implements _$$SingleBookStateImplCopyWith<$Res> {
+  __$$SingleBookStateImplCopyWithImpl(
+      _$SingleBookStateImpl _value, $Res Function(_$SingleBookStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LastReadState
+  /// Create a copy of SingleBookState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -112,7 +112,7 @@ class __$$LastReadStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? book = freezed,
   }) {
-    return _then(_$LastReadStateImpl(
+    return _then(_$SingleBookStateImpl(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -127,8 +127,8 @@ class __$$LastReadStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LastReadStateImpl implements _LastReadState {
-  const _$LastReadStateImpl({this.isLoading = false, this.book});
+class _$SingleBookStateImpl implements _SingleBookState {
+  const _$SingleBookStateImpl({this.isLoading = false, this.book});
 
   @override
   @JsonKey()
@@ -138,14 +138,14 @@ class _$LastReadStateImpl implements _LastReadState {
 
   @override
   String toString() {
-    return 'LastReadState(isLoading: $isLoading, book: $book)';
+    return 'SingleBookState(isLoading: $isLoading, book: $book)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LastReadStateImpl &&
+            other is _$SingleBookStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.book, book) || other.book == book));
@@ -154,28 +154,29 @@ class _$LastReadStateImpl implements _LastReadState {
   @override
   int get hashCode => Object.hash(runtimeType, isLoading, book);
 
-  /// Create a copy of LastReadState
+  /// Create a copy of SingleBookState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$LastReadStateImplCopyWith<_$LastReadStateImpl> get copyWith =>
-      __$$LastReadStateImplCopyWithImpl<_$LastReadStateImpl>(this, _$identity);
+  _$$SingleBookStateImplCopyWith<_$SingleBookStateImpl> get copyWith =>
+      __$$SingleBookStateImplCopyWithImpl<_$SingleBookStateImpl>(
+          this, _$identity);
 }
 
-abstract class _LastReadState implements LastReadState {
-  const factory _LastReadState({final bool isLoading, final BookModel? book}) =
-      _$LastReadStateImpl;
+abstract class _SingleBookState implements SingleBookState {
+  const factory _SingleBookState(
+      {final bool isLoading, final BookModel? book}) = _$SingleBookStateImpl;
 
   @override
   bool get isLoading;
   @override
   BookModel? get book;
 
-  /// Create a copy of LastReadState
+  /// Create a copy of SingleBookState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LastReadStateImplCopyWith<_$LastReadStateImpl> get copyWith =>
+  _$$SingleBookStateImplCopyWith<_$SingleBookStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

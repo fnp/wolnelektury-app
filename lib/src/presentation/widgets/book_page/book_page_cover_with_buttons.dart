@@ -11,6 +11,7 @@ import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/text_button_with_icon.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
@@ -21,12 +22,16 @@ import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class BookPageCoverWithButtons extends StatelessWidget {
   final BookModel book;
-  const BookPageCoverWithButtons({super.key, required this.book});
+  final VoidCallback? onDelete;
+  const BookPageCoverWithButtons({
+    super.key,
+    required this.book,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
     final audioCubit = BlocProvider.of<AudioCubit>(context);
-    final theme = Theme.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth / 2;
@@ -46,45 +51,13 @@ class BookPageCoverWithButtons extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      book.title,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    ...book.authors.map(
-                      (author) {
-                        return Expanded(
-                          child: Column(
-                            children: [
-                              InkWellWrapper(
-                                borderRadius: BorderRadius.circular(
-                                  5,
-                                ),
-                                onTap: () {
-                                  router.pushNamed(
-                                    authorPageConfig.name,
-                                    pathParameters: {
-                                      'slug': author.slug,
-                                    },
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 5,
-                                  ),
-                                  child: Text(
-                                    author.name,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                    Flexible(
+                      child: onDelete == null
+                          ? _TitleWithAuthors(book: book)
+                          : _TitleWithAutorsAndDelete(
+                              book: book,
+                              onDelete: onDelete!,
+                            ),
                     ),
                     TextButtonWithIcon(
                       nonActiveText: LocaleKeys.common_icon_button_read.tr(),
@@ -133,6 +106,88 @@ class BookPageCoverWithButtons extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _TitleWithAutorsAndDelete extends StatelessWidget {
+  final BookModel book;
+  final VoidCallback onDelete;
+  const _TitleWithAutorsAndDelete({
+    required this.book,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: _TitleWithAuthors(book: book)),
+        CustomButton(
+          icon: CustomIcons.delete_forever,
+          onPressed: onDelete,
+          backgroundColor: CustomColors.red,
+          iconColor: CustomColors.white,
+        ),
+      ],
+    );
+  }
+}
+
+class _TitleWithAuthors extends StatelessWidget {
+  final BookModel book;
+  const _TitleWithAuthors({required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          book.title,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        ...book.authors.map(
+          (author) {
+            return Expanded(
+              child: Column(
+                children: [
+                  InkWellWrapper(
+                    borderRadius: BorderRadius.circular(
+                      5,
+                    ),
+                    onTap: () {
+                      router.pushNamed(
+                        authorPageConfig.name,
+                        pathParameters: {
+                          'slug': author.slug,
+                        },
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                      ),
+                      child: Text(
+                        author.name,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

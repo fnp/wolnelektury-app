@@ -17,8 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$FavouritesState {
 // List of slugs
-  Map<String, List<String>> get favourites =>
-      throw _privateConstructorUsedError;
+  Map<String, List> get favourites => throw _privateConstructorUsedError;
 
   /// Create a copy of FavouritesState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +32,7 @@ abstract class $FavouritesStateCopyWith<$Res> {
           FavouritesState value, $Res Function(FavouritesState) then) =
       _$FavouritesStateCopyWithImpl<$Res, FavouritesState>;
   @useResult
-  $Res call({Map<String, List<String>> favourites});
+  $Res call({Map<String, List> favourites});
 }
 
 /// @nodoc
@@ -57,7 +56,7 @@ class _$FavouritesStateCopyWithImpl<$Res, $Val extends FavouritesState>
       favourites: null == favourites
           ? _value.favourites
           : favourites // ignore: cast_nullable_to_non_nullable
-              as Map<String, List<String>>,
+              as Map<String, List>,
     ) as $Val);
   }
 }
@@ -70,7 +69,7 @@ abstract class _$$FavouritesStateImplCopyWith<$Res>
       __$$FavouritesStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, List<String>> favourites});
+  $Res call({Map<String, List> favourites});
 }
 
 /// @nodoc
@@ -92,7 +91,7 @@ class __$$FavouritesStateImplCopyWithImpl<$Res>
       favourites: null == favourites
           ? _value._favourites
           : favourites // ignore: cast_nullable_to_non_nullable
-              as Map<String, List<String>>,
+              as Map<String, List>,
     ));
   }
 }
@@ -100,16 +99,15 @@ class __$$FavouritesStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$FavouritesStateImpl implements _FavouritesState {
-  const _$FavouritesStateImpl(
-      {final Map<String, List<String>> favourites = const {}})
+  const _$FavouritesStateImpl({final Map<String, List> favourites = const {}})
       : _favourites = favourites;
 
 // List of slugs
-  final Map<String, List<String>> _favourites;
+  final Map<String, List> _favourites;
 // List of slugs
   @override
   @JsonKey()
-  Map<String, List<String>> get favourites {
+  Map<String, List> get favourites {
     if (_favourites is EqualUnmodifiableMapView) return _favourites;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(_favourites);
@@ -144,12 +142,12 @@ class _$FavouritesStateImpl implements _FavouritesState {
 }
 
 abstract class _FavouritesState implements FavouritesState {
-  const factory _FavouritesState({final Map<String, List<String>> favourites}) =
+  const factory _FavouritesState({final Map<String, List> favourites}) =
       _$FavouritesStateImpl;
 
 // List of slugs
   @override
-  Map<String, List<String>> get favourites;
+  Map<String, List> get favourites;
 
   /// Create a copy of FavouritesState
   /// with the given fields replaced by the non-null parameter values.

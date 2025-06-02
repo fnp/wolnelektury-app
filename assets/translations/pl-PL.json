@@ -20,6 +20,19 @@
             "bookmark_delete_error": "Nie udało się usunąć zakładki"
         }
     },
+    "my_library": {
+        "lists": {
+            "creation_failure": "Nie udało się utworzyć listy, spróbuj ponownie",
+            "deletion_failure": "Nie udało się usunąć listy, spróbuj ponownie",
+            "book_removal_failure": "Nie udało się usunąć książki z listy, spróbuj ponownie",
+            "delete_dialog": {
+                "title": "Usuwanie listy",
+                "content": "Czy na pewno chcesz usunąć tę listę wraz z jej zawartością?",
+                "cancel": "Anuluj",
+                "delete": "Usuń"
+            }
+        }
+    },
     "login": {
         "title": "Zaloguj się",
         "title_alternative": "Zarejestruj się",
@@ -67,7 +80,8 @@
         "settings": {
             "sleep_timer": "wyłącz za {time} minut",
             "speed_selector": "prędkość odtwarzania {speed}",
-            "part_selector": "odtwarzaj do końca"
+            "part_selector": "odtwarzaj do końca",
+            "part_selector_specific": "rozdziału {part}"
         }
     },
     "account": {
@@ -77,6 +91,12 @@
     },
     "catalogue": {
         "title": "Katalog",
+        "list_creator": {
+            "failure": "Nie udało się zapisać listy",
+            "success": "Lista została zapisana",
+            "back": "Powrót",
+            "save": "Zapisz listę"
+        },
         "author": {
             "back": "Powrót",
             "more": "Więcej szczegółów",
@@ -101,7 +121,9 @@
         "sheet": {
             "title": "Dodaj książkę\ndo Listy",
             "add": "dodaj nową listę",
-            "save": "dodaj"
+            "save": "dodaj",
+            "success": "Książki zostały zapisane",
+            "error": "Nie udało się zapisać książek"
         }
     },
     "settings": {

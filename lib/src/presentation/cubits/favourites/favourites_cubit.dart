@@ -12,6 +12,7 @@ class FavouritesCubit extends SafeCubit<FavouritesState> {
   }
 
   Future<void> init() async {
+    // this endpoint needs to be simplified
     final response = await _booksRepository.getFavourites();
     response.when(
       success: (favourites, _) {

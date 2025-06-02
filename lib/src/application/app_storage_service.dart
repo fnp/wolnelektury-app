@@ -47,11 +47,18 @@ class AppStorage extends _$AppStorage {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) async {
+          await m.createAll();
+        },
+      );
 }
 
 class AppStorageService {
   static const int appSettingsId = 1;
-  static const Duration cacheValidity = Duration(days: 1);
+  static const Duration cacheValidity = Duration(days: 7);
   final AppStorage _storage;
 
   AppStorageService(this._storage);

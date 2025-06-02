@@ -38,3 +38,7 @@ class DataState<T> with _$DataState<T> {
     return const DataState.failed(Failure.notFound());
   }
 }
+
+extension DataStateX<T> on DataState<T> {
+  bool get isSuccess => this is _Success<T>;
+}

@@ -4,6 +4,6 @@ part of 'favourites_cubit.dart';
 class FavouritesState with _$FavouritesState {
   const factory FavouritesState({
     // List of slugs
-    @Default({}) Map<String, List<String>> favourites,
+    @Default({}) Map<String, List> favourites,
   }) = _FavouritesState;
 }

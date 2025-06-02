@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class AudioDialogSettingsPartSelector extends StatelessWidget {
@@ -64,9 +65,17 @@ class AudioDialogSettingsPartSelector extends StatelessWidget {
                       if (state.playToPart == 0)
                         const SizedBox()
                       else
-                        Text(
-                          'rozdziału ${state.playToPart}',
-                          style: textStyle,
+                        Expanded(
+                          child: Text(
+                            LocaleKeys
+                                .audio_dialog_settings_part_selector_specific
+                                .tr(
+                              namedArgs: {
+                                'part': state.playToPart.toString(),
+                              },
+                            ),
+                            style: textStyle,
+                          ),
                         ),
                       const Spacer(),
                       if (state.playToPart != 0)
@@ -114,7 +123,7 @@ class AudioDialogSettingsPartSelector extends StatelessWidget {
                           child: SizedBox.square(
                             dimension: 30,
                             child: Icon(
-                              Icons.add,
+                              CustomIcons.add,
                               size: 16,
                             ),
                           ),

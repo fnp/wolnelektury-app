@@ -1,17 +1,28 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
+import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
+import 'package:wolnelektury/src/presentation/widgets/book_lists/book_lists_sheet_existing_lists.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookListsSheet extends StatelessWidget {
-  const BookListsSheet({super.key});
+  final String bookSlug;
+  const BookListsSheet({
+    super.key,
+    required this.bookSlug,
+  });
 
   static void show({
     required BuildContext context,
+    required String bookSlug,
+    required VoidCallback onSave,
   }) {
     showModalBottomSheet(
       enableDrag: false,
@@ -24,62 +35,108 @@ class BookListsSheet extends StatelessWidget {
       ),
       context: context,
       useRootNavigator: true,
-      builder: (_) => const BookListsSheet(),
-    );
+      isScrollControlled: true,
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: context.read<ListCreatorCubit>(),
+          ),
+          BlocProvider.value(
+            value: context.read<ScrollCubit>(),
+          ),
+        ],
+        child: BookListsSheet(
+          bookSlug: bookSlug,
+        ),
+      ),
+    ).then((_) {
+      onSave.call();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    //todo downloading existing lists
     final theme = Theme.of(context);
     final availableHeight = MediaQuery.sizeOf(context).height / 2;
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: availableHeight,
-        minHeight: availableHeight / 2,
-        minWidth: double.infinity,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(Dimensions.modalsPadding),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    LocaleKeys.book_lists_sheet_title.tr().toUpperCase(),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w900,
-                      height: 1.14,
+    final cubit = BlocProvider.of<ListCreatorCubit>(context);
+    return Padding(
+      padding: MediaQuery.viewInsetsOf(context),
+      child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
+        buildWhen: (p, c) {
+          return p.allLists != c.allLists;
+        },
+        builder: (context, state) {
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: availableHeight,
+              minWidth: double.infinity,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(Dimensions.modalsPadding),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          LocaleKeys.book_lists_sheet_title.tr().toUpperCase(),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w900,
+                            height: 1.14,
+                          ),
+                        ),
+                      ),
+                      CustomButton(
+                        backgroundColor: CustomColors.white,
+                        icon: Icons.close,
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: Dimensions.spacer),
+                  Flexible(
+                    child: AnimatedSize(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.fastOutSlowIn,
+                      child: BookListsSheetExistingLists(
+                        currentlyWorkingOnBookSlug: bookSlug,
+                        effectiveList: state.allLists,
+                      ),
                     ),
                   ),
-                ),
-                CustomButton(
-                  backgroundColor: CustomColors.white,
-                  icon: Icons.close,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
+                  const SizedBox(height: Dimensions.mediumPadding),
+                  AddNewListElement(
+                    onSave: (String text) {
+                      cubit.newList(
+                        text,
+                        bookSlugs: [bookSlug],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: Dimensions.spacer),
-            const _AddNewElement(),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
 
-class _AddNewElement extends StatefulWidget {
-  const _AddNewElement();
+class AddNewListElement extends StatefulWidget {
+  final Function(String text) onSave;
+  const AddNewListElement({
+    super.key,
+    required this.onSave,
+  });
 
   @override
-  State<_AddNewElement> createState() => _AddNewElementState();
+  State<AddNewListElement> createState() => AddNewListElementState();
 }
 
-class _AddNewElementState extends State<_AddNewElement> {
+class AddNewListElementState extends State<AddNewListElement> {
   bool isAdding = false;
   bool isReadyToSave = false;
   final TextEditingController _controller = TextEditingController();
@@ -113,7 +170,7 @@ class _AddNewElementState extends State<_AddNewElement> {
                 width: Dimensions.mediumPadding,
               ),
               const Icon(
-                Icons.playlist_add,
+                CustomIcons.playlist_add,
                 color: CustomColors.white,
                 size: 22,
               ),
@@ -140,16 +197,11 @@ class _AddNewElementState extends State<_AddNewElement> {
                         ),
                       ),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.mediumPadding,
-                      ),
-                      child: Text(
-                        LocaleKeys.book_lists_sheet_add.tr(),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: CustomColors.white,
-                        ),
+                  : Text(
+                      LocaleKeys.book_lists_sheet_add.tr(),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.white,
                       ),
                     ),
               AnimatedBoxFade(
@@ -157,7 +209,11 @@ class _AddNewElementState extends State<_AddNewElement> {
                 child: ElevatedButton(
                   style: blueElevatedButton,
                   onPressed: () {
-                    //todo adding new lists
+                    widget.onSave.call(_controller.text);
+                    _controller.clear();
+                    setState(() {
+                      isReadyToSave = false;
+                    });
                   },
                   child: Text(
                     LocaleKeys.book_lists_sheet_save.tr(),

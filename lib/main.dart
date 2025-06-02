@@ -9,6 +9,7 @@ import 'package:wolnelektury/src/config/initializers/repository_initializer.dart
 import 'package:wolnelektury/src/config/initializers/service_initializer.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
+import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
 
@@ -47,9 +48,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      lazy: false,
-      create: (context) => SettingsCubit(get.get()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          lazy: false,
+          create: (context) => SettingsCubit(get.get()),
+        ),
+        BlocProvider(
+          create: (context) => AppModeCubit(),
+        ),
+      ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (p, c) => p.theme != c.theme,
         builder: (context, state) {

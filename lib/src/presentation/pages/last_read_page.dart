@@ -8,6 +8,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/progress/progress_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_with_buttons.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
 import 'package:wolnelektury/src/presentation/widgets/last_read/last_read_book_element.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
@@ -21,22 +22,10 @@ class LastReadPage extends StatelessWidget {
       create: (context) => ProgressCubit(get.get())..getProgresses(),
       child: Builder(
         builder: (context) {
-          final theme = Theme.of(context);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(
-                  Dimensions.veryLargePadding,
-                ),
-                child: Text(
-                  LocaleKeys.last_read_title.tr().toUpperCase(),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    height: 1,
-                  ),
-                ),
-              ),
+              PageSubtitle(subtitle: LocaleKeys.last_read_title.tr()),
               Expanded(
                 child: CustomScrollPage(
                   onLoadMore: () {

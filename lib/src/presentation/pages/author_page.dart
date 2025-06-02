@@ -8,12 +8,8 @@ import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_bo
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_go_back.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_top_bar.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_translations.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
-import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
-import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
-import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/load_more_button.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
-import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class AuthorPage extends StatefulWidget {
   final String? authorSlug;
@@ -122,60 +118,17 @@ class _BooksLoadMore extends StatelessWidget {
         if (state.authorsBooksPagination.next == null) {
           return const SizedBox.shrink();
         }
-        final theme = Theme.of(context);
         final cubit = BlocProvider.of<AuthorCubit>(context);
         return Padding(
           padding: const EdgeInsets.symmetric(
             vertical: Dimensions.mediumPadding,
           ),
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: CustomColors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  Dimensions.borderRadiusOfCircle,
-                ),
-              ),
-            ),
-            child: InkWellWrapper(
-              onTap: () {
-                if (state.isLoadingAuthorsBooks) return;
-                cubit.loadMoreBooks();
-              },
-              borderRadius: const BorderRadius.all(
-                Radius.circular(
-                  Dimensions.borderRadiusOfCircle,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.mediumPadding),
-                child: Row(
-                  children: [
-                    const Spacer(),
-                    Expanded(
-                      child: AnimatedBoxFade(
-                        isChildVisible: !state.isLoadingAuthorsBooks,
-                        duration: const Duration(milliseconds: 200),
-                        collapsedChild: const CustomLoader(),
-                        child: Text(
-                          LocaleKeys.catalogue_author_load_more.tr(),
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Expanded(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Icon(CustomIcons.expand_circle_down),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          child: LoadMoreButton(
+            isLoading: state.isLoadingAuthorsBooks,
+            onLoadMore: () {
+              if (state.isLoadingAuthorsBooks) return;
+              cubit.loadMoreBooks();
+            },
           ),
         );
       },
@@ -198,60 +151,17 @@ class _TranslationsLoadMore extends StatelessWidget {
         if (state.authorsTranslationsPagination.next == null) {
           return const SizedBox.shrink();
         }
-        final theme = Theme.of(context);
         final cubit = BlocProvider.of<AuthorCubit>(context);
         return Padding(
           padding: const EdgeInsets.symmetric(
             vertical: Dimensions.mediumPadding,
           ),
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: CustomColors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  Dimensions.borderRadiusOfCircle,
-                ),
-              ),
-            ),
-            child: InkWellWrapper(
-              onTap: () {
-                if (state.isLoadingAuthorsTranslations) return;
-                cubit.loadMoreTranslations();
-              },
-              borderRadius: const BorderRadius.all(
-                Radius.circular(
-                  Dimensions.borderRadiusOfCircle,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.mediumPadding),
-                child: Row(
-                  children: [
-                    const Spacer(),
-                    Expanded(
-                      child: AnimatedBoxFade(
-                        isChildVisible: !state.isLoadingAuthorsTranslations,
-                        duration: const Duration(milliseconds: 200),
-                        collapsedChild: const CustomLoader(),
-                        child: Text(
-                          'Wczytaj więcej',
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Expanded(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Icon(CustomIcons.expand_circle_down),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          child: LoadMoreButton(
+            isLoading: state.isLoadingAuthorsTranslations,
+            onLoadMore: () {
+              if (state.isLoadingAuthorsTranslations) return;
+              cubit.loadMoreTranslations();
+            },
           ),
         );
       },
