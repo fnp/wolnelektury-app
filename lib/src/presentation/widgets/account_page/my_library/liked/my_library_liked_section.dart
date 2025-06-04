@@ -17,7 +17,6 @@ class MyLibraryLikedSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         PageSubtitle(subtitle: MyLibraryEnum.liked.title),
-        const SizedBox(height: Dimensions.spacer),
         AnimatedSize(
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,

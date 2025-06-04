@@ -15,9 +15,14 @@ class AuthorPageGoBack extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocBuilder<AuthorCubit, AuthorState>(
-      buildWhen: (p, c) => p.isLoading != c.isLoading,
+      buildWhen: (p, c) =>
+          p.isLoading != c.isLoading ||
+          p.isLoadingAuthorsBooks != c.isLoadingAuthorsBooks ||
+          p.isLoadingAuthorsTranslations != c.isLoadingAuthorsTranslations,
       builder: (context, state) {
-        if (state.isLoading) {
+        if (state.isLoading ||
+            state.isLoadingAuthorsBooks ||
+            state.isLoadingAuthorsTranslations) {
           return const SizedBox.shrink();
         }
         return Padding(
@@ -26,9 +31,7 @@ class AuthorPageGoBack extends StatelessWidget {
             decoration: const BoxDecoration(
               color: CustomColors.primaryYellowColor,
               borderRadius: BorderRadius.all(
-                Radius.circular(
-                  Dimensions.borderRadiusOfCircle,
-                ),
+                Radius.circular(Dimensions.borderRadiusOfCircle),
               ),
             ),
             child: InkWellWrapper(
@@ -36,9 +39,7 @@ class AuthorPageGoBack extends StatelessWidget {
                 router.pop();
               },
               borderRadius: const BorderRadius.all(
-                Radius.circular(
-                  Dimensions.borderRadiusOfCircle,
-                ),
+                Radius.circular(Dimensions.borderRadiusOfCircle),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(Dimensions.mediumPadding),

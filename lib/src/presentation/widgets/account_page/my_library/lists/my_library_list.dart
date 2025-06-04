@@ -48,9 +48,7 @@ class _List extends StatelessWidget {
         );
       },
       separatorBuilder: (context, index) {
-        return const SizedBox(
-          height: Dimensions.spacer,
-        );
+        return const SizedBox(height: Dimensions.spacer);
       },
       itemCount: bookList.books.length,
     );
@@ -139,10 +137,7 @@ class _DeleteButton extends StatelessWidget {
           switchInCurve: Curves.fastOutSlowIn,
           switchOutCurve: Curves.fastOutSlowIn,
           transitionBuilder: (child, animation) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
+            return FadeTransition(opacity: animation, child: child);
           },
           child: state.deletingSlug == slug
               ? const SizedBox(
@@ -150,10 +145,7 @@ class _DeleteButton extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomLoader(
-                        size: 16,
-                        color: CustomColors.white,
-                      ),
+                      CustomLoader(size: 16, color: CustomColors.white),
                     ],
                   ),
                 )

@@ -41,13 +41,12 @@ class AuthorCubit extends Cubit<AuthorState> {
           state.copyWith(
             authorsBooks: books,
             authorsBooksPagination: pagination ?? state.authorsBooksPagination,
+            isLoadingAuthorsBooks: false,
           ),
         );
       },
       failure: (failure) => emit(state.copyWith(isLoadingAuthorsBooks: false)),
     );
-
-    emit(state.copyWith(isLoadingAuthorsBooks: false));
   }
 
   Future<void> loadMoreBooks() async {
