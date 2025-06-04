@@ -29,7 +29,7 @@
 			"part '${TM_FILENAME_BASE}.g.dart';",
 			"",
 			"@freezed",
-			"class ${1:DataClass} with _$${1:DataClass} {",
+			"sealed class ${1:DataClass} with _$${1:DataClass} {",
 			"  const factory ${1:DataClass}({",
 			"required String id,",
 			"",
@@ -47,7 +47,7 @@
 			"part '${TM_FILENAME_BASE}.freezed.dart';",
 			"",
 			"@freezed",
-			"class ${1:DataClass} with _$${1:DataClass} {",
+			"sealed class ${1:DataClass} with _$${1:DataClass} {",
 			"  const factory ${1:DataClass}({",
 			"required String id,",
 			"",
@@ -152,5 +152,5 @@
 			"factory ${1:name}.fromJson(Map<String, dynamic> json)",
 			"  => _$${1:name}FromJson(json);"
 		]
-	},
+	}
 }

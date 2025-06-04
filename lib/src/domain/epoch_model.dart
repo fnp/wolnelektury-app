@@ -4,7 +4,7 @@ part 'epoch_model.freezed.dart';
 part 'epoch_model.g.dart';
 
 @freezed
-class EpochModel with _$EpochModel {
+sealed class EpochModel with _$EpochModel {
   const factory EpochModel({
     String? url,
     String? name,

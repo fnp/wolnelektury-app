@@ -1,7 +1,7 @@
 part of 'router_cubit.dart';
 
 @freezed
-class RouterState with _$RouterState {
+sealed class RouterState with _$RouterState {
   const factory RouterState({
     required String location,
     required String previousLocation,

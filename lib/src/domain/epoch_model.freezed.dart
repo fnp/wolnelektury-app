@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,208 +10,148 @@ part of 'epoch_model.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-EpochModel _$EpochModelFromJson(Map<String, dynamic> json) {
-  return _EpochModel.fromJson(json);
-}
 
 /// @nodoc
 mixin _$EpochModel {
-  String? get url => throw _privateConstructorUsedError;
-  String? get name => throw _privateConstructorUsedError;
-  String? get href => throw _privateConstructorUsedError;
-  String? get slug => throw _privateConstructorUsedError;
+
+ String? get url; String? get name; String? get href; String? get slug;
+/// Create a copy of EpochModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EpochModelCopyWith<EpochModel> get copyWith => _$EpochModelCopyWithImpl<EpochModel>(this as EpochModel, _$identity);
 
   /// Serializes this EpochModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of EpochModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $EpochModelCopyWith<EpochModel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EpochModel&&(identical(other.url, url) || other.url == url)&&(identical(other.name, name) || other.name == name)&&(identical(other.href, href) || other.href == href)&&(identical(other.slug, slug) || other.slug == slug));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,url,name,href,slug);
+
+@override
+String toString() {
+  return 'EpochModel(url: $url, name: $name, href: $href, slug: $slug)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $EpochModelCopyWith<$Res> {
-  factory $EpochModelCopyWith(
-          EpochModel value, $Res Function(EpochModel) then) =
-      _$EpochModelCopyWithImpl<$Res, EpochModel>;
-  @useResult
-  $Res call({String? url, String? name, String? href, String? slug});
-}
+abstract mixin class $EpochModelCopyWith<$Res>  {
+  factory $EpochModelCopyWith(EpochModel value, $Res Function(EpochModel) _then) = _$EpochModelCopyWithImpl;
+@useResult
+$Res call({
+ String? url, String? name, String? href, String? slug
+});
 
+
+
+
+}
 /// @nodoc
-class _$EpochModelCopyWithImpl<$Res, $Val extends EpochModel>
+class _$EpochModelCopyWithImpl<$Res>
     implements $EpochModelCopyWith<$Res> {
-  _$EpochModelCopyWithImpl(this._value, this._then);
+  _$EpochModelCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final EpochModel _self;
+  final $Res Function(EpochModel) _then;
 
-  /// Create a copy of EpochModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? url = freezed,
-    Object? name = freezed,
-    Object? href = freezed,
-    Object? slug = freezed,
-  }) {
-    return _then(_value.copyWith(
-      url: freezed == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      href: freezed == href
-          ? _value.href
-          : href // ignore: cast_nullable_to_non_nullable
-              as String?,
-      slug: freezed == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
+/// Create a copy of EpochModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? url = freezed,Object? name = freezed,Object? href = freezed,Object? slug = freezed,}) {
+  return _then(_self.copyWith(
+url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,href: freezed == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
+as String?,slug: freezed == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$EpochModelImplCopyWith<$Res>
-    implements $EpochModelCopyWith<$Res> {
-  factory _$$EpochModelImplCopyWith(
-          _$EpochModelImpl value, $Res Function(_$EpochModelImpl) then) =
-      __$$EpochModelImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String? url, String? name, String? href, String? slug});
 }
 
-/// @nodoc
-class __$$EpochModelImplCopyWithImpl<$Res>
-    extends _$EpochModelCopyWithImpl<$Res, _$EpochModelImpl>
-    implements _$$EpochModelImplCopyWith<$Res> {
-  __$$EpochModelImplCopyWithImpl(
-      _$EpochModelImpl _value, $Res Function(_$EpochModelImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of EpochModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? url = freezed,
-    Object? name = freezed,
-    Object? href = freezed,
-    Object? slug = freezed,
-  }) {
-    return _then(_$EpochModelImpl(
-      url: freezed == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      href: freezed == href
-          ? _value.href
-          : href // ignore: cast_nullable_to_non_nullable
-              as String?,
-      slug: freezed == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$EpochModelImpl implements _EpochModel {
-  const _$EpochModelImpl({this.url, this.name, this.href, this.slug});
 
-  factory _$EpochModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$EpochModelImplFromJson(json);
+class _EpochModel implements EpochModel {
+  const _EpochModel({this.url, this.name, this.href, this.slug});
+  factory _EpochModel.fromJson(Map<String, dynamic> json) => _$EpochModelFromJson(json);
 
-  @override
-  final String? url;
-  @override
-  final String? name;
-  @override
-  final String? href;
-  @override
-  final String? slug;
+@override final  String? url;
+@override final  String? name;
+@override final  String? href;
+@override final  String? slug;
 
-  @override
-  String toString() {
-    return 'EpochModel(url: $url, name: $name, href: $href, slug: $slug)';
-  }
+/// Create a copy of EpochModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EpochModelCopyWith<_EpochModel> get copyWith => __$EpochModelCopyWithImpl<_EpochModel>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$EpochModelImpl &&
-            (identical(other.url, url) || other.url == url) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.href, href) || other.href == href) &&
-            (identical(other.slug, slug) || other.slug == slug));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, url, name, href, slug);
-
-  /// Create a copy of EpochModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$EpochModelImplCopyWith<_$EpochModelImpl> get copyWith =>
-      __$$EpochModelImplCopyWithImpl<_$EpochModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$EpochModelImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$EpochModelToJson(this, );
 }
 
-abstract class _EpochModel implements EpochModel {
-  const factory _EpochModel(
-      {final String? url,
-      final String? name,
-      final String? href,
-      final String? slug}) = _$EpochModelImpl;
-
-  factory _EpochModel.fromJson(Map<String, dynamic> json) =
-      _$EpochModelImpl.fromJson;
-
-  @override
-  String? get url;
-  @override
-  String? get name;
-  @override
-  String? get href;
-  @override
-  String? get slug;
-
-  /// Create a copy of EpochModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$EpochModelImplCopyWith<_$EpochModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EpochModel&&(identical(other.url, url) || other.url == url)&&(identical(other.name, name) || other.name == name)&&(identical(other.href, href) || other.href == href)&&(identical(other.slug, slug) || other.slug == slug));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,url,name,href,slug);
+
+@override
+String toString() {
+  return 'EpochModel(url: $url, name: $name, href: $href, slug: $slug)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EpochModelCopyWith<$Res> implements $EpochModelCopyWith<$Res> {
+  factory _$EpochModelCopyWith(_EpochModel value, $Res Function(_EpochModel) _then) = __$EpochModelCopyWithImpl;
+@override @useResult
+$Res call({
+ String? url, String? name, String? href, String? slug
+});
+
+
+
+
+}
+/// @nodoc
+class __$EpochModelCopyWithImpl<$Res>
+    implements _$EpochModelCopyWith<$Res> {
+  __$EpochModelCopyWithImpl(this._self, this._then);
+
+  final _EpochModel _self;
+  final $Res Function(_EpochModel) _then;
+
+/// Create a copy of EpochModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? url = freezed,Object? name = freezed,Object? href = freezed,Object? slug = freezed,}) {
+  return _then(_EpochModel(
+url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,href: freezed == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
+as String?,slug: freezed == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+// dart format on

@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,201 +10,151 @@ part of 'book_list_model.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-BookListModel _$BookListModelFromJson(Map<String, dynamic> json) {
-  return _BookListModel.fromJson(json);
-}
 
 /// @nodoc
 mixin _$BookListModel {
-  String get name => throw _privateConstructorUsedError;
-  String get slug => throw _privateConstructorUsedError;
-  List<String> get books => throw _privateConstructorUsedError;
+
+ String get name; String get slug; List<String> get books;
+/// Create a copy of BookListModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$BookListModelCopyWith<BookListModel> get copyWith => _$BookListModelCopyWithImpl<BookListModel>(this as BookListModel, _$identity);
 
   /// Serializes this BookListModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of BookListModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $BookListModelCopyWith<BookListModel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookListModel&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&const DeepCollectionEquality().equals(other.books, books));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,name,slug,const DeepCollectionEquality().hash(books));
+
+@override
+String toString() {
+  return 'BookListModel(name: $name, slug: $slug, books: $books)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $BookListModelCopyWith<$Res> {
-  factory $BookListModelCopyWith(
-          BookListModel value, $Res Function(BookListModel) then) =
-      _$BookListModelCopyWithImpl<$Res, BookListModel>;
-  @useResult
-  $Res call({String name, String slug, List<String> books});
-}
+abstract mixin class $BookListModelCopyWith<$Res>  {
+  factory $BookListModelCopyWith(BookListModel value, $Res Function(BookListModel) _then) = _$BookListModelCopyWithImpl;
+@useResult
+$Res call({
+ String name, String slug, List<String> books
+});
 
+
+
+
+}
 /// @nodoc
-class _$BookListModelCopyWithImpl<$Res, $Val extends BookListModel>
+class _$BookListModelCopyWithImpl<$Res>
     implements $BookListModelCopyWith<$Res> {
-  _$BookListModelCopyWithImpl(this._value, this._then);
+  _$BookListModelCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final BookListModel _self;
+  final $Res Function(BookListModel) _then;
 
-  /// Create a copy of BookListModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-    Object? slug = null,
-    Object? books = null,
-  }) {
-    return _then(_value.copyWith(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      slug: null == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String,
-      books: null == books
-          ? _value.books
-          : books // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ) as $Val);
-  }
+/// Create a copy of BookListModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? slug = null,Object? books = null,}) {
+  return _then(_self.copyWith(
+name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,books: null == books ? _self.books : books // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
 }
 
-/// @nodoc
-abstract class _$$BookListModelImplCopyWith<$Res>
-    implements $BookListModelCopyWith<$Res> {
-  factory _$$BookListModelImplCopyWith(
-          _$BookListModelImpl value, $Res Function(_$BookListModelImpl) then) =
-      __$$BookListModelImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String name, String slug, List<String> books});
 }
 
-/// @nodoc
-class __$$BookListModelImplCopyWithImpl<$Res>
-    extends _$BookListModelCopyWithImpl<$Res, _$BookListModelImpl>
-    implements _$$BookListModelImplCopyWith<$Res> {
-  __$$BookListModelImplCopyWithImpl(
-      _$BookListModelImpl _value, $Res Function(_$BookListModelImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of BookListModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-    Object? slug = null,
-    Object? books = null,
-  }) {
-    return _then(_$BookListModelImpl(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      slug: null == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String,
-      books: null == books
-          ? _value._books
-          : books // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$BookListModelImpl implements _BookListModel {
-  const _$BookListModelImpl(
-      {required this.name,
-      required this.slug,
-      required final List<String> books})
-      : _books = books;
 
-  factory _$BookListModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BookListModelImplFromJson(json);
+class _BookListModel implements BookListModel {
+  const _BookListModel({required this.name, required this.slug, required final  List<String> books}): _books = books;
+  factory _BookListModel.fromJson(Map<String, dynamic> json) => _$BookListModelFromJson(json);
 
-  @override
-  final String name;
-  @override
-  final String slug;
-  final List<String> _books;
-  @override
-  List<String> get books {
-    if (_books is EqualUnmodifiableListView) return _books;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_books);
-  }
-
-  @override
-  String toString() {
-    return 'BookListModel(name: $name, slug: $slug, books: $books)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$BookListModelImpl &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.slug, slug) || other.slug == slug) &&
-            const DeepCollectionEquality().equals(other._books, _books));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, name, slug, const DeepCollectionEquality().hash(_books));
-
-  /// Create a copy of BookListModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$BookListModelImplCopyWith<_$BookListModelImpl> get copyWith =>
-      __$$BookListModelImplCopyWithImpl<_$BookListModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BookListModelImplToJson(
-      this,
-    );
-  }
+@override final  String name;
+@override final  String slug;
+ final  List<String> _books;
+@override List<String> get books {
+  if (_books is EqualUnmodifiableListView) return _books;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_books);
 }
 
-abstract class _BookListModel implements BookListModel {
-  const factory _BookListModel(
-      {required final String name,
-      required final String slug,
-      required final List<String> books}) = _$BookListModelImpl;
 
-  factory _BookListModel.fromJson(Map<String, dynamic> json) =
-      _$BookListModelImpl.fromJson;
+/// Create a copy of BookListModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$BookListModelCopyWith<_BookListModel> get copyWith => __$BookListModelCopyWithImpl<_BookListModel>(this, _$identity);
 
-  @override
-  String get name;
-  @override
-  String get slug;
-  @override
-  List<String> get books;
-
-  /// Create a copy of BookListModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BookListModelImplCopyWith<_$BookListModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+Map<String, dynamic> toJson() {
+  return _$BookListModelToJson(this, );
 }
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookListModel&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&const DeepCollectionEquality().equals(other._books, _books));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,name,slug,const DeepCollectionEquality().hash(_books));
+
+@override
+String toString() {
+  return 'BookListModel(name: $name, slug: $slug, books: $books)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$BookListModelCopyWith<$Res> implements $BookListModelCopyWith<$Res> {
+  factory _$BookListModelCopyWith(_BookListModel value, $Res Function(_BookListModel) _then) = __$BookListModelCopyWithImpl;
+@override @useResult
+$Res call({
+ String name, String slug, List<String> books
+});
+
+
+
+
+}
+/// @nodoc
+class __$BookListModelCopyWithImpl<$Res>
+    implements _$BookListModelCopyWith<$Res> {
+  __$BookListModelCopyWithImpl(this._self, this._then);
+
+  final _BookListModel _self;
+  final $Res Function(_BookListModel) _then;
+
+/// Create a copy of BookListModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? slug = null,Object? books = null,}) {
+  return _then(_BookListModel(
+name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,books: null == books ? _self._books : books // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+
+
+}
+
+// dart format on

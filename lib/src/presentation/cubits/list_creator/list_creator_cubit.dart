@@ -24,7 +24,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     emit(const ListCreatorState());
     emit(state.copyWith(isLoading: true));
     final response = await _listsRepository.getLists();
-    response.when(
+    response.handle(
       success: (lists, pagination) {
         emit(
           state.copyWith(
@@ -34,13 +34,8 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
           ),
         );
       },
-      failed: (failure) {
-        emit(
-          state.copyWith(
-            isLoading: false,
-            allLists: const [],
-          ),
-        );
+      failure: (failure) {
+        emit(state.copyWith(isLoading: false, allLists: const []));
       },
     );
   }
@@ -53,7 +48,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
       url: state.pagination.next!.removeApiUrl,
     );
 
-    lists.when(
+    lists.handle(
       success: (lists, pagination) {
         emit(
           state.copyWith(
@@ -63,10 +58,11 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
           ),
         );
       },
-      failed: (failure) {
+      failure: (failure) {
         emit(
           state.copyWith(
             isLoadingMore: false,
+            pagination: const ApiResponsePagination(),
           ),
         );
       },
@@ -98,8 +94,9 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
 
   void addBookToListWithQueue(String listName, String bookSlug) {
     final currentLists = List<BookListModel>.from(state.allLists);
-    final index =
-        currentLists.indexWhere((element) => element.name == listName);
+    final index = currentLists.indexWhere(
+      (element) => element.name == listName,
+    );
     if (index != -1) {
       final list = currentLists[index];
       final books = List<String>.from(list.books);
@@ -118,8 +115,9 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
 
   void removeBookFromListWithQueue(String listName, String bookSlug) {
     final currentLists = List<BookListModel>.from(state.allLists);
-    final index =
-        currentLists.indexWhere((element) => element.name == listName);
+    final index = currentLists.indexWhere(
+      (element) => element.name == listName,
+    );
     if (index > -1) {
       final list = currentLists[index];
       final books = List<String>.from(list.books);
@@ -259,11 +257,11 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     final newState = List<BookListModel>.from(state.allLists);
     newState.removeWhere((element) => element.slug == slug);
     final result = await _listsRepository.deleteList(listSlug: slug);
-    result.when(
+    result.handle(
       success: (data, _) {
         emit(state.copyWith(allLists: newState, deletingSlug: null));
       },
-      failed: (failure) {
+      failure: (failure) {
         //todo snackbar error
         emit(state.copyWith(isDeleteFailure: true, deletingSlug: null));
       },
@@ -292,11 +290,11 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
       bookSlug: bookSlug,
     );
 
-    response.when(
+    response.handle(
       success: (_, __) {
         // Book removed successfully, no further action needed
       },
-      failed: (_) {
+      failure: (_) {
         // Revert state on failure
         emit(state.copyWith(allLists: previousLists));
       },
@@ -312,20 +310,15 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
       listName: name,
       bookSlugs: [],
     );
-    result.when(
+    result.handle(
       success: (data, _) {
         final newState = List<BookListModel>.from(state.allLists);
         newState.insert(0, BookListModel(name: name, books: [], slug: data));
         emit(state.copyWith(isAdding: false, allLists: newState));
       },
-      failed: (failure) {
+      failure: (failure) {
         //todo snackbar error
-        emit(
-          state.copyWith(
-            isAdding: false,
-            isAddingFailure: true,
-          ),
-        );
+        emit(state.copyWith(isAdding: false, isAddingFailure: true));
       },
     );
   }
@@ -384,7 +377,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
       listName: state.editedListToSave!.name,
     );
 
-    result.when(
+    result.handle(
       success: (data, _) {
         final updatedLists = List<BookListModel>.from(state.allLists);
         final index = updatedLists.indexWhere(
@@ -404,11 +397,12 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
         // Reinitialize the state to fetch the latest lists
         init(force: true);
       },
-      failed: (failure) {
+      failure: (failure) {
         emit(state.copyWith(isSavingEditedList: false, isSavingFailure: true));
       },
     );
   }
+
   // --------------------------
   // --------------------------
   // --------------------------

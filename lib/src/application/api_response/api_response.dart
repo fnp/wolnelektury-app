@@ -5,9 +5,11 @@ part 'api_response.freezed.dart';
 part 'api_response.g.dart';
 
 @freezed
-class ApiResponse with _$ApiResponse {
+sealed class ApiResponse with _$ApiResponse {
   const factory ApiResponse({
     List<Map<String, dynamic>>? data,
+    // Data that is not parsed into a model,
+    List<String>? simpleData,
 
     // Pagination info
     int? totalItems,
@@ -18,9 +20,14 @@ class ApiResponse with _$ApiResponse {
     int? statusCode,
   }) = _ApiResponse;
 
-  factory ApiResponse.fromApiServiceResponse(
-    Response<dynamic> response,
-  ) {
+  factory ApiResponse.fromApiServiceResponse(Response<dynamic> response) {
+    if (response.data is List && response.data.first is String) {
+      return ApiResponse(
+        simpleData: List<String>.from(response.data),
+        statusCode: response.statusCode,
+      );
+    }
+
     final convertedResponse = response.data is Map
         ? List<Map<String, dynamic>>.from([response.data])
         : List<Map<String, dynamic>>.from(response.data);
@@ -53,7 +60,6 @@ class ApiResponse with _$ApiResponse {
     final convertedResponse = response.data['member'] is Map
         ? List<Map<String, dynamic>>.from([response.data['member']])
         : List<Map<String, dynamic>>.from(response.data['member']);
-
     final paginationData = ApiResponsePagination.fromJson(
       response.data['view'] ?? {},
     );
@@ -77,7 +83,7 @@ class ApiResponse with _$ApiResponse {
 }
 
 @freezed
-class ApiResponsePagination with _$ApiResponsePagination {
+sealed class ApiResponsePagination with _$ApiResponsePagination {
   const factory ApiResponsePagination({
     String? first,
     String? last,

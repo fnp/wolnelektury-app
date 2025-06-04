@@ -1,7 +1,7 @@
 part of 'audio_cubit.dart';
 
 @freezed
-class AudioState with _$AudioState {
+sealed class AudioState with _$AudioState {
   const factory AudioState({
     BookModel? book,
     AudiobookModel? audiobook,

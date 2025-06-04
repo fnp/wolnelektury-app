@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,313 +10,199 @@ part of 'auth_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$AuthState {
-  bool get isLoading => throw _privateConstructorUsedError;
-  bool get isLoadingAgreements => throw _privateConstructorUsedError;
-  bool? get isLoginSuccess => throw _privateConstructorUsedError;
-  bool? get isRegisterSuccess => throw _privateConstructorUsedError;
-  bool? get isLoginSuccessFromRegisterFlow =>
-      throw _privateConstructorUsedError;
-  UserModel? get user => throw _privateConstructorUsedError;
-  RegisterAgreementModel? get agreements => throw _privateConstructorUsedError;
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $AuthStateCopyWith<AuthState> get copyWith =>
-      throw _privateConstructorUsedError;
+ bool get isLoading; bool get isLoadingAgreements; bool? get isLoginSuccess; bool? get isRegisterSuccess; bool? get isLoginSuccessFromRegisterFlow; UserModel? get user; RegisterAgreementModel? get agreements;
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>(this as AuthState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingAgreements, isLoadingAgreements) || other.isLoadingAgreements == isLoadingAgreements)&&(identical(other.isLoginSuccess, isLoginSuccess) || other.isLoginSuccess == isLoginSuccess)&&(identical(other.isRegisterSuccess, isRegisterSuccess) || other.isRegisterSuccess == isRegisterSuccess)&&(identical(other.isLoginSuccessFromRegisterFlow, isLoginSuccessFromRegisterFlow) || other.isLoginSuccessFromRegisterFlow == isLoginSuccessFromRegisterFlow)&&(identical(other.user, user) || other.user == user)&&(identical(other.agreements, agreements) || other.agreements == agreements));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingAgreements,isLoginSuccess,isRegisterSuccess,isLoginSuccessFromRegisterFlow,user,agreements);
+
+@override
+String toString() {
+  return 'AuthState(isLoading: $isLoading, isLoadingAgreements: $isLoadingAgreements, isLoginSuccess: $isLoginSuccess, isRegisterSuccess: $isRegisterSuccess, isLoginSuccessFromRegisterFlow: $isLoginSuccessFromRegisterFlow, user: $user, agreements: $agreements)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $AuthStateCopyWith<$Res> {
-  factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) then) =
-      _$AuthStateCopyWithImpl<$Res, AuthState>;
-  @useResult
-  $Res call(
-      {bool isLoading,
-      bool isLoadingAgreements,
-      bool? isLoginSuccess,
-      bool? isRegisterSuccess,
-      bool? isLoginSuccessFromRegisterFlow,
-      UserModel? user,
-      RegisterAgreementModel? agreements});
+abstract mixin class $AuthStateCopyWith<$Res>  {
+  factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
+@useResult
+$Res call({
+ bool isLoading, bool isLoadingAgreements, bool? isLoginSuccess, bool? isRegisterSuccess, bool? isLoginSuccessFromRegisterFlow, UserModel? user, RegisterAgreementModel? agreements
+});
 
-  $UserModelCopyWith<$Res>? get user;
-  $RegisterAgreementModelCopyWith<$Res>? get agreements;
+
+$UserModelCopyWith<$Res>? get user;$RegisterAgreementModelCopyWith<$Res>? get agreements;
+
 }
-
 /// @nodoc
-class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
+class _$AuthStateCopyWithImpl<$Res>
     implements $AuthStateCopyWith<$Res> {
-  _$AuthStateCopyWithImpl(this._value, this._then);
+  _$AuthStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final AuthState _self;
+  final $Res Function(AuthState) _then;
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? isLoadingAgreements = null,
-    Object? isLoginSuccess = freezed,
-    Object? isRegisterSuccess = freezed,
-    Object? isLoginSuccessFromRegisterFlow = freezed,
-    Object? user = freezed,
-    Object? agreements = freezed,
-  }) {
-    return _then(_value.copyWith(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoadingAgreements: null == isLoadingAgreements
-          ? _value.isLoadingAgreements
-          : isLoadingAgreements // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoginSuccess: freezed == isLoginSuccess
-          ? _value.isLoginSuccess
-          : isLoginSuccess // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      isRegisterSuccess: freezed == isRegisterSuccess
-          ? _value.isRegisterSuccess
-          : isRegisterSuccess // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      isLoginSuccessFromRegisterFlow: freezed == isLoginSuccessFromRegisterFlow
-          ? _value.isLoginSuccessFromRegisterFlow
-          : isLoginSuccessFromRegisterFlow // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
-      agreements: freezed == agreements
-          ? _value.agreements
-          : agreements // ignore: cast_nullable_to_non_nullable
-              as RegisterAgreementModel?,
-    ) as $Val);
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isLoadingAgreements = null,Object? isLoginSuccess = freezed,Object? isRegisterSuccess = freezed,Object? isLoginSuccessFromRegisterFlow = freezed,Object? user = freezed,Object? agreements = freezed,}) {
+  return _then(_self.copyWith(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingAgreements: null == isLoadingAgreements ? _self.isLoadingAgreements : isLoadingAgreements // ignore: cast_nullable_to_non_nullable
+as bool,isLoginSuccess: freezed == isLoginSuccess ? _self.isLoginSuccess : isLoginSuccess // ignore: cast_nullable_to_non_nullable
+as bool?,isRegisterSuccess: freezed == isRegisterSuccess ? _self.isRegisterSuccess : isRegisterSuccess // ignore: cast_nullable_to_non_nullable
+as bool?,isLoginSuccessFromRegisterFlow: freezed == isLoginSuccessFromRegisterFlow ? _self.isLoginSuccessFromRegisterFlow : isLoginSuccessFromRegisterFlow // ignore: cast_nullable_to_non_nullable
+as bool?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as UserModel?,agreements: freezed == agreements ? _self.agreements : agreements // ignore: cast_nullable_to_non_nullable
+as RegisterAgreementModel?,
+  ));
+}
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserModelCopyWith<$Res>? get user {
+    if (_self.user == null) {
+    return null;
   }
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserModelCopyWith<$Res>? get user {
-    if (_value.user == null) {
-      return null;
-    }
-
-    return $UserModelCopyWith<$Res>(_value.user!, (value) {
-      return _then(_value.copyWith(user: value) as $Val);
-    });
+  return $UserModelCopyWith<$Res>(_self.user!, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RegisterAgreementModelCopyWith<$Res>? get agreements {
+    if (_self.agreements == null) {
+    return null;
   }
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $RegisterAgreementModelCopyWith<$Res>? get agreements {
-    if (_value.agreements == null) {
-      return null;
-    }
-
-    return $RegisterAgreementModelCopyWith<$Res>(_value.agreements!, (value) {
-      return _then(_value.copyWith(agreements: value) as $Val);
-    });
-  }
+  return $RegisterAgreementModelCopyWith<$Res>(_self.agreements!, (value) {
+    return _then(_self.copyWith(agreements: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$AuthStateImplCopyWith<$Res>
-    implements $AuthStateCopyWith<$Res> {
-  factory _$$AuthStateImplCopyWith(
-          _$AuthStateImpl value, $Res Function(_$AuthStateImpl) then) =
-      __$$AuthStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {bool isLoading,
-      bool isLoadingAgreements,
-      bool? isLoginSuccess,
-      bool? isRegisterSuccess,
-      bool? isLoginSuccessFromRegisterFlow,
-      UserModel? user,
-      RegisterAgreementModel? agreements});
-
-  @override
-  $UserModelCopyWith<$Res>? get user;
-  @override
-  $RegisterAgreementModelCopyWith<$Res>? get agreements;
-}
-
-/// @nodoc
-class __$$AuthStateImplCopyWithImpl<$Res>
-    extends _$AuthStateCopyWithImpl<$Res, _$AuthStateImpl>
-    implements _$$AuthStateImplCopyWith<$Res> {
-  __$$AuthStateImplCopyWithImpl(
-      _$AuthStateImpl _value, $Res Function(_$AuthStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? isLoadingAgreements = null,
-    Object? isLoginSuccess = freezed,
-    Object? isRegisterSuccess = freezed,
-    Object? isLoginSuccessFromRegisterFlow = freezed,
-    Object? user = freezed,
-    Object? agreements = freezed,
-  }) {
-    return _then(_$AuthStateImpl(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoadingAgreements: null == isLoadingAgreements
-          ? _value.isLoadingAgreements
-          : isLoadingAgreements // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoginSuccess: freezed == isLoginSuccess
-          ? _value.isLoginSuccess
-          : isLoginSuccess // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      isRegisterSuccess: freezed == isRegisterSuccess
-          ? _value.isRegisterSuccess
-          : isRegisterSuccess // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      isLoginSuccessFromRegisterFlow: freezed == isLoginSuccessFromRegisterFlow
-          ? _value.isLoginSuccessFromRegisterFlow
-          : isLoginSuccessFromRegisterFlow // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
-      agreements: freezed == agreements
-          ? _value.agreements
-          : agreements // ignore: cast_nullable_to_non_nullable
-              as RegisterAgreementModel?,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$AuthStateImpl implements _AuthState {
-  const _$AuthStateImpl(
-      {this.isLoading = false,
-      this.isLoadingAgreements = false,
-      this.isLoginSuccess,
-      this.isRegisterSuccess,
-      this.isLoginSuccessFromRegisterFlow,
-      this.user,
-      this.agreements});
 
-  @override
-  @JsonKey()
-  final bool isLoading;
-  @override
-  @JsonKey()
-  final bool isLoadingAgreements;
-  @override
-  final bool? isLoginSuccess;
-  @override
-  final bool? isRegisterSuccess;
-  @override
-  final bool? isLoginSuccessFromRegisterFlow;
-  @override
-  final UserModel? user;
-  @override
-  final RegisterAgreementModel? agreements;
+class _AuthState implements AuthState {
+  const _AuthState({this.isLoading = false, this.isLoadingAgreements = false, this.isLoginSuccess, this.isRegisterSuccess, this.isLoginSuccessFromRegisterFlow, this.user, this.agreements});
+  
 
-  @override
-  String toString() {
-    return 'AuthState(isLoading: $isLoading, isLoadingAgreements: $isLoadingAgreements, isLoginSuccess: $isLoginSuccess, isRegisterSuccess: $isRegisterSuccess, isLoginSuccessFromRegisterFlow: $isLoginSuccessFromRegisterFlow, user: $user, agreements: $agreements)';
-  }
+@override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isLoadingAgreements;
+@override final  bool? isLoginSuccess;
+@override final  bool? isRegisterSuccess;
+@override final  bool? isLoginSuccessFromRegisterFlow;
+@override final  UserModel? user;
+@override final  RegisterAgreementModel? agreements;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AuthStateImpl &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            (identical(other.isLoadingAgreements, isLoadingAgreements) ||
-                other.isLoadingAgreements == isLoadingAgreements) &&
-            (identical(other.isLoginSuccess, isLoginSuccess) ||
-                other.isLoginSuccess == isLoginSuccess) &&
-            (identical(other.isRegisterSuccess, isRegisterSuccess) ||
-                other.isRegisterSuccess == isRegisterSuccess) &&
-            (identical(other.isLoginSuccessFromRegisterFlow,
-                    isLoginSuccessFromRegisterFlow) ||
-                other.isLoginSuccessFromRegisterFlow ==
-                    isLoginSuccessFromRegisterFlow) &&
-            (identical(other.user, user) || other.user == user) &&
-            (identical(other.agreements, agreements) ||
-                other.agreements == agreements));
-  }
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthState>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      isLoading,
-      isLoadingAgreements,
-      isLoginSuccess,
-      isRegisterSuccess,
-      isLoginSuccessFromRegisterFlow,
-      user,
-      agreements);
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$AuthStateImplCopyWith<_$AuthStateImpl> get copyWith =>
-      __$$AuthStateImplCopyWithImpl<_$AuthStateImpl>(this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingAgreements, isLoadingAgreements) || other.isLoadingAgreements == isLoadingAgreements)&&(identical(other.isLoginSuccess, isLoginSuccess) || other.isLoginSuccess == isLoginSuccess)&&(identical(other.isRegisterSuccess, isRegisterSuccess) || other.isRegisterSuccess == isRegisterSuccess)&&(identical(other.isLoginSuccessFromRegisterFlow, isLoginSuccessFromRegisterFlow) || other.isLoginSuccessFromRegisterFlow == isLoginSuccessFromRegisterFlow)&&(identical(other.user, user) || other.user == user)&&(identical(other.agreements, agreements) || other.agreements == agreements));
 }
 
-abstract class _AuthState implements AuthState {
-  const factory _AuthState(
-      {final bool isLoading,
-      final bool isLoadingAgreements,
-      final bool? isLoginSuccess,
-      final bool? isRegisterSuccess,
-      final bool? isLoginSuccessFromRegisterFlow,
-      final UserModel? user,
-      final RegisterAgreementModel? agreements}) = _$AuthStateImpl;
 
-  @override
-  bool get isLoading;
-  @override
-  bool get isLoadingAgreements;
-  @override
-  bool? get isLoginSuccess;
-  @override
-  bool? get isRegisterSuccess;
-  @override
-  bool? get isLoginSuccessFromRegisterFlow;
-  @override
-  UserModel? get user;
-  @override
-  RegisterAgreementModel? get agreements;
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingAgreements,isLoginSuccess,isRegisterSuccess,isLoginSuccessFromRegisterFlow,user,agreements);
 
-  /// Create a copy of AuthState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AuthStateImplCopyWith<_$AuthStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'AuthState(isLoading: $isLoading, isLoadingAgreements: $isLoadingAgreements, isLoginSuccess: $isLoginSuccess, isRegisterSuccess: $isRegisterSuccess, isLoginSuccessFromRegisterFlow: $isLoginSuccessFromRegisterFlow, user: $user, agreements: $agreements)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
+@override @useResult
+$Res call({
+ bool isLoading, bool isLoadingAgreements, bool? isLoginSuccess, bool? isRegisterSuccess, bool? isLoginSuccessFromRegisterFlow, UserModel? user, RegisterAgreementModel? agreements
+});
+
+
+@override $UserModelCopyWith<$Res>? get user;@override $RegisterAgreementModelCopyWith<$Res>? get agreements;
+
+}
+/// @nodoc
+class __$AuthStateCopyWithImpl<$Res>
+    implements _$AuthStateCopyWith<$Res> {
+  __$AuthStateCopyWithImpl(this._self, this._then);
+
+  final _AuthState _self;
+  final $Res Function(_AuthState) _then;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isLoadingAgreements = null,Object? isLoginSuccess = freezed,Object? isRegisterSuccess = freezed,Object? isLoginSuccessFromRegisterFlow = freezed,Object? user = freezed,Object? agreements = freezed,}) {
+  return _then(_AuthState(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingAgreements: null == isLoadingAgreements ? _self.isLoadingAgreements : isLoadingAgreements // ignore: cast_nullable_to_non_nullable
+as bool,isLoginSuccess: freezed == isLoginSuccess ? _self.isLoginSuccess : isLoginSuccess // ignore: cast_nullable_to_non_nullable
+as bool?,isRegisterSuccess: freezed == isRegisterSuccess ? _self.isRegisterSuccess : isRegisterSuccess // ignore: cast_nullable_to_non_nullable
+as bool?,isLoginSuccessFromRegisterFlow: freezed == isLoginSuccessFromRegisterFlow ? _self.isLoginSuccessFromRegisterFlow : isLoginSuccessFromRegisterFlow // ignore: cast_nullable_to_non_nullable
+as bool?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as UserModel?,agreements: freezed == agreements ? _self.agreements : agreements // ignore: cast_nullable_to_non_nullable
+as RegisterAgreementModel?,
+  ));
+}
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserModelCopyWith<$Res>? get user {
+    if (_self.user == null) {
+    return null;
+  }
+
+  return $UserModelCopyWith<$Res>(_self.user!, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RegisterAgreementModelCopyWith<$Res>? get agreements {
+    if (_self.agreements == null) {
+    return null;
+  }
+
+  return $RegisterAgreementModelCopyWith<$Res>(_self.agreements!, (value) {
+    return _then(_self.copyWith(agreements: value));
+  });
+}
+}
+
+// dart format on

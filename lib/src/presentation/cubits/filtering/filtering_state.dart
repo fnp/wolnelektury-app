@@ -1,7 +1,7 @@
 part of 'filtering_cubit.dart';
 
 @freezed
-class FilteringState with _$FilteringState {
+sealed class FilteringState with _$FilteringState {
   const factory FilteringState({
     @Default(false) bool isLoading,
     @Default(false) bool isLoadingMore,

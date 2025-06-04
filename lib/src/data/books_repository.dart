@@ -23,7 +23,7 @@ abstract class BooksRepository {
     required bool targetValue,
   });
 
-  Future<DataState<Map<String, List>>> getFavourites();
+  Future<DataState<List<String>>> getFavourites();
 
   Future<DataState<List<BookmarkModel>>> getBookBookmarks({
     required String slug,
@@ -42,17 +42,11 @@ abstract class BooksRepository {
     String? note,
   });
 
-  Future<DataState<void>> deleteBookmark({
-    required String href,
-  });
+  Future<DataState<void>> deleteBookmark({required String href});
 
-  Future<DataState<ReaderBookModel>> getBookJson({
-    required String slug,
-  });
+  Future<DataState<ReaderBookModel>> getBookJson({required String slug});
 
-  Future<DataState<BookModel>> getBookBySlug({
-    required String slug,
-  });
+  Future<DataState<BookModel>> getBookBySlug({required String slug});
 }
 
 class BooksRepositoryImplementation extends BooksRepository {
@@ -66,41 +60,29 @@ class BooksRepositoryImplementation extends BooksRepository {
   BooksRepositoryImplementation(this._apiService);
 
   @override
-  Future<DataState<BookModel>> getBookBySlug({
-    required String slug,
-  }) async {
+  Future<DataState<BookModel>> getBookBySlug({required String slug}) async {
     try {
-      final response = await _apiService.getRequest(
-        '$_booksEndpoint/$slug/',
-      );
+      final response = await _apiService.getRequest('$_booksEndpoint/$slug/');
 
       if (response.hasData) {
         return DataState.success(
-          BookModel.fromJson(response.data!.first),
+          data: BookModel.fromJson(response.data!.first),
         );
       }
-      return const DataState.failed(
-        Failure.notFound(),
-      );
+      return const DataState.failure(Failure.notFound());
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
   @override
   Future<DataState<void>> deleteBookmark({required String href}) async {
     try {
-      await _apiService.deleteRequest(
-        href.removeApiUrl,
-      );
+      await _apiService.deleteRequest(href.removeApiUrl);
 
-      return const DataState.success(null);
+      return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -112,27 +94,20 @@ class BooksRepositoryImplementation extends BooksRepository {
     String? note,
   }) async {
     try {
-      final response = await _apiService.putRequest(
-        href.removeApiUrl,
-        {
-          'note': note,
-          'book': slug,
-          'anchor': anchorId,
-        },
-      );
+      final response = await _apiService.putRequest(href.removeApiUrl, {
+        'note': note,
+        'book': slug,
+        'anchor': anchorId,
+      });
 
       if (response.hasData) {
         return DataState.success(
-          BookmarkModel.fromJson(response.data!.first),
+          data: BookmarkModel.fromJson(response.data!.first),
         );
       }
-      return const DataState.failed(
-        Failure.notFound(),
-      );
+      return const DataState.failure(Failure.notFound());
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -153,9 +128,7 @@ class BooksRepositoryImplementation extends BooksRepository {
         },
       );
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -166,34 +139,25 @@ class BooksRepositoryImplementation extends BooksRepository {
     String? note,
   }) async {
     try {
-      final response = await _apiService.postRequest(
-        _bookmarksEndpoint,
-        {
-          'anchor': anchorId,
-          'book': slug,
-          'note': note,
-        },
-      );
+      final response = await _apiService.postRequest(_bookmarksEndpoint, {
+        'anchor': anchorId,
+        'book': slug,
+        'note': note,
+      });
 
       if ((response.data ?? []).isNotEmpty) {
         return DataState.success(
-          BookmarkModel.fromJson(response.data!.first),
+          data: BookmarkModel.fromJson(response.data!.first),
         );
       }
-      return const DataState.failed(
-        Failure.notFound(),
-      );
+      return const DataState.failure(Failure.notFound());
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
   @override
-  Future<DataState<ReaderBookModel>> getBookJson({
-    required String slug,
-  }) async {
+  Future<DataState<ReaderBookModel>> getBookJson({required String slug}) async {
     try {
       final response = await _apiService.getRequest(
         '$_booksEndpoint/$slug.json',
@@ -201,45 +165,28 @@ class BooksRepositoryImplementation extends BooksRepository {
 
       if (response.hasData) {
         return DataState.success(
-          ReaderBookModel.fromJson(response.data!.first),
+          data: ReaderBookModel.fromJson(response.data!.first),
         );
       }
-      return const DataState.failed(
-        Failure.notFound(),
-      );
+      return const DataState.failure(Failure.notFound());
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
   @override
-  Future<DataState<Map<String, List>>> getFavourites() async {
+  Future<DataState<List<String>>> getFavourites() async {
     try {
       final response = await _apiService.getRequest(
         _myLikesEndpoint,
         useCache: CacheEnum.ignore,
       );
-
-      if (response.hasData) {
-        return DataState.success(
-          response.data!.first.entries.fold<Map<String, List>>(
-            <String, List>{},
-            (acc, entry) {
-              acc[entry.key] = [];
-              return acc;
-            },
-          ),
-        );
+      if (response.simpleData != null) {
+        return DataState.success(data: response.simpleData!);
       }
-      return const DataState.failed(
-        Failure.notFound(),
-      );
+      return const DataState.failure(Failure.notFound());
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -255,28 +202,22 @@ class BooksRepositoryImplementation extends BooksRepository {
           null,
         );
         if (response.error != null) {
-          return const DataState.failed(
-            Failure.badResponse(),
-          );
+          return const DataState.failure(Failure.badResponse());
         }
 
-        return const DataState.success(null);
+        return const DataState.success(data: null);
       } else {
         final response = await _apiService.deleteRequest(
           '$_likeEndpoint/$slug/',
         );
 
         if (response.error != null) {
-          return const DataState.failed(
-            Failure.badResponse(),
-          );
+          return const DataState.failure(Failure.badResponse());
         }
-        return const DataState.success(null);
+        return const DataState.success(data: null);
       }
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -291,14 +232,9 @@ class BooksRepositoryImplementation extends BooksRepository {
         sort: sort,
         apiUrl: url ?? _booksEndpoint,
       );
-      effectiveUrl = ApiUtils.applyTags(
-        tags: tags,
-        apiUrl: effectiveUrl,
-      );
+      effectiveUrl = ApiUtils.applyTags(tags: tags, apiUrl: effectiveUrl);
 
-      final response = await _apiService.getRequest(
-        effectiveUrl,
-      );
+      final response = await _apiService.getRequest(effectiveUrl);
 
       return DataState.fromApiResponse(
         response: response,
@@ -307,9 +243,7 @@ class BooksRepositoryImplementation extends BooksRepository {
         },
       );
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 }

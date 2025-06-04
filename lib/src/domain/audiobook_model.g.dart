@@ -6,22 +6,20 @@ part of 'audiobook_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AudiobookModelImpl _$$AudiobookModelImplFromJson(Map<String, dynamic> json) =>
-    _$AudiobookModelImpl(
-      parts: (json['parts'] as List<dynamic>?)
+_AudiobookModel _$AudiobookModelFromJson(Map<String, dynamic> json) =>
+    _AudiobookModel(
+      parts:
+          (json['parts'] as List<dynamic>?)
               ?.map((e) => AudioBookPart.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );
 
-Map<String, dynamic> _$$AudiobookModelImplToJson(
-        _$AudiobookModelImpl instance) =>
-    <String, dynamic>{
-      'parts': instance.parts,
-    };
+Map<String, dynamic> _$AudiobookModelToJson(_AudiobookModel instance) =>
+    <String, dynamic>{'parts': instance.parts};
 
-_$AudioBookPartImpl _$$AudioBookPartImplFromJson(Map<String, dynamic> json) =>
-    _$AudioBookPartImpl(
+_AudioBookPart _$AudioBookPartFromJson(Map<String, dynamic> json) =>
+    _AudioBookPart(
       name: json['name'] as String,
       artist: json['artist'] as String,
       director: json['director'] as String,
@@ -30,7 +28,7 @@ _$AudioBookPartImpl _$$AudioBookPartImplFromJson(Map<String, dynamic> json) =>
       size: (json['size'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$AudioBookPartImplToJson(_$AudioBookPartImpl instance) =>
+Map<String, dynamic> _$AudioBookPartToJson(_AudioBookPart instance) =>
     <String, dynamic>{
       'name': instance.name,
       'artist': instance.artist,

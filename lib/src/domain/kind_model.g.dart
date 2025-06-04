@@ -6,15 +6,14 @@ part of 'kind_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$KindModelImpl _$$KindModelImplFromJson(Map<String, dynamic> json) =>
-    _$KindModelImpl(
-      url: json['url'] as String?,
-      name: json['name'] as String?,
-      href: json['href'] as String?,
-      slug: json['slug'] as String?,
-    );
+_KindModel _$KindModelFromJson(Map<String, dynamic> json) => _KindModel(
+  url: json['url'] as String?,
+  name: json['name'] as String?,
+  href: json['href'] as String?,
+  slug: json['slug'] as String?,
+);
 
-Map<String, dynamic> _$$KindModelImplToJson(_$KindModelImpl instance) =>
+Map<String, dynamic> _$KindModelToJson(_KindModel instance) =>
     <String, dynamic>{
       'url': instance.url,
       'name': instance.name,

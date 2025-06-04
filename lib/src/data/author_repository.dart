@@ -42,14 +42,14 @@ class AuthorRepositoryImplementation extends AuthorRepository {
 
       if (response.hasData) {
         return DataState.success(
-          DetailedAuthorModel.fromJson(response.data!.first),
+          data: DetailedAuthorModel.fromJson(response.data!.first),
         );
       }
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.notFound(),
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }
@@ -82,7 +82,7 @@ class AuthorRepositoryImplementation extends AuthorRepository {
         },
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }
@@ -110,7 +110,7 @@ class AuthorRepositoryImplementation extends AuthorRepository {
         },
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }

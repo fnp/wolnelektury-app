@@ -46,18 +46,18 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       );
 
       if (response.hasError) {
-        return const DataState.failed(
+        return const DataState.failure(
           Failure.badResponse(),
         );
       }
 
       return DataState.success(
-        TextProgressModel.fromJson(
+        data: TextProgressModel.fromJson(
           response.data!.first,
         ),
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }
@@ -76,7 +76,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       );
 
       if (response.hasError) {
-        return const DataState.failed(
+        return const DataState.failure(
           Failure.badResponse(),
         );
       }
@@ -88,7 +88,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         },
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }
@@ -108,16 +108,16 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       );
 
       if (response.hasError) {
-        return const DataState.failed(
+        return const DataState.failure(
           Failure.badResponse(),
         );
       }
 
       return const DataState.success(
-        null,
+        data: null,
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }
@@ -137,18 +137,18 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       );
 
       if (response.hasError) {
-        return const DataState.failed(
+        return const DataState.failure(
           Failure.badResponse(),
         );
       }
 
       return DataState.success(
-        TextProgressModel.fromJson(
+        data: TextProgressModel.fromJson(
           response.data!.first,
         ),
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }
@@ -165,18 +165,18 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       );
 
       if (response.hasError) {
-        return const DataState.failed(
+        return const DataState.failure(
           Failure.badResponse(),
         );
       }
 
       return DataState.success(
-        AudioProgressModel.fromJson(
+        data: AudioProgressModel.fromJson(
           response.data!.first,
         ),
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }

@@ -29,9 +29,7 @@ class ApiService {
     try {
       final response = await _dio.get(
         endpoint,
-        options: createOptions(
-          accessToken: accessToken,
-        ),
+        options: createOptions(accessToken: accessToken),
       );
 
       final parsedResponse = _handleResponse(response);
@@ -73,9 +71,7 @@ class ApiService {
       final response = await _dio.post(
         endpoint,
         data: data,
-        options: createOptions(
-          accessToken: accessToken,
-        ),
+        options: createOptions(accessToken: accessToken),
       );
 
       return ApiResponse.fromApiServiceResponse(response);
@@ -90,9 +86,7 @@ class ApiService {
       final response = await _dio.put(
         endpoint,
         data: data,
-        options: createOptions(
-          accessToken: accessToken,
-        ),
+        options: createOptions(accessToken: accessToken),
       );
 
       return ApiResponse.fromApiServiceResponse(response);
@@ -106,17 +100,12 @@ class ApiService {
       final accessToken = await AppSecureStorageService().readAccessToken();
       final response = await _dio.delete(
         endpoint,
-        options: createOptions(
-          accessToken: accessToken,
-        ),
+        options: createOptions(accessToken: accessToken),
       );
 
       if ((response.statusCode ?? 0) >= 200 &&
           (response.statusCode ?? 0) < 300) {
-        return ApiResponse(
-          statusCode: response.statusCode,
-          data: null,
-        );
+        return ApiResponse(statusCode: response.statusCode, data: null);
       } else {
         return ApiResponse(
           statusCode: response.statusCode,
@@ -138,9 +127,7 @@ class ApiService {
     try {
       final response = await _dio.post(
         '/refreshToken',
-        data: {
-          'refresh_token': refreshToken,
-        },
+        data: {'refresh_token': refreshToken},
       );
 
       final apiResponse = ApiResponse.fromApiServiceResponse(response);
@@ -150,9 +137,7 @@ class ApiService {
     }
   }
 
-  Future<bool> setTokens({
-    required ApiResponse response,
-  }) async {
+  Future<bool> setTokens({required ApiResponse response}) async {
     final String? accessToken = response.data?[0]['access_token'] as String?;
     final String? refreshToken = response.data?[0]['refresh_token'] as String?;
 
@@ -175,20 +160,14 @@ class ApiService {
         statusCode: e.response?.statusCode,
       );
     } else {
-      return ApiResponse(
-        error: 'Error: ${e.message}',
-      );
+      return ApiResponse(error: 'Error: ${e.message}');
     }
   }
 
-  Options? createOptions({
-    String? accessToken,
-  }) {
+  Options? createOptions({String? accessToken}) {
     return accessToken != null
         ? Options(
-            headers: {
-              'Authorization': 'Token $accessToken',
-            },
+            headers: {'Authorization': 'Token $accessToken'},
             receiveTimeout: const Duration(seconds: 10),
           )
         : null;

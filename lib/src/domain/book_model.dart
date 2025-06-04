@@ -8,7 +8,7 @@ part 'book_model.freezed.dart';
 part 'book_model.g.dart';
 
 @freezed
-class BookModel with _$BookModel {
+sealed class BookModel with _$BookModel {
   const factory BookModel({
     required String title,
     required String url,
@@ -53,7 +53,7 @@ class BookModel with _$BookModel {
 }
 
 @freezed
-class BookFragmentData with _$BookFragmentData {
+sealed class BookFragmentData with _$BookFragmentData {
   const factory BookFragmentData({
     String? title,
     String? html,
@@ -64,7 +64,7 @@ class BookFragmentData with _$BookFragmentData {
 }
 
 @freezed
-class BookTranslator with _$BookTranslator {
+sealed class BookTranslator with _$BookTranslator {
   const factory BookTranslator({
     String? name,
   }) = _BookTranslator;

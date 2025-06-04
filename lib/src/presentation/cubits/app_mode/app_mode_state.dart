@@ -1,7 +1,7 @@
 part of 'app_mode_cubit.dart';
 
 @freezed
-class AppModeState with _$AppModeState {
+sealed class AppModeState with _$AppModeState {
   const factory AppModeState({
     @Default(AppModeEnum.defaultMode) AppModeEnum mode,
   }) = _AppModeState;

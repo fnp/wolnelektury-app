@@ -4,7 +4,7 @@ part 'kind_model.freezed.dart';
 part 'kind_model.g.dart';
 
 @freezed
-class KindModel with _$KindModel {
+sealed class KindModel with _$KindModel {
   const factory KindModel({
     String? url,
     String? name,

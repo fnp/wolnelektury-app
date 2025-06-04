@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,437 +10,226 @@ part of 'reading_page_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$ReadingPageState {
-  String? get currentSlug => throw _privateConstructorUsedError;
-  double get textSizeFactor => throw _privateConstructorUsedError;
-  ReaderFontType get fontType => throw _privateConstructorUsedError;
-  bool get isJsonLoading => throw _privateConstructorUsedError;
-  ReaderBookModel? get book => throw _privateConstructorUsedError; // Bookmarks
-  (Success, bool)? get isBookmarkSuccess => throw _privateConstructorUsedError;
-  BookmarkModel? get editingBookmark => throw _privateConstructorUsedError;
-  List<BookmarkModel> get bookmarks =>
-      throw _privateConstructorUsedError; // ParagraphSheet
-  int? get selectedIndex => throw _privateConstructorUsedError;
-  ReaderBookModelContent? get selectedParagraph =>
-      throw _privateConstructorUsedError;
-  bool get isAddingBookmark => throw _privateConstructorUsedError; // Progress
-  TextProgressModel? get progress => throw _privateConstructorUsedError;
 
-  /// Create a copy of ReadingPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ReadingPageStateCopyWith<ReadingPageState> get copyWith =>
-      throw _privateConstructorUsedError;
+ String? get currentSlug; double get textSizeFactor; ReaderFontType get fontType; bool get isJsonLoading; ReaderBookModel? get book;// Bookmarks
+ SuccessState? get isBookmarkSuccess; BookmarkModel? get editingBookmark; List<BookmarkModel> get bookmarks;// ParagraphSheet
+ int? get selectedIndex; ReaderBookModelContent? get selectedParagraph; bool get isAddingBookmark;// Progress
+ TextProgressModel? get progress;
+/// Create a copy of ReadingPageState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ReadingPageStateCopyWith<ReadingPageState> get copyWith => _$ReadingPageStateCopyWithImpl<ReadingPageState>(this as ReadingPageState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.book, book) || other.book == book)&&(identical(other.isBookmarkSuccess, isBookmarkSuccess) || other.isBookmarkSuccess == isBookmarkSuccess)&&(identical(other.editingBookmark, editingBookmark) || other.editingBookmark == editingBookmark)&&const DeepCollectionEquality().equals(other.bookmarks, bookmarks)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,book,isBookmarkSuccess,editingBookmark,const DeepCollectionEquality().hash(bookmarks),selectedIndex,selectedParagraph,isAddingBookmark,progress);
+
+@override
+String toString() {
+  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarks: $bookmarks, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ReadingPageStateCopyWith<$Res> {
-  factory $ReadingPageStateCopyWith(
-          ReadingPageState value, $Res Function(ReadingPageState) then) =
-      _$ReadingPageStateCopyWithImpl<$Res, ReadingPageState>;
-  @useResult
-  $Res call(
-      {String? currentSlug,
-      double textSizeFactor,
-      ReaderFontType fontType,
-      bool isJsonLoading,
-      ReaderBookModel? book,
-      (Success, bool)? isBookmarkSuccess,
-      BookmarkModel? editingBookmark,
-      List<BookmarkModel> bookmarks,
-      int? selectedIndex,
-      ReaderBookModelContent? selectedParagraph,
-      bool isAddingBookmark,
-      TextProgressModel? progress});
+abstract mixin class $ReadingPageStateCopyWith<$Res>  {
+  factory $ReadingPageStateCopyWith(ReadingPageState value, $Res Function(ReadingPageState) _then) = _$ReadingPageStateCopyWithImpl;
+@useResult
+$Res call({
+ String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, SuccessState? isBookmarkSuccess, BookmarkModel? editingBookmark, List<BookmarkModel> bookmarks, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, TextProgressModel? progress
+});
 
-  $BookmarkModelCopyWith<$Res>? get editingBookmark;
-  $TextProgressModelCopyWith<$Res>? get progress;
+
+$BookmarkModelCopyWith<$Res>? get editingBookmark;$TextProgressModelCopyWith<$Res>? get progress;
+
 }
-
 /// @nodoc
-class _$ReadingPageStateCopyWithImpl<$Res, $Val extends ReadingPageState>
+class _$ReadingPageStateCopyWithImpl<$Res>
     implements $ReadingPageStateCopyWith<$Res> {
-  _$ReadingPageStateCopyWithImpl(this._value, this._then);
+  _$ReadingPageStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final ReadingPageState _self;
+  final $Res Function(ReadingPageState) _then;
 
-  /// Create a copy of ReadingPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? currentSlug = freezed,
-    Object? textSizeFactor = null,
-    Object? fontType = null,
-    Object? isJsonLoading = null,
-    Object? book = freezed,
-    Object? isBookmarkSuccess = freezed,
-    Object? editingBookmark = freezed,
-    Object? bookmarks = null,
-    Object? selectedIndex = freezed,
-    Object? selectedParagraph = freezed,
-    Object? isAddingBookmark = null,
-    Object? progress = freezed,
-  }) {
-    return _then(_value.copyWith(
-      currentSlug: freezed == currentSlug
-          ? _value.currentSlug
-          : currentSlug // ignore: cast_nullable_to_non_nullable
-              as String?,
-      textSizeFactor: null == textSizeFactor
-          ? _value.textSizeFactor
-          : textSizeFactor // ignore: cast_nullable_to_non_nullable
-              as double,
-      fontType: null == fontType
-          ? _value.fontType
-          : fontType // ignore: cast_nullable_to_non_nullable
-              as ReaderFontType,
-      isJsonLoading: null == isJsonLoading
-          ? _value.isJsonLoading
-          : isJsonLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      book: freezed == book
-          ? _value.book
-          : book // ignore: cast_nullable_to_non_nullable
-              as ReaderBookModel?,
-      isBookmarkSuccess: freezed == isBookmarkSuccess
-          ? _value.isBookmarkSuccess
-          : isBookmarkSuccess // ignore: cast_nullable_to_non_nullable
-              as (Success, bool)?,
-      editingBookmark: freezed == editingBookmark
-          ? _value.editingBookmark
-          : editingBookmark // ignore: cast_nullable_to_non_nullable
-              as BookmarkModel?,
-      bookmarks: null == bookmarks
-          ? _value.bookmarks
-          : bookmarks // ignore: cast_nullable_to_non_nullable
-              as List<BookmarkModel>,
-      selectedIndex: freezed == selectedIndex
-          ? _value.selectedIndex
-          : selectedIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
-      selectedParagraph: freezed == selectedParagraph
-          ? _value.selectedParagraph
-          : selectedParagraph // ignore: cast_nullable_to_non_nullable
-              as ReaderBookModelContent?,
-      isAddingBookmark: null == isAddingBookmark
-          ? _value.isAddingBookmark
-          : isAddingBookmark // ignore: cast_nullable_to_non_nullable
-              as bool,
-      progress: freezed == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as TextProgressModel?,
-    ) as $Val);
+/// Create a copy of ReadingPageState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? book = freezed,Object? isBookmarkSuccess = freezed,Object? editingBookmark = freezed,Object? bookmarks = null,Object? selectedIndex = freezed,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,}) {
+  return _then(_self.copyWith(
+currentSlug: freezed == currentSlug ? _self.currentSlug : currentSlug // ignore: cast_nullable_to_non_nullable
+as String?,textSizeFactor: null == textSizeFactor ? _self.textSizeFactor : textSizeFactor // ignore: cast_nullable_to_non_nullable
+as double,fontType: null == fontType ? _self.fontType : fontType // ignore: cast_nullable_to_non_nullable
+as ReaderFontType,isJsonLoading: null == isJsonLoading ? _self.isJsonLoading : isJsonLoading // ignore: cast_nullable_to_non_nullable
+as bool,book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as ReaderBookModel?,isBookmarkSuccess: freezed == isBookmarkSuccess ? _self.isBookmarkSuccess : isBookmarkSuccess // ignore: cast_nullable_to_non_nullable
+as SuccessState?,editingBookmark: freezed == editingBookmark ? _self.editingBookmark : editingBookmark // ignore: cast_nullable_to_non_nullable
+as BookmarkModel?,bookmarks: null == bookmarks ? _self.bookmarks : bookmarks // ignore: cast_nullable_to_non_nullable
+as List<BookmarkModel>,selectedIndex: freezed == selectedIndex ? _self.selectedIndex : selectedIndex // ignore: cast_nullable_to_non_nullable
+as int?,selectedParagraph: freezed == selectedParagraph ? _self.selectedParagraph : selectedParagraph // ignore: cast_nullable_to_non_nullable
+as ReaderBookModelContent?,isAddingBookmark: null == isAddingBookmark ? _self.isAddingBookmark : isAddingBookmark // ignore: cast_nullable_to_non_nullable
+as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
+as TextProgressModel?,
+  ));
+}
+/// Create a copy of ReadingPageState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BookmarkModelCopyWith<$Res>? get editingBookmark {
+    if (_self.editingBookmark == null) {
+    return null;
   }
 
-  /// Create a copy of ReadingPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $BookmarkModelCopyWith<$Res>? get editingBookmark {
-    if (_value.editingBookmark == null) {
-      return null;
-    }
-
-    return $BookmarkModelCopyWith<$Res>(_value.editingBookmark!, (value) {
-      return _then(_value.copyWith(editingBookmark: value) as $Val);
-    });
+  return $BookmarkModelCopyWith<$Res>(_self.editingBookmark!, (value) {
+    return _then(_self.copyWith(editingBookmark: value));
+  });
+}/// Create a copy of ReadingPageState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextProgressModelCopyWith<$Res>? get progress {
+    if (_self.progress == null) {
+    return null;
   }
 
-  /// Create a copy of ReadingPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $TextProgressModelCopyWith<$Res>? get progress {
-    if (_value.progress == null) {
-      return null;
-    }
-
-    return $TextProgressModelCopyWith<$Res>(_value.progress!, (value) {
-      return _then(_value.copyWith(progress: value) as $Val);
-    });
-  }
+  return $TextProgressModelCopyWith<$Res>(_self.progress!, (value) {
+    return _then(_self.copyWith(progress: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$ReadingPageStateImplCopyWith<$Res>
-    implements $ReadingPageStateCopyWith<$Res> {
-  factory _$$ReadingPageStateImplCopyWith(_$ReadingPageStateImpl value,
-          $Res Function(_$ReadingPageStateImpl) then) =
-      __$$ReadingPageStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String? currentSlug,
-      double textSizeFactor,
-      ReaderFontType fontType,
-      bool isJsonLoading,
-      ReaderBookModel? book,
-      (Success, bool)? isBookmarkSuccess,
-      BookmarkModel? editingBookmark,
-      List<BookmarkModel> bookmarks,
-      int? selectedIndex,
-      ReaderBookModelContent? selectedParagraph,
-      bool isAddingBookmark,
-      TextProgressModel? progress});
-
-  @override
-  $BookmarkModelCopyWith<$Res>? get editingBookmark;
-  @override
-  $TextProgressModelCopyWith<$Res>? get progress;
-}
-
-/// @nodoc
-class __$$ReadingPageStateImplCopyWithImpl<$Res>
-    extends _$ReadingPageStateCopyWithImpl<$Res, _$ReadingPageStateImpl>
-    implements _$$ReadingPageStateImplCopyWith<$Res> {
-  __$$ReadingPageStateImplCopyWithImpl(_$ReadingPageStateImpl _value,
-      $Res Function(_$ReadingPageStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ReadingPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? currentSlug = freezed,
-    Object? textSizeFactor = null,
-    Object? fontType = null,
-    Object? isJsonLoading = null,
-    Object? book = freezed,
-    Object? isBookmarkSuccess = freezed,
-    Object? editingBookmark = freezed,
-    Object? bookmarks = null,
-    Object? selectedIndex = freezed,
-    Object? selectedParagraph = freezed,
-    Object? isAddingBookmark = null,
-    Object? progress = freezed,
-  }) {
-    return _then(_$ReadingPageStateImpl(
-      currentSlug: freezed == currentSlug
-          ? _value.currentSlug
-          : currentSlug // ignore: cast_nullable_to_non_nullable
-              as String?,
-      textSizeFactor: null == textSizeFactor
-          ? _value.textSizeFactor
-          : textSizeFactor // ignore: cast_nullable_to_non_nullable
-              as double,
-      fontType: null == fontType
-          ? _value.fontType
-          : fontType // ignore: cast_nullable_to_non_nullable
-              as ReaderFontType,
-      isJsonLoading: null == isJsonLoading
-          ? _value.isJsonLoading
-          : isJsonLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      book: freezed == book
-          ? _value.book
-          : book // ignore: cast_nullable_to_non_nullable
-              as ReaderBookModel?,
-      isBookmarkSuccess: freezed == isBookmarkSuccess
-          ? _value.isBookmarkSuccess
-          : isBookmarkSuccess // ignore: cast_nullable_to_non_nullable
-              as (Success, bool)?,
-      editingBookmark: freezed == editingBookmark
-          ? _value.editingBookmark
-          : editingBookmark // ignore: cast_nullable_to_non_nullable
-              as BookmarkModel?,
-      bookmarks: null == bookmarks
-          ? _value._bookmarks
-          : bookmarks // ignore: cast_nullable_to_non_nullable
-              as List<BookmarkModel>,
-      selectedIndex: freezed == selectedIndex
-          ? _value.selectedIndex
-          : selectedIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
-      selectedParagraph: freezed == selectedParagraph
-          ? _value.selectedParagraph
-          : selectedParagraph // ignore: cast_nullable_to_non_nullable
-              as ReaderBookModelContent?,
-      isAddingBookmark: null == isAddingBookmark
-          ? _value.isAddingBookmark
-          : isAddingBookmark // ignore: cast_nullable_to_non_nullable
-              as bool,
-      progress: freezed == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as TextProgressModel?,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$ReadingPageStateImpl implements _ReadingPageState {
-  const _$ReadingPageStateImpl(
-      {this.currentSlug,
-      this.textSizeFactor = 0.5,
-      this.fontType = ReaderFontType.sans,
-      this.isJsonLoading = false,
-      this.book,
-      this.isBookmarkSuccess,
-      this.editingBookmark,
-      final List<BookmarkModel> bookmarks = const [],
-      this.selectedIndex,
-      this.selectedParagraph,
-      this.isAddingBookmark = false,
-      this.progress})
-      : _bookmarks = bookmarks;
 
-  @override
-  final String? currentSlug;
-  @override
-  @JsonKey()
-  final double textSizeFactor;
-  @override
-  @JsonKey()
-  final ReaderFontType fontType;
-  @override
-  @JsonKey()
-  final bool isJsonLoading;
-  @override
-  final ReaderBookModel? book;
+class _ReadingPageState implements ReadingPageState {
+  const _ReadingPageState({this.currentSlug, this.textSizeFactor = 0.5, this.fontType = ReaderFontType.sans, this.isJsonLoading = false, this.book, this.isBookmarkSuccess, this.editingBookmark, final  List<BookmarkModel> bookmarks = const [], this.selectedIndex, this.selectedParagraph, this.isAddingBookmark = false, this.progress}): _bookmarks = bookmarks;
+  
+
+@override final  String? currentSlug;
+@override@JsonKey() final  double textSizeFactor;
+@override@JsonKey() final  ReaderFontType fontType;
+@override@JsonKey() final  bool isJsonLoading;
+@override final  ReaderBookModel? book;
 // Bookmarks
-  @override
-  final (Success, bool)? isBookmarkSuccess;
-  @override
-  final BookmarkModel? editingBookmark;
-  final List<BookmarkModel> _bookmarks;
-  @override
-  @JsonKey()
-  List<BookmarkModel> get bookmarks {
-    if (_bookmarks is EqualUnmodifiableListView) return _bookmarks;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_bookmarks);
-  }
+@override final  SuccessState? isBookmarkSuccess;
+@override final  BookmarkModel? editingBookmark;
+ final  List<BookmarkModel> _bookmarks;
+@override@JsonKey() List<BookmarkModel> get bookmarks {
+  if (_bookmarks is EqualUnmodifiableListView) return _bookmarks;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_bookmarks);
+}
 
 // ParagraphSheet
-  @override
-  final int? selectedIndex;
-  @override
-  final ReaderBookModelContent? selectedParagraph;
-  @override
-  @JsonKey()
-  final bool isAddingBookmark;
+@override final  int? selectedIndex;
+@override final  ReaderBookModelContent? selectedParagraph;
+@override@JsonKey() final  bool isAddingBookmark;
 // Progress
-  @override
-  final TextProgressModel? progress;
+@override final  TextProgressModel? progress;
 
-  @override
-  String toString() {
-    return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarks: $bookmarks, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress)';
-  }
+/// Create a copy of ReadingPageState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ReadingPageStateCopyWith<_ReadingPageState> get copyWith => __$ReadingPageStateCopyWithImpl<_ReadingPageState>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ReadingPageStateImpl &&
-            (identical(other.currentSlug, currentSlug) ||
-                other.currentSlug == currentSlug) &&
-            (identical(other.textSizeFactor, textSizeFactor) ||
-                other.textSizeFactor == textSizeFactor) &&
-            (identical(other.fontType, fontType) ||
-                other.fontType == fontType) &&
-            (identical(other.isJsonLoading, isJsonLoading) ||
-                other.isJsonLoading == isJsonLoading) &&
-            (identical(other.book, book) || other.book == book) &&
-            (identical(other.isBookmarkSuccess, isBookmarkSuccess) ||
-                other.isBookmarkSuccess == isBookmarkSuccess) &&
-            (identical(other.editingBookmark, editingBookmark) ||
-                other.editingBookmark == editingBookmark) &&
-            const DeepCollectionEquality()
-                .equals(other._bookmarks, _bookmarks) &&
-            (identical(other.selectedIndex, selectedIndex) ||
-                other.selectedIndex == selectedIndex) &&
-            (identical(other.selectedParagraph, selectedParagraph) ||
-                other.selectedParagraph == selectedParagraph) &&
-            (identical(other.isAddingBookmark, isAddingBookmark) ||
-                other.isAddingBookmark == isAddingBookmark) &&
-            (identical(other.progress, progress) ||
-                other.progress == progress));
-  }
 
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      currentSlug,
-      textSizeFactor,
-      fontType,
-      isJsonLoading,
-      book,
-      isBookmarkSuccess,
-      editingBookmark,
-      const DeepCollectionEquality().hash(_bookmarks),
-      selectedIndex,
-      selectedParagraph,
-      isAddingBookmark,
-      progress);
 
-  /// Create a copy of ReadingPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ReadingPageStateImplCopyWith<_$ReadingPageStateImpl> get copyWith =>
-      __$$ReadingPageStateImplCopyWithImpl<_$ReadingPageStateImpl>(
-          this, _$identity);
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.book, book) || other.book == book)&&(identical(other.isBookmarkSuccess, isBookmarkSuccess) || other.isBookmarkSuccess == isBookmarkSuccess)&&(identical(other.editingBookmark, editingBookmark) || other.editingBookmark == editingBookmark)&&const DeepCollectionEquality().equals(other._bookmarks, _bookmarks)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress));
 }
 
-abstract class _ReadingPageState implements ReadingPageState {
-  const factory _ReadingPageState(
-      {final String? currentSlug,
-      final double textSizeFactor,
-      final ReaderFontType fontType,
-      final bool isJsonLoading,
-      final ReaderBookModel? book,
-      final (Success, bool)? isBookmarkSuccess,
-      final BookmarkModel? editingBookmark,
-      final List<BookmarkModel> bookmarks,
-      final int? selectedIndex,
-      final ReaderBookModelContent? selectedParagraph,
-      final bool isAddingBookmark,
-      final TextProgressModel? progress}) = _$ReadingPageStateImpl;
 
-  @override
-  String? get currentSlug;
-  @override
-  double get textSizeFactor;
-  @override
-  ReaderFontType get fontType;
-  @override
-  bool get isJsonLoading;
-  @override
-  ReaderBookModel? get book; // Bookmarks
-  @override
-  (Success, bool)? get isBookmarkSuccess;
-  @override
-  BookmarkModel? get editingBookmark;
-  @override
-  List<BookmarkModel> get bookmarks; // ParagraphSheet
-  @override
-  int? get selectedIndex;
-  @override
-  ReaderBookModelContent? get selectedParagraph;
-  @override
-  bool get isAddingBookmark; // Progress
-  @override
-  TextProgressModel? get progress;
+@override
+int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,book,isBookmarkSuccess,editingBookmark,const DeepCollectionEquality().hash(_bookmarks),selectedIndex,selectedParagraph,isAddingBookmark,progress);
 
-  /// Create a copy of ReadingPageState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ReadingPageStateImplCopyWith<_$ReadingPageStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarks: $bookmarks, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ReadingPageStateCopyWith<$Res> implements $ReadingPageStateCopyWith<$Res> {
+  factory _$ReadingPageStateCopyWith(_ReadingPageState value, $Res Function(_ReadingPageState) _then) = __$ReadingPageStateCopyWithImpl;
+@override @useResult
+$Res call({
+ String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, SuccessState? isBookmarkSuccess, BookmarkModel? editingBookmark, List<BookmarkModel> bookmarks, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, TextProgressModel? progress
+});
+
+
+@override $BookmarkModelCopyWith<$Res>? get editingBookmark;@override $TextProgressModelCopyWith<$Res>? get progress;
+
+}
+/// @nodoc
+class __$ReadingPageStateCopyWithImpl<$Res>
+    implements _$ReadingPageStateCopyWith<$Res> {
+  __$ReadingPageStateCopyWithImpl(this._self, this._then);
+
+  final _ReadingPageState _self;
+  final $Res Function(_ReadingPageState) _then;
+
+/// Create a copy of ReadingPageState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? book = freezed,Object? isBookmarkSuccess = freezed,Object? editingBookmark = freezed,Object? bookmarks = null,Object? selectedIndex = freezed,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,}) {
+  return _then(_ReadingPageState(
+currentSlug: freezed == currentSlug ? _self.currentSlug : currentSlug // ignore: cast_nullable_to_non_nullable
+as String?,textSizeFactor: null == textSizeFactor ? _self.textSizeFactor : textSizeFactor // ignore: cast_nullable_to_non_nullable
+as double,fontType: null == fontType ? _self.fontType : fontType // ignore: cast_nullable_to_non_nullable
+as ReaderFontType,isJsonLoading: null == isJsonLoading ? _self.isJsonLoading : isJsonLoading // ignore: cast_nullable_to_non_nullable
+as bool,book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as ReaderBookModel?,isBookmarkSuccess: freezed == isBookmarkSuccess ? _self.isBookmarkSuccess : isBookmarkSuccess // ignore: cast_nullable_to_non_nullable
+as SuccessState?,editingBookmark: freezed == editingBookmark ? _self.editingBookmark : editingBookmark // ignore: cast_nullable_to_non_nullable
+as BookmarkModel?,bookmarks: null == bookmarks ? _self._bookmarks : bookmarks // ignore: cast_nullable_to_non_nullable
+as List<BookmarkModel>,selectedIndex: freezed == selectedIndex ? _self.selectedIndex : selectedIndex // ignore: cast_nullable_to_non_nullable
+as int?,selectedParagraph: freezed == selectedParagraph ? _self.selectedParagraph : selectedParagraph // ignore: cast_nullable_to_non_nullable
+as ReaderBookModelContent?,isAddingBookmark: null == isAddingBookmark ? _self.isAddingBookmark : isAddingBookmark // ignore: cast_nullable_to_non_nullable
+as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
+as TextProgressModel?,
+  ));
+}
+
+/// Create a copy of ReadingPageState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BookmarkModelCopyWith<$Res>? get editingBookmark {
+    if (_self.editingBookmark == null) {
+    return null;
+  }
+
+  return $BookmarkModelCopyWith<$Res>(_self.editingBookmark!, (value) {
+    return _then(_self.copyWith(editingBookmark: value));
+  });
+}/// Create a copy of ReadingPageState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextProgressModelCopyWith<$Res>? get progress {
+    if (_self.progress == null) {
+    return null;
+  }
+
+  return $TextProgressModelCopyWith<$Res>(_self.progress!, (value) {
+    return _then(_self.copyWith(progress: value));
+  });
+}
+}
+
+// dart format on

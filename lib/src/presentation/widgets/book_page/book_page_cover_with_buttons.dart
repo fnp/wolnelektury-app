@@ -41,11 +41,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                child: _Image(
-                  coverUrl: book.coverUrl,
-                ),
-              ),
+              Expanded(child: _Image(coverUrl: book.coverUrl)),
               const SizedBox(width: Dimensions.mediumPadding),
               Expanded(
                 child: Column(
@@ -65,38 +61,28 @@ class BookPageCoverWithButtons extends StatelessWidget {
                       onPressed: () {
                         router.pushNamed(
                           readingPageConfig.name,
-                          pathParameters: {
-                            'slug': book.slug,
-                          },
+                          pathParameters: {'slug': book.slug},
                           extra: book,
                         );
                       },
                     ),
-                    const SizedBox(
-                      height: Dimensions.mediumPadding,
-                    ),
+                    const SizedBox(height: Dimensions.mediumPadding),
                     if (book.hasAudiobook) ...[
                       TextButtonWithIcon(
-                        nonActiveText:
-                            LocaleKeys.common_icon_button_listen.tr(),
+                        nonActiveText: LocaleKeys.common_icon_button_listen
+                            .tr(),
                         nonActiveIcon: CustomIcons.headphones,
                         onPressed: () {
                           // Select proper book
-                          audioCubit.pickBook(
-                            book,
-                          );
+                          audioCubit.pickBook(book);
                           // Show audio dialog
                           AudioDialog.show(
                             context: context,
-                            onClosed: () => audioCubit.dialogShown(
-                              false,
-                            ),
+                            onClosed: () => audioCubit.dialogShown(false),
                           );
                         },
                       ),
-                      const SizedBox(
-                        height: Dimensions.mediumPadding,
-                      ),
+                      const SizedBox(height: Dimensions.mediumPadding),
                     ],
                     _HeartButton(book: book),
                   ],
@@ -113,10 +99,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
 class _TitleWithAutorsAndDelete extends StatelessWidget {
   final BookModel book;
   final VoidCallback onDelete;
-  const _TitleWithAutorsAndDelete({
-    required this.book,
-    required this.onDelete,
-  });
+  const _TitleWithAutorsAndDelete({required this.book, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -153,40 +136,32 @@ class _TitleWithAuthors extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        ...book.authors.map(
-          (author) {
-            return Expanded(
-              child: Column(
-                children: [
-                  InkWellWrapper(
-                    borderRadius: BorderRadius.circular(
-                      5,
-                    ),
-                    onTap: () {
-                      router.pushNamed(
-                        authorPageConfig.name,
-                        pathParameters: {
-                          'slug': author.slug,
-                        },
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                      ),
-                      child: Text(
-                        author.name,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+        ...book.authors.map((author) {
+          return Expanded(
+            child: Column(
+              children: [
+                InkWellWrapper(
+                  borderRadius: BorderRadius.circular(5),
+                  onTap: () {
+                    router.pushNamed(
+                      authorPageConfig.name,
+                      pathParameters: {'slug': author.slug},
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      author.name,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+              ],
+            ),
+          );
+        }),
       ],
     );
   }
@@ -201,9 +176,7 @@ class _Image extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ClipRRect(
-      borderRadius: BorderRadius.circular(
-        Dimensions.smallBorderRadius,
-      ),
+      borderRadius: BorderRadius.circular(Dimensions.smallBorderRadius),
       child: (coverUrl ?? '').isEmpty
           ? Container(
               color: theme.colorScheme.surface,
@@ -213,11 +186,8 @@ class _Image extends StatelessWidget {
           : CachedNetworkImage(
               imageUrl: coverUrl ?? '',
               fit: BoxFit.cover,
-              placeholder: (context, url) => Center(
-                child: SvgPicture.asset(
-                  Images.logo,
-                ),
-              ),
+              placeholder: (context, url) =>
+                  Center(child: SvgPicture.asset(Images.logo)),
             ),
     );
   }
@@ -233,9 +203,7 @@ class _HeartButton extends StatelessWidget {
     return BlocBuilder<FavouritesCubit, FavouritesState>(
       buildWhen: (p, c) => p.favourites != c.favourites,
       builder: (context, state) {
-        final isLiked = state.favourites.keys.contains(
-          book.slug,
-        );
+        final isLiked = state.favourites.contains(book.slug);
         return AuthWrapper(
           authChild: (user) {
             return TextButtonWithIcon(
@@ -247,15 +215,11 @@ class _HeartButton extends StatelessWidget {
               isActive: isLiked,
               onPressed: () {
                 if (isLiked) {
-                  favouritesCubit.removeFromFavourites(
-                    book.slug,
-                  );
+                  favouritesCubit.removeFromFavourites(book.slug);
                   return;
                 }
 
-                favouritesCubit.addToFavourites(
-                  book.slug,
-                );
+                favouritesCubit.addToFavourites(book.slug);
               },
             );
           },

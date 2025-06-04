@@ -8,37 +8,51 @@ export '../failure/failure.dart';
 part 'data_state.freezed.dart';
 
 @freezed
-class DataState<T> with _$DataState<T> {
-  const DataState._();
-
-  const factory DataState.success(
-    T data, {
+sealed class DataState<T> with _$DataState<T> {
+  const factory DataState.success({
+    required T data,
     ApiResponsePagination? pagination,
-  }) = _Success;
+  }) = DataStateSuccess<T>;
 
-  const factory DataState.failed(Failure failure) = _Failed;
+  const factory DataState.failure(Failure failure) = DataStateFailure<T>;
 
   factory DataState.fromApiResponse({
     required ApiResponse response,
     required T Function(List<Map<String, dynamic>> data) converter,
   }) {
     if (response.hasError) {
-      return const DataState.failed(Failure.badResponse());
+      return const DataState.failure(Failure.badResponse());
     }
+
     if (response.hasData) {
       try {
         return DataState.success(
-          converter(response.data!),
+          data: converter(response.data!),
           pagination: response.paginationData,
         );
-      } catch (e) {
-        AppLogger.instance.e('DataState', 'fromApiResponse', e);
+      } catch (e, stackTrace) {
+        AppLogger.instance.e('DataState', 'fromApiResponse', e, stackTrace);
+        return const DataState.failure(Failure.badResponse());
       }
     }
-    return const DataState.failed(Failure.notFound());
+
+    return const DataState.failure(Failure.notFound());
   }
 }
 
 extension DataStateX<T> on DataState<T> {
-  bool get isSuccess => this is _Success<T>;
+  bool get isSuccess => this is DataStateSuccess<T>;
+
+  void handle({
+    required void Function(T data, ApiResponsePagination? pagination) success,
+    required void Function(Failure failure) failure,
+  }) {
+    return switch (this) {
+      DataStateSuccess<T>(:final data, :final pagination) => success(
+        data,
+        pagination,
+      ),
+      DataStateFailure<T>(failure: final failure0) => failure(failure0),
+    };
+  }
 }

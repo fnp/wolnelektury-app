@@ -3,7 +3,7 @@ part of 'reading_page_cubit.dart';
 typedef SuccessState = (Success, bool);
 
 @freezed
-class ReadingPageState with _$ReadingPageState {
+sealed class ReadingPageState with _$ReadingPageState {
   const factory ReadingPageState({
     String? currentSlug,
     @Default(0.5) double textSizeFactor,

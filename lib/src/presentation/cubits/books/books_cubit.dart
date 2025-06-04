@@ -5,6 +5,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/tag_model.dart';
 import 'package:wolnelektury/src/presentation/enums/sort_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
+import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/string/string_extension.dart';
 
 part 'books_cubit.freezed.dart';
@@ -24,9 +25,7 @@ class BooksCubit extends SafeCubit<BooksState> {
     emit(state.copyWith(filterTags: tags));
   }
 
-  Future<void> getBooks({
-    List<TagModel>? tags,
-  }) async {
+  Future<void> getBooks({List<TagModel>? tags}) async {
     emit(state.copyWith(isLoading: true, isSuccess: null));
     if (tags != null) _changeTags(tags);
 
@@ -34,7 +33,7 @@ class BooksCubit extends SafeCubit<BooksState> {
       sort: state.sort,
       tags: state.filterTags,
     );
-    books.when(
+    books.handle(
       success: (books, pagination) {
         emit(
           state.copyWith(
@@ -45,13 +44,8 @@ class BooksCubit extends SafeCubit<BooksState> {
           ),
         );
       },
-      failed: (failure) {
-        emit(
-          state.copyWith(
-            isLoading: false,
-            isSuccess: false,
-          ),
-        );
+      failure: (failure) {
+        emit(state.copyWith(isLoading: false, isSuccess: false));
       },
     );
   }
@@ -66,7 +60,7 @@ class BooksCubit extends SafeCubit<BooksState> {
       url: state.pagination.next!.removeApiUrl,
     );
 
-    books.when(
+    books.handle(
       success: (books, pagination) {
         emit(
           state.copyWith(
@@ -76,12 +70,8 @@ class BooksCubit extends SafeCubit<BooksState> {
           ),
         );
       },
-      failed: (failure) {
-        emit(
-          state.copyWith(
-            isLoadingMore: false,
-          ),
-        );
+      failure: (failure) {
+        emit(state.copyWith(isLoadingMore: false));
       },
     );
   }

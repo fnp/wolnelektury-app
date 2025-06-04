@@ -40,7 +40,7 @@ class TagsRepositoryImplementation extends TagsRepository {
         },
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }

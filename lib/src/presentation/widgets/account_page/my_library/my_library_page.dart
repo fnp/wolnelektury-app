@@ -6,6 +6,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/liked/my_library_liked_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/lists/my_library_lists_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/my_library_pill.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
@@ -26,10 +27,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
 
   int currentIndex = 0;
 
-  void setIndex({
-    required int newIndex,
-    required bool shouldScrollVertically,
-  }) {
+  void setIndex({required int newIndex, required bool shouldScrollVertically}) {
     if (currentIndex == newIndex) {
       return;
     }
@@ -66,9 +64,8 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
           SizedBox(
             height: Dimensions.elementHeight,
             child: ListView.separated(
-              separatorBuilder: (_, __) => const SizedBox(
-                width: Dimensions.mediumPadding,
-              ),
+              separatorBuilder: (_, __) =>
+                  const SizedBox(width: Dimensions.mediumPadding),
               controller: horizontalController,
               scrollDirection: Axis.horizontal,
               itemCount: MyLibraryEnum.values.length,
@@ -88,7 +85,17 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
                       isSelected: isIndexActive(index),
                       pillType: MyLibraryEnum.values[index],
                       onTap: () {
+                        _canTrigger = false;
+
                         setIndex(newIndex: index, shouldScrollVertically: true);
+
+                        _debounce?.cancel();
+                        _debounce = Timer(
+                          const Duration(milliseconds: 300),
+                          () {
+                            _canTrigger = true;
+                          },
+                        );
                       },
                     ),
                   ),
@@ -105,9 +112,8 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
               child: CustomScrollPage(
                 controller: verticalController,
                 builder: (controller) => ListView.separated(
-                  separatorBuilder: (_, __) => const SizedBox(
-                    height: Dimensions.veryLargePadding,
-                  ),
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: Dimensions.veryLargePadding),
                   controller: controller,
                   itemCount: MyLibraryEnum.values.length,
                   itemBuilder: (_, index) {
@@ -127,15 +133,15 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
                             );
 
                             _debounce?.cancel();
-                            _debounce =
-                                Timer(const Duration(milliseconds: 300), () {
-                              _canTrigger = true;
-                            });
+                            _debounce = Timer(
+                              const Duration(milliseconds: 300),
+                              () {
+                                _canTrigger = true;
+                              },
+                            );
                           }
                         },
-                        child: _WidgetByType(
-                          type: MyLibraryEnum.values[index],
-                        ),
+                        child: _WidgetByType(type: MyLibraryEnum.values[index]),
                       ),
                     );
                   },
@@ -158,23 +164,15 @@ class _WidgetByType extends StatelessWidget {
     switch (type) {
       case MyLibraryEnum.audiobooks:
         return const Center(
-          child: SizedBox(
-            height: 800,
-            child: Text('Audiobooks Section'),
-          ),
+          child: SizedBox(height: 800, child: Text('Audiobooks Section')),
         );
       case MyLibraryEnum.lists:
         return const MyLibraryListsSection();
       case MyLibraryEnum.liked:
-        return const Center(
-          child: SizedBox(height: 800, child: Text('Liked Section')),
-        );
+        return const MyLibraryLikedSection();
       case MyLibraryEnum.bookmarks:
         return const Center(
-          child: SizedBox(
-            height: 800,
-            child: Text('Bookmarks Section'),
-          ),
+          child: SizedBox(height: 800, child: Text('Bookmarks Section')),
         );
     }
   }

@@ -1,7 +1,7 @@
 part of 'progress_cubit.dart';
 
 @freezed
-class ProgressState with _$ProgressState {
+sealed class ProgressState with _$ProgressState {
   const factory ProgressState({
     @Default(false) bool isLoading,
     @Default(false) bool isLoadingMore,

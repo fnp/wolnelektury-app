@@ -4,6 +4,7 @@ import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/data/author_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/detailed_author_model.dart';
+import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/string/string_extension.dart';
 
 part 'author_cubit.freezed.dart';
@@ -18,27 +19,23 @@ class AuthorCubit extends Cubit<AuthorState> {
 
     final result = await _authorRepository.getAuthor(slug: slug);
 
-    result.when(
+    result.handle(
       success: (author, _) {
         emit(state.copyWith(author: author));
         getBooks(authorId: author.id);
       },
-      failed: (failure) => emit(state.copyWith(isLoading: false)),
+      failure: (failure) => emit(state.copyWith(isLoading: false)),
     );
 
     emit(state.copyWith(isLoading: false));
   }
 
-  Future<void> getBooks({
-    required int authorId,
-  }) async {
+  Future<void> getBooks({required int authorId}) async {
     emit(state.copyWith(isLoadingAuthorsBooks: true));
 
-    final result = await _authorRepository.getAuthorsBooks(
-      authorId: authorId,
-    );
+    final result = await _authorRepository.getAuthorsBooks(authorId: authorId);
 
-    result.when(
+    result.handle(
       success: (books, pagination) {
         emit(
           state.copyWith(
@@ -47,7 +44,7 @@ class AuthorCubit extends Cubit<AuthorState> {
           ),
         );
       },
-      failed: (failure) => emit(state.copyWith(isLoadingAuthorsBooks: false)),
+      failure: (failure) => emit(state.copyWith(isLoadingAuthorsBooks: false)),
     );
 
     emit(state.copyWith(isLoadingAuthorsBooks: false));
@@ -62,7 +59,7 @@ class AuthorCubit extends Cubit<AuthorState> {
       url: state.authorsBooksPagination.next!.removeApiUrl,
     );
 
-    books.when(
+    books.handle(
       success: (books, pagination) {
         emit(
           state.copyWith(
@@ -72,26 +69,20 @@ class AuthorCubit extends Cubit<AuthorState> {
           ),
         );
       },
-      failed: (failure) {
-        emit(
-          state.copyWith(
-            isLoadingAuthorsBooks: false,
-          ),
-        );
+      failure: (failure) {
+        emit(state.copyWith(isLoadingAuthorsBooks: false));
       },
     );
   }
 
-  Future<void> getTranslations({
-    required int authorId,
-  }) async {
+  Future<void> getTranslations({required int authorId}) async {
     emit(state.copyWith(isLoadingAuthorsTranslations: true));
 
     final result = await _authorRepository.getAuthorTranslations(
       authorId: authorId,
     );
 
-    result.when(
+    result.handle(
       success: (books, pagination) {
         emit(
           state.copyWith(
@@ -101,7 +92,7 @@ class AuthorCubit extends Cubit<AuthorState> {
           ),
         );
       },
-      failed: (failure) =>
+      failure: (failure) =>
           emit(state.copyWith(isLoadingAuthorsTranslations: false)),
     );
 
@@ -117,26 +108,19 @@ class AuthorCubit extends Cubit<AuthorState> {
       url: state.authorsTranslationsPagination.next!.removeApiUrl,
     );
 
-    books.when(
+    books.handle(
       success: (books, pagination) {
         emit(
           state.copyWith(
-            authorsTranslations: [
-              ...state.authorsTranslations,
-              ...books,
-            ],
+            authorsTranslations: [...state.authorsTranslations, ...books],
             authorsTranslationsPagination:
                 pagination ?? state.authorsTranslationsPagination,
             isLoadingAuthorsTranslations: false,
           ),
         );
       },
-      failed: (failure) {
-        emit(
-          state.copyWith(
-            isLoadingAuthorsTranslations: false,
-          ),
-        );
+      failure: (failure) {
+        emit(state.copyWith(isLoadingAuthorsTranslations: false));
       },
     );
   }

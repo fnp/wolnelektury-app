@@ -6,8 +6,8 @@ part of 'progress_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ProgressModelImpl _$$ProgressModelImplFromJson(Map<String, dynamic> json) =>
-    _$ProgressModelImpl(
+_ProgressModel _$ProgressModelFromJson(Map<String, dynamic> json) =>
+    _ProgressModel(
       book: json['book'] as String?,
       slug: json['book_slug'] as String?,
       lastMode: json['last_mode'] as String?,
@@ -17,13 +17,13 @@ _$ProgressModelImpl _$$ProgressModelImplFromJson(Map<String, dynamic> json) =>
       audioTimestamp: (json['audio_timestamp'] as num?)?.toDouble(),
       implicitTextPercent: (json['implicit_text_percent'] as num?)?.toDouble(),
       implicitTextAnchor: json['implicit_text_anchor'] as String?,
-      implicitAudioPercent:
-          (json['implicit_audio_percent'] as num?)?.toDouble(),
-      implicitAudioTimestamp:
-          (json['implicit_audio_timestamp'] as num?)?.toDouble(),
+      implicitAudioPercent: (json['implicit_audio_percent'] as num?)
+          ?.toDouble(),
+      implicitAudioTimestamp: (json['implicit_audio_timestamp'] as num?)
+          ?.toDouble(),
     );
 
-Map<String, dynamic> _$$ProgressModelImplToJson(_$ProgressModelImpl instance) =>
+Map<String, dynamic> _$ProgressModelToJson(_ProgressModel instance) =>
     <String, dynamic>{
       'book': instance.book,
       'book_slug': instance.slug,
@@ -38,29 +38,25 @@ Map<String, dynamic> _$$ProgressModelImplToJson(_$ProgressModelImpl instance) =>
       'implicit_audio_timestamp': instance.implicitAudioTimestamp,
     };
 
-_$TextProgressModelImpl _$$TextProgressModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$TextProgressModelImpl(
+_TextProgressModel _$TextProgressModelFromJson(Map<String, dynamic> json) =>
+    _TextProgressModel(
       textPercent: (json['text_percent'] as num?)?.toDouble(),
       textAnchor: json['text_anchor'] as String?,
     );
 
-Map<String, dynamic> _$$TextProgressModelImplToJson(
-        _$TextProgressModelImpl instance) =>
+Map<String, dynamic> _$TextProgressModelToJson(_TextProgressModel instance) =>
     <String, dynamic>{
       'text_percent': instance.textPercent,
       'text_anchor': instance.textAnchor,
     };
 
-_$AudioProgressModelImpl _$$AudioProgressModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$AudioProgressModelImpl(
+_AudioProgressModel _$AudioProgressModelFromJson(Map<String, dynamic> json) =>
+    _AudioProgressModel(
       audioTimestamp: (json['audio_timestamp'] as num?)?.toInt(),
       audioPercent: (json['audio_percent'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$$AudioProgressModelImplToJson(
-        _$AudioProgressModelImpl instance) =>
+Map<String, dynamic> _$AudioProgressModelToJson(_AudioProgressModel instance) =>
     <String, dynamic>{
       'audio_timestamp': instance.audioTimestamp,
       'audio_percent': instance.audioPercent,

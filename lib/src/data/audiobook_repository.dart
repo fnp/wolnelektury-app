@@ -34,7 +34,7 @@ class AudiobookRepositoryImplementation extends AudiobookRepository {
         },
       );
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }

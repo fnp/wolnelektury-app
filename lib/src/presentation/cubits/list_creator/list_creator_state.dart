@@ -3,7 +3,7 @@ part of 'list_creator_cubit.dart';
 typedef BookToRemove = (String listSlug, String listName, String bookSlug);
 
 @freezed
-class ListCreatorState with _$ListCreatorState {
+sealed class ListCreatorState with _$ListCreatorState {
   const factory ListCreatorState({
     @Default([]) List<BookListModel> booksToAdd,
     // (List slug, book slug)

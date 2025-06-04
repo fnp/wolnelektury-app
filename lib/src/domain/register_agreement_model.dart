@@ -4,7 +4,7 @@ part 'register_agreement_model.freezed.dart';
 part 'register_agreement_model.g.dart';
 
 @freezed
-class RegisterAgreementModel with _$RegisterAgreementModel {
+sealed class RegisterAgreementModel with _$RegisterAgreementModel {
   const factory RegisterAgreementModel({
     @Default([]) List<String> info,
     @Default([]) List<SingleRegisterAgreementModel> options,
@@ -15,7 +15,7 @@ class RegisterAgreementModel with _$RegisterAgreementModel {
 }
 
 @freezed
-class SingleRegisterAgreementModel with _$SingleRegisterAgreementModel {
+sealed class SingleRegisterAgreementModel with _$SingleRegisterAgreementModel {
   const factory SingleRegisterAgreementModel({
     required int id,
     required String html,

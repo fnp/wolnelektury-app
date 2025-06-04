@@ -4,7 +4,7 @@ part 'audiobook_model.freezed.dart';
 part 'audiobook_model.g.dart';
 
 @freezed
-class AudiobookModel with _$AudiobookModel {
+sealed class AudiobookModel with _$AudiobookModel {
   const factory AudiobookModel({
     @Default([]) List<AudioBookPart> parts,
   }) = _AudiobookModel;
@@ -21,7 +21,7 @@ class AudiobookModel with _$AudiobookModel {
 }
 
 @freezed
-class AudioBookPart with _$AudioBookPart {
+sealed class AudioBookPart with _$AudioBookPart {
   const factory AudioBookPart({
     required String name,
     required String artist,

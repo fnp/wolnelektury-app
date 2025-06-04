@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,223 +10,148 @@ part of 'bookmark_model.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-BookmarkModel _$BookmarkModelFromJson(Map<String, dynamic> json) {
-  return _BookmarkModel.fromJson(json);
-}
 
 /// @nodoc
 mixin _$BookmarkModel {
-  @JsonKey(name: 'book')
-  String get slug => throw _privateConstructorUsedError;
-  String get note => throw _privateConstructorUsedError;
-  String get anchor => throw _privateConstructorUsedError;
-  String get href => throw _privateConstructorUsedError;
+
+@JsonKey(name: 'book') String get slug; String get note; String get anchor; String get href;
+/// Create a copy of BookmarkModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$BookmarkModelCopyWith<BookmarkModel> get copyWith => _$BookmarkModelCopyWithImpl<BookmarkModel>(this as BookmarkModel, _$identity);
 
   /// Serializes this BookmarkModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of BookmarkModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $BookmarkModelCopyWith<BookmarkModel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookmarkModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.note, note) || other.note == note)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.href, href) || other.href == href));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,slug,note,anchor,href);
+
+@override
+String toString() {
+  return 'BookmarkModel(slug: $slug, note: $note, anchor: $anchor, href: $href)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $BookmarkModelCopyWith<$Res> {
-  factory $BookmarkModelCopyWith(
-          BookmarkModel value, $Res Function(BookmarkModel) then) =
-      _$BookmarkModelCopyWithImpl<$Res, BookmarkModel>;
-  @useResult
-  $Res call(
-      {@JsonKey(name: 'book') String slug,
-      String note,
-      String anchor,
-      String href});
-}
+abstract mixin class $BookmarkModelCopyWith<$Res>  {
+  factory $BookmarkModelCopyWith(BookmarkModel value, $Res Function(BookmarkModel) _then) = _$BookmarkModelCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'book') String slug, String note, String anchor, String href
+});
 
+
+
+
+}
 /// @nodoc
-class _$BookmarkModelCopyWithImpl<$Res, $Val extends BookmarkModel>
+class _$BookmarkModelCopyWithImpl<$Res>
     implements $BookmarkModelCopyWith<$Res> {
-  _$BookmarkModelCopyWithImpl(this._value, this._then);
+  _$BookmarkModelCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final BookmarkModel _self;
+  final $Res Function(BookmarkModel) _then;
 
-  /// Create a copy of BookmarkModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? slug = null,
-    Object? note = null,
-    Object? anchor = null,
-    Object? href = null,
-  }) {
-    return _then(_value.copyWith(
-      slug: null == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String,
-      note: null == note
-          ? _value.note
-          : note // ignore: cast_nullable_to_non_nullable
-              as String,
-      anchor: null == anchor
-          ? _value.anchor
-          : anchor // ignore: cast_nullable_to_non_nullable
-              as String,
-      href: null == href
-          ? _value.href
-          : href // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
+/// Create a copy of BookmarkModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? slug = null,Object? note = null,Object? anchor = null,Object? href = null,}) {
+  return _then(_self.copyWith(
+slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String,anchor: null == anchor ? _self.anchor : anchor // ignore: cast_nullable_to_non_nullable
+as String,href: null == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-abstract class _$$BookmarkModelImplCopyWith<$Res>
-    implements $BookmarkModelCopyWith<$Res> {
-  factory _$$BookmarkModelImplCopyWith(
-          _$BookmarkModelImpl value, $Res Function(_$BookmarkModelImpl) then) =
-      __$$BookmarkModelImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {@JsonKey(name: 'book') String slug,
-      String note,
-      String anchor,
-      String href});
 }
 
-/// @nodoc
-class __$$BookmarkModelImplCopyWithImpl<$Res>
-    extends _$BookmarkModelCopyWithImpl<$Res, _$BookmarkModelImpl>
-    implements _$$BookmarkModelImplCopyWith<$Res> {
-  __$$BookmarkModelImplCopyWithImpl(
-      _$BookmarkModelImpl _value, $Res Function(_$BookmarkModelImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of BookmarkModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? slug = null,
-    Object? note = null,
-    Object? anchor = null,
-    Object? href = null,
-  }) {
-    return _then(_$BookmarkModelImpl(
-      slug: null == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String,
-      note: null == note
-          ? _value.note
-          : note // ignore: cast_nullable_to_non_nullable
-              as String,
-      anchor: null == anchor
-          ? _value.anchor
-          : anchor // ignore: cast_nullable_to_non_nullable
-              as String,
-      href: null == href
-          ? _value.href
-          : href // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$BookmarkModelImpl implements _BookmarkModel {
-  const _$BookmarkModelImpl(
-      {@JsonKey(name: 'book') required this.slug,
-      required this.note,
-      required this.anchor,
-      required this.href});
 
-  factory _$BookmarkModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BookmarkModelImplFromJson(json);
+class _BookmarkModel implements BookmarkModel {
+  const _BookmarkModel({@JsonKey(name: 'book') required this.slug, required this.note, required this.anchor, required this.href});
+  factory _BookmarkModel.fromJson(Map<String, dynamic> json) => _$BookmarkModelFromJson(json);
 
-  @override
-  @JsonKey(name: 'book')
-  final String slug;
-  @override
-  final String note;
-  @override
-  final String anchor;
-  @override
-  final String href;
+@override@JsonKey(name: 'book') final  String slug;
+@override final  String note;
+@override final  String anchor;
+@override final  String href;
 
-  @override
-  String toString() {
-    return 'BookmarkModel(slug: $slug, note: $note, anchor: $anchor, href: $href)';
-  }
+/// Create a copy of BookmarkModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$BookmarkModelCopyWith<_BookmarkModel> get copyWith => __$BookmarkModelCopyWithImpl<_BookmarkModel>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$BookmarkModelImpl &&
-            (identical(other.slug, slug) || other.slug == slug) &&
-            (identical(other.note, note) || other.note == note) &&
-            (identical(other.anchor, anchor) || other.anchor == anchor) &&
-            (identical(other.href, href) || other.href == href));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, slug, note, anchor, href);
-
-  /// Create a copy of BookmarkModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$BookmarkModelImplCopyWith<_$BookmarkModelImpl> get copyWith =>
-      __$$BookmarkModelImplCopyWithImpl<_$BookmarkModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BookmarkModelImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$BookmarkModelToJson(this, );
 }
 
-abstract class _BookmarkModel implements BookmarkModel {
-  const factory _BookmarkModel(
-      {@JsonKey(name: 'book') required final String slug,
-      required final String note,
-      required final String anchor,
-      required final String href}) = _$BookmarkModelImpl;
-
-  factory _BookmarkModel.fromJson(Map<String, dynamic> json) =
-      _$BookmarkModelImpl.fromJson;
-
-  @override
-  @JsonKey(name: 'book')
-  String get slug;
-  @override
-  String get note;
-  @override
-  String get anchor;
-  @override
-  String get href;
-
-  /// Create a copy of BookmarkModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BookmarkModelImplCopyWith<_$BookmarkModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookmarkModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.note, note) || other.note == note)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.href, href) || other.href == href));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,slug,note,anchor,href);
+
+@override
+String toString() {
+  return 'BookmarkModel(slug: $slug, note: $note, anchor: $anchor, href: $href)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$BookmarkModelCopyWith<$Res> implements $BookmarkModelCopyWith<$Res> {
+  factory _$BookmarkModelCopyWith(_BookmarkModel value, $Res Function(_BookmarkModel) _then) = __$BookmarkModelCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: 'book') String slug, String note, String anchor, String href
+});
+
+
+
+
+}
+/// @nodoc
+class __$BookmarkModelCopyWithImpl<$Res>
+    implements _$BookmarkModelCopyWith<$Res> {
+  __$BookmarkModelCopyWithImpl(this._self, this._then);
+
+  final _BookmarkModel _self;
+  final $Res Function(_BookmarkModel) _then;
+
+/// Create a copy of BookmarkModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? slug = null,Object? note = null,Object? anchor = null,Object? href = null,}) {
+  return _then(_BookmarkModel(
+slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String,anchor: null == anchor ? _self.anchor : anchor // ignore: cast_nullable_to_non_nullable
+as String,href: null == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on

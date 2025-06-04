@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,137 +10,136 @@ part of 'settings_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$SettingsState {
-  AppSetting? get settings => throw _privateConstructorUsedError;
 
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $SettingsStateCopyWith<SettingsState> get copyWith =>
-      throw _privateConstructorUsedError;
+ AppSetting? get settings; String? get version;
+/// Create a copy of SettingsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SettingsStateCopyWith<SettingsState> get copyWith => _$SettingsStateCopyWithImpl<SettingsState>(this as SettingsState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version);
+
+@override
+String toString() {
+  return 'SettingsState(settings: $settings, version: $version)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $SettingsStateCopyWith<$Res> {
-  factory $SettingsStateCopyWith(
-          SettingsState value, $Res Function(SettingsState) then) =
-      _$SettingsStateCopyWithImpl<$Res, SettingsState>;
-  @useResult
-  $Res call({AppSetting? settings});
-}
+abstract mixin class $SettingsStateCopyWith<$Res>  {
+  factory $SettingsStateCopyWith(SettingsState value, $Res Function(SettingsState) _then) = _$SettingsStateCopyWithImpl;
+@useResult
+$Res call({
+ AppSetting? settings, String? version
+});
 
+
+
+
+}
 /// @nodoc
-class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
+class _$SettingsStateCopyWithImpl<$Res>
     implements $SettingsStateCopyWith<$Res> {
-  _$SettingsStateCopyWithImpl(this._value, this._then);
+  _$SettingsStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final SettingsState _self;
+  final $Res Function(SettingsState) _then;
 
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? settings = freezed,
-  }) {
-    return _then(_value.copyWith(
-      settings: freezed == settings
-          ? _value.settings
-          : settings // ignore: cast_nullable_to_non_nullable
-              as AppSetting?,
-    ) as $Val);
-  }
+/// Create a copy of SettingsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? settings = freezed,Object? version = freezed,}) {
+  return _then(_self.copyWith(
+settings: freezed == settings ? _self.settings : settings // ignore: cast_nullable_to_non_nullable
+as AppSetting?,version: freezed == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$SettingsStateImplCopyWith<$Res>
-    implements $SettingsStateCopyWith<$Res> {
-  factory _$$SettingsStateImplCopyWith(
-          _$SettingsStateImpl value, $Res Function(_$SettingsStateImpl) then) =
-      __$$SettingsStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({AppSetting? settings});
 }
 
-/// @nodoc
-class __$$SettingsStateImplCopyWithImpl<$Res>
-    extends _$SettingsStateCopyWithImpl<$Res, _$SettingsStateImpl>
-    implements _$$SettingsStateImplCopyWith<$Res> {
-  __$$SettingsStateImplCopyWithImpl(
-      _$SettingsStateImpl _value, $Res Function(_$SettingsStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? settings = freezed,
-  }) {
-    return _then(_$SettingsStateImpl(
-      settings: freezed == settings
-          ? _value.settings
-          : settings // ignore: cast_nullable_to_non_nullable
-              as AppSetting?,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$SettingsStateImpl implements _SettingsState {
-  const _$SettingsStateImpl({this.settings});
 
-  @override
-  final AppSetting? settings;
+class _SettingsState implements SettingsState {
+  const _SettingsState({this.settings, this.version});
+  
 
-  @override
-  String toString() {
-    return 'SettingsState(settings: $settings)';
-  }
+@override final  AppSetting? settings;
+@override final  String? version;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SettingsStateImpl &&
-            const DeepCollectionEquality().equals(other.settings, settings));
-  }
+/// Create a copy of SettingsState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SettingsStateCopyWith<_SettingsState> get copyWith => __$SettingsStateCopyWithImpl<_SettingsState>(this, _$identity);
 
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(settings));
 
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
-      __$$SettingsStateImplCopyWithImpl<_$SettingsStateImpl>(this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version));
 }
 
-abstract class _SettingsState implements SettingsState {
-  const factory _SettingsState({final AppSetting? settings}) =
-      _$SettingsStateImpl;
 
-  @override
-  AppSetting? get settings;
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version);
 
-  /// Create a copy of SettingsState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'SettingsState(settings: $settings, version: $version)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SettingsStateCopyWith<$Res> implements $SettingsStateCopyWith<$Res> {
+  factory _$SettingsStateCopyWith(_SettingsState value, $Res Function(_SettingsState) _then) = __$SettingsStateCopyWithImpl;
+@override @useResult
+$Res call({
+ AppSetting? settings, String? version
+});
+
+
+
+
+}
+/// @nodoc
+class __$SettingsStateCopyWithImpl<$Res>
+    implements _$SettingsStateCopyWith<$Res> {
+  __$SettingsStateCopyWithImpl(this._self, this._then);
+
+  final _SettingsState _self;
+  final $Res Function(_SettingsState) _then;
+
+/// Create a copy of SettingsState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? settings = freezed,Object? version = freezed,}) {
+  return _then(_SettingsState(
+settings: freezed == settings ? _self.settings : settings // ignore: cast_nullable_to_non_nullable
+as AppSetting?,version: freezed == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+// dart format on

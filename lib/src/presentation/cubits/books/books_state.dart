@@ -1,7 +1,7 @@
 part of 'books_cubit.dart';
 
 @freezed
-class BooksState with _$BooksState {
+sealed class BooksState with _$BooksState {
   const factory BooksState({
     @Default([]) List<BookModel> books,
     @Default([]) List<TagModel> filterTags,

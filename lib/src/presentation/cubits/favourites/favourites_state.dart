@@ -1,9 +1,14 @@
 part of 'favourites_cubit.dart';
 
 @freezed
-class FavouritesState with _$FavouritesState {
+sealed class FavouritesState with _$FavouritesState {
   const factory FavouritesState({
     // List of slugs
-    @Default({}) Map<String, List> favourites,
+    @Default([]) List<String> favourites,
+    @Default(5) int itemsPerPage,
   }) = _FavouritesState;
+}
+
+extension FavouritesStateX on FavouritesState {
+  int get effectiveLength => min(itemsPerPage, favourites.length);
 }

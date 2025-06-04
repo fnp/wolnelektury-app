@@ -2,6 +2,7 @@ import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
+import 'package:wolnelektury/src/utils/api/api_utils.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';
 
@@ -17,9 +18,7 @@ abstract class ListsRepository {
     required List<String> bookSlugs,
   });
 
-  Future<DataState<void>> deleteList({
-    required String listSlug,
-  });
+  Future<DataState<void>> deleteList({required String listSlug});
 
   Future<DataState<void>> deleteBookFromList({
     required String listSlug,
@@ -31,13 +30,9 @@ abstract class ListsRepository {
     required List<String> bookSlugs,
   });
 
-  Future<DataState<BookListModel>> getList({
-    required String listSlug,
-  });
+  Future<DataState<BookListModel>> getList({required String listSlug});
 
-  Future<DataState<List<BookListModel>>> getLists({
-    String? url,
-  });
+  Future<DataState<List<BookListModel>>> getLists({String? url});
 }
 
 class ListsRepositoryImplementation extends ListsRepository {
@@ -61,21 +56,15 @@ class ListsRepositoryImplementation extends ListsRepository {
     try {
       final response = await _apiService.postRequest(
         _manageListEndpoint(listSlug),
-        {
-          'books': bookSlugs,
-        },
+        {'books': bookSlugs},
       );
 
       if (response.hasError) {
-        return const DataState.failed(
-          Failure.badResponse(),
-        );
+        return const DataState.failure(Failure.badResponse());
       }
-      return const DataState.success(null);
+      return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -85,24 +74,17 @@ class ListsRepositoryImplementation extends ListsRepository {
     required List<String> bookSlugs,
   }) async {
     try {
-      final response = await _apiService.postRequest(
-        _createListEndpoint,
-        {
-          'name': listName,
-          'books': bookSlugs,
-        },
-      );
+      final response = await _apiService.postRequest(_createListEndpoint, {
+        'name': listName,
+        'books': bookSlugs,
+      });
 
       if (response.hasError || !response.hasData) {
-        return const DataState.failed(
-          Failure.badResponse(),
-        );
+        return const DataState.failure(Failure.badResponse());
       }
-      return DataState.success(response.data!.first['slug'] as String);
+      return DataState.success(data: response.data!.first['slug'] as String);
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -117,15 +99,11 @@ class ListsRepositoryImplementation extends ListsRepository {
       );
 
       if (response.hasError) {
-        return const DataState.failed(
-          Failure.badResponse(),
-        );
+        return const DataState.failure(Failure.badResponse());
       }
-      return const DataState.success(null);
+      return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -137,15 +115,11 @@ class ListsRepositoryImplementation extends ListsRepository {
       );
 
       if (response.hasError) {
-        return const DataState.failed(
-          Failure.badResponse(),
-        );
+        return const DataState.failure(Failure.badResponse());
       }
-      return const DataState.success(null);
+      return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -158,22 +132,15 @@ class ListsRepositoryImplementation extends ListsRepository {
     try {
       final response = await _apiService.putRequest(
         _manageListEndpoint(listSlug),
-        {
-          'name': listName,
-          'books': bookSlugs,
-        },
+        {'name': listName, 'books': bookSlugs},
       );
 
       if (response.hasError) {
-        return const DataState.failed(
-          Failure.badResponse(),
-        );
+        return const DataState.failure(Failure.badResponse());
       }
-      return const DataState.success(null);
+      return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -186,31 +153,25 @@ class ListsRepositoryImplementation extends ListsRepository {
       );
 
       if (!response.hasData) {
-        return const DataState.failed(
-          Failure.notFound(),
-        );
+        return const DataState.failure(Failure.notFound());
       }
-      return DataState.success(BookListModel.fromJson(response.data!.first));
-    } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
+      return DataState.success(
+        data: BookListModel.fromJson(response.data!.first),
       );
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
   @override
-  Future<DataState<List<BookListModel>>> getLists({
-    String? url,
-  }) async {
+  Future<DataState<List<BookListModel>>> getLists({String? url}) async {
     try {
       final response = await _apiService.getRequest(
-        url ?? _createListEndpoint,
+        url ?? ApiUtils.applyLimit(apiUrl: _createListEndpoint, limit: 5),
         useCache: CacheEnum.ignore,
       );
       if (!response.hasData) {
-        return const DataState.failed(
-          Failure.notFound(),
-        );
+        return const DataState.failure(Failure.notFound());
       }
       return DataState.fromApiResponse(
         response: response,
@@ -219,9 +180,7 @@ class ListsRepositoryImplementation extends ListsRepository {
         },
       );
     } catch (e) {
-      return const DataState.failed(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 }

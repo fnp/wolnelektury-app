@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,135 +10,133 @@ part of 'scroll_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$ScrollState {
-  dynamic get showAppBar => throw _privateConstructorUsedError;
 
-  /// Create a copy of ScrollState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ScrollStateCopyWith<ScrollState> get copyWith =>
-      throw _privateConstructorUsedError;
+ dynamic get showAppBar;
+/// Create a copy of ScrollState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ScrollStateCopyWith<ScrollState> get copyWith => _$ScrollStateCopyWithImpl<ScrollState>(this as ScrollState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScrollState&&const DeepCollectionEquality().equals(other.showAppBar, showAppBar));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(showAppBar));
+
+@override
+String toString() {
+  return 'ScrollState(showAppBar: $showAppBar)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ScrollStateCopyWith<$Res> {
-  factory $ScrollStateCopyWith(
-          ScrollState value, $Res Function(ScrollState) then) =
-      _$ScrollStateCopyWithImpl<$Res, ScrollState>;
-  @useResult
-  $Res call({dynamic showAppBar});
-}
+abstract mixin class $ScrollStateCopyWith<$Res>  {
+  factory $ScrollStateCopyWith(ScrollState value, $Res Function(ScrollState) _then) = _$ScrollStateCopyWithImpl;
+@useResult
+$Res call({
+ dynamic showAppBar
+});
 
+
+
+
+}
 /// @nodoc
-class _$ScrollStateCopyWithImpl<$Res, $Val extends ScrollState>
+class _$ScrollStateCopyWithImpl<$Res>
     implements $ScrollStateCopyWith<$Res> {
-  _$ScrollStateCopyWithImpl(this._value, this._then);
+  _$ScrollStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final ScrollState _self;
+  final $Res Function(ScrollState) _then;
 
-  /// Create a copy of ScrollState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? showAppBar = freezed,
-  }) {
-    return _then(_value.copyWith(
-      showAppBar: freezed == showAppBar
-          ? _value.showAppBar
-          : showAppBar // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-    ) as $Val);
-  }
+/// Create a copy of ScrollState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? showAppBar = freezed,}) {
+  return _then(_self.copyWith(
+showAppBar: freezed == showAppBar ? _self.showAppBar : showAppBar // ignore: cast_nullable_to_non_nullable
+as dynamic,
+  ));
 }
 
-/// @nodoc
-abstract class _$$ScrollStateImplCopyWith<$Res>
-    implements $ScrollStateCopyWith<$Res> {
-  factory _$$ScrollStateImplCopyWith(
-          _$ScrollStateImpl value, $Res Function(_$ScrollStateImpl) then) =
-      __$$ScrollStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({dynamic showAppBar});
 }
 
-/// @nodoc
-class __$$ScrollStateImplCopyWithImpl<$Res>
-    extends _$ScrollStateCopyWithImpl<$Res, _$ScrollStateImpl>
-    implements _$$ScrollStateImplCopyWith<$Res> {
-  __$$ScrollStateImplCopyWithImpl(
-      _$ScrollStateImpl _value, $Res Function(_$ScrollStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ScrollState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? showAppBar = freezed,
-  }) {
-    return _then(_$ScrollStateImpl(
-      showAppBar: freezed == showAppBar ? _value.showAppBar! : showAppBar,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$ScrollStateImpl implements _ScrollState {
-  const _$ScrollStateImpl({this.showAppBar = true});
 
-  @override
-  @JsonKey()
-  final dynamic showAppBar;
+class _ScrollState implements ScrollState {
+  const _ScrollState({this.showAppBar = true});
+  
 
-  @override
-  String toString() {
-    return 'ScrollState(showAppBar: $showAppBar)';
-  }
+@override@JsonKey() final  dynamic showAppBar;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ScrollStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other.showAppBar, showAppBar));
-  }
+/// Create a copy of ScrollState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ScrollStateCopyWith<_ScrollState> get copyWith => __$ScrollStateCopyWithImpl<_ScrollState>(this, _$identity);
 
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(showAppBar));
 
-  /// Create a copy of ScrollState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ScrollStateImplCopyWith<_$ScrollStateImpl> get copyWith =>
-      __$$ScrollStateImplCopyWithImpl<_$ScrollStateImpl>(this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScrollState&&const DeepCollectionEquality().equals(other.showAppBar, showAppBar));
 }
 
-abstract class _ScrollState implements ScrollState {
-  const factory _ScrollState({final dynamic showAppBar}) = _$ScrollStateImpl;
 
-  @override
-  dynamic get showAppBar;
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(showAppBar));
 
-  /// Create a copy of ScrollState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ScrollStateImplCopyWith<_$ScrollStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'ScrollState(showAppBar: $showAppBar)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ScrollStateCopyWith<$Res> implements $ScrollStateCopyWith<$Res> {
+  factory _$ScrollStateCopyWith(_ScrollState value, $Res Function(_ScrollState) _then) = __$ScrollStateCopyWithImpl;
+@override @useResult
+$Res call({
+ dynamic showAppBar
+});
+
+
+
+
+}
+/// @nodoc
+class __$ScrollStateCopyWithImpl<$Res>
+    implements _$ScrollStateCopyWith<$Res> {
+  __$ScrollStateCopyWithImpl(this._self, this._then);
+
+  final _ScrollState _self;
+  final $Res Function(_ScrollState) _then;
+
+/// Create a copy of ScrollState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? showAppBar = freezed,}) {
+  return _then(_ScrollState(
+showAppBar: freezed == showAppBar ? _self.showAppBar : showAppBar // ignore: cast_nullable_to_non_nullable
+as dynamic,
+  ));
+}
+
+
+}
+
+// dart format on

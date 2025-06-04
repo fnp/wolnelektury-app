@@ -4,7 +4,7 @@ part 'progress_model.freezed.dart';
 part 'progress_model.g.dart';
 
 @freezed
-class ProgressModel with _$ProgressModel {
+sealed class ProgressModel with _$ProgressModel {
   const factory ProgressModel({
     String? book,
     @JsonKey(name: 'book_slug') String? slug,
@@ -24,7 +24,7 @@ class ProgressModel with _$ProgressModel {
 }
 
 @freezed
-class TextProgressModel with _$TextProgressModel {
+sealed class TextProgressModel with _$TextProgressModel {
   const factory TextProgressModel({
     @JsonKey(name: 'text_percent') double? textPercent,
     @JsonKey(name: 'text_anchor') String? textAnchor,
@@ -35,7 +35,7 @@ class TextProgressModel with _$TextProgressModel {
 }
 
 @freezed
-class AudioProgressModel with _$AudioProgressModel {
+sealed class AudioProgressModel with _$AudioProgressModel {
   const factory AudioProgressModel({
     @JsonKey(name: 'audio_timestamp') int? audioTimestamp,
     @JsonKey(name: 'audio_percent') double? audioPercent,

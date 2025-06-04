@@ -4,7 +4,7 @@ part 'bookmark_model.freezed.dart';
 part 'bookmark_model.g.dart';
 
 @freezed
-class BookmarkModel with _$BookmarkModel {
+sealed class BookmarkModel with _$BookmarkModel {
   const factory BookmarkModel({
     @JsonKey(name: 'book') required String slug,
     required String note,

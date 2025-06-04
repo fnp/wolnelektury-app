@@ -38,18 +38,18 @@ class AuthRepositoryImplementation extends AuthRepository {
       });
 
       if (response.hasError || response.data?.isEmpty == true) {
-        return const DataState.failed(Failure.badResponse());
+        return const DataState.failure(Failure.badResponse());
       }
 
       final result = await _apiService.setTokens(response: response);
 
       if (!result) {
-        return const DataState.failed(Failure.badResponse());
+        return const DataState.failure(Failure.badResponse());
       }
 
-      return const DataState.success(null);
+      return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }
@@ -69,12 +69,12 @@ class AuthRepositoryImplementation extends AuthRepository {
       });
 
       if (response.hasError) {
-        return const DataState.failed(Failure.badResponse());
+        return const DataState.failure(Failure.badResponse());
       }
 
-      return const DataState.success(null);
+      return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failed(
+      return const DataState.failure(
         Failure.badResponse(),
       );
     }
@@ -88,14 +88,14 @@ class AuthRepositoryImplementation extends AuthRepository {
     );
 
     if (response.error != null) {
-      return const DataState.failed(Failure.badResponse());
+      return const DataState.failure(Failure.badResponse());
     }
 
     try {
       final user = UserModel.fromJson(response.data!.first);
-      return DataState.success(user);
+      return DataState.success(data: user);
     } catch (e) {
-      return const DataState.failed(Failure.badResponse());
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -106,14 +106,14 @@ class AuthRepositoryImplementation extends AuthRepository {
     );
 
     if (response.error != null) {
-      return const DataState.failed(Failure.badResponse());
+      return const DataState.failure(Failure.badResponse());
     }
 
     try {
       final agreements = RegisterAgreementModel.fromJson(response.data!.first);
-      return DataState.success(agreements);
+      return DataState.success(data: agreements);
     } catch (e) {
-      return const DataState.failed(Failure.badResponse());
+      return const DataState.failure(Failure.badResponse());
     }
   }
 }

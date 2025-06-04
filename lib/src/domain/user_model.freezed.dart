@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,193 +10,145 @@ part of 'user_model.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-UserModel _$UserModelFromJson(Map<String, dynamic> json) {
-  return _UserModel.fromJson(json);
-}
 
 /// @nodoc
 mixin _$UserModel {
-  String get username => throw _privateConstructorUsedError;
-  bool get confirmed => throw _privateConstructorUsedError;
-  bool get premium => throw _privateConstructorUsedError;
+
+ String get username; bool get confirmed; bool get premium;
+/// Create a copy of UserModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UserModelCopyWith<UserModel> get copyWith => _$UserModelCopyWithImpl<UserModel>(this as UserModel, _$identity);
 
   /// Serializes this UserModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of UserModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $UserModelCopyWith<UserModel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.username, username) || other.username == username)&&(identical(other.confirmed, confirmed) || other.confirmed == confirmed)&&(identical(other.premium, premium) || other.premium == premium));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,username,confirmed,premium);
+
+@override
+String toString() {
+  return 'UserModel(username: $username, confirmed: $confirmed, premium: $premium)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $UserModelCopyWith<$Res> {
-  factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
-      _$UserModelCopyWithImpl<$Res, UserModel>;
-  @useResult
-  $Res call({String username, bool confirmed, bool premium});
-}
+abstract mixin class $UserModelCopyWith<$Res>  {
+  factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
+@useResult
+$Res call({
+ String username, bool confirmed, bool premium
+});
 
+
+
+
+}
 /// @nodoc
-class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
+class _$UserModelCopyWithImpl<$Res>
     implements $UserModelCopyWith<$Res> {
-  _$UserModelCopyWithImpl(this._value, this._then);
+  _$UserModelCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final UserModel _self;
+  final $Res Function(UserModel) _then;
 
-  /// Create a copy of UserModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? username = null,
-    Object? confirmed = null,
-    Object? premium = null,
-  }) {
-    return _then(_value.copyWith(
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-      confirmed: null == confirmed
-          ? _value.confirmed
-          : confirmed // ignore: cast_nullable_to_non_nullable
-              as bool,
-      premium: null == premium
-          ? _value.premium
-          : premium // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
-  }
+/// Create a copy of UserModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? username = null,Object? confirmed = null,Object? premium = null,}) {
+  return _then(_self.copyWith(
+username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String,confirmed: null == confirmed ? _self.confirmed : confirmed // ignore: cast_nullable_to_non_nullable
+as bool,premium: null == premium ? _self.premium : premium // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
 }
 
-/// @nodoc
-abstract class _$$UserModelImplCopyWith<$Res>
-    implements $UserModelCopyWith<$Res> {
-  factory _$$UserModelImplCopyWith(
-          _$UserModelImpl value, $Res Function(_$UserModelImpl) then) =
-      __$$UserModelImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String username, bool confirmed, bool premium});
 }
 
-/// @nodoc
-class __$$UserModelImplCopyWithImpl<$Res>
-    extends _$UserModelCopyWithImpl<$Res, _$UserModelImpl>
-    implements _$$UserModelImplCopyWith<$Res> {
-  __$$UserModelImplCopyWithImpl(
-      _$UserModelImpl _value, $Res Function(_$UserModelImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of UserModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? username = null,
-    Object? confirmed = null,
-    Object? premium = null,
-  }) {
-    return _then(_$UserModelImpl(
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-      confirmed: null == confirmed
-          ? _value.confirmed
-          : confirmed // ignore: cast_nullable_to_non_nullable
-              as bool,
-      premium: null == premium
-          ? _value.premium
-          : premium // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$UserModelImpl implements _UserModel {
-  const _$UserModelImpl(
-      {required this.username, required this.confirmed, required this.premium});
 
-  factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserModelImplFromJson(json);
+class _UserModel implements UserModel {
+  const _UserModel({required this.username, required this.confirmed, required this.premium});
+  factory _UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
-  @override
-  final String username;
-  @override
-  final bool confirmed;
-  @override
-  final bool premium;
+@override final  String username;
+@override final  bool confirmed;
+@override final  bool premium;
 
-  @override
-  String toString() {
-    return 'UserModel(username: $username, confirmed: $confirmed, premium: $premium)';
-  }
+/// Create a copy of UserModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UserModelCopyWith<_UserModel> get copyWith => __$UserModelCopyWithImpl<_UserModel>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UserModelImpl &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.confirmed, confirmed) ||
-                other.confirmed == confirmed) &&
-            (identical(other.premium, premium) || other.premium == premium));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, username, confirmed, premium);
-
-  /// Create a copy of UserModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
-      __$$UserModelImplCopyWithImpl<_$UserModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$UserModelImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$UserModelToJson(this, );
 }
 
-abstract class _UserModel implements UserModel {
-  const factory _UserModel(
-      {required final String username,
-      required final bool confirmed,
-      required final bool premium}) = _$UserModelImpl;
-
-  factory _UserModel.fromJson(Map<String, dynamic> json) =
-      _$UserModelImpl.fromJson;
-
-  @override
-  String get username;
-  @override
-  bool get confirmed;
-  @override
-  bool get premium;
-
-  /// Create a copy of UserModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.username, username) || other.username == username)&&(identical(other.confirmed, confirmed) || other.confirmed == confirmed)&&(identical(other.premium, premium) || other.premium == premium));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,username,confirmed,premium);
+
+@override
+String toString() {
+  return 'UserModel(username: $username, confirmed: $confirmed, premium: $premium)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
+  factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
+@override @useResult
+$Res call({
+ String username, bool confirmed, bool premium
+});
+
+
+
+
+}
+/// @nodoc
+class __$UserModelCopyWithImpl<$Res>
+    implements _$UserModelCopyWith<$Res> {
+  __$UserModelCopyWithImpl(this._self, this._then);
+
+  final _UserModel _self;
+  final $Res Function(_UserModel) _then;
+
+/// Create a copy of UserModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? username = null,Object? confirmed = null,Object? premium = null,}) {
+  return _then(_UserModel(
+username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String,confirmed: null == confirmed ? _self.confirmed : confirmed // ignore: cast_nullable_to_non_nullable
+as bool,premium: null == premium ? _self.premium : premium // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
+}
+
+// dart format on

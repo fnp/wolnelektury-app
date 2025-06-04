@@ -12,19 +12,26 @@ class $AppSettingsTable extends AppSettings
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _themeMeta = const VerificationMeta('theme');
   @override
   late final GeneratedColumn<String> theme = GeneratedColumn<String>(
-      'theme', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant('adaptive'));
+    'theme',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('adaptive'),
+  );
   @override
   List<GeneratedColumn> get $columns => [id, theme];
   @override
@@ -33,8 +40,10 @@ class $AppSettingsTable extends AppSettings
   String get actualTableName => $name;
   static const String $name = 'app_settings';
   @override
-  VerificationContext validateIntegrity(Insertable<AppSetting> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<AppSetting> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -42,7 +51,9 @@ class $AppSettingsTable extends AppSettings
     }
     if (data.containsKey('theme')) {
       context.handle(
-          _themeMeta, theme.isAcceptableOrUnknown(data['theme']!, _themeMeta));
+        _themeMeta,
+        theme.isAcceptableOrUnknown(data['theme']!, _themeMeta),
+      );
     }
     return context;
   }
@@ -53,10 +64,14 @@ class $AppSettingsTable extends AppSettings
   AppSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AppSetting(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      theme: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}theme'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      theme: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}theme'],
+      )!,
     );
   }
 
@@ -79,14 +94,13 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   }
 
   AppSettingsCompanion toCompanion(bool nullToAbsent) {
-    return AppSettingsCompanion(
-      id: Value(id),
-      theme: Value(theme),
-    );
+    return AppSettingsCompanion(id: Value(id), theme: Value(theme));
   }
 
-  factory AppSetting.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory AppSetting.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return AppSetting(
       id: serializer.fromJson<int>(json['id']),
@@ -102,10 +116,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     };
   }
 
-  AppSetting copyWith({int? id, String? theme}) => AppSetting(
-        id: id ?? this.id,
-        theme: theme ?? this.theme,
-      );
+  AppSetting copyWith({int? id, String? theme}) =>
+      AppSetting(id: id ?? this.id, theme: theme ?? this.theme);
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
     return AppSetting(
       id: data.id.present ? data.id.value : this.id,
@@ -152,10 +164,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }
 
   AppSettingsCompanion copyWith({Value<int>? id, Value<String>? theme}) {
-    return AppSettingsCompanion(
-      id: id ?? this.id,
-      theme: theme ?? this.theme,
-    );
+    return AppSettingsCompanion(id: id ?? this.id, theme: theme ?? this.theme);
   }
 
   @override
@@ -186,28 +195,41 @@ class $AppCacheTable extends AppCache
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $AppCacheTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _callKeyMeta =
-      const VerificationMeta('callKey');
+  static const VerificationMeta _callKeyMeta = const VerificationMeta(
+    'callKey',
+  );
   @override
   late final GeneratedColumn<String> callKey = GeneratedColumn<String>(
-      'call_key', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL UNIQUE');
-  static const VerificationMeta _responseMeta =
-      const VerificationMeta('response');
+    'call_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL UNIQUE',
+  );
+  static const VerificationMeta _responseMeta = const VerificationMeta(
+    'response',
+  );
   @override
   late final GeneratedColumn<String> response = GeneratedColumn<String>(
-      'response', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'response',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   @override
   List<GeneratedColumn> get $columns => [callKey, response, createdAt];
   @override
@@ -216,25 +238,33 @@ class $AppCacheTable extends AppCache
   String get actualTableName => $name;
   static const String $name = 'app_cache';
   @override
-  VerificationContext validateIntegrity(Insertable<AppCacheData> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<AppCacheData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('call_key')) {
-      context.handle(_callKeyMeta,
-          callKey.isAcceptableOrUnknown(data['call_key']!, _callKeyMeta));
+      context.handle(
+        _callKeyMeta,
+        callKey.isAcceptableOrUnknown(data['call_key']!, _callKeyMeta),
+      );
     } else if (isInserting) {
       context.missing(_callKeyMeta);
     }
     if (data.containsKey('response')) {
-      context.handle(_responseMeta,
-          response.isAcceptableOrUnknown(data['response']!, _responseMeta));
+      context.handle(
+        _responseMeta,
+        response.isAcceptableOrUnknown(data['response']!, _responseMeta),
+      );
     } else if (isInserting) {
       context.missing(_responseMeta);
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     }
     return context;
   }
@@ -245,12 +275,18 @@ class $AppCacheTable extends AppCache
   AppCacheData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AppCacheData(
-      callKey: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}call_key'])!,
-      response: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}response'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      callKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}call_key'],
+      )!,
+      response: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}response'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
     );
   }
 
@@ -264,8 +300,11 @@ class AppCacheData extends DataClass implements Insertable<AppCacheData> {
   final String callKey;
   final String response;
   final DateTime createdAt;
-  const AppCacheData(
-      {required this.callKey, required this.response, required this.createdAt});
+  const AppCacheData({
+    required this.callKey,
+    required this.response,
+    required this.createdAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -283,8 +322,10 @@ class AppCacheData extends DataClass implements Insertable<AppCacheData> {
     );
   }
 
-  factory AppCacheData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory AppCacheData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return AppCacheData(
       callKey: serializer.fromJson<String>(json['callKey']),
@@ -302,13 +343,15 @@ class AppCacheData extends DataClass implements Insertable<AppCacheData> {
     };
   }
 
-  AppCacheData copyWith(
-          {String? callKey, String? response, DateTime? createdAt}) =>
-      AppCacheData(
-        callKey: callKey ?? this.callKey,
-        response: response ?? this.response,
-        createdAt: createdAt ?? this.createdAt,
-      );
+  AppCacheData copyWith({
+    String? callKey,
+    String? response,
+    DateTime? createdAt,
+  }) => AppCacheData(
+    callKey: callKey ?? this.callKey,
+    response: response ?? this.response,
+    createdAt: createdAt ?? this.createdAt,
+  );
   AppCacheData copyWithCompanion(AppCacheCompanion data) {
     return AppCacheData(
       callKey: data.callKey.present ? data.callKey.value : this.callKey,
@@ -354,8 +397,8 @@ class AppCacheCompanion extends UpdateCompanion<AppCacheData> {
     required String response,
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  })  : callKey = Value(callKey),
-        response = Value(response);
+  }) : callKey = Value(callKey),
+       response = Value(response);
   static Insertable<AppCacheData> custom({
     Expression<String>? callKey,
     Expression<String>? response,
@@ -370,11 +413,12 @@ class AppCacheCompanion extends UpdateCompanion<AppCacheData> {
     });
   }
 
-  AppCacheCompanion copyWith(
-      {Value<String>? callKey,
-      Value<String>? response,
-      Value<DateTime>? createdAt,
-      Value<int>? rowid}) {
+  AppCacheCompanion copyWith({
+    Value<String>? callKey,
+    Value<String>? response,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
     return AppCacheCompanion(
       callKey: callKey ?? this.callKey,
       response: response ?? this.response,
@@ -422,28 +466,40 @@ class $ReaderSettingsTable extends ReaderSettings
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _readingFontSizeMeta =
-      const VerificationMeta('readingFontSize');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _readingFontSizeMeta = const VerificationMeta(
+    'readingFontSize',
+  );
   @override
   late final GeneratedColumn<double> readingFontSize = GeneratedColumn<double>(
-      'reading_font_size', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.5));
-  static const VerificationMeta _readingFontTypeMeta =
-      const VerificationMeta('readingFontType');
+    'reading_font_size',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.5),
+  );
+  static const VerificationMeta _readingFontTypeMeta = const VerificationMeta(
+    'readingFontType',
+  );
   @override
   late final GeneratedColumn<String> readingFontType = GeneratedColumn<String>(
-      'reading_font_type', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant('sans'));
+    'reading_font_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('sans'),
+  );
   @override
   List<GeneratedColumn> get $columns => [id, readingFontSize, readingFontType];
   @override
@@ -452,8 +508,10 @@ class $ReaderSettingsTable extends ReaderSettings
   String get actualTableName => $name;
   static const String $name = 'reader_settings';
   @override
-  VerificationContext validateIntegrity(Insertable<ReaderSetting> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<ReaderSetting> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -461,15 +519,21 @@ class $ReaderSettingsTable extends ReaderSettings
     }
     if (data.containsKey('reading_font_size')) {
       context.handle(
+        _readingFontSizeMeta,
+        readingFontSize.isAcceptableOrUnknown(
+          data['reading_font_size']!,
           _readingFontSizeMeta,
-          readingFontSize.isAcceptableOrUnknown(
-              data['reading_font_size']!, _readingFontSizeMeta));
+        ),
+      );
     }
     if (data.containsKey('reading_font_type')) {
       context.handle(
+        _readingFontTypeMeta,
+        readingFontType.isAcceptableOrUnknown(
+          data['reading_font_type']!,
           _readingFontTypeMeta,
-          readingFontType.isAcceptableOrUnknown(
-              data['reading_font_type']!, _readingFontTypeMeta));
+        ),
+      );
     }
     return context;
   }
@@ -480,12 +544,18 @@ class $ReaderSettingsTable extends ReaderSettings
   ReaderSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ReaderSetting(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
       readingFontSize: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}reading_font_size'])!,
+        DriftSqlType.double,
+        data['${effectivePrefix}reading_font_size'],
+      )!,
       readingFontType: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}reading_font_type'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}reading_font_type'],
+      )!,
     );
   }
 
@@ -499,10 +569,11 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
   final int id;
   final double readingFontSize;
   final String readingFontType;
-  const ReaderSetting(
-      {required this.id,
-      required this.readingFontSize,
-      required this.readingFontType});
+  const ReaderSetting({
+    required this.id,
+    required this.readingFontSize,
+    required this.readingFontType,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -520,8 +591,10 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
     );
   }
 
-  factory ReaderSetting.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory ReaderSetting.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ReaderSetting(
       id: serializer.fromJson<int>(json['id']),
@@ -539,13 +612,15 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
     };
   }
 
-  ReaderSetting copyWith(
-          {int? id, double? readingFontSize, String? readingFontType}) =>
-      ReaderSetting(
-        id: id ?? this.id,
-        readingFontSize: readingFontSize ?? this.readingFontSize,
-        readingFontType: readingFontType ?? this.readingFontType,
-      );
+  ReaderSetting copyWith({
+    int? id,
+    double? readingFontSize,
+    String? readingFontType,
+  }) => ReaderSetting(
+    id: id ?? this.id,
+    readingFontSize: readingFontSize ?? this.readingFontSize,
+    readingFontType: readingFontType ?? this.readingFontType,
+  );
   ReaderSetting copyWithCompanion(ReaderSettingsCompanion data) {
     return ReaderSetting(
       id: data.id.present ? data.id.value : this.id,
@@ -605,10 +680,11 @@ class ReaderSettingsCompanion extends UpdateCompanion<ReaderSetting> {
     });
   }
 
-  ReaderSettingsCompanion copyWith(
-      {Value<int>? id,
-      Value<double>? readingFontSize,
-      Value<String>? readingFontType}) {
+  ReaderSettingsCompanion copyWith({
+    Value<int>? id,
+    Value<double>? readingFontSize,
+    Value<String>? readingFontType,
+  }) {
     return ReaderSettingsCompanion(
       id: id ?? this.id,
       readingFontSize: readingFontSize ?? this.readingFontSize,
@@ -652,20 +728,17 @@ abstract class _$AppStorage extends GeneratedDatabase {
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [appSettings, appCache, readerSettings];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    appSettings,
+    appCache,
+    readerSettings,
+  ];
 }
 
-typedef $$AppSettingsTableCreateCompanionBuilder = AppSettingsCompanion
-    Function({
-  Value<int> id,
-  Value<String> theme,
-});
-typedef $$AppSettingsTableUpdateCompanionBuilder = AppSettingsCompanion
-    Function({
-  Value<int> id,
-  Value<String> theme,
-});
+typedef $$AppSettingsTableCreateCompanionBuilder =
+    AppSettingsCompanion Function({Value<int> id, Value<String> theme});
+typedef $$AppSettingsTableUpdateCompanionBuilder =
+    AppSettingsCompanion Function({Value<int> id, Value<String> theme});
 
 class $$AppSettingsTableFilterComposer
     extends Composer<_$AppStorage, $AppSettingsTable> {
@@ -677,10 +750,14 @@ class $$AppSettingsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get theme => $composableBuilder(
-      column: $table.theme, builder: (column) => ColumnFilters(column));
+    column: $table.theme,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$AppSettingsTableOrderingComposer
@@ -693,10 +770,14 @@ class $$AppSettingsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get theme => $composableBuilder(
-      column: $table.theme, builder: (column) => ColumnOrderings(column));
+    column: $table.theme,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AppSettingsTableAnnotationComposer
@@ -715,20 +796,27 @@ class $$AppSettingsTableAnnotationComposer
       $composableBuilder(column: $table.theme, builder: (column) => column);
 }
 
-class $$AppSettingsTableTableManager extends RootTableManager<
-    _$AppStorage,
-    $AppSettingsTable,
-    AppSetting,
-    $$AppSettingsTableFilterComposer,
-    $$AppSettingsTableOrderingComposer,
-    $$AppSettingsTableAnnotationComposer,
-    $$AppSettingsTableCreateCompanionBuilder,
-    $$AppSettingsTableUpdateCompanionBuilder,
-    (AppSetting, BaseReferences<_$AppStorage, $AppSettingsTable, AppSetting>),
-    AppSetting,
-    PrefetchHooks Function()> {
+class $$AppSettingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $AppSettingsTable,
+          AppSetting,
+          $$AppSettingsTableFilterComposer,
+          $$AppSettingsTableOrderingComposer,
+          $$AppSettingsTableAnnotationComposer,
+          $$AppSettingsTableCreateCompanionBuilder,
+          $$AppSettingsTableUpdateCompanionBuilder,
+          (
+            AppSetting,
+            BaseReferences<_$AppStorage, $AppSettingsTable, AppSetting>,
+          ),
+          AppSetting,
+          PrefetchHooks Function()
+        > {
   $$AppSettingsTableTableManager(_$AppStorage db, $AppSettingsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -737,53 +825,52 @@ class $$AppSettingsTableTableManager extends RootTableManager<
               $$AppSettingsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$AppSettingsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> theme = const Value.absent(),
-          }) =>
-              AppSettingsCompanion(
-            id: id,
-            theme: theme,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> theme = const Value.absent(),
-          }) =>
-              AppSettingsCompanion.insert(
-            id: id,
-            theme: theme,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> theme = const Value.absent(),
+              }) => AppSettingsCompanion(id: id, theme: theme),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> theme = const Value.absent(),
+              }) => AppSettingsCompanion.insert(id: id, theme: theme),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$AppSettingsTableProcessedTableManager = ProcessedTableManager<
-    _$AppStorage,
-    $AppSettingsTable,
-    AppSetting,
-    $$AppSettingsTableFilterComposer,
-    $$AppSettingsTableOrderingComposer,
-    $$AppSettingsTableAnnotationComposer,
-    $$AppSettingsTableCreateCompanionBuilder,
-    $$AppSettingsTableUpdateCompanionBuilder,
-    (AppSetting, BaseReferences<_$AppStorage, $AppSettingsTable, AppSetting>),
-    AppSetting,
-    PrefetchHooks Function()>;
-typedef $$AppCacheTableCreateCompanionBuilder = AppCacheCompanion Function({
-  required String callKey,
-  required String response,
-  Value<DateTime> createdAt,
-  Value<int> rowid,
-});
-typedef $$AppCacheTableUpdateCompanionBuilder = AppCacheCompanion Function({
-  Value<String> callKey,
-  Value<String> response,
-  Value<DateTime> createdAt,
-  Value<int> rowid,
-});
+typedef $$AppSettingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $AppSettingsTable,
+      AppSetting,
+      $$AppSettingsTableFilterComposer,
+      $$AppSettingsTableOrderingComposer,
+      $$AppSettingsTableAnnotationComposer,
+      $$AppSettingsTableCreateCompanionBuilder,
+      $$AppSettingsTableUpdateCompanionBuilder,
+      (AppSetting, BaseReferences<_$AppStorage, $AppSettingsTable, AppSetting>),
+      AppSetting,
+      PrefetchHooks Function()
+    >;
+typedef $$AppCacheTableCreateCompanionBuilder =
+    AppCacheCompanion Function({
+      required String callKey,
+      required String response,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $$AppCacheTableUpdateCompanionBuilder =
+    AppCacheCompanion Function({
+      Value<String> callKey,
+      Value<String> response,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
 
 class $$AppCacheTableFilterComposer
     extends Composer<_$AppStorage, $AppCacheTable> {
@@ -795,13 +882,19 @@ class $$AppCacheTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get callKey => $composableBuilder(
-      column: $table.callKey, builder: (column) => ColumnFilters(column));
+    column: $table.callKey,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get response => $composableBuilder(
-      column: $table.response, builder: (column) => ColumnFilters(column));
+    column: $table.response,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$AppCacheTableOrderingComposer
@@ -814,13 +907,19 @@ class $$AppCacheTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get callKey => $composableBuilder(
-      column: $table.callKey, builder: (column) => ColumnOrderings(column));
+    column: $table.callKey,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get response => $composableBuilder(
-      column: $table.response, builder: (column) => ColumnOrderings(column));
+    column: $table.response,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AppCacheTableAnnotationComposer
@@ -842,20 +941,27 @@ class $$AppCacheTableAnnotationComposer
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 }
 
-class $$AppCacheTableTableManager extends RootTableManager<
-    _$AppStorage,
-    $AppCacheTable,
-    AppCacheData,
-    $$AppCacheTableFilterComposer,
-    $$AppCacheTableOrderingComposer,
-    $$AppCacheTableAnnotationComposer,
-    $$AppCacheTableCreateCompanionBuilder,
-    $$AppCacheTableUpdateCompanionBuilder,
-    (AppCacheData, BaseReferences<_$AppStorage, $AppCacheTable, AppCacheData>),
-    AppCacheData,
-    PrefetchHooks Function()> {
+class $$AppCacheTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $AppCacheTable,
+          AppCacheData,
+          $$AppCacheTableFilterComposer,
+          $$AppCacheTableOrderingComposer,
+          $$AppCacheTableAnnotationComposer,
+          $$AppCacheTableCreateCompanionBuilder,
+          $$AppCacheTableUpdateCompanionBuilder,
+          (
+            AppCacheData,
+            BaseReferences<_$AppStorage, $AppCacheTable, AppCacheData>,
+          ),
+          AppCacheData,
+          PrefetchHooks Function()
+        > {
   $$AppCacheTableTableManager(_$AppStorage db, $AppCacheTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -864,61 +970,67 @@ class $$AppCacheTableTableManager extends RootTableManager<
               $$AppCacheTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$AppCacheTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> callKey = const Value.absent(),
-            Value<String> response = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              AppCacheCompanion(
-            callKey: callKey,
-            response: response,
-            createdAt: createdAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String callKey,
-            required String response,
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              AppCacheCompanion.insert(
-            callKey: callKey,
-            response: response,
-            createdAt: createdAt,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> callKey = const Value.absent(),
+                Value<String> response = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AppCacheCompanion(
+                callKey: callKey,
+                response: response,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String callKey,
+                required String response,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AppCacheCompanion.insert(
+                callKey: callKey,
+                response: response,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$AppCacheTableProcessedTableManager = ProcessedTableManager<
-    _$AppStorage,
-    $AppCacheTable,
-    AppCacheData,
-    $$AppCacheTableFilterComposer,
-    $$AppCacheTableOrderingComposer,
-    $$AppCacheTableAnnotationComposer,
-    $$AppCacheTableCreateCompanionBuilder,
-    $$AppCacheTableUpdateCompanionBuilder,
-    (AppCacheData, BaseReferences<_$AppStorage, $AppCacheTable, AppCacheData>),
-    AppCacheData,
-    PrefetchHooks Function()>;
-typedef $$ReaderSettingsTableCreateCompanionBuilder = ReaderSettingsCompanion
-    Function({
-  Value<int> id,
-  Value<double> readingFontSize,
-  Value<String> readingFontType,
-});
-typedef $$ReaderSettingsTableUpdateCompanionBuilder = ReaderSettingsCompanion
-    Function({
-  Value<int> id,
-  Value<double> readingFontSize,
-  Value<String> readingFontType,
-});
+typedef $$AppCacheTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $AppCacheTable,
+      AppCacheData,
+      $$AppCacheTableFilterComposer,
+      $$AppCacheTableOrderingComposer,
+      $$AppCacheTableAnnotationComposer,
+      $$AppCacheTableCreateCompanionBuilder,
+      $$AppCacheTableUpdateCompanionBuilder,
+      (
+        AppCacheData,
+        BaseReferences<_$AppStorage, $AppCacheTable, AppCacheData>,
+      ),
+      AppCacheData,
+      PrefetchHooks Function()
+    >;
+typedef $$ReaderSettingsTableCreateCompanionBuilder =
+    ReaderSettingsCompanion Function({
+      Value<int> id,
+      Value<double> readingFontSize,
+      Value<String> readingFontType,
+    });
+typedef $$ReaderSettingsTableUpdateCompanionBuilder =
+    ReaderSettingsCompanion Function({
+      Value<int> id,
+      Value<double> readingFontSize,
+      Value<String> readingFontType,
+    });
 
 class $$ReaderSettingsTableFilterComposer
     extends Composer<_$AppStorage, $ReaderSettingsTable> {
@@ -930,15 +1042,19 @@ class $$ReaderSettingsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get readingFontSize => $composableBuilder(
-      column: $table.readingFontSize,
-      builder: (column) => ColumnFilters(column));
+    column: $table.readingFontSize,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get readingFontType => $composableBuilder(
-      column: $table.readingFontType,
-      builder: (column) => ColumnFilters(column));
+    column: $table.readingFontType,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$ReaderSettingsTableOrderingComposer
@@ -951,15 +1067,19 @@ class $$ReaderSettingsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get readingFontSize => $composableBuilder(
-      column: $table.readingFontSize,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.readingFontSize,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get readingFontType => $composableBuilder(
-      column: $table.readingFontType,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.readingFontType,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ReaderSettingsTableAnnotationComposer
@@ -975,29 +1095,37 @@ class $$ReaderSettingsTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<double> get readingFontSize => $composableBuilder(
-      column: $table.readingFontSize, builder: (column) => column);
+    column: $table.readingFontSize,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get readingFontType => $composableBuilder(
-      column: $table.readingFontType, builder: (column) => column);
+    column: $table.readingFontType,
+    builder: (column) => column,
+  );
 }
 
-class $$ReaderSettingsTableTableManager extends RootTableManager<
-    _$AppStorage,
-    $ReaderSettingsTable,
-    ReaderSetting,
-    $$ReaderSettingsTableFilterComposer,
-    $$ReaderSettingsTableOrderingComposer,
-    $$ReaderSettingsTableAnnotationComposer,
-    $$ReaderSettingsTableCreateCompanionBuilder,
-    $$ReaderSettingsTableUpdateCompanionBuilder,
-    (
-      ReaderSetting,
-      BaseReferences<_$AppStorage, $ReaderSettingsTable, ReaderSetting>
-    ),
-    ReaderSetting,
-    PrefetchHooks Function()> {
+class $$ReaderSettingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $ReaderSettingsTable,
+          ReaderSetting,
+          $$ReaderSettingsTableFilterComposer,
+          $$ReaderSettingsTableOrderingComposer,
+          $$ReaderSettingsTableAnnotationComposer,
+          $$ReaderSettingsTableCreateCompanionBuilder,
+          $$ReaderSettingsTableUpdateCompanionBuilder,
+          (
+            ReaderSetting,
+            BaseReferences<_$AppStorage, $ReaderSettingsTable, ReaderSetting>,
+          ),
+          ReaderSetting,
+          PrefetchHooks Function()
+        > {
   $$ReaderSettingsTableTableManager(_$AppStorage db, $ReaderSettingsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -1006,48 +1134,51 @@ class $$ReaderSettingsTableTableManager extends RootTableManager<
               $$ReaderSettingsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$ReaderSettingsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<double> readingFontSize = const Value.absent(),
-            Value<String> readingFontType = const Value.absent(),
-          }) =>
-              ReaderSettingsCompanion(
-            id: id,
-            readingFontSize: readingFontSize,
-            readingFontType: readingFontType,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<double> readingFontSize = const Value.absent(),
-            Value<String> readingFontType = const Value.absent(),
-          }) =>
-              ReaderSettingsCompanion.insert(
-            id: id,
-            readingFontSize: readingFontSize,
-            readingFontType: readingFontType,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<double> readingFontSize = const Value.absent(),
+                Value<String> readingFontType = const Value.absent(),
+              }) => ReaderSettingsCompanion(
+                id: id,
+                readingFontSize: readingFontSize,
+                readingFontType: readingFontType,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<double> readingFontSize = const Value.absent(),
+                Value<String> readingFontType = const Value.absent(),
+              }) => ReaderSettingsCompanion.insert(
+                id: id,
+                readingFontSize: readingFontSize,
+                readingFontType: readingFontType,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$ReaderSettingsTableProcessedTableManager = ProcessedTableManager<
-    _$AppStorage,
-    $ReaderSettingsTable,
-    ReaderSetting,
-    $$ReaderSettingsTableFilterComposer,
-    $$ReaderSettingsTableOrderingComposer,
-    $$ReaderSettingsTableAnnotationComposer,
-    $$ReaderSettingsTableCreateCompanionBuilder,
-    $$ReaderSettingsTableUpdateCompanionBuilder,
-    (
+typedef $$ReaderSettingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $ReaderSettingsTable,
       ReaderSetting,
-      BaseReferences<_$AppStorage, $ReaderSettingsTable, ReaderSetting>
-    ),
-    ReaderSetting,
-    PrefetchHooks Function()>;
+      $$ReaderSettingsTableFilterComposer,
+      $$ReaderSettingsTableOrderingComposer,
+      $$ReaderSettingsTableAnnotationComposer,
+      $$ReaderSettingsTableCreateCompanionBuilder,
+      $$ReaderSettingsTableUpdateCompanionBuilder,
+      (
+        ReaderSetting,
+        BaseReferences<_$AppStorage, $ReaderSettingsTable, ReaderSetting>,
+      ),
+      ReaderSetting,
+      PrefetchHooks Function()
+    >;
 
 class $AppStorageManager {
   final _$AppStorage _db;

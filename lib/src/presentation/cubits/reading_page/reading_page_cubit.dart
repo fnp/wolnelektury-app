@@ -15,6 +15,7 @@ import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/presentation/enums/reader_font_type.dart';
 import 'package:wolnelektury/src/presentation/enums/success_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
+import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 part 'reading_page_cubit.freezed.dart';
 part 'reading_page_state.dart';
@@ -41,7 +42,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       slug: book.slug,
     );
 
-    bookJson.when(
+    bookJson.handle(
       success: (data, _) async {
         await _getAndSetBookmarks(
           slug: book.slug,
@@ -60,7 +61,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
           itemScrollController: itemScrollController,
         );
       },
-      failed: (failure) {
+      failure: (failure) {
         //TODO handle error
         emit(state.copyWith(isJsonLoading: false));
       },
@@ -73,11 +74,11 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     final bookmarks = await _booksRepository.getBookBookmarks(
       slug: slug,
     );
-    bookmarks.when(
+    bookmarks.handle(
       success: (data, _) {
         emit(state.copyWith(bookmarks: data));
       },
-      failed: (_) {},
+      failure: (_) {},
     );
   }
 
@@ -88,7 +89,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     final progress = await _progressRepository.getTextProgressByBook(
       slug: state.currentSlug!,
     );
-    progress.when(
+    progress.handle(
       success: (data, _) async {
         AppLogger.instance.d(
           'ReadingPageCubit',
@@ -107,7 +108,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
           );
         }
       },
-      failed: (_) {},
+      failure: (_) {},
     );
   }
 
@@ -134,11 +135,11 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       textAnchor: anchor,
     );
 
-    newProgress.when(
+    newProgress.handle(
       success: (data, _) {
         emit(state.copyWith(progress: data));
       },
-      failed: (_) {},
+      failure: (_) {},
     );
   }
 
@@ -187,7 +188,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       note: note,
     );
 
-    response.when(
+    response.handle(
       success: (data, _) {
         emit(
           state.copyWith(
@@ -196,7 +197,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
           ),
         );
       },
-      failed: (_) {
+      failure: (_) {
         emit(state.copyWith(isBookmarkSuccess: (Success.create, false)));
       },
     );
@@ -214,7 +215,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       note: note,
     );
 
-    response.when(
+    response.handle(
       success: (data, _) {
         final bookmarks = List<BookmarkModel>.from(state.bookmarks).map((e) {
           if (e.href == data.href) {
@@ -230,7 +231,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
           ),
         );
       },
-      failed: (_) {
+      failure: (_) {
         emit(state.copyWith(isBookmarkSuccess: (Success.update, false)));
       },
     );
@@ -243,7 +244,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       href: state.editingBookmark!.href,
     );
 
-    response.when(
+    response.handle(
       success: (data, _) {
         final bookmarks = List<BookmarkModel>.from(state.bookmarks);
         bookmarks.removeWhere((e) => e.href == state.editingBookmark!.href);
@@ -255,7 +256,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
           ),
         );
       },
-      failed: (_) {
+      failure: (_) {
         emit(state.copyWith(isBookmarkSuccess: (Success.delete, false)));
       },
     );

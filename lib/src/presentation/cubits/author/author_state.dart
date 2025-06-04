@@ -1,7 +1,7 @@
 part of 'author_cubit.dart';
 
 @freezed
-class AuthorState with _$AuthorState {
+sealed class AuthorState with _$AuthorState {
   const factory AuthorState({
     @Default(false) bool isLoading,
     DetailedAuthorModel? author,

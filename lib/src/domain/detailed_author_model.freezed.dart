@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,235 +10,151 @@ part of 'detailed_author_model.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-DetailedAuthorModel _$DetailedAuthorModelFromJson(Map<String, dynamic> json) {
-  return _DetailedAuthorModel.fromJson(json);
-}
 
 /// @nodoc
 mixin _$DetailedAuthorModel {
-  int get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String get slug => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
-  String? get photo => throw _privateConstructorUsedError;
+
+ int get id; String get name; String get slug; String? get description; String? get photo;
+/// Create a copy of DetailedAuthorModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DetailedAuthorModelCopyWith<DetailedAuthorModel> get copyWith => _$DetailedAuthorModelCopyWithImpl<DetailedAuthorModel>(this as DetailedAuthorModel, _$identity);
 
   /// Serializes this DetailedAuthorModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of DetailedAuthorModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $DetailedAuthorModelCopyWith<DetailedAuthorModel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DetailedAuthorModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.description, description) || other.description == description)&&(identical(other.photo, photo) || other.photo == photo));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,slug,description,photo);
+
+@override
+String toString() {
+  return 'DetailedAuthorModel(id: $id, name: $name, slug: $slug, description: $description, photo: $photo)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DetailedAuthorModelCopyWith<$Res> {
-  factory $DetailedAuthorModelCopyWith(
-          DetailedAuthorModel value, $Res Function(DetailedAuthorModel) then) =
-      _$DetailedAuthorModelCopyWithImpl<$Res, DetailedAuthorModel>;
-  @useResult
-  $Res call(
-      {int id, String name, String slug, String? description, String? photo});
-}
+abstract mixin class $DetailedAuthorModelCopyWith<$Res>  {
+  factory $DetailedAuthorModelCopyWith(DetailedAuthorModel value, $Res Function(DetailedAuthorModel) _then) = _$DetailedAuthorModelCopyWithImpl;
+@useResult
+$Res call({
+ int id, String name, String slug, String? description, String? photo
+});
 
+
+
+
+}
 /// @nodoc
-class _$DetailedAuthorModelCopyWithImpl<$Res, $Val extends DetailedAuthorModel>
+class _$DetailedAuthorModelCopyWithImpl<$Res>
     implements $DetailedAuthorModelCopyWith<$Res> {
-  _$DetailedAuthorModelCopyWithImpl(this._value, this._then);
+  _$DetailedAuthorModelCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final DetailedAuthorModel _self;
+  final $Res Function(DetailedAuthorModel) _then;
 
-  /// Create a copy of DetailedAuthorModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? name = null,
-    Object? slug = null,
-    Object? description = freezed,
-    Object? photo = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      slug: null == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photo: freezed == photo
-          ? _value.photo
-          : photo // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
+/// Create a copy of DetailedAuthorModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? description = freezed,Object? photo = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,photo: freezed == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$DetailedAuthorModelImplCopyWith<$Res>
-    implements $DetailedAuthorModelCopyWith<$Res> {
-  factory _$$DetailedAuthorModelImplCopyWith(_$DetailedAuthorModelImpl value,
-          $Res Function(_$DetailedAuthorModelImpl) then) =
-      __$$DetailedAuthorModelImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {int id, String name, String slug, String? description, String? photo});
 }
 
-/// @nodoc
-class __$$DetailedAuthorModelImplCopyWithImpl<$Res>
-    extends _$DetailedAuthorModelCopyWithImpl<$Res, _$DetailedAuthorModelImpl>
-    implements _$$DetailedAuthorModelImplCopyWith<$Res> {
-  __$$DetailedAuthorModelImplCopyWithImpl(_$DetailedAuthorModelImpl _value,
-      $Res Function(_$DetailedAuthorModelImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of DetailedAuthorModel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? name = null,
-    Object? slug = null,
-    Object? description = freezed,
-    Object? photo = freezed,
-  }) {
-    return _then(_$DetailedAuthorModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      slug: null == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photo: freezed == photo
-          ? _value.photo
-          : photo // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$DetailedAuthorModelImpl implements _DetailedAuthorModel {
-  const _$DetailedAuthorModelImpl(
-      {required this.id,
-      required this.name,
-      required this.slug,
-      this.description,
-      this.photo});
 
-  factory _$DetailedAuthorModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DetailedAuthorModelImplFromJson(json);
+class _DetailedAuthorModel implements DetailedAuthorModel {
+  const _DetailedAuthorModel({required this.id, required this.name, required this.slug, this.description, this.photo});
+  factory _DetailedAuthorModel.fromJson(Map<String, dynamic> json) => _$DetailedAuthorModelFromJson(json);
 
-  @override
-  final int id;
-  @override
-  final String name;
-  @override
-  final String slug;
-  @override
-  final String? description;
-  @override
-  final String? photo;
+@override final  int id;
+@override final  String name;
+@override final  String slug;
+@override final  String? description;
+@override final  String? photo;
 
-  @override
-  String toString() {
-    return 'DetailedAuthorModel(id: $id, name: $name, slug: $slug, description: $description, photo: $photo)';
-  }
+/// Create a copy of DetailedAuthorModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DetailedAuthorModelCopyWith<_DetailedAuthorModel> get copyWith => __$DetailedAuthorModelCopyWithImpl<_DetailedAuthorModel>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DetailedAuthorModelImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.slug, slug) || other.slug == slug) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.photo, photo) || other.photo == photo));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, slug, description, photo);
-
-  /// Create a copy of DetailedAuthorModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DetailedAuthorModelImplCopyWith<_$DetailedAuthorModelImpl> get copyWith =>
-      __$$DetailedAuthorModelImplCopyWithImpl<_$DetailedAuthorModelImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$DetailedAuthorModelImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$DetailedAuthorModelToJson(this, );
 }
 
-abstract class _DetailedAuthorModel implements DetailedAuthorModel {
-  const factory _DetailedAuthorModel(
-      {required final int id,
-      required final String name,
-      required final String slug,
-      final String? description,
-      final String? photo}) = _$DetailedAuthorModelImpl;
-
-  factory _DetailedAuthorModel.fromJson(Map<String, dynamic> json) =
-      _$DetailedAuthorModelImpl.fromJson;
-
-  @override
-  int get id;
-  @override
-  String get name;
-  @override
-  String get slug;
-  @override
-  String? get description;
-  @override
-  String? get photo;
-
-  /// Create a copy of DetailedAuthorModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DetailedAuthorModelImplCopyWith<_$DetailedAuthorModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DetailedAuthorModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.description, description) || other.description == description)&&(identical(other.photo, photo) || other.photo == photo));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,slug,description,photo);
+
+@override
+String toString() {
+  return 'DetailedAuthorModel(id: $id, name: $name, slug: $slug, description: $description, photo: $photo)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DetailedAuthorModelCopyWith<$Res> implements $DetailedAuthorModelCopyWith<$Res> {
+  factory _$DetailedAuthorModelCopyWith(_DetailedAuthorModel value, $Res Function(_DetailedAuthorModel) _then) = __$DetailedAuthorModelCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, String name, String slug, String? description, String? photo
+});
+
+
+
+
+}
+/// @nodoc
+class __$DetailedAuthorModelCopyWithImpl<$Res>
+    implements _$DetailedAuthorModelCopyWith<$Res> {
+  __$DetailedAuthorModelCopyWithImpl(this._self, this._then);
+
+  final _DetailedAuthorModel _self;
+  final $Res Function(_DetailedAuthorModel) _then;
+
+/// Create a copy of DetailedAuthorModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? description = freezed,Object? photo = freezed,}) {
+  return _then(_DetailedAuthorModel(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,photo: freezed == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+// dart format on

@@ -5,6 +5,7 @@ import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/data/tags_repository.dart';
 import 'package:wolnelektury/src/domain/tag_model.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
+import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/string/string_extension.dart';
 
 part 'filtering_cubit.freezed.dart';
@@ -41,7 +42,7 @@ class FilteringCubit extends SafeCubit<FilteringState> {
       tags: state.selectedTags,
       search: state.query,
     );
-    result.when(
+    result.handle(
       success: (tags, pagination) {
         emit(
           state.copyWith(
@@ -50,9 +51,9 @@ class FilteringCubit extends SafeCubit<FilteringState> {
           ),
         );
       },
-      failed: (failure) {
-        failure.maybeMap(
-          notFound: (value) {
+      failure: (failure) {
+        failure.handle(
+          notFound: () {
             emit(
               state.copyWith(
                 pagination: state.pagination.copyWith(next: null),
@@ -62,11 +63,7 @@ class FilteringCubit extends SafeCubit<FilteringState> {
             );
           },
           orElse: () {
-            emit(
-              state.copyWith(
-                isLoadingMore: false,
-              ),
-            );
+            emit(state.copyWith(isLoadingMore: false));
           },
         );
       },
@@ -83,7 +80,7 @@ class FilteringCubit extends SafeCubit<FilteringState> {
       search: state.query,
     );
 
-    books.when(
+    books.handle(
       success: (books, pagination) {
         emit(
           state.copyWith(
@@ -93,9 +90,9 @@ class FilteringCubit extends SafeCubit<FilteringState> {
           ),
         );
       },
-      failed: (failure) {
-        failure.maybeMap(
-          notFound: (value) {
+      failure: (failure) {
+        failure.handle(
+          notFound: () {
             emit(
               state.copyWith(
                 pagination: state.pagination.copyWith(next: null),
@@ -105,11 +102,7 @@ class FilteringCubit extends SafeCubit<FilteringState> {
             );
           },
           orElse: () {
-            emit(
-              state.copyWith(
-                isLoadingMore: false,
-              ),
-            );
+            emit(state.copyWith(isLoadingMore: false));
           },
         );
       },

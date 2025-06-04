@@ -46,9 +46,7 @@ class BookOverviewWidget extends StatelessWidget {
 
             router.pushNamed(
               bookPageConfig.name,
-              pathParameters: {
-                'slug': book.slug,
-              },
+              pathParameters: {'slug': book.slug},
               extra: book,
             );
           },
@@ -65,7 +63,8 @@ class BookOverviewWidget extends StatelessWidget {
                           // Skeleton
                           return Container(
                             color: theme.colorScheme.surface,
-                            height: constraints.maxWidth /
+                            height:
+                                constraints.maxWidth /
                                 Dimensions.coverAspectRatio,
                             width: constraints.maxWidth,
                           );
@@ -87,38 +86,17 @@ class BookOverviewWidget extends StatelessWidget {
                     Positioned(
                       right: 10,
                       bottom: 40,
-                      child: _HeartButton(
-                        book: book,
-                      ),
+                      child: _HeartButton(book: book),
                     ),
                   if (state.isDefault)
                     Positioned(
                       right: 10,
                       bottom: 10,
-                      child: BookOverviewWidgetButton(
-                        onTap: () {
-                          final cubit =
-                              BlocProvider.of<ListCreatorCubit>(context);
-
-                          cubit.init(force: true);
-                          BookListsSheet.show(
-                            context: context,
-                            bookSlug: book.slug,
-                            onSave: () {
-                              cubit.save();
-                            },
-                          );
-                        },
-                        nonActiveBackgroundColor: CustomColors.white,
-                        activeBackgroundColor: CustomColors.primaryYellowColor,
-                        nonActiveIcon: CustomIcons.playlist_add,
-                      ),
+                      child: _CreateListButton(book: book),
                     ),
                 ],
               ),
-              const SizedBox(
-                height: Dimensions.smallPadding,
-              ),
+              const SizedBox(height: Dimensions.smallPadding),
               Flexible(
                 child: Text(
                   book.title,
@@ -150,22 +128,53 @@ class BookOverviewWidget extends StatelessWidget {
   BorderRadius getBorderRadius(bool isListCreation) {
     return isListCreation
         ? const BorderRadius.only(
-            bottomLeft: Radius.circular(
-              Dimensions.smallBorderRadius,
-            ),
-            bottomRight: Radius.circular(
-              Dimensions.elementHeight / 2,
-            ),
-            topLeft: Radius.circular(
-              Dimensions.smallBorderRadius,
-            ),
-            topRight: Radius.circular(
-              Dimensions.smallBorderRadius,
-            ),
+            bottomLeft: Radius.circular(Dimensions.smallBorderRadius),
+            bottomRight: Radius.circular(Dimensions.elementHeight / 2),
+            topLeft: Radius.circular(Dimensions.smallBorderRadius),
+            topRight: Radius.circular(Dimensions.smallBorderRadius),
           )
-        : BorderRadius.circular(
-            Dimensions.smallBorderRadius,
+        : BorderRadius.circular(Dimensions.smallBorderRadius);
+  }
+}
+
+class _CreateListButton extends StatelessWidget {
+  final BookModel book;
+  const _CreateListButton({required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthWrapper(
+      authChild: (user) {
+        return BookOverviewWidgetButton(
+          onTap: () {
+            final cubit = BlocProvider.of<ListCreatorCubit>(context);
+
+            cubit.init(force: true);
+            BookListsSheet.show(
+              context: context,
+              bookSlug: book.slug,
+              onSave: () {
+                cubit.save();
+              },
+            );
+          },
+          nonActiveBackgroundColor: CustomColors.white,
+          activeBackgroundColor: CustomColors.primaryYellowColor,
+          nonActiveIcon: CustomIcons.playlist_add,
+        );
+      },
+      nonAuthChild: BookOverviewWidgetButton(
+        nonActiveBackgroundColor: CustomColors.white,
+        nonActiveIcon: CustomIcons.playlist_add,
+        onTap: () {
+          CustomSnackbar.error(
+            context,
+            LocaleKeys.common_snackbar_not_logged.tr(),
           );
+        },
+        isActive: false,
+      ),
+    );
   }
 }
 
@@ -179,9 +188,7 @@ class _HeartButton extends StatelessWidget {
     return BlocBuilder<FavouritesCubit, FavouritesState>(
       buildWhen: (p, c) => p.favourites != c.favourites,
       builder: (context, state) {
-        final isLiked = state.favourites.keys.contains(
-          book.slug,
-        );
+        final isLiked = state.favourites.contains(book.slug);
         return AuthWrapper(
           authChild: (user) {
             return BookOverviewWidgetButton(
@@ -233,15 +240,14 @@ class _AddToListButton extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           switchOutCurve: Curves.fastOutSlowIn,
           switchInCurve: Curves.fastOutSlowIn,
-          transitionBuilder: (child, animation) => ScaleTransition(
-            scale: animation,
-            child: child,
-          ),
+          transitionBuilder: (child, animation) =>
+              ScaleTransition(scale: animation, child: child),
           child: CustomButton(
             key: ValueKey(isBookInEditedList),
             icon: isBookInEditedList ? Icons.check : CustomIcons.add,
-            backgroundColor:
-                isBookInEditedList ? CustomColors.green : CustomColors.white,
+            backgroundColor: isBookInEditedList
+                ? CustomColors.green
+                : CustomColors.white,
             iconColor: CustomColors.black,
             onPressed: () {
               if (isBookInEditedList) {
@@ -261,10 +267,7 @@ class _AddToListButton extends StatelessWidget {
 class _ImageWithFilter extends StatelessWidget {
   final BookModel book;
   final BoxConstraints constraints;
-  const _ImageWithFilter({
-    required this.book,
-    required this.constraints,
-  });
+  const _ImageWithFilter({required this.book, required this.constraints});
 
   @override
   Widget build(BuildContext context) {

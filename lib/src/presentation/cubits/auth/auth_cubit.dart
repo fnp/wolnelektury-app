@@ -5,6 +5,7 @@ import 'package:wolnelektury/src/data/auth_repository.dart';
 import 'package:wolnelektury/src/domain/register_agreement_model.dart';
 import 'package:wolnelektury/src/domain/user_model.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
+import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 part 'auth_cubit.freezed.dart';
 part 'auth_state.dart';
@@ -41,19 +42,15 @@ class AuthCubit extends SafeCubit<AuthState> {
       password: password.toLowerCase(),
     );
 
-    result.map(
-      success: (_) async {
+    result.handle(
+      success: (_, _) async {
         await getAndSetUser();
       },
-      failed: (failure) {
+      failure: (failure) {
         // Display different error in case of registering flow
         // email has not been verified yet
         if (fromRegisterFlow) {
-          emit(
-            state.copyWith(
-              isLoginSuccessFromRegisterFlow: false,
-            ),
-          );
+          emit(state.copyWith(isLoginSuccessFromRegisterFlow: false));
           return;
         }
         emit(state.copyWith(isLoginSuccess: false));
@@ -75,15 +72,11 @@ class AuthCubit extends SafeCubit<AuthState> {
       options: state.getListOfAgreements,
     );
 
-    result.map(
-      success: (_) async {
-        emit(
-          state.copyWith(
-            isRegisterSuccess: true,
-          ),
-        );
+    result.handle(
+      success: (_, _) async {
+        emit(state.copyWith(isRegisterSuccess: true));
       },
-      failed: (failure) {
+      failure: (failure) {
         emit(state.copyWith(isRegisterSuccess: false));
       },
     );
@@ -99,16 +92,11 @@ class AuthCubit extends SafeCubit<AuthState> {
   Future<void> getAndSetUser() async {
     final userResult = await _authRepository.getUser();
 
-    userResult.map(
-      success: (data) {
-        emit(
-          state.copyWith(
-            user: data.data,
-            isLoginSuccess: true,
-          ),
-        );
+    userResult.handle(
+      success: (data, _) {
+        emit(state.copyWith(user: data, isLoginSuccess: true));
       },
-      failed: (failure) {
+      failure: (failure) {
         logout();
         emit(state.copyWith(isLoginSuccess: false));
       },
@@ -120,16 +108,11 @@ class AuthCubit extends SafeCubit<AuthState> {
     if (state.agreements != null) return;
     emit(state.copyWith(isLoadingAgreements: true));
     final result = await _authRepository.getRegisterAgreements();
-    result.map(
-      success: (data) {
-        emit(
-          state.copyWith(
-            agreements: data.data,
-            isLoadingAgreements: false,
-          ),
-        );
+    result.handle(
+      success: (data, _) {
+        emit(state.copyWith(agreements: data, isLoadingAgreements: false));
       },
-      failed: (failure) {
+      failure: (failure) {
         emit(state.copyWith(isLoadingAgreements: false));
       },
     );
@@ -145,9 +128,7 @@ class AuthCubit extends SafeCubit<AuthState> {
       return option;
     }).toList();
     emit(
-      state.copyWith(
-        agreements: agreements.copyWith(options: updatedOptions),
-      ),
+      state.copyWith(agreements: agreements.copyWith(options: updatedOptions)),
     );
   }
 }

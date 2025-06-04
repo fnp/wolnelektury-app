@@ -4,7 +4,7 @@ part 'detailed_author_model.freezed.dart';
 part 'detailed_author_model.g.dart';
 
 @freezed
-class DetailedAuthorModel with _$DetailedAuthorModel {
+sealed class DetailedAuthorModel with _$DetailedAuthorModel {
   const factory DetailedAuthorModel({
     required int id,
     required String name,

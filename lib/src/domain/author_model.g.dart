@@ -6,14 +6,8 @@ part of 'author_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AuthorModelImpl _$$AuthorModelImplFromJson(Map<String, dynamic> json) =>
-    _$AuthorModelImpl(
-      name: json['name'] as String,
-      slug: json['slug'] as String,
-    );
+_AuthorModel _$AuthorModelFromJson(Map<String, dynamic> json) =>
+    _AuthorModel(name: json['name'] as String, slug: json['slug'] as String);
 
-Map<String, dynamic> _$$AuthorModelImplToJson(_$AuthorModelImpl instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'slug': instance.slug,
-    };
+Map<String, dynamic> _$AuthorModelToJson(_AuthorModel instance) =>
+    <String, dynamic>{'name': instance.name, 'slug': instance.slug};

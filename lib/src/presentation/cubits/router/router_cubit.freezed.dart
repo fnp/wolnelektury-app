@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,156 +10,136 @@ part of 'router_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$RouterState {
-  String get location => throw _privateConstructorUsedError;
-  String get previousLocation => throw _privateConstructorUsedError;
 
-  /// Create a copy of RouterState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $RouterStateCopyWith<RouterState> get copyWith =>
-      throw _privateConstructorUsedError;
+ String get location; String get previousLocation;
+/// Create a copy of RouterState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$RouterStateCopyWith<RouterState> get copyWith => _$RouterStateCopyWithImpl<RouterState>(this as RouterState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RouterState&&(identical(other.location, location) || other.location == location)&&(identical(other.previousLocation, previousLocation) || other.previousLocation == previousLocation));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,location,previousLocation);
+
+@override
+String toString() {
+  return 'RouterState(location: $location, previousLocation: $previousLocation)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $RouterStateCopyWith<$Res> {
-  factory $RouterStateCopyWith(
-          RouterState value, $Res Function(RouterState) then) =
-      _$RouterStateCopyWithImpl<$Res, RouterState>;
-  @useResult
-  $Res call({String location, String previousLocation});
-}
+abstract mixin class $RouterStateCopyWith<$Res>  {
+  factory $RouterStateCopyWith(RouterState value, $Res Function(RouterState) _then) = _$RouterStateCopyWithImpl;
+@useResult
+$Res call({
+ String location, String previousLocation
+});
 
+
+
+
+}
 /// @nodoc
-class _$RouterStateCopyWithImpl<$Res, $Val extends RouterState>
+class _$RouterStateCopyWithImpl<$Res>
     implements $RouterStateCopyWith<$Res> {
-  _$RouterStateCopyWithImpl(this._value, this._then);
+  _$RouterStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final RouterState _self;
+  final $Res Function(RouterState) _then;
 
-  /// Create a copy of RouterState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? location = null,
-    Object? previousLocation = null,
-  }) {
-    return _then(_value.copyWith(
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      previousLocation: null == previousLocation
-          ? _value.previousLocation
-          : previousLocation // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
+/// Create a copy of RouterState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? location = null,Object? previousLocation = null,}) {
+  return _then(_self.copyWith(
+location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String,previousLocation: null == previousLocation ? _self.previousLocation : previousLocation // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-abstract class _$$RouterStateImplCopyWith<$Res>
-    implements $RouterStateCopyWith<$Res> {
-  factory _$$RouterStateImplCopyWith(
-          _$RouterStateImpl value, $Res Function(_$RouterStateImpl) then) =
-      __$$RouterStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String location, String previousLocation});
 }
 
-/// @nodoc
-class __$$RouterStateImplCopyWithImpl<$Res>
-    extends _$RouterStateCopyWithImpl<$Res, _$RouterStateImpl>
-    implements _$$RouterStateImplCopyWith<$Res> {
-  __$$RouterStateImplCopyWithImpl(
-      _$RouterStateImpl _value, $Res Function(_$RouterStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of RouterState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? location = null,
-    Object? previousLocation = null,
-  }) {
-    return _then(_$RouterStateImpl(
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      previousLocation: null == previousLocation
-          ? _value.previousLocation
-          : previousLocation // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$RouterStateImpl implements _RouterState {
-  const _$RouterStateImpl(
-      {required this.location, required this.previousLocation});
 
-  @override
-  final String location;
-  @override
-  final String previousLocation;
+class _RouterState implements RouterState {
+  const _RouterState({required this.location, required this.previousLocation});
+  
 
-  @override
-  String toString() {
-    return 'RouterState(location: $location, previousLocation: $previousLocation)';
-  }
+@override final  String location;
+@override final  String previousLocation;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$RouterStateImpl &&
-            (identical(other.location, location) ||
-                other.location == location) &&
-            (identical(other.previousLocation, previousLocation) ||
-                other.previousLocation == previousLocation));
-  }
+/// Create a copy of RouterState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RouterStateCopyWith<_RouterState> get copyWith => __$RouterStateCopyWithImpl<_RouterState>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, location, previousLocation);
 
-  /// Create a copy of RouterState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$RouterStateImplCopyWith<_$RouterStateImpl> get copyWith =>
-      __$$RouterStateImplCopyWithImpl<_$RouterStateImpl>(this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RouterState&&(identical(other.location, location) || other.location == location)&&(identical(other.previousLocation, previousLocation) || other.previousLocation == previousLocation));
 }
 
-abstract class _RouterState implements RouterState {
-  const factory _RouterState(
-      {required final String location,
-      required final String previousLocation}) = _$RouterStateImpl;
 
-  @override
-  String get location;
-  @override
-  String get previousLocation;
+@override
+int get hashCode => Object.hash(runtimeType,location,previousLocation);
 
-  /// Create a copy of RouterState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RouterStateImplCopyWith<_$RouterStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'RouterState(location: $location, previousLocation: $previousLocation)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$RouterStateCopyWith<$Res> implements $RouterStateCopyWith<$Res> {
+  factory _$RouterStateCopyWith(_RouterState value, $Res Function(_RouterState) _then) = __$RouterStateCopyWithImpl;
+@override @useResult
+$Res call({
+ String location, String previousLocation
+});
+
+
+
+
+}
+/// @nodoc
+class __$RouterStateCopyWithImpl<$Res>
+    implements _$RouterStateCopyWith<$Res> {
+  __$RouterStateCopyWithImpl(this._self, this._then);
+
+  final _RouterState _self;
+  final $Res Function(_RouterState) _then;
+
+/// Create a copy of RouterState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? location = null,Object? previousLocation = null,}) {
+  return _then(_RouterState(
+location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String,previousLocation: null == previousLocation ? _self.previousLocation : previousLocation // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on

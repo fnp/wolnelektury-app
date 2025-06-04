@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,395 +10,191 @@ part of 'data_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$DataState<T> {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(T data, ApiResponsePagination? pagination)
-        success,
-    required TResult Function(Failure failure) failed,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(T data, ApiResponsePagination? pagination)? success,
-    TResult? Function(Failure failure)? failed,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(T data, ApiResponsePagination? pagination)? success,
-    TResult Function(Failure failure)? failed,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Success<T> value) success,
-    required TResult Function(_Failed<T> value) failed,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Success<T> value)? success,
-    TResult? Function(_Failed<T> value)? failed,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Success<T> value)? success,
-    TResult Function(_Failed<T> value)? failed,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DataState<T>);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'DataState<$T>()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DataStateCopyWith<T, $Res> {
-  factory $DataStateCopyWith(
-          DataState<T> value, $Res Function(DataState<T>) then) =
-      _$DataStateCopyWithImpl<T, $Res, DataState<T>>;
+class $DataStateCopyWith<T,$Res>  {
+$DataStateCopyWith(DataState<T> _, $Res Function(DataState<T>) __);
+}
+
+
+/// @nodoc
+
+
+class DataStateSuccess<T> implements DataState<T> {
+  const DataStateSuccess({required this.data, this.pagination});
+  
+
+ final  T data;
+ final  ApiResponsePagination? pagination;
+
+/// Create a copy of DataState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DataStateSuccessCopyWith<T, DataStateSuccess<T>> get copyWith => _$DataStateSuccessCopyWithImpl<T, DataStateSuccess<T>>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DataStateSuccess<T>&&const DeepCollectionEquality().equals(other.data, data)&&(identical(other.pagination, pagination) || other.pagination == pagination));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(data),pagination);
+
+@override
+String toString() {
+  return 'DataState<$T>.success(data: $data, pagination: $pagination)';
+}
+
+
 }
 
 /// @nodoc
-class _$DataStateCopyWithImpl<T, $Res, $Val extends DataState<T>>
-    implements $DataStateCopyWith<T, $Res> {
-  _$DataStateCopyWithImpl(this._value, this._then);
+abstract mixin class $DataStateSuccessCopyWith<T,$Res> implements $DataStateCopyWith<T, $Res> {
+  factory $DataStateSuccessCopyWith(DataStateSuccess<T> value, $Res Function(DataStateSuccess<T>) _then) = _$DataStateSuccessCopyWithImpl;
+@useResult
+$Res call({
+ T data, ApiResponsePagination? pagination
+});
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
 
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
+$ApiResponsePaginationCopyWith<$Res>? get pagination;
+
+}
+/// @nodoc
+class _$DataStateSuccessCopyWithImpl<T,$Res>
+    implements $DataStateSuccessCopyWith<T, $Res> {
+  _$DataStateSuccessCopyWithImpl(this._self, this._then);
+
+  final DataStateSuccess<T> _self;
+  final $Res Function(DataStateSuccess<T>) _then;
+
+/// Create a copy of DataState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? data = freezed,Object? pagination = freezed,}) {
+  return _then(DataStateSuccess<T>(
+data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as T,pagination: freezed == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
+as ApiResponsePagination?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$SuccessImplCopyWith<T, $Res> {
-  factory _$$SuccessImplCopyWith(
-          _$SuccessImpl<T> value, $Res Function(_$SuccessImpl<T>) then) =
-      __$$SuccessImplCopyWithImpl<T, $Res>;
-  @useResult
-  $Res call({T data, ApiResponsePagination? pagination});
-
-  $ApiResponsePaginationCopyWith<$Res>? get pagination;
-}
-
-/// @nodoc
-class __$$SuccessImplCopyWithImpl<T, $Res>
-    extends _$DataStateCopyWithImpl<T, $Res, _$SuccessImpl<T>>
-    implements _$$SuccessImplCopyWith<T, $Res> {
-  __$$SuccessImplCopyWithImpl(
-      _$SuccessImpl<T> _value, $Res Function(_$SuccessImpl<T>) _then)
-      : super(_value, _then);
-
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? data = freezed,
-    Object? pagination = freezed,
-  }) {
-    return _then(_$SuccessImpl<T>(
-      freezed == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as T,
-      pagination: freezed == pagination
-          ? _value.pagination
-          : pagination // ignore: cast_nullable_to_non_nullable
-              as ApiResponsePagination?,
-    ));
+/// Create a copy of DataState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ApiResponsePaginationCopyWith<$Res>? get pagination {
+    if (_self.pagination == null) {
+    return null;
   }
 
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ApiResponsePaginationCopyWith<$Res>? get pagination {
-    if (_value.pagination == null) {
-      return null;
-    }
-
-    return $ApiResponsePaginationCopyWith<$Res>(_value.pagination!, (value) {
-      return _then(_value.copyWith(pagination: value));
-    });
-  }
+  return $ApiResponsePaginationCopyWith<$Res>(_self.pagination!, (value) {
+    return _then(_self.copyWith(pagination: value));
+  });
+}
 }
 
 /// @nodoc
 
-class _$SuccessImpl<T> extends _Success<T> {
-  const _$SuccessImpl(this.data, {this.pagination}) : super._();
 
-  @override
-  final T data;
-  @override
-  final ApiResponsePagination? pagination;
+class DataStateFailure<T> implements DataState<T> {
+  const DataStateFailure(this.failure);
+  
 
-  @override
-  String toString() {
-    return 'DataState<$T>.success(data: $data, pagination: $pagination)';
-  }
+ final  Failure failure;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SuccessImpl<T> &&
-            const DeepCollectionEquality().equals(other.data, data) &&
-            (identical(other.pagination, pagination) ||
-                other.pagination == pagination));
-  }
+/// Create a copy of DataState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DataStateFailureCopyWith<T, DataStateFailure<T>> get copyWith => _$DataStateFailureCopyWithImpl<T, DataStateFailure<T>>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(data), pagination);
 
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SuccessImplCopyWith<T, _$SuccessImpl<T>> get copyWith =>
-      __$$SuccessImplCopyWithImpl<T, _$SuccessImpl<T>>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(T data, ApiResponsePagination? pagination)
-        success,
-    required TResult Function(Failure failure) failed,
-  }) {
-    return success(data, pagination);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(T data, ApiResponsePagination? pagination)? success,
-    TResult? Function(Failure failure)? failed,
-  }) {
-    return success?.call(data, pagination);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(T data, ApiResponsePagination? pagination)? success,
-    TResult Function(Failure failure)? failed,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(data, pagination);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Success<T> value) success,
-    required TResult Function(_Failed<T> value) failed,
-  }) {
-    return success(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Success<T> value)? success,
-    TResult? Function(_Failed<T> value)? failed,
-  }) {
-    return success?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Success<T> value)? success,
-    TResult Function(_Failed<T> value)? failed,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DataStateFailure<T>&&(identical(other.failure, failure) || other.failure == failure));
 }
 
-abstract class _Success<T> extends DataState<T> {
-  const factory _Success(final T data,
-      {final ApiResponsePagination? pagination}) = _$SuccessImpl<T>;
-  const _Success._() : super._();
 
-  T get data;
-  ApiResponsePagination? get pagination;
+@override
+int get hashCode => Object.hash(runtimeType,failure);
 
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SuccessImplCopyWith<T, _$SuccessImpl<T>> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'DataState<$T>.failure(failure: $failure)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$FailedImplCopyWith<T, $Res> {
-  factory _$$FailedImplCopyWith(
-          _$FailedImpl<T> value, $Res Function(_$FailedImpl<T>) then) =
-      __$$FailedImplCopyWithImpl<T, $Res>;
-  @useResult
-  $Res call({Failure failure});
+abstract mixin class $DataStateFailureCopyWith<T,$Res> implements $DataStateCopyWith<T, $Res> {
+  factory $DataStateFailureCopyWith(DataStateFailure<T> value, $Res Function(DataStateFailure<T>) _then) = _$DataStateFailureCopyWithImpl;
+@useResult
+$Res call({
+ Failure failure
+});
 
-  $FailureCopyWith<$Res> get failure;
+
+$FailureCopyWith<$Res> get failure;
+
 }
-
 /// @nodoc
-class __$$FailedImplCopyWithImpl<T, $Res>
-    extends _$DataStateCopyWithImpl<T, $Res, _$FailedImpl<T>>
-    implements _$$FailedImplCopyWith<T, $Res> {
-  __$$FailedImplCopyWithImpl(
-      _$FailedImpl<T> _value, $Res Function(_$FailedImpl<T>) _then)
-      : super(_value, _then);
+class _$DataStateFailureCopyWithImpl<T,$Res>
+    implements $DataStateFailureCopyWith<T, $Res> {
+  _$DataStateFailureCopyWithImpl(this._self, this._then);
 
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? failure = null,
-  }) {
-    return _then(_$FailedImpl<T>(
-      null == failure
-          ? _value.failure
-          : failure // ignore: cast_nullable_to_non_nullable
-              as Failure,
-    ));
-  }
+  final DataStateFailure<T> _self;
+  final $Res Function(DataStateFailure<T>) _then;
 
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $FailureCopyWith<$Res> get failure {
-    return $FailureCopyWith<$Res>(_value.failure, (value) {
-      return _then(_value.copyWith(failure: value));
-    });
-  }
+/// Create a copy of DataState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
+  return _then(DataStateFailure<T>(
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as Failure,
+  ));
 }
 
-/// @nodoc
-
-class _$FailedImpl<T> extends _Failed<T> {
-  const _$FailedImpl(this.failure) : super._();
-
-  @override
-  final Failure failure;
-
-  @override
-  String toString() {
-    return 'DataState<$T>.failed(failure: $failure)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$FailedImpl<T> &&
-            (identical(other.failure, failure) || other.failure == failure));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, failure);
-
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$FailedImplCopyWith<T, _$FailedImpl<T>> get copyWith =>
-      __$$FailedImplCopyWithImpl<T, _$FailedImpl<T>>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(T data, ApiResponsePagination? pagination)
-        success,
-    required TResult Function(Failure failure) failed,
-  }) {
-    return failed(failure);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(T data, ApiResponsePagination? pagination)? success,
-    TResult? Function(Failure failure)? failed,
-  }) {
-    return failed?.call(failure);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(T data, ApiResponsePagination? pagination)? success,
-    TResult Function(Failure failure)? failed,
-    required TResult orElse(),
-  }) {
-    if (failed != null) {
-      return failed(failure);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Success<T> value) success,
-    required TResult Function(_Failed<T> value) failed,
-  }) {
-    return failed(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Success<T> value)? success,
-    TResult? Function(_Failed<T> value)? failed,
-  }) {
-    return failed?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Success<T> value)? success,
-    TResult Function(_Failed<T> value)? failed,
-    required TResult orElse(),
-  }) {
-    if (failed != null) {
-      return failed(this);
-    }
-    return orElse();
-  }
+/// Create a copy of DataState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FailureCopyWith<$Res> get failure {
+  
+  return $FailureCopyWith<$Res>(_self.failure, (value) {
+    return _then(_self.copyWith(failure: value));
+  });
+}
 }
 
-abstract class _Failed<T> extends DataState<T> {
-  const factory _Failed(final Failure failure) = _$FailedImpl<T>;
-  const _Failed._() : super._();
-
-  Failure get failure;
-
-  /// Create a copy of DataState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$FailedImplCopyWith<T, _$FailedImpl<T>> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

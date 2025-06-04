@@ -6,15 +6,14 @@ part of 'epoch_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$EpochModelImpl _$$EpochModelImplFromJson(Map<String, dynamic> json) =>
-    _$EpochModelImpl(
-      url: json['url'] as String?,
-      name: json['name'] as String?,
-      href: json['href'] as String?,
-      slug: json['slug'] as String?,
-    );
+_EpochModel _$EpochModelFromJson(Map<String, dynamic> json) => _EpochModel(
+  url: json['url'] as String?,
+  name: json['name'] as String?,
+  href: json['href'] as String?,
+  slug: json['slug'] as String?,
+);
 
-Map<String, dynamic> _$$EpochModelImplToJson(_$EpochModelImpl instance) =>
+Map<String, dynamic> _$EpochModelToJson(_EpochModel instance) =>
     <String, dynamic>{
       'url': instance.url,
       'name': instance.name,

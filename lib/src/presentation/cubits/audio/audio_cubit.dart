@@ -12,6 +12,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/enums/audio_player_speed_enum.dart';
 import 'package:wolnelektury/src/utils/audio/custom_audio_session.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
+import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 part 'audio_cubit.freezed.dart';
 part 'audio_state.dart';
@@ -88,8 +89,8 @@ class AudioCubit extends SafeCubit<AudioState> {
       slug: book.slug,
     );
 
-    audiobookResponse.when(
-      success: (data, _) {
+    audiobookResponse.handle(
+      success: (data, pagination) {
         emit(
           state.copyWith(
             audiobook: AudiobookModel.create(parts: data),
@@ -102,7 +103,7 @@ class AudioCubit extends SafeCubit<AudioState> {
           _preparePlaylist();
         }
       },
-      failed: (_) {
+      failure: (failure) {
         emit(state.copyWith(isLoadingAudiobook: false));
         //TODO handle failure
       },
@@ -496,7 +497,8 @@ class AudioCubit extends SafeCubit<AudioState> {
       slug: state.book!.slug,
     );
     (int, int) foundPosition = (0, 0);
-    existingProgress.when(
+
+    existingProgress.handle(
       success: (data, _) {
         final timestamp = data.audioTimestamp ?? 0;
         foundPosition = _findPositionAndIndex(timestamp);
@@ -511,7 +513,12 @@ class AudioCubit extends SafeCubit<AudioState> {
           ),
         );
       },
-      failed: (_) {},
+      failure: (f) {
+        AppLogger.instance.e(
+          'AudioCubit',
+          'Failed to retrieve progress for book: ${state.book?.slug}',
+        );
+      },
     );
     return foundPosition;
   }
