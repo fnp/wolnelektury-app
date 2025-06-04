@@ -20,13 +20,30 @@ class MyLibraryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: Dimensions.spacer,
-      children: [
-        _Header(bookList: bookList),
-        if (bookList.books.isNotEmpty) _List(bookList: bookList),
-      ],
+    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+      buildWhen: (p, c) =>
+          p.doesLocalListExistsAlready(bookList.name) !=
+          c.doesLocalListExistsAlready(bookList.name),
+      builder: (context, state) {
+        final isExisting = state.doesLocalListExistsAlready(bookList.name);
+        return AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.fastOutSlowIn,
+          child: isExisting
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: Dimensions.spacer),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: Dimensions.spacer,
+                    children: [
+                      _Header(bookList: bookList),
+                      if (bookList.books.isNotEmpty) _List(bookList: bookList),
+                    ],
+                  ),
+                )
+              : const SizedBox(width: double.infinity),
+        );
+      },
     );
   }
 }
@@ -37,7 +54,7 @@ class _List extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, index) {
@@ -45,10 +62,8 @@ class _List extends StatelessWidget {
           key: ValueKey(bookList.books[index]),
           bookSlug: bookList.books[index],
           listSlug: bookList.slug,
+          listName: bookList.name,
         );
-      },
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: Dimensions.spacer);
       },
       itemCount: bookList.books.length,
     );
@@ -105,7 +120,7 @@ class _Header extends StatelessWidget {
                     CustomButton(
                       icon: CustomIcons.add,
                       onPressed: () {
-                        listCubit.setListAsEdited(bookList);
+                        listCubit.setListAsEdited(bookList.name);
                         modeCubit.changeMode(AppModeEnum.listCreationMode);
                         router.pushNamed(cataloguePageConfig.name);
                       },

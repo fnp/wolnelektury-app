@@ -14,10 +14,7 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookListsSheet extends StatelessWidget {
   final String bookSlug;
-  const BookListsSheet({
-    super.key,
-    required this.bookSlug,
-  });
+  const BookListsSheet({super.key, required this.bookSlug});
 
   static void show({
     required BuildContext context,
@@ -38,16 +35,10 @@ class BookListsSheet extends StatelessWidget {
       isScrollControlled: true,
       builder: (_) => MultiBlocProvider(
         providers: [
-          BlocProvider.value(
-            value: context.read<ListCreatorCubit>(),
-          ),
-          BlocProvider.value(
-            value: context.read<ScrollCubit>(),
-          ),
+          BlocProvider.value(value: context.read<ListCreatorCubit>()),
+          BlocProvider.value(value: context.read<ScrollCubit>()),
         ],
-        child: BookListsSheet(
-          bookSlug: bookSlug,
-        ),
+        child: BookListsSheet(bookSlug: bookSlug),
       ),
     ).then((_) {
       onSave.call();
@@ -109,10 +100,7 @@ class BookListsSheet extends StatelessWidget {
                   const SizedBox(height: Dimensions.mediumPadding),
                   AddNewListElement(
                     onSave: (String text) {
-                      cubit.newList(
-                        text,
-                        bookSlugs: [bookSlug],
-                      );
+                      cubit.newList(text, bookSlugs: [bookSlug]);
                     },
                   ),
                 ],
@@ -127,17 +115,13 @@ class BookListsSheet extends StatelessWidget {
 
 class AddNewListElement extends StatefulWidget {
   final Function(String text) onSave;
-  const AddNewListElement({
-    super.key,
-    required this.onSave,
-  });
+  const AddNewListElement({super.key, required this.onSave});
 
   @override
   State<AddNewListElement> createState() => AddNewListElementState();
 }
 
 class AddNewListElementState extends State<AddNewListElement> {
-  bool isAdding = false;
   bool isReadyToSave = false;
   final TextEditingController _controller = TextEditingController();
 
@@ -150,78 +134,65 @@ class AddNewListElementState extends State<AddNewListElement> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          isAdding = true;
-        });
-      },
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: CustomColors.black,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          height: Dimensions.elementHeight,
-          child: Row(
-            children: [
-              const SizedBox(
-                width: Dimensions.mediumPadding,
-              ),
-              const Icon(
-                CustomIcons.playlist_add,
-                color: CustomColors.white,
-                size: 22,
-              ),
-              const SizedBox(width: Dimensions.smallPadding),
-              isAdding
-                  ? Flexible(
-                      child: Theme(
-                        data: theme.copyWith(
-                          inputDecorationTheme: alternativeInput,
-                        ),
-                        child: TextField(
-                          onChanged: (value) {
-                            setState(() {
-                              isReadyToSave = value.isNotEmpty;
-                            });
-                          },
-                          controller: _controller,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: CustomColors.white,
-                            decorationColor: CustomColors.red,
-                          ),
-                          autofocus: true,
-                        ),
-                      ),
-                    )
-                  : Text(
-                      LocaleKeys.book_lists_sheet_add.tr(),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.white,
-                      ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: CustomColors.black,
+        borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: Dimensions.elementHeight,
+        child: Row(
+          children: [
+            const SizedBox(width: Dimensions.mediumPadding),
+            const Icon(
+              CustomIcons.playlist_add,
+              color: CustomColors.white,
+              size: 22,
+            ),
+            const SizedBox(width: Dimensions.smallPadding),
+            Expanded(
+              child: Theme(
+                data: theme.copyWith(inputDecorationTheme: alternativeInput),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: LocaleKeys.book_lists_sheet_add.tr(),
+                    hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: CustomColors.white,
                     ),
-              AnimatedBoxFade(
-                isChildVisible: isReadyToSave,
-                child: ElevatedButton(
-                  style: blueElevatedButton,
-                  onPressed: () {
-                    widget.onSave.call(_controller.text);
-                    _controller.clear();
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (value) {
                     setState(() {
-                      isReadyToSave = false;
+                      isReadyToSave = value.isNotEmpty;
                     });
                   },
-                  child: Text(
-                    LocaleKeys.book_lists_sheet_save.tr(),
+                  controller: _controller,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: CustomColors.white,
+                    decorationColor: CustomColors.red,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+
+            AnimatedBoxFade(
+              isChildVisible: isReadyToSave,
+              child: ElevatedButton(
+                style: blueElevatedButton,
+                onPressed: () {
+                  widget.onSave.call(_controller.text);
+                  _controller.clear();
+                  setState(() {
+                    isReadyToSave = false;
+                  });
+                },
+                child: Text(LocaleKeys.book_lists_sheet_save.tr()),
+              ),
+            ),
+          ],
         ),
       ),
     );

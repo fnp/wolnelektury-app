@@ -52,8 +52,9 @@ class MyLibraryListsSection extends StatelessWidget {
           PageSubtitle(subtitle: MyLibraryEnum.lists.title),
           AddNewListElement(
             onSave: (text) {
-              BlocProvider.of<ListCreatorCubit>(context)
-                  .addEmptyList(name: text);
+              BlocProvider.of<ListCreatorCubit>(
+                context,
+              ).addEmptyList(name: text);
             },
           ),
           const SizedBox(height: Dimensions.spacer),
@@ -62,15 +63,10 @@ class MyLibraryListsSection extends StatelessWidget {
             curve: Curves.fastOutSlowIn,
             child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
               buildWhen: (p, c) {
-                return p.allLists != c.allLists ||
-                    p.isLoading != c.isLoading ||
-                    p.isAdding != c.isAdding;
+                return p.isLoading != c.isLoading || p.isAdding != c.isAdding;
               },
               builder: (context, state) {
-                return ListView.separated(
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: Dimensions.spacer);
-                  },
+                return ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: state.allLists.length,

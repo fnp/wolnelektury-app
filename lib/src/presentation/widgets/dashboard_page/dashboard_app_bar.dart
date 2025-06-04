@@ -23,11 +23,10 @@ class DashboardAppBar extends StatelessWidget {
       builder: (context, state) {
         return AnimatedBoxSize(
           isChildVisible: state.showAppBar,
+          duration: const Duration(milliseconds: 300),
           collapsedChild: const SizedBox(height: Dimensions.appBarHeight),
           child: PreferredSize(
-            preferredSize: const Size.fromHeight(
-              Dimensions.appBarHeight,
-            ),
+            preferredSize: const Size.fromHeight(Dimensions.appBarHeight),
             child: AppBar(
               titleSpacing: Dimensions.mediumPadding,
               backgroundColor: theme.colorScheme.surface,
@@ -70,12 +69,7 @@ class DashboardAppBar extends StatelessWidget {
                       );
                     },
                   ),
-                  Expanded(
-                    child: SvgPicture.asset(
-                      Images.logo,
-                      width: 165,
-                    ),
-                  ),
+                  Expanded(child: SvgPicture.asset(Images.logo, width: 165)),
                   const CustomButton(
                     icon: Icons.search,
                     iconColor: CustomColors.black,

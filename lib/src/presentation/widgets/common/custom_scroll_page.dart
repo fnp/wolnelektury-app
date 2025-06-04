@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +13,9 @@ class CustomScrollPage extends HookWidget {
 
   final double loadPoint;
   final bool ignoreTopbar;
+
+  static Timer? _showAppBarTimer;
+  static ScrollDirection? _lastDirection;
 
   const CustomScrollPage({
     required this.builder,
@@ -26,24 +31,20 @@ class CustomScrollPage extends HookWidget {
     final scrollCubit = BlocProvider.of<ScrollCubit>(context);
     final scrollController = useScrollController();
     final maxScrollOffsetValue = useState<double?>(null);
+    useEffect(() {
+      void listener() {
+        _scrollListener(
+          controller ?? scrollController,
+          maxScrollOffsetValue,
+          scrollCubit,
+        );
+      }
 
-    useEffect(
-      () {
-        void listener() {
-          _scrollListener(
-            controller ?? scrollController,
-            maxScrollOffsetValue,
-            scrollCubit,
-          );
-        }
-
-        (controller ?? scrollController).addListener(listener);
-        return () {
-          (controller ?? scrollController).removeListener(listener);
-        };
-      },
-      [controller ?? scrollController],
-    );
+      (controller ?? scrollController).addListener(listener);
+      return () {
+        (controller ?? scrollController).removeListener(listener);
+      };
+    }, [controller ?? scrollController]);
 
     /// Handles case when list is larger than incoming childs
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -68,11 +69,7 @@ class CustomScrollPage extends HookWidget {
     final maxOffset = scroll.position.maxScrollExtent;
 
     if (!ignoreTopbar) {
-      if (scroll.position.userScrollDirection == ScrollDirection.reverse) {
-        scrollCubit.hideAppBar();
-      } else {
-        scrollCubit.showAppBar();
-      }
+      handleScroll(scroll: scroll, scrollCubit: scrollCubit);
     }
 
     if (onLoadMore == null) return;
@@ -81,6 +78,29 @@ class CustomScrollPage extends HookWidget {
         scrollOffset > (maxOffset * (1 - loadPoint))) {
       maxScrollOffsetValue.value = maxOffset;
       onLoadMore?.call();
+    }
+  }
+
+  void handleScroll({
+    required ScrollController scroll,
+    required ScrollCubit scrollCubit,
+  }) {
+    if (!ignoreTopbar) {
+      if (scroll.position.userScrollDirection == ScrollDirection.reverse) {
+        _showAppBarTimer?.cancel();
+        _lastDirection = ScrollDirection.reverse;
+        scrollCubit.hideAppBar();
+      } else if (scroll.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (_lastDirection != ScrollDirection.forward) {
+          _lastDirection = ScrollDirection.forward;
+          _showAppBarTimer?.cancel();
+          // Debounce so the app bar doesn't bounce back and forth
+          _showAppBarTimer = Timer(const Duration(milliseconds: 400), () {
+            scrollCubit.showAppBar();
+          });
+        }
+      }
     }
   }
 }

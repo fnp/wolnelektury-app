@@ -111,9 +111,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
               ),
               child: CustomScrollPage(
                 controller: verticalController,
-                builder: (controller) => ListView.separated(
-                  separatorBuilder: (_, __) =>
-                      const SizedBox(height: Dimensions.veryLargePadding),
+                builder: (controller) => ListView.builder(
                   controller: controller,
                   itemCount: MyLibraryEnum.values.length,
                   itemBuilder: (_, index) {

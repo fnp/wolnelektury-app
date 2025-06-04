@@ -19,29 +19,22 @@ class DashboardProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (_) => RouterCubit(),
-        ),
-        BlocProvider(
-          create: (_) => FavouritesCubit(get.get()),
-        ),
+        BlocProvider(create: (_) => RouterCubit()),
+        BlocProvider(create: (_) => FavouritesCubit(get.get())),
         BlocProvider(
           create: (_) => AudioCubit(get.get(), get.get()),
           lazy: false,
         ),
-        BlocProvider(
-          create: (_) => ListCreatorCubit(get.get()),
-        ),
-        BlocProvider(
-          create: (_) => ScrollCubit(),
-        ),
+        BlocProvider(create: (_) => ListCreatorCubit(get.get())),
+        BlocProvider(create: (_) => ScrollCubit()),
         BlocProvider(
           lazy: false,
           create: (_) {
             final insets = MediaQuery.viewInsetsOf(context);
             final size = MediaQuery.sizeOf(context);
             final paddings = MediaQuery.paddingOf(context);
-            final effectiveHeight = size.height -
+            final effectiveHeight =
+                size.height -
                 paddings.top -
                 paddings.bottom -
                 insets.bottom -
@@ -56,9 +49,7 @@ class DashboardProviders extends StatelessWidget {
             );
           },
         ),
-        BlocProvider(
-          create: (_) => AuthCubit(get.get())..tryAutoLogin(),
-        ),
+        BlocProvider(create: (_) => AuthCubit(get.get())..tryAutoLogin()),
       ],
       child: child,
     );

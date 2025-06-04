@@ -11,4 +11,7 @@ sealed class FavouritesState with _$FavouritesState {
 
 extension FavouritesStateX on FavouritesState {
   int get effectiveLength => min(itemsPerPage, favourites.length);
+  bool isLiked(String slug) {
+    return favourites.contains(slug);
+  }
 }

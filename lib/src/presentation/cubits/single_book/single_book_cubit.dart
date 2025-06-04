@@ -14,9 +14,6 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
   Future<void> loadBookData({required String slug}) async {
     emit(state.copyWith(isLoading: true));
     final book = await _booksRepository.getBookBySlug(slug: slug);
-    await Future.delayed(
-      const Duration(milliseconds: 50),
-    ); // Simulate loading delay
     book.handle(
       success: (book, _) {
         emit(state.copyWith(book: book, isLoading: false));

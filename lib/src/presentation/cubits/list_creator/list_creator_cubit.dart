@@ -256,10 +256,11 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     emit(state.copyWith(deletingSlug: slug, isDeleteFailure: false));
     final newState = List<BookListModel>.from(state.allLists);
     newState.removeWhere((element) => element.slug == slug);
+    emit(state.copyWith(allLists: newState));
     final result = await _listsRepository.deleteList(listSlug: slug);
     result.handle(
       success: (data, _) {
-        emit(state.copyWith(allLists: newState, deletingSlug: null));
+        emit(state.copyWith(deletingSlug: null));
       },
       failure: (failure) {
         //todo snackbar error
@@ -284,7 +285,6 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
       ..[index] = updatedList;
 
     emit(state.copyWith(allLists: updatedLists));
-
     final response = await _listsRepository.deleteBookFromList(
       listSlug: listSlug,
       bookSlug: bookSlug,
@@ -331,7 +331,11 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   // -------- App Mode --------
   // --------------------------
 
-  void setListAsEdited(BookListModel list) {
+  // Using listName because we need to retrieve up2date list from the state
+  void setListAsEdited(String listName) {
+    final list = state.allLists.firstWhereOrNull(
+      (element) => element.name == listName,
+    );
     emit(state.copyWith(editedList: list, editedListToSave: list));
   }
 

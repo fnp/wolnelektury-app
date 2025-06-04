@@ -17,25 +17,18 @@ class MyLibraryLikedSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         PageSubtitle(subtitle: MyLibraryEnum.liked.title),
-        AnimatedSize(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.fastOutSlowIn,
-          child: BlocBuilder<FavouritesCubit, FavouritesState>(
-            buildWhen: (p, c) => p.itemsPerPage != c.itemsPerPage,
-            builder: (context, state) {
-              return ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return MyLibraryLikedBook(bookSlug: state.favourites[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: Dimensions.spacer);
-                },
-                itemCount: state.effectiveLength,
-              );
-            },
-          ),
+        BlocBuilder<FavouritesCubit, FavouritesState>(
+          buildWhen: (p, c) => p.itemsPerPage != c.itemsPerPage,
+          builder: (context, state) {
+            return ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return MyLibraryLikedBook(bookSlug: state.favourites[index]);
+              },
+              itemCount: state.effectiveLength,
+            );
+          },
         ),
         const SizedBox(height: Dimensions.spacer),
         BlocBuilder<FavouritesCubit, FavouritesState>(
