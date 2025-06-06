@@ -79,7 +79,7 @@ as int,
 
 
 class _FavouritesState implements FavouritesState {
-  const _FavouritesState({final  List<String> favourites = const [], this.itemsPerPage = 5}): _favourites = favourites;
+  const _FavouritesState({final  List<String> favourites = const [], this.itemsPerPage = 10}): _favourites = favourites;
   
 
 // List of slugs

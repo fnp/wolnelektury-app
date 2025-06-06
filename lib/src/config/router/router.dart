@@ -35,9 +35,7 @@ final GoRouter router = GoRouter(
   routes: [
     ShellRoute(
       navigatorKey: dashboardNavigationKey,
-      builder: (context, state, child) => DashboardWrapper(
-        child: child,
-      ),
+      builder: (context, state, child) => DashboardWrapper(child: child),
       routes: [
         GoRoute(
           path: cataloguePageConfig.path,
@@ -104,9 +102,7 @@ final GoRouter router = GoRouter(
               context: context,
               state: state,
               reversed: true,
-              child: BookPage(
-                book: book,
-              ),
+              child: BookPage(book: book),
             );
           },
         ),
@@ -119,9 +115,7 @@ final GoRouter router = GoRouter(
               context: context,
               state: state,
               reversed: true,
-              child: AuthorPage(
-                authorSlug: authorSlug,
-              ),
+              child: AuthorPage(authorSlug: authorSlug),
             );
           },
         ),
@@ -134,9 +128,7 @@ final GoRouter router = GoRouter(
               context: context,
               state: state,
               reversed: true,
-              child: ReadingPage(
-                book: book,
-              ),
+              child: ReadingPage(book: book),
             );
           },
         ),
@@ -159,8 +151,9 @@ final GoRouter router = GoRouter(
 /// Checks if the transition is reversed
 bool _isReversedTransition(RouterCubit routerCubit) {
   final currentIndex = mainPathsOrder.indexOf(routerCubit.state.location);
-  final previousIndex =
-      mainPathsOrder.indexOf(routerCubit.state.previousLocation);
+  final previousIndex = mainPathsOrder.indexOf(
+    routerCubit.state.previousLocation,
+  );
   return currentIndex > previousIndex;
 }
 
@@ -181,18 +174,14 @@ CustomTransitionPage _slideTransition({
       const end = Offset.zero;
       const curve = Curves.ease;
 
-      final slideAnim = Tween(begin: begin, end: end).chain(
-        CurveTween(
-          curve: curve,
-        ),
-      );
+      final slideAnim = Tween(
+        begin: begin,
+        end: end,
+      ).chain(CurveTween(curve: curve));
 
       return SlideTransition(
         position: animation.drive(slideAnim),
-        child: FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
+        child: FadeTransition(opacity: animation, child: child),
       );
     },
     child: child,

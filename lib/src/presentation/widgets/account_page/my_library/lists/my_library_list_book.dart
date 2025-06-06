@@ -44,12 +44,10 @@ class MyLibraryListBook extends StatelessWidget {
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.fastOutSlowIn,
                 child: innerState.isBookInList(listName, bookSlug)
-                    ? Skeletonizer(
-                        enabled: state.isLoading,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: Dimensions.spacer,
-                          ),
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: Dimensions.spacer),
+                        child: Skeletonizer(
+                          enabled: state.isLoading,
                           child: BookPageCoverWithButtons(
                             key: ValueKey(bookSlug),
                             onDelete: () {

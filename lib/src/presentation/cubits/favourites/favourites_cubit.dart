@@ -27,7 +27,7 @@ class FavouritesCubit extends SafeCubit<FavouritesState> {
   }
 
   void increaseItemsPerPage() {
-    emit(state.copyWith(itemsPerPage: state.itemsPerPage + 5));
+    emit(state.copyWith(itemsPerPage: state.itemsPerPage + 10));
   }
 
   Future<void> addToFavourites(String slug) async {

@@ -2,10 +2,7 @@ class _RouteConfig {
   final String path;
   final String name;
 
-  const _RouteConfig({
-    required this.path,
-    required this.name,
-  });
+  const _RouteConfig({required this.path, required this.name});
 }
 
 const cataloguePageConfig = _RouteConfig(
@@ -28,10 +25,7 @@ const settingsPageConfig = _RouteConfig(
   path: '/settingsPage',
 );
 
-const bookPageConfig = _RouteConfig(
-  name: 'bookPage',
-  path: '/bookPage/:slug',
-);
+const bookPageConfig = _RouteConfig(name: 'bookPage', path: '/bookPage/:slug');
 
 const authorPageConfig = _RouteConfig(
   name: 'authorPage',
@@ -43,7 +37,4 @@ const readingPageConfig = _RouteConfig(
   path: '/readingPage/:slug',
 );
 
-const notFoundPageConfig = _RouteConfig(
-  name: 'notFound',
-  path: '/notFound',
-);
+const notFoundPageConfig = _RouteConfig(name: 'notFound', path: '/notFound');

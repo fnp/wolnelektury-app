@@ -25,6 +25,7 @@ sealed class ListCreatorState with _$ListCreatorState {
     // Adding list
     @Default(false) bool isAdding,
     @Default(false) bool isAddingFailure,
+    BookListModel? pendingList,
 
     // Deleting list
     String? deletingSlug,
@@ -37,7 +38,8 @@ sealed class ListCreatorState with _$ListCreatorState {
 
 extension ListCreatorStateX on ListCreatorState {
   bool doesLocalListExistsAlready(String listName) {
-    return allLists.any((element) => element.name == listName);
+    return allLists.any((element) => element.name == listName) ||
+        pendingList?.name == listName;
   }
 
   bool isBookInList(String listName, String bookSlug) {
@@ -59,8 +61,10 @@ extension ListCreatorStateX on ListCreatorState {
         ?.slug;
   }
 
-  bool get anyChangesInEditesList => !(const ListEquality()
-      .equals(editedList?.books, editedListToSave?.books));
+  bool get anyChangesInEditesList => !(const ListEquality().equals(
+    editedList?.books,
+    editedListToSave?.books,
+  ));
 
   bool isBookInEditedList(String bookSlug) {
     return editedListToSave?.books.contains(bookSlug) ?? false;

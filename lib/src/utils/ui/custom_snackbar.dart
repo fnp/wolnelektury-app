@@ -12,24 +12,15 @@ class CustomSnackbar {
     return SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: isSuccess ? CustomColors.green : CustomColors.red,
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.largePadding,
-        vertical: Dimensions.smallPadding,
-      ),
-      margin: const EdgeInsets.all(
-        Dimensions.mediumPadding,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.largePadding),
+      margin: const EdgeInsets.all(Dimensions.mediumPadding),
       elevation: 0,
       shape: ShapeBorder.lerp(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            Dimensions.borderRadiusOfCircle,
-          ),
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
         ),
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            Dimensions.borderRadiusOfCircle,
-          ),
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
         ),
         1,
       ),
@@ -60,11 +51,7 @@ class CustomSnackbar {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        _getDefault(
-          message: message,
-          isSuccess: true,
-          context: context,
-        ),
+        _getDefault(message: message, isSuccess: true, context: context),
       );
   }
 
@@ -72,11 +59,7 @@ class CustomSnackbar {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        _getDefault(
-          message: message,
-          isSuccess: false,
-          context: context,
-        ),
+        _getDefault(message: message, isSuccess: false, context: context),
       );
   }
 }

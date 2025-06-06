@@ -167,7 +167,7 @@ class _CreateListButton extends StatelessWidget {
         nonActiveBackgroundColor: CustomColors.white,
         nonActiveIcon: CustomIcons.playlist_add,
         onTap: () {
-          CustomSnackbar.error(
+          CustomSnackbar.success(
             context,
             LocaleKeys.common_snackbar_not_logged.tr(),
           );
@@ -211,7 +211,7 @@ class _HeartButton extends StatelessWidget {
             nonActiveBackgroundColor: CustomColors.white,
             nonActiveIcon: CustomIcons.favorite_filled,
             onTap: () {
-              CustomSnackbar.error(
+              CustomSnackbar.success(
                 context,
                 LocaleKeys.common_snackbar_not_logged.tr(),
               );

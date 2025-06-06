@@ -2,7 +2,6 @@ import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
-import 'package:wolnelektury/src/utils/api/api_utils.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';
 
@@ -167,7 +166,7 @@ class ListsRepositoryImplementation extends ListsRepository {
   Future<DataState<List<BookListModel>>> getLists({String? url}) async {
     try {
       final response = await _apiService.getRequest(
-        url ?? ApiUtils.applyLimit(apiUrl: _createListEndpoint, limit: 5),
+        url ?? _createListEndpoint,
         useCache: CacheEnum.ignore,
       );
       if (!response.hasData) {

@@ -302,14 +302,21 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   }
 
   Future<void> addEmptyList({required String name}) async {
-    emit(state.copyWith(isAdding: true, isAddingFailure: false));
     if (state.listNameIsDuplicate(name)) {
       return;
     }
+    emit(state.copyWith(isAdding: true, isAddingFailure: false));
+    await Future.delayed(const Duration(milliseconds: 1));
+    emit(
+      state.copyWith(
+        pendingList: BookListModel(name: name, slug: '', books: []),
+      ),
+    );
     final result = await _listsRepository.createList(
       listName: name,
       bookSlugs: [],
     );
+    await Future.delayed(const Duration(milliseconds: 300));
     result.handle(
       success: (data, _) {
         final newState = List<BookListModel>.from(state.allLists);
@@ -317,10 +324,11 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
         emit(state.copyWith(isAdding: false, allLists: newState));
       },
       failure: (failure) {
-        //todo snackbar error
         emit(state.copyWith(isAdding: false, isAddingFailure: true));
       },
     );
+
+    emit(state.copyWith(pendingList: null));
   }
 
   // --------------------------

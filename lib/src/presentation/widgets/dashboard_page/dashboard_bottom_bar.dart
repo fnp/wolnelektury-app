@@ -25,9 +25,9 @@ class DashboardBottomBar extends StatelessWidget {
           buildWhen: (p, c) => p.isMainPage != c.isMainPage,
           builder: (context, state) {
             return MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                textScaler: const TextScaler.linear(1),
-              ),
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: const TextScaler.linear(1)),
               child: AnimatedBoxSize(
                 isChildVisible:
                     state.isMainPage && outerState.shouldShowBottomBar,
@@ -36,9 +36,7 @@ class DashboardBottomBar extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: theme.colorScheme.tertiaryContainer,
                       border: Border(
-                        top: BorderSide(
-                          color: theme.colorScheme.surface,
-                        ),
+                        top: BorderSide(color: theme.colorScheme.surface),
                       ),
                     ),
                     child: SafeArea(

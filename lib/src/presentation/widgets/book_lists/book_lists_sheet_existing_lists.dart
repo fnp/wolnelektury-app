@@ -30,46 +30,48 @@ class BookListsSheetExistingLists extends StatelessWidget {
       },
       builder: (scrollController) =>
           BlocBuilder<ListCreatorCubit, ListCreatorState>(
-        buildWhen: (p, c) => p.isLoading != c.isLoading,
-        builder: (context, state) {
-          return AnimatedBoxFade(
-            collapsedChild: const Padding(
-              padding: EdgeInsets.only(bottom: Dimensions.spacer),
-              child: CustomLoader(),
-            ),
-            isChildVisible: state.isLoading == false,
-            child: state.isLoading
-                ? const SizedBox.shrink()
-                : ListView.separated(
-                    controller: scrollController,
-                    shrinkWrap: true,
-                    itemCount: effectiveList.length,
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: Dimensions.mediumPadding);
-                    },
-                    itemBuilder: (context, index) {
-                      final listName = effectiveList[index].name;
-                      return _Element(
-                        listName: listName,
-                        bookSlug: currentlyWorkingOnBookSlug,
-                        onAdd: () {
-                          creatorCubit.addBookToListWithQueue(
-                            listName,
-                            currentlyWorkingOnBookSlug,
+            buildWhen: (p, c) => p.isLoading != c.isLoading,
+            builder: (context, state) {
+              return AnimatedBoxFade(
+                collapsedChild: const Padding(
+                  padding: EdgeInsets.only(bottom: Dimensions.spacer),
+                  child: CustomLoader(),
+                ),
+                isChildVisible: state.isLoading == false,
+                child: state.isLoading
+                    ? const SizedBox.shrink()
+                    : ListView.separated(
+                        controller: scrollController,
+                        shrinkWrap: true,
+                        itemCount: effectiveList.length,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: Dimensions.mediumPadding,
                           );
                         },
-                        onRemove: () {
-                          creatorCubit.removeBookFromListWithQueue(
-                            listName,
-                            currentlyWorkingOnBookSlug,
+                        itemBuilder: (context, index) {
+                          final listName = effectiveList[index].name;
+                          return _Element(
+                            listName: listName,
+                            bookSlug: currentlyWorkingOnBookSlug,
+                            onAdd: () {
+                              creatorCubit.addBookToListWithQueue(
+                                listName,
+                                currentlyWorkingOnBookSlug,
+                              );
+                            },
+                            onRemove: () {
+                              creatorCubit.removeBookFromListWithQueue(
+                                listName,
+                                currentlyWorkingOnBookSlug,
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                  ),
-          );
-        },
-      ),
+                      ),
+              );
+            },
+          ),
     );
   }
 }
@@ -101,8 +103,9 @@ class _Element extends StatelessWidget {
           height: Dimensions.elementHeight,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.circular(Dimensions.borderRadiusOfCircle),
+              borderRadius: BorderRadius.circular(
+                Dimensions.borderRadiusOfCircle,
+              ),
               color: isBookInList ? CustomColors.grey : CustomColors.white,
             ),
             child: Row(
@@ -121,8 +124,9 @@ class _Element extends StatelessWidget {
                   ),
                 ),
                 CustomButton(
-                  backgroundColor:
-                      isBookInList ? CustomColors.grey : CustomColors.white,
+                  backgroundColor: isBookInList
+                      ? CustomColors.grey
+                      : CustomColors.white,
                   icon: isBookInList
                       ? CustomIcons.delete_forever
                       : CustomIcons.add,

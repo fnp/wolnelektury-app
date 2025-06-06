@@ -228,7 +228,7 @@ class _HeartButton extends StatelessWidget {
             nonActiveIcon: CustomIcons.favorite,
             isActive: false,
             onPressed: () {
-              CustomSnackbar.error(
+              CustomSnackbar.success(
                 context,
                 LocaleKeys.common_snackbar_not_logged.tr(),
               );

@@ -34,10 +34,11 @@ class MyLibraryList extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: Dimensions.spacer),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: Dimensions.spacer,
                     children: [
                       _Header(bookList: bookList),
-                      if (bookList.books.isNotEmpty) _List(bookList: bookList),
+                      if (bookList.books.isNotEmpty) ...[
+                        _List(bookList: bookList),
+                      ],
                     ],
                   ),
                 )

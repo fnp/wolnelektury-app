@@ -5,7 +5,7 @@ sealed class FavouritesState with _$FavouritesState {
   const factory FavouritesState({
     // List of slugs
     @Default([]) List<String> favourites,
-    @Default(5) int itemsPerPage,
+    @Default(10) int itemsPerPage,
   }) = _FavouritesState;
 }
 
