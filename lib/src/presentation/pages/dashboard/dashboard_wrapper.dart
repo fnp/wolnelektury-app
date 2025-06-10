@@ -7,10 +7,7 @@ import 'package:wolnelektury/src/presentation/widgets/dashboard_page/dashboard_b
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class DashboardWrapper extends StatelessWidget {
-  const DashboardWrapper({
-    required this.child,
-    super.key,
-  });
+  const DashboardWrapper({required this.child, super.key});
 
   final Widget child;
 
@@ -22,19 +19,12 @@ class DashboardWrapper extends StatelessWidget {
         child: Scaffold(
           backgroundColor: theme.colorScheme.surface,
           appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(
-              Dimensions.appBarHeight,
-            ),
+            preferredSize: Size.fromHeight(Dimensions.appBarHeight),
             child: DashboardAppBar(),
           ),
           body: SafeArea(
             top: true,
-            child: Stack(
-              children: [
-                child,
-                const AudioMinimizedWidget(),
-              ],
-            ),
+            child: Stack(children: [child, const AudioMinimizedWidget()]),
           ),
           bottomNavigationBar: const DashboardBottomBar(),
         ),

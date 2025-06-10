@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class AuthorPageDetailsDialog extends StatelessWidget {
@@ -59,9 +59,7 @@ class AuthorPageDetailsDialog extends StatelessWidget {
                     ),
                   ],
                 ),
-                Html(
-                  data: authorDescription,
-                ),
+                Html(data: authorDescription),
               ],
             ),
           ),

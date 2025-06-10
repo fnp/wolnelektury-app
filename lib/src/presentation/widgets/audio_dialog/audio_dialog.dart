@@ -1,29 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_book_cover.dart';
+import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_bookmarks/audio_dialog_bookmarks.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_controls.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_settings/audio_dialog_settings.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_slider.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_top_bar.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class AudioDialog extends StatelessWidget {
+  static final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
   const AudioDialog({super.key});
 
   static void show({
     required BuildContext context,
     required VoidCallback onClosed,
+    required String slug,
   }) {
     showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (_) {
-        return BlocProvider.value(
-          value: context.read<AudioCubit>()..dialogShown(true),
-          child: const AudioDialog(),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: context.read<ScrollCubit>()),
+            BlocProvider.value(
+              value: context.read<AudioCubit>()
+                ..dialogShown(true)
+                ..toggleBookmarks(false),
+            ),
+            BlocProvider(
+              create: (context) {
+                return BookmarksCubit(get.get())..getBookmarks(slug: slug);
+              },
+            ),
+          ],
+          child: ScaffoldMessenger(
+            key: messengerKey,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Builder(
+                builder: (context) {
+                  final audioCubit = BlocProvider.of<AudioCubit>(context);
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: BlocBuilder<AudioCubit, AudioState>(
+                          buildWhen: (p, c) =>
+                              p.isSettingsOpened != c.isSettingsOpened ||
+                              p.isPreparingPlaylist != c.isPreparingPlaylist ||
+                              p.isBookmarksOpened != c.isBookmarksOpened,
+                          builder: (context, state) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (state.isSettingsOpened) {
+                                  audioCubit.toggleSettings(false);
+                                  return;
+                                }
+                                if (state.isBookmarksOpened) {
+                                  audioCubit.toggleBookmarks(false);
+                                  return;
+                                }
+
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      const AudioDialog(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
         );
       },
     ).then((_) {
@@ -33,29 +92,12 @@ class AudioDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final audioCubit = BlocProvider.of<AudioCubit>(context);
     return BlocBuilder<AudioCubit, AudioState>(
-      buildWhen: (p, c) =>
-          p.isSettingsOpened != c.isSettingsOpened ||
-          p.isPreparingPlaylist != c.isPreparingPlaylist,
+      buildWhen: (p, c) => p.isPreparingPlaylist != c.isPreparingPlaylist,
       builder: (context, state) {
-        return Stack(
-          children: [
-            // Tapping outside of AudioDialog should close the settings overlay
-            // first, then the dialog itself
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () {
-                  if (state.isSettingsOpened) {
-                    audioCubit.toggleSettings(false);
-                    return;
-                  }
-
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-            Dialog(
+        return Center(
+          child: SingleChildScrollView(
+            child: Dialog(
               insetPadding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.mediumPadding,
                 vertical: Dimensions.mediumPadding,
@@ -124,14 +166,12 @@ class AudioDialog extends StatelessWidget {
                                           ),
                                         ),
                                       ] else ...[
-                                        AudioDialogSlider(
-                                          book: state.book!,
-                                        ),
+                                        AudioDialogSlider(book: state.book!),
                                         const Padding(
                                           padding: EdgeInsets.symmetric(
                                             horizontal:
                                                 Dimensions.modalsPadding -
-                                                    Dimensions.smallPadding * 2,
+                                                Dimensions.smallPadding * 2,
                                           ),
                                           child: AudioDialogControls(),
                                         ),
@@ -147,6 +187,7 @@ class AudioDialog extends StatelessWidget {
                           ),
                         ),
                         const _GrayCover(),
+                        const _Bookmarks(),
                         const _Settings(),
                       ],
                     ),
@@ -154,7 +195,7 @@ class AudioDialog extends StatelessWidget {
                 },
               ),
             ),
-          ],
+          ),
         );
       },
     );
@@ -184,6 +225,29 @@ class _Settings extends StatelessWidget {
   }
 }
 
+class _Bookmarks extends StatelessWidget {
+  const _Bookmarks();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AudioCubit, AudioState>(
+      buildWhen: (p, c) => p.isBookmarksOpened != c.isBookmarksOpened,
+      builder: (context, state) {
+        return AnimatedPositioned(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.fastOutSlowIn,
+          left: 0,
+          right: 0,
+          top: state.isBookmarksOpened
+              ? 0
+              : -(MediaQuery.sizeOf(context).height * 0.66),
+          child: const AudioDialogBookmarks(),
+        );
+      },
+    );
+  }
+}
+
 class _GrayCover extends StatelessWidget {
   const _GrayCover();
 
@@ -202,9 +266,7 @@ class _GrayCover extends StatelessWidget {
               isChildVisible: state.isSettingsOpened,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: CustomColors.darkGrey.withValues(
-                    alpha: 0.5,
-                  ),
+                  color: CustomColors.darkGrey.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(
                     Dimensions.modalsBorderRadius,
                   ),

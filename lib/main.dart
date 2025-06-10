@@ -12,6 +12,7 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
+import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,12 +20,10 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await initializeServices(getIt: get);
   await initializeRepositories(getIt: get);
-  await SystemChrome.setPreferredOrientations(
-    [
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ],
-  );
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   await JustAudioBackground.init(
     androidNotificationChannelId: 'pl.app.wolnelektury.audiobook.channel.audio',
@@ -34,9 +33,7 @@ void main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: const [
-        Locale('pl', 'PL'),
-      ],
+      supportedLocales: const [Locale('pl', 'PL')],
       path: 'assets/translations',
       child: const MyApp(),
     ),
@@ -54,14 +51,13 @@ class MyApp extends StatelessWidget {
           lazy: false,
           create: (context) => SettingsCubit(get.get()),
         ),
-        BlocProvider(
-          create: (context) => AppModeCubit(),
-        ),
+        BlocProvider(create: (context) => AppModeCubit()),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (p, c) => p.theme != c.theme,
         builder: (context, state) {
           return MaterialApp.router(
+            scaffoldMessengerKey: CustomSnackbar.scaffoldMessengerKey,
             debugShowCheckedModeBanner: false,
             title: 'Wolne Lektury',
             localizationsDelegates: context.localizationDelegates,

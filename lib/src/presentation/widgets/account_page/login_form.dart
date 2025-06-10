@@ -5,10 +5,10 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/forgot_password_dialog.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_header.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/text_field_label.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/text_field_validation_error.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_label.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_validation_error.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -54,9 +54,7 @@ class _LoginFormState extends State<LoginForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           PageHeader(title: LocaleKeys.login_title.tr()),
-          const SizedBox(
-            height: Dimensions.spacer,
-          ),
+          const SizedBox(height: Dimensions.spacer),
           Form(
             autovalidateMode: isAnyError
                 ? AutovalidateMode.always
@@ -85,6 +83,7 @@ class _LoginFormState extends State<LoginForm> {
                 SizedBox(
                   height: Dimensions.elementHeight,
                   child: TextField(
+                    textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       fillColor: showUsernameError
                           ? Colors.red.withValues(alpha: 0.3)
@@ -100,9 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                     },
                   ),
                 ),
-                const SizedBox(
-                  height: Dimensions.mediumPadding,
-                ),
+                const SizedBox(height: Dimensions.mediumPadding),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -115,8 +112,8 @@ class _LoginFormState extends State<LoginForm> {
                       child: AnimatedBoxFade(
                         isChildVisible: showPasswordError,
                         child: TextFieldValidationError(
-                          message:
-                              LocaleKeys.login_password_validation_empty.tr(),
+                          message: LocaleKeys.login_password_validation_empty
+                              .tr(),
                         ),
                       ),
                     ),
@@ -125,11 +122,21 @@ class _LoginFormState extends State<LoginForm> {
                 SizedBox(
                   height: Dimensions.elementHeight,
                   child: TextField(
+                    textInputAction: TextInputAction.go,
                     obscureText: true,
                     enableSuggestions: false,
                     autocorrect: false,
                     style: theme.textTheme.bodyMedium,
                     controller: _passwordController,
+                    onSubmitted: (value) {
+                      _validate();
+                      if (!isAnyError) {
+                        BlocProvider.of<AuthCubit>(context).login(
+                          email: _usernameController.text,
+                          password: _passwordController.text,
+                        );
+                      }
+                    },
                     onChanged: (_) {
                       if (showPasswordError) {
                         _validate();
@@ -137,15 +144,11 @@ class _LoginFormState extends State<LoginForm> {
                     },
                     decoration: InputDecoration(
                       fillColor: showPasswordError
-                          ? Colors.red.withValues(
-                              alpha: 0.3,
-                            )
+                          ? Colors.red.withValues(alpha: 0.3)
                           : null,
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          ForgotPasswordDialog.show(
-                            context: context,
-                          );
+                          ForgotPasswordDialog.show(context: context);
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -171,9 +174,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 32,
-                ),
+                const SizedBox(height: 32),
                 Row(
                   children: [
                     Expanded(
@@ -192,9 +193,7 @@ class _LoginFormState extends State<LoginForm> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ).tr(),
-                              const SizedBox(
-                                width: Dimensions.smallPadding,
-                              ),
+                              const SizedBox(width: Dimensions.smallPadding),
                               Text(
                                 LocaleKeys.login_register,
                                 style: theme.textTheme.bodySmall?.copyWith(
@@ -215,7 +214,6 @@ class _LoginFormState extends State<LoginForm> {
                           child: ElevatedButton(
                             style: blueElevatedButton,
                             onPressed: () {
-                              if (state.isLoading) return;
                               _validate();
                               if (!isAnyError) {
                                 BlocProvider.of<AuthCubit>(context).login(
@@ -234,9 +232,7 @@ class _LoginFormState extends State<LoginForm> {
                                       size: 18,
                                       strokeWidth: 2,
                                     )
-                                  : const Text(
-                                      LocaleKeys.login_login,
-                                    ).tr(),
+                                  : const Text(LocaleKeys.login_login).tr(),
                             ),
                           ),
                         );

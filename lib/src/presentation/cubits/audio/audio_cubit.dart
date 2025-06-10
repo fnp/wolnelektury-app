@@ -21,7 +21,7 @@ class AudioCubit extends SafeCubit<AudioState> {
   final AudiobookRepository _audiobookRepository;
   final ProgressRepository _progressRepository;
   AudioCubit(this._audiobookRepository, this._progressRepository)
-      : super(const AudioState());
+    : super(const AudioState());
   Timer? _sleepTimer;
   Timer? _positionTimeoutTimer;
 
@@ -30,9 +30,7 @@ class AudioCubit extends SafeCubit<AudioState> {
   int _currentlySavingProgress = 0;
 
   // Audioplayer instance
-  final AudioPlayer _player = AudioPlayer(
-    androidApplyAudioAttributes: false,
-  );
+  final AudioPlayer _player = AudioPlayer(androidApplyAudioAttributes: false);
 
   // Audio session instance
   final CustomAudioSession _audioSession = CustomAudioSession();
@@ -46,18 +44,20 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(isSettingsOpened: value));
   }
 
+  // This is used to toggle opening bookmarks
+  void toggleBookmarks(bool value) {
+    emit(state.copyWith(isBookmarksOpened: value));
+  }
+
   // This is setting the sleep timer in the settings
   void changeSleepTimer(int timer, {bool cancelTimer = false}) {
     emit(state.copyWith(sleepTimer: timer, playToPart: 0));
     _sleepTimer?.cancel();
     if (!cancelTimer && timer > 0) {
-      _sleepTimer = Timer(
-        Duration(minutes: timer),
-        () async {
-          await stop();
-          emit(state.copyWith(sleepTimer: 0));
-        },
-      );
+      _sleepTimer = Timer(Duration(minutes: timer), () async {
+        await stop();
+        emit(state.copyWith(sleepTimer: 0));
+      });
     }
   }
 
@@ -78,11 +78,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     // New book selected, reset all values
     await stop();
 
-    emit(
-      state.copyWith(
-        book: book,
-      ),
-    );
+    emit(state.copyWith(book: book));
 
     emit(state.copyWith(isLoadingAudiobook: true));
     final audiobookResponse = await _audiobookRepository.getAudiobook(
@@ -155,7 +151,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     if (state.playToPart <= currentlyPlayingPart) {
       final durationLeftOfThisPart =
           state.parts[currentlyPlayingPart].duration.floor() -
-              _player.position.inSeconds;
+          _player.position.inSeconds;
       final inMinutes = durationLeftOfThisPart ~/ 60;
       changeSleepTimer(inMinutes);
       emit(state.copyWith(playToPart: currentlyPlayingPart + 1));
@@ -204,27 +200,17 @@ class AudioCubit extends SafeCubit<AudioState> {
 
   Future<void> pause() async {
     emit(state.copyWith(isPlaying: false));
-    await Future.wait([
-      _player.pause(),
-      _audioSession.setActive(false),
-    ]);
+    await Future.wait([_player.pause(), _audioSession.setActive(false)]);
   }
 
   // Completely stops the player and resets the playlist
   Future<void> stop() async {
     _cancelSubscriptions();
-    emit(
-      AudioState(
-        book: state.book,
-        audiobook: state.audiobook,
-      ),
-    );
+    emit(AudioState(book: state.book, audiobook: state.audiobook));
     Future.wait([
       _player.stop(),
       _player.seek(Duration.zero, index: 0),
-      _player.setAudioSources(
-        [],
-      ),
+      _player.setAudioSources([]),
       _audioSession.setActive(false),
     ]);
   }
@@ -258,11 +244,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     final currentIndex = _player.currentIndex ?? 0;
     final positionInCurrentPart = _player.position.inSeconds;
 
-    emit(
-      state.copyWith(
-        statePosition: max(0, state.statePosition - 15),
-      ),
-    );
+    emit(state.copyWith(statePosition: max(0, state.statePosition - 15)));
 
     if (positionInCurrentPart >= 15) {
       await _player.seek(
@@ -270,8 +252,8 @@ class AudioCubit extends SafeCubit<AudioState> {
         index: currentIndex,
       );
     } else if (currentIndex > 0) {
-      final previousPartDuration =
-          state.parts[currentIndex - 1].duration.floor();
+      final previousPartDuration = state.parts[currentIndex - 1].duration
+          .floor();
       await _player.seek(
         Duration(seconds: previousPartDuration - (15 - positionInCurrentPart)),
         index: currentIndex - 1,
@@ -283,9 +265,7 @@ class AudioCubit extends SafeCubit<AudioState> {
 
   // Local position is used to show the position of the audiobook in UI, that is
   // not synchronized with the player. This function is used to synchronize that.
-  Future<void> seekToLocallySelectedPosition({
-    int? optionalSeconds,
-  }) async {
+  Future<void> seekToLocallySelectedPosition({int? optionalSeconds}) async {
     if (optionalSeconds == null && state.localPosition == null) {
       return;
     }
@@ -293,12 +273,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     final seconds = optionalSeconds ?? state.localPosition!;
     final foundPosition = _findPositionAndIndex(seconds);
 
-    emit(
-      state.copyWith(
-        localPosition: null,
-        statePosition: seconds,
-      ),
-    );
+    emit(state.copyWith(localPosition: null, statePosition: seconds));
 
     // If we are at the end of the audiobook, pause it
     if (seconds == state.wholeDuration) {
@@ -308,19 +283,13 @@ class AudioCubit extends SafeCubit<AudioState> {
 
     // Seek to the found position
     await _player.seek(
-      Duration(
-        seconds: foundPosition.$1,
-      ),
+      Duration(seconds: foundPosition.$1),
       index: foundPosition.$2,
     );
   }
 
   void updateLocalPosition(int seconds) {
-    emit(
-      state.copyWith(
-        localPosition: seconds,
-      ),
-    );
+    emit(state.copyWith(localPosition: seconds));
   }
 
   void dialogShown(bool value) {
@@ -346,22 +315,20 @@ class AudioCubit extends SafeCubit<AudioState> {
       ),
     );
 
-    final playlist = state.audiobook!.parts.map(
-      (part) {
-        return AudioSource.uri(
-          Uri.parse(part.url),
-          tag: MediaItem(
-            // Specify a unique ID for each media item:
-            id: part.name,
-            // Metadata to display in the notification:
-            album: state.book?.title,
-            title: part.name,
-            artUri: Uri.parse(state.book?.coverUrl ?? ''),
-            duration: Duration(seconds: part.duration.floor()),
-          ),
-        );
-      },
-    ).toList();
+    final playlist = state.audiobook!.parts.map((part) {
+      return AudioSource.uri(
+        Uri.parse(part.url),
+        tag: MediaItem(
+          // Specify a unique ID for each media item:
+          id: part.name,
+          // Metadata to display in the notification:
+          album: state.book?.title,
+          title: part.name,
+          artUri: Uri.parse(state.book?.coverUrl ?? ''),
+          duration: Duration(seconds: part.duration.floor()),
+        ),
+      );
+    }).toList();
 
     // This gets the progress of the audiobook from the repository
     // and sets the position in UI as well as in the player
@@ -446,18 +413,13 @@ class AudioCubit extends SafeCubit<AudioState> {
     // Reset failure count, local and state progresses are synchronized
     _failureCount = 0;
     emit(
-      state.copyWith(
-        statePosition: newPosition,
-        currentlyPlayingPart: index,
-      ),
+      state.copyWith(statePosition: newPosition, currentlyPlayingPart: index),
     );
   }
 
   // This function finds the position in the index of the audiobook from
   // given timestamp in seconds
-  (int positionInIndex, int index) _findPositionAndIndex(
-    int position,
-  ) {
+  (int positionInIndex, int index) _findPositionAndIndex(int position) {
     int index = 0;
     int remainingSeconds = position;
 

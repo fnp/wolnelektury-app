@@ -18,6 +18,7 @@ sealed class AudioState with _$AudioState {
 
     // Settings
     @Default(false) bool isSettingsOpened,
+    @Default(false) bool isBookmarksOpened,
     @Default(0) int sleepTimer,
     @Default(AudioPlayerSpeedEnum.x1) AudioPlayerSpeedEnum speed,
     @Default(0) int playToPart,

@@ -8,7 +8,7 @@ import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_c
 import 'package:wolnelektury/src/presentation/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/lists/my_library_list_book.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/lists/my_library_list_delete_confirmation_dialog.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';

@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_bookmark_listener.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_list_view_builder.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings.dart';
@@ -31,15 +32,22 @@ class _ReadingPageState extends State<ReadingPage> {
       return const Center(child: Text('Error'));
     }
 
-    return BlocProvider(
-      create: (context) => ReadingPageCubit(
-        get.get(),
-        get.get(),
-        get.get(),
-      )..init(
-          book: widget.book!,
-          itemScrollController: itemScrollController,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ReadingPageCubit(get.get(), get.get(), get.get())
+            ..init(
+              book: widget.book!,
+              itemScrollController: itemScrollController,
+            ),
         ),
+        BlocProvider(
+          create: (context) {
+            return BookmarksCubit(get.get())
+              ..getBookmarks(slug: widget.book!.slug);
+          },
+        ),
+      ],
       child: Builder(
         builder: (context) {
           final cubit = BlocProvider.of<ReadingPageCubit>(context);

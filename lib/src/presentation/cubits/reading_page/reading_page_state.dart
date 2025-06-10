@@ -1,7 +1,5 @@
 part of 'reading_page_cubit.dart';
 
-typedef SuccessState = (Success, bool);
-
 @freezed
 sealed class ReadingPageState with _$ReadingPageState {
   const factory ReadingPageState({
@@ -10,11 +8,6 @@ sealed class ReadingPageState with _$ReadingPageState {
     @Default(ReaderFontType.sans) ReaderFontType fontType,
     @Default(false) bool isJsonLoading,
     ReaderBookModel? book,
-
-    // Bookmarks
-    SuccessState? isBookmarkSuccess,
-    BookmarkModel? editingBookmark,
-    @Default([]) List<BookmarkModel> bookmarks,
 
     // ParagraphSheet
     int? selectedIndex,
@@ -27,9 +20,7 @@ sealed class ReadingPageState with _$ReadingPageState {
 }
 
 extension ReadingPageStateX on ReadingPageState {
-  int? findElementIndexByParagraphIndex(
-    int paragraphIndex,
-  ) {
+  int? findElementIndexByParagraphIndex(int paragraphIndex) {
     if (book == null) return null;
     return book!.contents.indexWhere(
       (element) => element.paragraphIndex == paragraphIndex,
@@ -41,13 +32,6 @@ extension ReadingPageStateX on ReadingPageState {
         book != state.book ||
         fontType != state.fontType ||
         isJsonLoading != state.isJsonLoading;
-  }
-
-  BookmarkModel? get isSelectedParagraphBookmarked {
-    return bookmarks.firstWhereOrNull(
-      (element) =>
-          element.anchor == selectedParagraph?.paragraphIndex.toString(),
-    );
   }
 
   double getFontSize(ThemeData theme) =>

@@ -11,8 +11,8 @@ import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/text_button_with_icon.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -79,6 +79,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
                           AudioDialog.show(
                             context: context,
                             onClosed: () => audioCubit.dialogShown(false),
+                            slug: book.slug,
                           );
                         },
                       ),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/reader_font_type.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/paragraph_sheet/reading_page_paragraph_sheet.dart';
@@ -11,6 +12,7 @@ import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_yellow_background.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class ReaderListViewBuilder extends StatelessWidget {
   final ReadingPageState state;
@@ -23,18 +25,17 @@ class ReaderListViewBuilder extends StatelessWidget {
 
   void onLongPress({
     required ReadingPageCubit cubit,
+    required BookmarksCubit bookmarksCubit,
     required BuildContext context,
     int? index,
     ReaderBookModelContent? element,
   }) {
     HapticFeedback.selectionClick();
-    cubit.selectParagraph(
-      index: index,
-      element: element,
-    );
+    cubit.selectParagraph(index: index, element: element);
     ReadingPageParagraphSheet.show(
       context: context,
       onClosed: () {
+        bookmarksCubit.setEditingBookmark(null);
         cubit.selectParagraph();
       },
     );
@@ -43,42 +44,46 @@ class ReaderListViewBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<ReadingPageCubit>(context);
+    final bookmarksCubit = BlocProvider.of<BookmarksCubit>(context);
     final theme = Theme.of(context);
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        textScaler: const TextScaler.linear(1),
-      ),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1)),
       child: ScrollablePositionedList.builder(
         itemScrollController: itemScrollController,
         itemCount: state.book!.contents.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return _Header(
-              state: state,
-            );
+            return _Header(state: state);
           }
           final element = state.book!.contents[index - 1];
-          return VisibilityDetector(
-            key: ValueKey(
-              element.hashCode,
+          return InkWellWrapper(
+            onLongPress: () => onLongPress(
+              cubit: cubit,
+              bookmarksCubit: bookmarksCubit,
+              context: context,
+              index: index,
+              element: element,
             ),
-            onVisibilityChanged: (info) {
-              if (info.visibleFraction > 0) {
-                cubit.setProgress(
-                  anchor: element.paragraphIndex,
-                );
-              }
-            },
-            child: Stack(
-              children: [
-                ReaderYellowBackground(index: index),
-                ReaderSpansWrapper(
-                  element: element,
-                  fontFamily: state.fontType.familyName,
-                  fontSize: state.getFontSize(theme),
-                  debugPrint: true,
-                ),
-              ],
+            child: VisibilityDetector(
+              key: ValueKey(element.hashCode),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction > 0) {
+                  cubit.setProgress(anchor: element.paragraphIndex);
+                }
+              },
+              child: Stack(
+                children: [
+                  ReaderYellowBackground(index: index),
+                  ReaderSpansWrapper(
+                    element: element,
+                    fontFamily: state.fontType.familyName,
+                    fontSize: state.getFontSize(theme),
+                    debugPrint: true,
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -89,18 +94,13 @@ class ReaderListViewBuilder extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   final ReadingPageState state;
-  const _Header({
-    required this.state,
-  });
+  const _Header({required this.state});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 20,
-        horizontal: 40,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: Dimensions.veryLargePadding,

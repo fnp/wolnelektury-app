@@ -269,9 +269,34 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     );
   }
 
+  void undoRemoveBookFromList() {
+    emit(state.copyWith(bookToRemoveFromList: null));
+  }
+
   Future<void> removeBookFromList({
     required String listSlug,
     required String bookSlug,
+  }) async {
+    if (state.bookToRemoveFromList != null) {
+      _deleteBookFromList(
+        listSlug: state.bookToRemoveFromList!.$1,
+        bookSlug: state.bookToRemoveFromList!.$2,
+        shouldHandle: false,
+      );
+    }
+    emit(state.copyWith(bookToRemoveFromList: (listSlug, bookSlug)));
+    await Future.delayed(const Duration(seconds: 5));
+    if (state.bookToRemoveFromList?.$1 != listSlug ||
+        state.bookToRemoveFromList?.$2 != bookSlug) {
+      return; // Book was reverted from the deletion, do nothing
+    }
+    _deleteBookFromList(listSlug: listSlug, bookSlug: bookSlug);
+  }
+
+  Future<void> _deleteBookFromList({
+    required String listSlug,
+    required String bookSlug,
+    bool shouldHandle = false,
   }) async {
     final previousLists = List<BookListModel>.from(state.allLists);
     final index = previousLists.indexWhere((e) => e.slug == listSlug);
@@ -289,14 +314,18 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
       listSlug: listSlug,
       bookSlug: bookSlug,
     );
+    if (!shouldHandle) return;
 
     response.handle(
       success: (_, __) {
         // Book removed successfully, no further action needed
+        emit(state.copyWith(bookToRemoveFromList: null));
       },
       failure: (_) {
         // Revert state on failure
-        emit(state.copyWith(allLists: previousLists));
+        emit(
+          state.copyWith(allLists: previousLists, bookToRemoveFromList: null),
+        );
       },
     );
   }

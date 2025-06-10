@@ -20,6 +20,7 @@ class AnimatedBoxFade extends StatelessWidget {
       duration: duration,
       switchInCurve: Curves.fastOutSlowIn,
       switchOutCurve: Curves.fastOutSlowIn,
+
       child: isChildVisible
           ? child
           : SizedBox(

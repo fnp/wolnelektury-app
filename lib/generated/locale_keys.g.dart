@@ -1,5 +1,7 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
+// ignore_for_file: constant_identifier_names
+
 abstract class  LocaleKeys {
   static const dashboard_catalogue = 'dashboard.catalogue';
   static const dashboard_donation = 'dashboard.donation';
@@ -65,6 +67,8 @@ abstract class  LocaleKeys {
   static const donation_button = 'donation.button';
   static const donation = 'donation';
   static const audio_dialog_part = 'audio_dialog.part';
+  static const audio_dialog_paragraph = 'audio_dialog.paragraph';
+  static const audio_dialog_delete_paragraph = 'audio_dialog.delete_paragraph';
   static const audio_dialog_settings_sleep_timer = 'audio_dialog.settings.sleep_timer';
   static const audio_dialog_settings_speed_selector = 'audio_dialog.settings.speed_selector';
   static const audio_dialog_settings_part_selector = 'audio_dialog.settings.part_selector';
@@ -80,7 +84,6 @@ abstract class  LocaleKeys {
   static const catalogue_list_creator_success = 'catalogue.list_creator.success';
   static const catalogue_list_creator_back = 'catalogue.list_creator.back';
   static const catalogue_list_creator_save = 'catalogue.list_creator.save';
-  static const catalogue_list_creator_load_more = 'catalogue.list_creator.load_more';
   static const catalogue_list_creator = 'catalogue.list_creator';
   static const catalogue_author_back = 'catalogue.author.back';
   static const catalogue_author_more = 'catalogue.author.more';
@@ -102,6 +105,7 @@ abstract class  LocaleKeys {
   static const book_lists_sheet_save = 'book_lists.sheet.save';
   static const book_lists_sheet_success = 'book_lists.sheet.success';
   static const book_lists_sheet_error = 'book_lists.sheet.error';
+  static const book_lists_sheet_delete = 'book_lists.sheet.delete';
   static const book_lists_sheet = 'book_lists.sheet';
   static const book_lists = 'book_lists';
   static const settings_title = 'settings.title';
@@ -129,6 +133,7 @@ abstract class  LocaleKeys {
   static const common_icon_button_filter = 'common.icon_button.filter';
   static const common_icon_button = 'common.icon_button';
   static const common_snackbar_not_logged = 'common.snackbar.not_logged';
+  static const common_snackbar_revert = 'common.snackbar.revert';
   static const common_snackbar = 'common.snackbar';
   static const common = 'common';
 

@@ -13,7 +13,7 @@ import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_c
 import 'package:wolnelektury/src/presentation/widgets/book_lists/book_lists_sheet.dart';
 import 'package:wolnelektury/src/presentation/widgets/catalogue_page/book_overview_widget_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';

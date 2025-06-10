@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -9,11 +8,9 @@ import 'package:wolnelektury/src/application/app_storage_service.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
-import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/presentation/enums/reader_font_type.dart';
-import 'package:wolnelektury/src/presentation/enums/success_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
@@ -38,15 +35,10 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   }) async {
     final settings = await _storageService.readReadingSettings();
     emit(state.copyWith(isJsonLoading: true));
-    final bookJson = await _booksRepository.getBookJson(
-      slug: book.slug,
-    );
+    final bookJson = await _booksRepository.getBookJson(slug: book.slug);
 
     bookJson.handle(
       success: (data, _) async {
-        await _getAndSetBookmarks(
-          slug: book.slug,
-        );
         emit(
           state.copyWith(
             currentSlug: book.slug,
@@ -65,20 +57,6 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
         //TODO handle error
         emit(state.copyWith(isJsonLoading: false));
       },
-    );
-  }
-
-  Future<void> _getAndSetBookmarks({
-    required String slug,
-  }) async {
-    final bookmarks = await _booksRepository.getBookBookmarks(
-      slug: slug,
-    );
-    bookmarks.handle(
-      success: (data, _) {
-        emit(state.copyWith(bookmarks: data));
-      },
-      failure: (_) {},
     );
   }
 
@@ -112,9 +90,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     );
   }
 
-  Future<void> setProgress({
-    required int? anchor,
-  }) async {
+  Future<void> setProgress({required int? anchor}) async {
     if (state.currentSlug == null || anchor == null) return;
     if (state.progress?.textAnchor == anchor.toString()) return;
 
@@ -160,7 +136,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
 
   void selectParagraph({int? index, ReaderBookModelContent? element}) {
     if (index == null && element == null) {
-      emit(state.copyWith(isAddingBookmark: false, editingBookmark: null));
+      emit(state.copyWith(isAddingBookmark: false));
     }
     emit(state.copyWith(selectedIndex: index, selectedParagraph: element));
   }
@@ -172,94 +148,5 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     emit(state.copyWith(isAddingBookmark: !state.isAddingBookmark));
   }
 
-  void setEditingBookmark(BookmarkModel? bookmark) {
-    emit(state.copyWith(editingBookmark: bookmark));
-  }
-
-  Future<void> createBookmark({
-    required int anchorId,
-    String? note,
-  }) async {
-    if (state.currentSlug == null) return;
-    emit(state.copyWith(isBookmarkSuccess: null));
-    final response = await _booksRepository.createBookmark(
-      slug: state.currentSlug!,
-      anchorId: anchorId,
-      note: note,
-    );
-
-    response.handle(
-      success: (data, _) {
-        emit(
-          state.copyWith(
-            isBookmarkSuccess: (Success.create, true),
-            bookmarks: [...state.bookmarks, data],
-          ),
-        );
-      },
-      failure: (_) {
-        emit(state.copyWith(isBookmarkSuccess: (Success.create, false)));
-      },
-    );
-  }
-
-  Future<void> updateBookmark({
-    required String note,
-  }) async {
-    if (state.editingBookmark == null) return;
-    emit(state.copyWith(isBookmarkSuccess: null));
-    final response = await _booksRepository.updateBookmark(
-      href: state.editingBookmark!.href,
-      slug: state.editingBookmark!.slug,
-      anchorId: int.tryParse(state.editingBookmark!.anchor) ?? 0,
-      note: note,
-    );
-
-    response.handle(
-      success: (data, _) {
-        final bookmarks = List<BookmarkModel>.from(state.bookmarks).map((e) {
-          if (e.href == data.href) {
-            return data;
-          }
-          return e;
-        }).toList();
-        emit(
-          state.copyWith(
-            isBookmarkSuccess: (Success.update, true),
-            bookmarks: bookmarks,
-            editingBookmark: null,
-          ),
-        );
-      },
-      failure: (_) {
-        emit(state.copyWith(isBookmarkSuccess: (Success.update, false)));
-      },
-    );
-  }
-
-  Future<void> deleteBookmark() async {
-    if (state.editingBookmark == null) return;
-    emit(state.copyWith(isBookmarkSuccess: null));
-    final response = await _booksRepository.deleteBookmark(
-      href: state.editingBookmark!.href,
-    );
-
-    response.handle(
-      success: (data, _) {
-        final bookmarks = List<BookmarkModel>.from(state.bookmarks);
-        bookmarks.removeWhere((e) => e.href == state.editingBookmark!.href);
-        emit(
-          state.copyWith(
-            isBookmarkSuccess: (Success.delete, true),
-            bookmarks: bookmarks,
-            editingBookmark: null,
-          ),
-        );
-      },
-      failure: (_) {
-        emit(state.copyWith(isBookmarkSuccess: (Success.delete, false)));
-      },
-    );
-  }
   // ------------------------------------------
 }

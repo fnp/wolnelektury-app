@@ -5,7 +5,7 @@ import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/minimized_player/minimized_player_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -85,6 +85,7 @@ class _AudioMinimizedWidgetState extends State<AudioMinimizedWidget>
                           AudioDialog.show(
                             context: context,
                             onClosed: () => audioCubit.dialogShown(false),
+                            slug: audioCubit.state.book?.slug ?? '',
                           );
                         },
                         child: DecoratedBox(

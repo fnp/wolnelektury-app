@@ -7,7 +7,7 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/detailed_author_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/author/author_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_details_dialog.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -59,9 +59,7 @@ class _Body extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: CustomColors.darkModeGrey.withValues(
-                      alpha: 0.15,
-                    ),
+                    color: CustomColors.darkModeGrey.withValues(alpha: 0.15),
                   ),
                   child: author.photo != null
                       ? ClipRRect(
@@ -94,23 +92,17 @@ class _Body extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(
-                height: Dimensions.mediumPadding,
-              ),
+              const SizedBox(height: Dimensions.mediumPadding),
               if ((author.description ?? '').isNotEmpty)
                 Stack(
                   children: [
                     ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxHeight: 200,
-                      ),
+                      constraints: const BoxConstraints(maxHeight: 200),
                       child: Html(
                         data: author.description,
                         style: {
                           'body': Style(
-                            fontSize: FontSize(
-                              14,
-                            ),
+                            fontSize: FontSize(14),
                             color: theme.textTheme.bodyMedium?.color,
                           ),
                         },

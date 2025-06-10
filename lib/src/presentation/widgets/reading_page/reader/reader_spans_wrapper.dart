@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/paragraph_sheet/reading_page_paragraph_sheet.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
@@ -47,9 +48,7 @@ class ReaderSpansWrapper extends StatelessWidget {
               text: TextSpan(
                 children: [
                   if (element.paragraphIndex != null)
-                    const TextSpan(
-                      text: textIndent,
-                    ),
+                    const TextSpan(text: textIndent),
                   ...buildReaderBase(
                     theme: Theme.of(context),
                     element: element,
@@ -69,9 +68,7 @@ class ReaderSpansWrapper extends StatelessWidget {
         ),
         SizedBox(
           width: 40,
-          child: _Bookmark(
-            paragraphIndex: element.paragraphIndex,
-          ),
+          child: _Bookmark(paragraphIndex: element.paragraphIndex),
         ),
       ],
     );
@@ -94,7 +91,7 @@ class _Bookmark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (paragraphIndex == null) return const SizedBox.shrink();
-    return BlocBuilder<ReadingPageCubit, ReadingPageState>(
+    return BlocBuilder<BookmarksCubit, BookmarksState>(
       buildWhen: (p, c) => p.bookmarks != c.bookmarks,
       builder: (context, state) {
         final isBookmarked = state.bookmarks.firstWhereOrNull(
@@ -103,15 +100,16 @@ class _Bookmark extends StatelessWidget {
         if (isBookmarked == null) {
           return const SizedBox.shrink();
         }
-        final cubit = BlocProvider.of<ReadingPageCubit>(context);
+        final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
+        final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
         return GestureDetector(
           onTap: () {
-            cubit.setEditingBookmark(isBookmarked);
-            cubit.toggleIsAddingBookmark();
+            bookmarkCubit.setEditingBookmark(isBookmarked);
+            readingPageCubit.toggleIsAddingBookmark();
             ReadingPageParagraphSheet.show(
               context: context,
               onClosed: () {
-                cubit.selectParagraph();
+                readingPageCubit.selectParagraph();
               },
             );
           },

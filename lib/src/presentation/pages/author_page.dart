@@ -8,7 +8,7 @@ import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_bo
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_go_back.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_top_bar.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_translations.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/load_more_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/load_more_button.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class AuthorPage extends StatefulWidget {
@@ -40,32 +40,18 @@ class _AuthorPageState extends State<AuthorPage> {
         return AuthorCubit(get.get())..getAuthor(widget.authorSlug!);
       },
       child: Padding(
-        padding: const EdgeInsets.all(
-          Dimensions.mediumPadding,
-        ),
+        padding: const EdgeInsets.all(Dimensions.mediumPadding),
         child: CustomScrollView(
           controller: _scrollController,
           slivers: const [
             SliverToBoxAdapter(child: AuthorPageTopBar()),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: Dimensions.spacer,
-              ),
-            ),
+            SliverToBoxAdapter(child: SizedBox(height: Dimensions.spacer)),
             AuthorPageBooks(),
-            SliverToBoxAdapter(
-              child: _BooksLoadMore(),
-            ),
-            SliverToBoxAdapter(
-              child: _TranslationsHeader(),
-            ),
+            SliverToBoxAdapter(child: _BooksLoadMore()),
+            SliverToBoxAdapter(child: _TranslationsHeader()),
             AuthorPageTranslations(),
-            SliverToBoxAdapter(
-              child: _TranslationsLoadMore(),
-            ),
-            SliverToBoxAdapter(
-              child: AuthorPageGoBack(),
-            ),
+            SliverToBoxAdapter(child: _TranslationsLoadMore()),
+            SliverToBoxAdapter(child: AuthorPageGoBack()),
           ],
         ),
       ),

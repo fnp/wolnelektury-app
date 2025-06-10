@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/audio_player_speed_enum.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -28,9 +28,7 @@ class AudioDialogSettingsSpeedSelector extends StatelessWidget {
             builder: (context, state) {
               return Text(
                 LocaleKeys.audio_dialog_settings_speed_selector.tr(
-                  namedArgs: {
-                    'speed': state.speed.name,
-                  },
+                  namedArgs: {'speed': state.speed.name},
                 ),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: Colors.black,
@@ -40,9 +38,7 @@ class AudioDialogSettingsSpeedSelector extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(
-          height: Dimensions.smallPadding,
-        ),
+        const SizedBox(height: Dimensions.smallPadding),
         SizedBox(
           height: Dimensions.elementHeight,
           child: DecoratedBox(
@@ -82,11 +78,7 @@ class AudioDialogSettingsSpeedSelector extends StatelessWidget {
 }
 
 class _Element extends StatelessWidget {
-  const _Element({
-    required this.speed,
-    required this.isSelected,
-    super.key,
-  });
+  const _Element({required this.speed, required this.isSelected, super.key});
 
   final AudioPlayerSpeedEnum speed;
   final bool isSelected;
@@ -101,8 +93,9 @@ class _Element extends StatelessWidget {
       },
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color:
-              isSelected ? CustomColors.black : CustomColors.primaryYellowColor,
+          color: isSelected
+              ? CustomColors.black
+              : CustomColors.primaryYellowColor,
           shape: BoxShape.circle,
         ),
         child: AnimatedContainer(

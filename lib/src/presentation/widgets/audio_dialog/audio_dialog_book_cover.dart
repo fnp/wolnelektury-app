@@ -6,29 +6,19 @@ import 'package:wolnelektury/src/utils/ui/images.dart';
 
 class AudioDialogBookCover extends StatelessWidget {
   final String? bookCoverUrl;
-  const AudioDialogBookCover({
-    super.key,
-    required this.bookCoverUrl,
-  });
+  const AudioDialogBookCover({super.key, required this.bookCoverUrl});
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(
-        Dimensions.smallBorderRadius,
-      ),
+      borderRadius: BorderRadius.circular(Dimensions.smallBorderRadius),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxHeight: 230,
-        ),
+        constraints: const BoxConstraints(maxHeight: 230),
         child: CachedNetworkImage(
           imageUrl: bookCoverUrl ?? '',
           fit: BoxFit.cover,
-          placeholder: (context, url) => Center(
-            child: SvgPicture.asset(
-              Images.logo,
-            ),
-          ),
+          placeholder: (context, url) =>
+              Center(child: SvgPicture.asset(Images.logo)),
         ),
       ),
     );

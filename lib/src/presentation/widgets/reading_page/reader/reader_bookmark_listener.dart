@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
-import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/success_enum.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 
@@ -12,14 +12,11 @@ class ReaderBookmarkListener extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ReadingPageCubit, ReadingPageState>(
+    return BlocListener<BookmarksCubit, BookmarksState>(
       listenWhen: (p, c) => p.isBookmarkSuccess != c.isBookmarkSuccess,
       listener: (context, state) {
         if (state.isBookmarkSuccess == null) return;
-        determineSnackbar(
-          context: context,
-          state: state.isBookmarkSuccess!,
-        );
+        determineSnackbar(context: context, state: state.isBookmarkSuccess!);
       },
       child: child,
     );

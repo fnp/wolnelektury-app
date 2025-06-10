@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class DialogWrapper extends StatefulWidget {
@@ -39,12 +39,7 @@ class _DialogWrapperState extends State<DialogWrapper>
       TweenSequenceItem(tween: Tween(begin: 0.1, end: -0.1), weight: 1),
       TweenSequenceItem(tween: Tween(begin: -0.1, end: 0.1), weight: 1),
       TweenSequenceItem(tween: Tween(begin: 0.1, end: 0), weight: 1),
-    ]).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInSine,
-      ),
-    );
+    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInSine));
   }
 
   @override
@@ -77,9 +72,7 @@ class _DialogWrapperState extends State<DialogWrapper>
                   size: 24,
                 ),
               ),
-              const SizedBox(
-                width: 25,
-              ),
+              const SizedBox(width: 25),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(

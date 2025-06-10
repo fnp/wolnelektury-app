@@ -6,9 +6,9 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/presentation/cubits/filtering/filtering_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/text_button_with_icon.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
@@ -38,12 +38,8 @@ class CatalogueFiltering extends StatelessWidget {
                   context.read<FilteringCubit>();
                   return MultiBlocProvider(
                     providers: [
-                      BlocProvider.value(
-                        value: context.read<FilteringCubit>(),
-                      ),
-                      BlocProvider.value(
-                        value: context.read<ScrollCubit>(),
-                      ),
+                      BlocProvider.value(value: context.read<FilteringCubit>()),
+                      BlocProvider.value(value: context.read<ScrollCubit>()),
                     ],
                     child: const _FiltersWidget(),
                   );
@@ -83,22 +79,14 @@ class _FiltersWidget extends StatelessWidget {
                     return CustomScrollView(
                       controller: controller,
                       slivers: [
-                        _SearchWithX(
-                          initialText: state.query,
-                        ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 4,
-                          ),
-                        ),
+                        _SearchWithX(initialText: state.query),
+                        const SliverToBoxAdapter(child: SizedBox(height: 4)),
                         SliverStickyHeader(
                           overlapsContent: false,
                           header: const _SelectedTags(),
                         ),
                         const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: Dimensions.mediumPadding,
-                          ),
+                          child: SizedBox(height: Dimensions.mediumPadding),
                         ),
                         const _FilteringChips(),
                       ],
@@ -150,6 +138,7 @@ class _SearchWithXState extends State<_SearchWithX> {
             child: SizedBox(
               height: Dimensions.elementHeight,
               child: TextField(
+                textInputAction: TextInputAction.done,
                 controller: controller,
                 onChanged: (value) {
                   cubit.changeQuery(value);
@@ -185,10 +174,7 @@ class _SearchWithXState extends State<_SearchWithX> {
                     dimension: 40,
                     child: Align(
                       alignment: Alignment.center,
-                      child: Icon(
-                        Icons.search,
-                        size: 24,
-                      ),
+                      child: Icon(Icons.search, size: 24),
                     ),
                   ),
                 ),

@@ -6,7 +6,7 @@ import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_size.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/donation/donation_dialog.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';

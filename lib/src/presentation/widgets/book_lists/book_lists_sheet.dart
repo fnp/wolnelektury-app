@@ -6,8 +6,8 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_lists/book_lists_sheet_existing_lists.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -155,6 +155,7 @@ class AddNewListElementState extends State<AddNewListElement> {
               child: Theme(
                 data: theme.copyWith(inputDecorationTheme: alternativeInput),
                 child: TextField(
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     hintText: LocaleKeys.book_lists_sheet_add.tr(),
                     hintStyle: theme.textTheme.bodyMedium?.copyWith(

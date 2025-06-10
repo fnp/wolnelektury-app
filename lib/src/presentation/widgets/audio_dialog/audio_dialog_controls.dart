@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
@@ -17,8 +17,10 @@ class AudioDialogControls extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const SizedBox(
-          width: Dimensions.elementHeight,
+        CustomButton(
+          icon: CustomIcons.bookmark_add,
+          backgroundColor: CustomColors.grey,
+          onPressed: () => audioCubit.toggleBookmarks(true),
         ),
         CustomButton(
           icon: CustomIcons.backward,
@@ -66,7 +68,7 @@ class AudioDialogControls extends StatelessWidget {
           },
         ),
         CustomButton(
-          icon: Icons.more_horiz,
+          icon: CustomIcons.more_horiz,
           backgroundColor: CustomColors.grey,
           onPressed: () => audioCubit.toggleSettings(true),
         ),

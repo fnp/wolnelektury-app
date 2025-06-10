@@ -7,10 +7,10 @@ import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/register/register_form_agreement_checkbox.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/register/register_form_info_box.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/register_flow_dialog.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_header.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/text_field_label.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/text_field_validation_error.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_label.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_validation_error.dart';
 import 'package:wolnelektury/src/utils/regex/regexes.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
@@ -30,9 +30,7 @@ class RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        minHeight: maxHeightConstraint,
-      ),
+      constraints: BoxConstraints(minHeight: maxHeightConstraint),
       child: Padding(
         padding: const EdgeInsets.all(Dimensions.mediumPadding),
         child: Column(
@@ -44,12 +42,8 @@ class RegisterForm extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PageHeader(title: LocaleKeys.login_title_alternative.tr()),
-                const SizedBox(
-                  height: Dimensions.veryLargePadding,
-                ),
-                _Form(
-                  onLogin: onLogin,
-                ),
+                const SizedBox(height: Dimensions.veryLargePadding),
+                _Form(onLogin: onLogin),
               ],
             ),
             const RegisterFormInfoBox(),
@@ -61,9 +55,7 @@ class RegisterForm extends StatelessWidget {
 }
 
 class _Form extends StatefulWidget {
-  const _Form({
-    required this.onLogin,
-  });
+  const _Form({required this.onLogin});
   final VoidCallback onLogin;
 
   @override
@@ -100,10 +92,9 @@ class _FormState extends State<_Form> {
     setState(() {
       showAgreementError = !agreementsState.areAllRequiredAgreementsChecked;
       showPasswordError = _passwordController.text.isEmpty;
-      showEmailError = _emailController.text.isEmpty ||
-          !Regexes.emailRegex.hasMatch(
-            _emailController.text,
-          );
+      showEmailError =
+          _emailController.text.isEmpty ||
+          !Regexes.emailRegex.hasMatch(_emailController.text);
     });
   }
 
@@ -120,15 +111,13 @@ class _FormState extends State<_Form> {
           );
         }
         if (state.isRegisterSuccess == false) {
-          CustomSnackbar.error(
-            context,
-            LocaleKeys.login_errors_register.tr(),
-          );
+          CustomSnackbar.error(context, LocaleKeys.login_errors_register.tr());
         }
       },
       child: Form(
-        autovalidateMode:
-            isAnyError ? AutovalidateMode.always : AutovalidateMode.disabled,
+        autovalidateMode: isAnyError
+            ? AutovalidateMode.always
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -136,9 +125,7 @@ class _FormState extends State<_Form> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
-                  child: TextFieldLabel(
-                    label: LocaleKeys.login_email.tr(),
-                  ),
+                  child: TextFieldLabel(label: LocaleKeys.login_email.tr()),
                 ),
                 Expanded(
                   child: AnimatedBoxFade(
@@ -153,6 +140,7 @@ class _FormState extends State<_Form> {
             SizedBox(
               height: Dimensions.elementHeight,
               child: TextField(
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   fillColor: showEmailError
                       ? CustomColors.red.withValues(alpha: 0.3)
@@ -168,16 +156,12 @@ class _FormState extends State<_Form> {
                 },
               ),
             ),
-            const SizedBox(
-              height: Dimensions.mediumPadding,
-            ),
+            const SizedBox(height: Dimensions.mediumPadding),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
-                  child: TextFieldLabel(
-                    label: LocaleKeys.login_password.tr(),
-                  ),
+                  child: TextFieldLabel(label: LocaleKeys.login_password.tr()),
                 ),
                 Expanded(
                   child: AnimatedBoxFade(
@@ -192,6 +176,7 @@ class _FormState extends State<_Form> {
             SizedBox(
               height: Dimensions.elementHeight,
               child: TextField(
+                textInputAction: TextInputAction.go,
                 decoration: InputDecoration(
                   fillColor: showPasswordError
                       ? CustomColors.red.withValues(alpha: 0.3)
@@ -209,15 +194,14 @@ class _FormState extends State<_Form> {
                 },
               ),
             ),
-            const SizedBox(
-              height: Dimensions.mediumPadding,
-            ),
+            const SizedBox(height: Dimensions.mediumPadding),
             BlocBuilder<AuthCubit, AuthState>(
               buildWhen: (p, c) => p.agreements != c.agreements,
               builder: (context, state) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: state.agreements?.options
+                  children:
+                      state.agreements?.options
                           .map(
                             (e) => RegisterFormAgreementCheckbox(
                               agreement: e,
@@ -229,9 +213,7 @@ class _FormState extends State<_Form> {
                 );
               },
             ),
-            const SizedBox(
-              height: Dimensions.veryLargePadding,
-            ),
+            const SizedBox(height: Dimensions.veryLargePadding),
             Row(
               children: [
                 Expanded(
@@ -250,9 +232,7 @@ class _FormState extends State<_Form> {
                               fontWeight: FontWeight.w500,
                             ),
                           ).tr(),
-                          const SizedBox(
-                            width: Dimensions.smallPadding,
-                          ),
+                          const SizedBox(width: Dimensions.smallPadding),
                           Text(
                             LocaleKeys.login_login,
                             style: theme.textTheme.bodySmall?.copyWith(

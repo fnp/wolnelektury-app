@@ -29,6 +29,7 @@ class AuthCubit extends SafeCubit<AuthState> {
     // different error is presented in case of failure
     bool fromRegisterFlow = false,
   }) async {
+    if (state.isLoading) return;
     emit(
       state.copyWith(
         isLoading: true,

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/dropdown/custom_dropdown.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
@@ -47,12 +47,11 @@ class AudioDialogTopBar extends StatelessWidget {
                 maxElements: 5,
                 highlightButton: false,
                 width: 200,
-                items: state.audiobook?.parts.mapIndexed((index, part) {
+                items:
+                    state.audiobook?.parts.mapIndexed((index, part) {
                       return CustomDropdownElement(
                         title: LocaleKeys.audio_dialog_part.tr(
-                          namedArgs: {
-                            'part': (index + 1).toString(),
-                          },
+                          namedArgs: {'part': (index + 1).toString()},
                         ),
                         element: index,
                       );

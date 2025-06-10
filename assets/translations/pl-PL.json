@@ -77,6 +77,8 @@
     },
     "audio_dialog": {
         "part": "Rozdział {part}",
+        "paragraph": "Akapit {paragraph}",
+        "delete_paragraph": "Pomyślnie usunąłeś zakładkę",
         "settings": {
             "sleep_timer": "wyłącz za {time} minut",
             "speed_selector": "prędkość odtwarzania {speed}",
@@ -123,7 +125,8 @@
             "add": "dodaj nową listę",
             "save": "dodaj",
             "success": "Książki zostały zapisane",
-            "error": "Nie udało się zapisać książek"
+            "error": "Nie udało się zapisać książek",
+            "delete": "Pomyślnie usunąłeś książkę z listy"
         }
     },
     "settings": {
@@ -156,7 +159,8 @@
             "filter": "Filtruj"
         },
         "snackbar": {
-            "not_logged": "Musisz być zalogowany aby to zrobić"
+            "not_logged": "Musisz być zalogowany aby to zrobić",
+            "revert": "Cofnij"
         }
     }
 }
