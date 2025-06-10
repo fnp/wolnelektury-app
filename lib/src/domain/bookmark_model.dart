@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 part 'bookmark_model.freezed.dart';
 part 'bookmark_model.g.dart';
@@ -14,4 +15,13 @@ sealed class BookmarkModel with _$BookmarkModel {
 
   factory BookmarkModel.fromJson(Map<String, dynamic> json) =>
       _$BookmarkModelFromJson(json);
+
+  factory BookmarkModel.skeletonized() {
+    return BookmarkModel(
+      slug: BoneMock.name,
+      note: BoneMock.name,
+      anchor: BoneMock.name,
+      href: BoneMock.name,
+    );
+  }
 }

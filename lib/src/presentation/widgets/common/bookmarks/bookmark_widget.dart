@@ -16,7 +16,13 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 class BookmarkWidget extends StatelessWidget {
   final BookModel book;
   final BookmarkModel bookmark;
-  const BookmarkWidget({super.key, required this.bookmark, required this.book});
+  final bool isLoading;
+  const BookmarkWidget({
+    super.key,
+    required this.bookmark,
+    required this.book,
+    required this.isLoading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +39,9 @@ class BookmarkWidget extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,
           child:
-              state.bookmarkToDelete == bookmark ||
-                  !state.bookmarkExists(bookmark.slug, bookmark.anchor)
+              (state.bookmarkToDelete == bookmark ||
+                      !state.bookmarkExists(bookmark.slug, bookmark.anchor)) &&
+                  !isLoading
               ? const SizedBox.shrink()
               : Padding(
                   padding: const EdgeInsets.only(bottom: Dimensions.spacer),

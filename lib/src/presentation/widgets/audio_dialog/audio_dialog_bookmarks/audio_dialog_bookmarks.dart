@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
@@ -99,22 +101,30 @@ class _ListOfExistingBookmarks extends StatelessWidget {
         return p.isLoading != c.isLoading;
       },
       builder: (context, state) {
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            final isLast = index == state.bookmarks.length - 1;
-            final isFirst = index == 0;
-            return Padding(
-              padding: EdgeInsets.only(
-                top: isFirst ? Dimensions.veryLargePadding : 0,
-                bottom: isLast ? Dimensions.spacer : 0,
-              ),
-              child: BookmarkWidget(
-                bookmark: state.bookmarks[index],
-                book: book,
-              ),
-            );
-          },
-          itemCount: state.bookmarks.length,
+        final effectiveBookmarks = state.isLoading
+            ? [BookmarkModel.skeletonized()]
+            : state.bookmarks;
+        return Skeletonizer(
+          containersColor: CustomColors.grey,
+          enabled: state.isLoading,
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              final isLast = index == effectiveBookmarks.length - 1;
+              final isFirst = index == 0;
+              return Padding(
+                padding: EdgeInsets.only(
+                  top: isFirst ? Dimensions.veryLargePadding : 0,
+                  bottom: isLast ? Dimensions.spacer : 0,
+                ),
+                child: BookmarkWidget(
+                  bookmark: effectiveBookmarks[index],
+                  book: book,
+                  isLoading: state.isLoading,
+                ),
+              );
+            },
+            itemCount: effectiveBookmarks.length,
+          ),
         );
       },
     );
