@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/domain/author_model.dart';
 import 'package:wolnelektury/src/domain/epoch_model.dart';
 import 'package:wolnelektury/src/domain/genre_model.dart';
@@ -31,22 +32,17 @@ sealed class BookModel with _$BookModel {
     @JsonKey(name: 'has_mp3_file') @Default(false) bool hasAudiobook,
   }) = _BookModel;
 
-  factory BookModel.empty() => const BookModel(
-        title: 'There is some long title, just for skeletonizor purposes',
-        slug: '',
-        authors: [
-          AuthorModel(
-            name: 'There should be an author',
-            slug: '',
-          ),
-        ],
-        url: '',
-        fragment: BookFragmentData(
-          title: '',
-          html:
-              'There is some long title, just for skeletonizor purposes. There is some long title, just for skeletonizor purposes. There is some long title, just for skeletonizor purposes.',
-        ),
-      );
+  factory BookModel.empty() => BookModel(
+    title: BoneMock.title,
+    slug: '',
+    authors: [AuthorModel(name: BoneMock.fullName, slug: '')],
+    url: '',
+    fragment: const BookFragmentData(
+      title: '',
+      html:
+          'There is some long title, just for skeletonizor purposes. There is some long title, just for skeletonizor purposes. There is some long title, just for skeletonizor purposes.',
+    ),
+  );
 
   factory BookModel.fromJson(Map<String, dynamic> json) =>
       _$BookModelFromJson(json);
@@ -54,10 +50,8 @@ sealed class BookModel with _$BookModel {
 
 @freezed
 sealed class BookFragmentData with _$BookFragmentData {
-  const factory BookFragmentData({
-    String? title,
-    String? html,
-  }) = _BookFragmentData;
+  const factory BookFragmentData({String? title, String? html}) =
+      _BookFragmentData;
 
   factory BookFragmentData.fromJson(Map<String, dynamic> json) =>
       _$BookFragmentDataFromJson(json);
@@ -65,9 +59,7 @@ sealed class BookFragmentData with _$BookFragmentData {
 
 @freezed
 sealed class BookTranslator with _$BookTranslator {
-  const factory BookTranslator({
-    String? name,
-  }) = _BookTranslator;
+  const factory BookTranslator({String? name}) = _BookTranslator;
 
   factory BookTranslator.fromJson(Map<String, dynamic> json) =>
       _$BookTranslatorFromJson(json);

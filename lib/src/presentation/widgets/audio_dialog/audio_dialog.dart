@@ -39,7 +39,7 @@ class AudioDialog extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) {
-                return BookmarksCubit(get.get())..getBookmarks(slug: slug);
+                return BookmarksCubit(get.get())..getBookBookmarks(slug: slug);
               },
             ),
           ],

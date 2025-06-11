@@ -1,10 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/presentation/enums/success_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
+import 'package:wolnelektury/src/utils/string/string_extension.dart';
 
 part 'bookmarks_cubit.freezed.dart';
 part 'bookmarks_state.dart';
@@ -13,7 +15,58 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   final BooksRepository _booksRepository;
   BookmarksCubit(this._booksRepository) : super(const BookmarksState());
 
-  Future<void> getBookmarks({required String slug}) async {
+  // --------------------------
+  // ------- My Library -------
+  // --------------------------
+
+  Future<void> getMyLibraryBookmarks() async {
+    emit(state.copyWith(isLoading: true));
+    final bookmarks = await _booksRepository.getBookmarks();
+    bookmarks.handle(
+      success: (data, p) {
+        emit(
+          state.copyWith(
+            bookmarks: data,
+            isLoading: false,
+            pagination: p ?? state.pagination,
+          ),
+        );
+      },
+      failure: (error) {
+        emit(state.copyWith(isLoading: false));
+      },
+    );
+  }
+
+  Future<void> loadMoreMyLibraryBookmarks() async {
+    if (state.pagination.next == null || state.isLoadingMore) return;
+
+    emit(state.copyWith(isLoadingMore: true));
+    final books = await _booksRepository.getBookmarks(
+      url: state.pagination.next!.removeApiUrl,
+    );
+
+    books.handle(
+      success: (data, pagination) {
+        emit(
+          state.copyWith(
+            bookmarks: [...state.bookmarks, ...data],
+            pagination: pagination ?? state.pagination,
+            isLoadingMore: false,
+          ),
+        );
+      },
+      failure: (failure) {
+        emit(state.copyWith(isLoadingMore: false));
+      },
+    );
+  }
+
+  // --------------------------
+  // --------------------------
+  // --------------------------
+
+  Future<void> getBookBookmarks({required String slug}) async {
     emit(state.copyWith(isLoading: true));
     final bookmarks = await _booksRepository.getBookBookmarks(slug: slug);
     bookmarks.handle(

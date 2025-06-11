@@ -25,6 +25,8 @@ abstract class BooksRepository {
 
   Future<DataState<List<String>>> getFavourites();
 
+  Future<DataState<List<BookmarkModel>>> getBookmarks({String? url});
+
   Future<DataState<List<BookmarkModel>>> getBookBookmarks({
     required String slug,
   });
@@ -240,6 +242,25 @@ class BooksRepositoryImplementation extends BooksRepository {
         response: response,
         converter: (data) {
           return serializer(data: data, serializer: BookModel.fromJson);
+        },
+      );
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<List<BookmarkModel>>> getBookmarks({String? url}) async {
+    try {
+      final effectiveUrl = url ?? _bookmarksEndpoint;
+      final response = await _apiService.getRequest(
+        effectiveUrl,
+        useCache: CacheEnum.ignore,
+      );
+      return DataState.fromApiResponse(
+        response: response,
+        converter: (data) {
+          return serializer(data: data, serializer: BookmarkModel.fromJson);
         },
       );
     } catch (e) {

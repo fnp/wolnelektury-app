@@ -44,7 +44,7 @@ class _ReadingPageState extends State<ReadingPage> {
         BlocProvider(
           create: (context) {
             return BookmarksCubit(get.get())
-              ..getBookmarks(slug: widget.book!.slug);
+              ..getBookBookmarks(slug: widget.book!.slug);
           },
         ),
       ],

@@ -16,9 +16,9 @@ T _$identity<T>(T value) => value;
 mixin _$BookmarksState {
 
 //
- bool get isLoading; SuccessState? get isBookmarkSuccess;//
+ bool get isLoading; bool get isLoadingMore; SuccessState? get isBookmarkSuccess;//
  BookmarkModel? get editingBookmark; BookmarkModel? get bookmarkToDelete;//
- List<BookmarkModel> get bookmarks;
+ List<BookmarkModel> get bookmarks; ApiResponsePagination get pagination;
 /// Create a copy of BookmarksState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $BookmarksStateCopyWith<BookmarksState> get copyWith => _$BookmarksStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookmarksState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isBookmarkSuccess, isBookmarkSuccess) || other.isBookmarkSuccess == isBookmarkSuccess)&&(identical(other.editingBookmark, editingBookmark) || other.editingBookmark == editingBookmark)&&(identical(other.bookmarkToDelete, bookmarkToDelete) || other.bookmarkToDelete == bookmarkToDelete)&&const DeepCollectionEquality().equals(other.bookmarks, bookmarks));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookmarksState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.isBookmarkSuccess, isBookmarkSuccess) || other.isBookmarkSuccess == isBookmarkSuccess)&&(identical(other.editingBookmark, editingBookmark) || other.editingBookmark == editingBookmark)&&(identical(other.bookmarkToDelete, bookmarkToDelete) || other.bookmarkToDelete == bookmarkToDelete)&&const DeepCollectionEquality().equals(other.bookmarks, bookmarks)&&(identical(other.pagination, pagination) || other.pagination == pagination));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isBookmarkSuccess,editingBookmark,bookmarkToDelete,const DeepCollectionEquality().hash(bookmarks));
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingMore,isBookmarkSuccess,editingBookmark,bookmarkToDelete,const DeepCollectionEquality().hash(bookmarks),pagination);
 
 @override
 String toString() {
-  return 'BookmarksState(isLoading: $isLoading, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarkToDelete: $bookmarkToDelete, bookmarks: $bookmarks)';
+  return 'BookmarksState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarkToDelete: $bookmarkToDelete, bookmarks: $bookmarks, pagination: $pagination)';
 }
 
 
@@ -49,11 +49,11 @@ abstract mixin class $BookmarksStateCopyWith<$Res>  {
   factory $BookmarksStateCopyWith(BookmarksState value, $Res Function(BookmarksState) _then) = _$BookmarksStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, SuccessState? isBookmarkSuccess, BookmarkModel? editingBookmark, BookmarkModel? bookmarkToDelete, List<BookmarkModel> bookmarks
+ bool isLoading, bool isLoadingMore, SuccessState? isBookmarkSuccess, BookmarkModel? editingBookmark, BookmarkModel? bookmarkToDelete, List<BookmarkModel> bookmarks, ApiResponsePagination pagination
 });
 
 
-$BookmarkModelCopyWith<$Res>? get editingBookmark;$BookmarkModelCopyWith<$Res>? get bookmarkToDelete;
+$BookmarkModelCopyWith<$Res>? get editingBookmark;$BookmarkModelCopyWith<$Res>? get bookmarkToDelete;$ApiResponsePaginationCopyWith<$Res> get pagination;
 
 }
 /// @nodoc
@@ -66,14 +66,16 @@ class _$BookmarksStateCopyWithImpl<$Res>
 
 /// Create a copy of BookmarksState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isBookmarkSuccess = freezed,Object? editingBookmark = freezed,Object? bookmarkToDelete = freezed,Object? bookmarks = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isLoadingMore = null,Object? isBookmarkSuccess = freezed,Object? editingBookmark = freezed,Object? bookmarkToDelete = freezed,Object? bookmarks = null,Object? pagination = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,isBookmarkSuccess: freezed == isBookmarkSuccess ? _self.isBookmarkSuccess : isBookmarkSuccess // ignore: cast_nullable_to_non_nullable
 as SuccessState?,editingBookmark: freezed == editingBookmark ? _self.editingBookmark : editingBookmark // ignore: cast_nullable_to_non_nullable
 as BookmarkModel?,bookmarkToDelete: freezed == bookmarkToDelete ? _self.bookmarkToDelete : bookmarkToDelete // ignore: cast_nullable_to_non_nullable
 as BookmarkModel?,bookmarks: null == bookmarks ? _self.bookmarks : bookmarks // ignore: cast_nullable_to_non_nullable
-as List<BookmarkModel>,
+as List<BookmarkModel>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
+as ApiResponsePagination,
   ));
 }
 /// Create a copy of BookmarksState
@@ -100,6 +102,15 @@ $BookmarkModelCopyWith<$Res>? get bookmarkToDelete {
   return $BookmarkModelCopyWith<$Res>(_self.bookmarkToDelete!, (value) {
     return _then(_self.copyWith(bookmarkToDelete: value));
   });
+}/// Create a copy of BookmarksState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ApiResponsePaginationCopyWith<$Res> get pagination {
+  
+  return $ApiResponsePaginationCopyWith<$Res>(_self.pagination, (value) {
+    return _then(_self.copyWith(pagination: value));
+  });
 }
 }
 
@@ -108,11 +119,12 @@ $BookmarkModelCopyWith<$Res>? get bookmarkToDelete {
 
 
 class _BookmarksState implements BookmarksState {
-  const _BookmarksState({this.isLoading = false, this.isBookmarkSuccess, this.editingBookmark, this.bookmarkToDelete, final  List<BookmarkModel> bookmarks = const []}): _bookmarks = bookmarks;
+  const _BookmarksState({this.isLoading = false, this.isLoadingMore = false, this.isBookmarkSuccess, this.editingBookmark, this.bookmarkToDelete, final  List<BookmarkModel> bookmarks = const [], this.pagination = const ApiResponsePagination()}): _bookmarks = bookmarks;
   
 
 //
 @override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isLoadingMore;
 @override final  SuccessState? isBookmarkSuccess;
 //
 @override final  BookmarkModel? editingBookmark;
@@ -126,6 +138,7 @@ class _BookmarksState implements BookmarksState {
   return EqualUnmodifiableListView(_bookmarks);
 }
 
+@override@JsonKey() final  ApiResponsePagination pagination;
 
 /// Create a copy of BookmarksState
 /// with the given fields replaced by the non-null parameter values.
@@ -137,16 +150,16 @@ _$BookmarksStateCopyWith<_BookmarksState> get copyWith => __$BookmarksStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookmarksState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isBookmarkSuccess, isBookmarkSuccess) || other.isBookmarkSuccess == isBookmarkSuccess)&&(identical(other.editingBookmark, editingBookmark) || other.editingBookmark == editingBookmark)&&(identical(other.bookmarkToDelete, bookmarkToDelete) || other.bookmarkToDelete == bookmarkToDelete)&&const DeepCollectionEquality().equals(other._bookmarks, _bookmarks));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookmarksState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.isBookmarkSuccess, isBookmarkSuccess) || other.isBookmarkSuccess == isBookmarkSuccess)&&(identical(other.editingBookmark, editingBookmark) || other.editingBookmark == editingBookmark)&&(identical(other.bookmarkToDelete, bookmarkToDelete) || other.bookmarkToDelete == bookmarkToDelete)&&const DeepCollectionEquality().equals(other._bookmarks, _bookmarks)&&(identical(other.pagination, pagination) || other.pagination == pagination));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isBookmarkSuccess,editingBookmark,bookmarkToDelete,const DeepCollectionEquality().hash(_bookmarks));
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingMore,isBookmarkSuccess,editingBookmark,bookmarkToDelete,const DeepCollectionEquality().hash(_bookmarks),pagination);
 
 @override
 String toString() {
-  return 'BookmarksState(isLoading: $isLoading, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarkToDelete: $bookmarkToDelete, bookmarks: $bookmarks)';
+  return 'BookmarksState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, isBookmarkSuccess: $isBookmarkSuccess, editingBookmark: $editingBookmark, bookmarkToDelete: $bookmarkToDelete, bookmarks: $bookmarks, pagination: $pagination)';
 }
 
 
@@ -157,11 +170,11 @@ abstract mixin class _$BookmarksStateCopyWith<$Res> implements $BookmarksStateCo
   factory _$BookmarksStateCopyWith(_BookmarksState value, $Res Function(_BookmarksState) _then) = __$BookmarksStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, SuccessState? isBookmarkSuccess, BookmarkModel? editingBookmark, BookmarkModel? bookmarkToDelete, List<BookmarkModel> bookmarks
+ bool isLoading, bool isLoadingMore, SuccessState? isBookmarkSuccess, BookmarkModel? editingBookmark, BookmarkModel? bookmarkToDelete, List<BookmarkModel> bookmarks, ApiResponsePagination pagination
 });
 
 
-@override $BookmarkModelCopyWith<$Res>? get editingBookmark;@override $BookmarkModelCopyWith<$Res>? get bookmarkToDelete;
+@override $BookmarkModelCopyWith<$Res>? get editingBookmark;@override $BookmarkModelCopyWith<$Res>? get bookmarkToDelete;@override $ApiResponsePaginationCopyWith<$Res> get pagination;
 
 }
 /// @nodoc
@@ -174,14 +187,16 @@ class __$BookmarksStateCopyWithImpl<$Res>
 
 /// Create a copy of BookmarksState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isBookmarkSuccess = freezed,Object? editingBookmark = freezed,Object? bookmarkToDelete = freezed,Object? bookmarks = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isLoadingMore = null,Object? isBookmarkSuccess = freezed,Object? editingBookmark = freezed,Object? bookmarkToDelete = freezed,Object? bookmarks = null,Object? pagination = null,}) {
   return _then(_BookmarksState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,isBookmarkSuccess: freezed == isBookmarkSuccess ? _self.isBookmarkSuccess : isBookmarkSuccess // ignore: cast_nullable_to_non_nullable
 as SuccessState?,editingBookmark: freezed == editingBookmark ? _self.editingBookmark : editingBookmark // ignore: cast_nullable_to_non_nullable
 as BookmarkModel?,bookmarkToDelete: freezed == bookmarkToDelete ? _self.bookmarkToDelete : bookmarkToDelete // ignore: cast_nullable_to_non_nullable
 as BookmarkModel?,bookmarks: null == bookmarks ? _self._bookmarks : bookmarks // ignore: cast_nullable_to_non_nullable
-as List<BookmarkModel>,
+as List<BookmarkModel>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
+as ApiResponsePagination,
   ));
 }
 
@@ -208,6 +223,15 @@ $BookmarkModelCopyWith<$Res>? get bookmarkToDelete {
 
   return $BookmarkModelCopyWith<$Res>(_self.bookmarkToDelete!, (value) {
     return _then(_self.copyWith(bookmarkToDelete: value));
+  });
+}/// Create a copy of BookmarksState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ApiResponsePaginationCopyWith<$Res> get pagination {
+  
+  return $ApiResponsePaginationCopyWith<$Res>(_self.pagination, (value) {
+    return _then(_self.copyWith(pagination: value));
   });
 }
 }

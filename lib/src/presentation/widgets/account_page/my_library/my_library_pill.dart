@@ -19,22 +19,23 @@ class MyLibraryPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 200,
-      ),
-      child: DecoratedBox(
+      constraints: const BoxConstraints(maxWidth: 200),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.fastOutSlowIn,
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
           color: isSelected
               ? theme.colorScheme.onTertiaryContainer
               : theme.colorScheme.tertiaryContainer,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
         ),
         child: SizedBox(
           height: Dimensions.elementHeight,
           child: InkWellWrapper(
             onTap: onTap,
-            borderRadius:
-                BorderRadius.circular(Dimensions.borderRadiusOfCircle),
+            borderRadius: BorderRadius.circular(
+              Dimensions.borderRadiusOfCircle,
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.largePadding,

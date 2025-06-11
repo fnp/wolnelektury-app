@@ -29,6 +29,7 @@ class MyLibraryList extends StatelessWidget {
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,
+          alignment: Alignment.topCenter,
           child: isExisting
               ? Padding(
                   padding: const EdgeInsets.only(bottom: Dimensions.spacer),

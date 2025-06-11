@@ -30,12 +30,13 @@ class MyLibraryLikedBook extends StatelessWidget {
             buildWhen: (p, c) {
               return p.isLiked(bookSlug) != c.isLiked(bookSlug);
             },
-            builder: (context, inneState) {
+            builder: (context, innerState) {
               return AnimatedSize(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.fastOutSlowIn,
-                child: inneState.isLiked(bookSlug)
+                child: innerState.isLiked(bookSlug)
                     ? Skeletonizer(
+                        enableSwitchAnimation: true,
                         enabled: state.isLoading,
                         child: Padding(
                           padding: const EdgeInsets.only(

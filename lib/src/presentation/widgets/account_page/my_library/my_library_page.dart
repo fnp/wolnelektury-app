@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/bookmarks/my_library_bookmarks_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/liked/my_library_liked_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/lists/my_library_lists_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/my_library_pill.dart';
@@ -26,8 +29,15 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: context.read<ListCreatorCubit>()..init(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: context.read<ListCreatorCubit>()..init()),
+        BlocProvider(
+          create: (context) {
+            return BookmarksCubit(get.get())..getMyLibraryBookmarks();
+          },
+        ),
+      ],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -77,6 +87,8 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
               children: const [
                 MyLibraryListsSection(),
                 MyLibraryLikedSection(),
+                Text('Tutaj będą offline audiobooki :-)'),
+                MyLibraryBookmarksSection(),
               ],
             ),
           ),

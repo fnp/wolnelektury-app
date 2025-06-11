@@ -4,6 +4,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
+import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/bookmark_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/create_bookmark_widget.dart';
@@ -105,6 +106,7 @@ class _ListOfExistingBookmarks extends StatelessWidget {
             ? [BookmarkModel.skeletonized()]
             : state.bookmarks;
         return Skeletonizer(
+          enableSwitchAnimation: true,
           containersColor: CustomColors.grey,
           enabled: state.isLoading,
           child: ListView.builder(
@@ -120,6 +122,8 @@ class _ListOfExistingBookmarks extends StatelessWidget {
                   bookmark: effectiveBookmarks[index],
                   book: book,
                   isLoading: state.isLoading,
+                  backgroundColor: CustomColors.grey,
+                  messengerKey: AudioDialog.messengerKey,
                 ),
               );
             },

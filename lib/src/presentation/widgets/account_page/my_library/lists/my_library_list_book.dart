@@ -44,17 +44,19 @@ class MyLibraryListBook extends StatelessWidget {
                       c.isBookInList(listName, bookSlug);
             },
             builder: (context, innerState) {
+              final shouldHide =
+                  !innerState.isBookInList(listName, bookSlug) ||
+                  (innerState.bookToRemoveFromList?.$1 == listSlug &&
+                      innerState.bookToRemoveFromList?.$2 == bookSlug);
               return AnimatedSize(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.fastOutSlowIn,
-                child:
-                    !innerState.isBookInList(listName, bookSlug) ||
-                        (innerState.bookToRemoveFromList?.$1 == listSlug &&
-                            innerState.bookToRemoveFromList?.$2 == bookSlug)
+                child: shouldHide
                     ? const SizedBox(width: double.infinity)
                     : Padding(
                         padding: const EdgeInsets.only(top: Dimensions.spacer),
                         child: Skeletonizer(
+                          enableSwitchAnimation: true,
                           enabled: state.isLoading,
                           child: BookPageCoverWithButtons(
                             key: ValueKey(bookSlug),

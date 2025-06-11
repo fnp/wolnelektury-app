@@ -7,12 +7,14 @@ sealed class BookmarksState with _$BookmarksState {
   const factory BookmarksState({
     //
     @Default(false) bool isLoading,
+    @Default(false) bool isLoadingMore,
     SuccessState? isBookmarkSuccess,
     //
     BookmarkModel? editingBookmark,
     BookmarkModel? bookmarkToDelete,
     //
     @Default([]) List<BookmarkModel> bookmarks,
+    @Default(ApiResponsePagination()) ApiResponsePagination pagination,
   }) = _BookmarksState;
 }
 
