@@ -255,15 +255,18 @@ class _GrayCover extends StatelessWidget {
   Widget build(BuildContext context) {
     final audioCubit = BlocProvider.of<AudioCubit>(context);
     return BlocBuilder<AudioCubit, AudioState>(
-      buildWhen: (p, c) => p.isSettingsOpened != c.isSettingsOpened,
+      buildWhen: (p, c) =>
+          p.isSettingsOpened != c.isSettingsOpened ||
+          p.isBookmarksOpened != c.isBookmarksOpened,
       builder: (context, state) {
         return Positioned.fill(
           child: GestureDetector(
             onTap: () {
               audioCubit.toggleSettings(false);
+              audioCubit.toggleBookmarks(false);
             },
             child: AnimatedBoxFade(
-              isChildVisible: state.isSettingsOpened,
+              isChildVisible: state.isSettingsOpened || state.isBookmarksOpened,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: CustomColors.darkGrey.withValues(alpha: 0.5),

@@ -11,12 +11,16 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
   final BooksRepository _booksRepository;
   SingleBookCubit(this._booksRepository) : super(const SingleBookState());
 
-  Future<void> loadBookData({required String slug}) async {
+  Future<void> loadBookData({
+    required String slug,
+    Function(BookModel data)? onFinished,
+  }) async {
     emit(state.copyWith(isLoading: true));
     final book = await _booksRepository.getBookBySlug(slug: slug);
     book.handle(
       success: (book, _) {
         emit(state.copyWith(book: book, isLoading: false));
+        onFinished?.call(book);
       },
       failure: (failure) {
         emit(state.copyWith(isLoading: false));

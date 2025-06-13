@@ -5,6 +5,7 @@ import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_bookmark_listener.dart';
@@ -16,7 +17,17 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPage extends StatefulWidget {
   final BookModel? book;
-  const ReadingPage({super.key, required this.book});
+  final String? slug;
+  final int? overrideProgressAnchor;
+  const ReadingPage({
+    super.key,
+    this.book,
+    this.slug,
+    this.overrideProgressAnchor,
+  }) : assert(
+         book != null || slug != null,
+         'Either book or slug must be provided',
+       );
 
   @override
   State<ReadingPage> createState() => _ReadingPageState();
@@ -27,76 +38,98 @@ class _ReadingPageState extends State<ReadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.book == null) {
-      //TODO
-      return const Center(child: Text('Error'));
-    }
+    final slug = widget.slug ?? widget.book?.slug;
+    final child = _Body(itemScrollController: itemScrollController);
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ReadingPageCubit(get.get(), get.get(), get.get())
-            ..init(
-              book: widget.book!,
-              itemScrollController: itemScrollController,
-            ),
-        ),
-        BlocProvider(
           create: (context) {
-            return BookmarksCubit(get.get())
-              ..getBookBookmarks(slug: widget.book!.slug);
+            final cubit = ReadingPageCubit(get.get(), get.get(), get.get());
+            if (widget.book != null) {
+              cubit.init(
+                book: widget.book!,
+                itemScrollController: itemScrollController,
+                overrideProgressAnchor: widget.overrideProgressAnchor,
+              );
+            }
+            return cubit;
           },
         ),
+        BlocProvider(
+          lazy: false,
+          create: (context) =>
+              BookmarksCubit(get.get())..getBookBookmarks(slug: slug!),
+        ),
+        if (widget.book == null)
+          BlocProvider(
+            lazy: false,
+            create: (context) => SingleBookCubit(get.get())
+              ..loadBookData(
+                slug: slug!,
+                onFinished: (book) {
+                  context.read<ReadingPageCubit>().init(
+                    book: book,
+                    itemScrollController: itemScrollController,
+                    overrideProgressAnchor: widget.overrideProgressAnchor,
+                  );
+                },
+              ),
+          ),
       ],
-      child: Builder(
-        builder: (context) {
-          final cubit = BlocProvider.of<ReadingPageCubit>(context);
-          return ReaderBookmarkListener(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
-                    buildWhen: (p, c) => c.shouldRebuild(p),
-                    builder: (context, state) {
-                      return AnimatedBoxFade(
-                        duration: const Duration(milliseconds: 400),
-                        isChildVisible: !state.isJsonLoading,
-                        collapsedChild: const Center(
-                          child: CustomLoader(
-                            color: CustomColors.secondaryBlueColor,
-                          ),
+      child: child,
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  final ItemScrollController itemScrollController;
+  const _Body({required this.itemScrollController});
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<ReadingPageCubit>(context);
+    return ReaderBookmarkListener(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
+              buildWhen: (p, c) => c.shouldRebuild(p),
+              builder: (context, state) {
+                return AnimatedBoxFade(
+                  duration: const Duration(milliseconds: 400),
+                  isChildVisible: !state.isJsonLoading,
+                  collapsedChild: const Center(
+                    child: CustomLoader(color: CustomColors.secondaryBlueColor),
+                  ),
+                  child: state.book == null
+                      ? const SizedBox.shrink()
+                      : ReaderListViewBuilder(
+                          state: state,
+                          itemScrollController: itemScrollController,
                         ),
-                        child: state.book == null
-                            ? const SizedBox.shrink()
-                            : ReaderListViewBuilder(
-                                state: state,
-                                itemScrollController: itemScrollController,
-                              ),
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  bottom: Dimensions.modalsPadding,
-                  right: Dimensions.modalsPadding,
-                  child: CustomButton(
-                    size: Dimensions.elementHeight,
-                    backgroundColor: CustomColors.white,
-                    icon: Icons.tune,
-                    onPressed: () {
-                      ReadingPageSettings.show(
-                        context: context,
-                        onClosed: () {
-                          cubit.saveSettings();
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
+                );
+              },
             ),
-          );
-        },
+          ),
+          Positioned(
+            bottom: Dimensions.modalsPadding,
+            right: Dimensions.modalsPadding,
+            child: CustomButton(
+              size: Dimensions.elementHeight,
+              backgroundColor: CustomColors.white,
+              icon: Icons.tune,
+              onPressed: () {
+                ReadingPageSettings.show(
+                  context: context,
+                  onClosed: () {
+                    cubit.saveSettings();
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

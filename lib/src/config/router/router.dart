@@ -120,15 +120,35 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
-          path: readingPageConfig.path,
-          name: readingPageConfig.name,
+          path: readingPageConfigWithAnchor.path,
+          name: readingPageConfigWithAnchor.name,
           pageBuilder: (context, state) {
             final book = state.extra as BookModel?;
+            final anchor = int.tryParse(state.pathParameters['anchor'] ?? '');
+            final slug = state.pathParameters['slug'];
             return _slideTransition(
               context: context,
               state: state,
               reversed: true,
-              child: ReadingPage(book: book),
+              child: ReadingPage(
+                book: book,
+                overrideProgressAnchor: anchor,
+                slug: slug,
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: readingPageConfig.path,
+          name: readingPageConfig.name,
+          pageBuilder: (context, state) {
+            final book = state.extra as BookModel?;
+            final slug = state.pathParameters['slug'];
+            return _slideTransition(
+              context: context,
+              state: state,
+              reversed: true,
+              child: ReadingPage(book: book, slug: slug),
             );
           },
         ),

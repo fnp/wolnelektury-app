@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
@@ -179,7 +181,17 @@ class BookmarkWidget extends StatelessWidget {
                               Flexible(
                                 child: TextButtonWithIcon(
                                   onPressed: () {
-                                    //TODO: Implement bookmark read from functionality
+                                    if (messengerKey != null) {
+                                      Navigator.of(context).pop();
+                                    }
+                                    router.pushNamed(
+                                      readingPageConfigWithAnchor.name,
+                                      extra: book,
+                                      pathParameters: {
+                                        'slug': book.slug,
+                                        'anchor': bookmark.anchor.toString(),
+                                      },
+                                    );
                                   },
                                   nonActiveText: LocaleKeys
                                       .common_icon_button_read

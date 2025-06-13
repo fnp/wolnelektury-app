@@ -32,6 +32,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   Future<void> init({
     required BookModel book,
     required ItemScrollController itemScrollController,
+    int? overrideProgressAnchor,
   }) async {
     final settings = await _storageService.readReadingSettings();
     emit(state.copyWith(isJsonLoading: true));
@@ -51,6 +52,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
         await _getAndSetProgress(
           slug: book.slug,
           itemScrollController: itemScrollController,
+          overrideProgressAnchor: overrideProgressAnchor,
         );
       },
       failure: (failure) {
@@ -63,7 +65,17 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   Future<void> _getAndSetProgress({
     required String slug,
     required ItemScrollController itemScrollController,
+    int? overrideProgressAnchor,
   }) async {
+    if (overrideProgressAnchor != null) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      itemScrollController.scrollTo(
+        index: overrideProgressAnchor,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+      );
+      return;
+    }
     final progress = await _progressRepository.getTextProgressByBook(
       slug: state.currentSlug!,
     );
