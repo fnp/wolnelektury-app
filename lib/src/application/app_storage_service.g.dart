@@ -718,12 +718,222 @@ class ReaderSettingsCompanion extends UpdateCompanion<ReaderSetting> {
   }
 }
 
+class $OfflineBooksTable extends OfflineBooks
+    with TableInfo<$OfflineBooksTable, OfflineBook> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $OfflineBooksTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _slugMeta = const VerificationMeta('slug');
+  @override
+  late final GeneratedColumn<String> slug = GeneratedColumn<String>(
+    'slug',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL UNIQUE',
+  );
+  static const VerificationMeta _bookJsonMeta = const VerificationMeta(
+    'bookJson',
+  );
+  @override
+  late final GeneratedColumn<String> bookJson = GeneratedColumn<String>(
+    'book_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [slug, bookJson];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'offline_books';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<OfflineBook> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('slug')) {
+      context.handle(
+        _slugMeta,
+        slug.isAcceptableOrUnknown(data['slug']!, _slugMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_slugMeta);
+    }
+    if (data.containsKey('book_json')) {
+      context.handle(
+        _bookJsonMeta,
+        bookJson.isAcceptableOrUnknown(data['book_json']!, _bookJsonMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  OfflineBook map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return OfflineBook(
+      slug: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}slug'],
+      )!,
+      bookJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}book_json'],
+      )!,
+    );
+  }
+
+  @override
+  $OfflineBooksTable createAlias(String alias) {
+    return $OfflineBooksTable(attachedDatabase, alias);
+  }
+}
+
+class OfflineBook extends DataClass implements Insertable<OfflineBook> {
+  final String slug;
+  final String bookJson;
+  const OfflineBook({required this.slug, required this.bookJson});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['slug'] = Variable<String>(slug);
+    map['book_json'] = Variable<String>(bookJson);
+    return map;
+  }
+
+  OfflineBooksCompanion toCompanion(bool nullToAbsent) {
+    return OfflineBooksCompanion(slug: Value(slug), bookJson: Value(bookJson));
+  }
+
+  factory OfflineBook.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return OfflineBook(
+      slug: serializer.fromJson<String>(json['slug']),
+      bookJson: serializer.fromJson<String>(json['bookJson']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'slug': serializer.toJson<String>(slug),
+      'bookJson': serializer.toJson<String>(bookJson),
+    };
+  }
+
+  OfflineBook copyWith({String? slug, String? bookJson}) =>
+      OfflineBook(slug: slug ?? this.slug, bookJson: bookJson ?? this.bookJson);
+  OfflineBook copyWithCompanion(OfflineBooksCompanion data) {
+    return OfflineBook(
+      slug: data.slug.present ? data.slug.value : this.slug,
+      bookJson: data.bookJson.present ? data.bookJson.value : this.bookJson,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OfflineBook(')
+          ..write('slug: $slug, ')
+          ..write('bookJson: $bookJson')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(slug, bookJson);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is OfflineBook &&
+          other.slug == this.slug &&
+          other.bookJson == this.bookJson);
+}
+
+class OfflineBooksCompanion extends UpdateCompanion<OfflineBook> {
+  final Value<String> slug;
+  final Value<String> bookJson;
+  final Value<int> rowid;
+  const OfflineBooksCompanion({
+    this.slug = const Value.absent(),
+    this.bookJson = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  OfflineBooksCompanion.insert({
+    required String slug,
+    this.bookJson = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : slug = Value(slug);
+  static Insertable<OfflineBook> custom({
+    Expression<String>? slug,
+    Expression<String>? bookJson,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (slug != null) 'slug': slug,
+      if (bookJson != null) 'book_json': bookJson,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  OfflineBooksCompanion copyWith({
+    Value<String>? slug,
+    Value<String>? bookJson,
+    Value<int>? rowid,
+  }) {
+    return OfflineBooksCompanion(
+      slug: slug ?? this.slug,
+      bookJson: bookJson ?? this.bookJson,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (slug.present) {
+      map['slug'] = Variable<String>(slug.value);
+    }
+    if (bookJson.present) {
+      map['book_json'] = Variable<String>(bookJson.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OfflineBooksCompanion(')
+          ..write('slug: $slug, ')
+          ..write('bookJson: $bookJson, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppStorage extends GeneratedDatabase {
   _$AppStorage(QueryExecutor e) : super(e);
   $AppStorageManager get managers => $AppStorageManager(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   late final $AppCacheTable appCache = $AppCacheTable(this);
   late final $ReaderSettingsTable readerSettings = $ReaderSettingsTable(this);
+  late final $OfflineBooksTable offlineBooks = $OfflineBooksTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -732,6 +942,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
     appSettings,
     appCache,
     readerSettings,
+    offlineBooks,
   ];
 }
 
@@ -1179,6 +1390,149 @@ typedef $$ReaderSettingsTableProcessedTableManager =
       ReaderSetting,
       PrefetchHooks Function()
     >;
+typedef $$OfflineBooksTableCreateCompanionBuilder =
+    OfflineBooksCompanion Function({
+      required String slug,
+      Value<String> bookJson,
+      Value<int> rowid,
+    });
+typedef $$OfflineBooksTableUpdateCompanionBuilder =
+    OfflineBooksCompanion Function({
+      Value<String> slug,
+      Value<String> bookJson,
+      Value<int> rowid,
+    });
+
+class $$OfflineBooksTableFilterComposer
+    extends Composer<_$AppStorage, $OfflineBooksTable> {
+  $$OfflineBooksTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get bookJson => $composableBuilder(
+    column: $table.bookJson,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$OfflineBooksTableOrderingComposer
+    extends Composer<_$AppStorage, $OfflineBooksTable> {
+  $$OfflineBooksTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get bookJson => $composableBuilder(
+    column: $table.bookJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$OfflineBooksTableAnnotationComposer
+    extends Composer<_$AppStorage, $OfflineBooksTable> {
+  $$OfflineBooksTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get slug =>
+      $composableBuilder(column: $table.slug, builder: (column) => column);
+
+  GeneratedColumn<String> get bookJson =>
+      $composableBuilder(column: $table.bookJson, builder: (column) => column);
+}
+
+class $$OfflineBooksTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $OfflineBooksTable,
+          OfflineBook,
+          $$OfflineBooksTableFilterComposer,
+          $$OfflineBooksTableOrderingComposer,
+          $$OfflineBooksTableAnnotationComposer,
+          $$OfflineBooksTableCreateCompanionBuilder,
+          $$OfflineBooksTableUpdateCompanionBuilder,
+          (
+            OfflineBook,
+            BaseReferences<_$AppStorage, $OfflineBooksTable, OfflineBook>,
+          ),
+          OfflineBook,
+          PrefetchHooks Function()
+        > {
+  $$OfflineBooksTableTableManager(_$AppStorage db, $OfflineBooksTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$OfflineBooksTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$OfflineBooksTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$OfflineBooksTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> slug = const Value.absent(),
+                Value<String> bookJson = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => OfflineBooksCompanion(
+                slug: slug,
+                bookJson: bookJson,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String slug,
+                Value<String> bookJson = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => OfflineBooksCompanion.insert(
+                slug: slug,
+                bookJson: bookJson,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$OfflineBooksTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $OfflineBooksTable,
+      OfflineBook,
+      $$OfflineBooksTableFilterComposer,
+      $$OfflineBooksTableOrderingComposer,
+      $$OfflineBooksTableAnnotationComposer,
+      $$OfflineBooksTableCreateCompanionBuilder,
+      $$OfflineBooksTableUpdateCompanionBuilder,
+      (
+        OfflineBook,
+        BaseReferences<_$AppStorage, $OfflineBooksTable, OfflineBook>,
+      ),
+      OfflineBook,
+      PrefetchHooks Function()
+    >;
 
 class $AppStorageManager {
   final _$AppStorage _db;
@@ -1189,4 +1543,6 @@ class $AppStorageManager {
       $$AppCacheTableTableManager(_db, _db.appCache);
   $$ReaderSettingsTableTableManager get readerSettings =>
       $$ReaderSettingsTableTableManager(_db, _db.readerSettings);
+  $$OfflineBooksTableTableManager get offlineBooks =>
+      $$OfflineBooksTableTableManager(_db, _db.offlineBooks);
 }

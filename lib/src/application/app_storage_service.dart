@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
+import 'package:wolnelektury/src/domain/offline_book_model.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
 import 'package:wolnelektury/src/presentation/enums/reader_font_type.dart';
 
@@ -27,15 +28,13 @@ class AppCache extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
-//TODO There should be place to save books and audiobooks
+class OfflineBooks extends Table {
+  TextColumn get slug => text().customConstraint('NOT NULL UNIQUE')();
+  // Stringified JSON of OfflineBookModel
+  TextColumn get bookJson => text().withDefault(const Constant(''))();
+}
 
-@DriftDatabase(
-  tables: [
-    AppSettings,
-    AppCache,
-    ReaderSettings,
-  ],
-)
+@DriftDatabase(tables: [AppSettings, AppCache, ReaderSettings, OfflineBooks])
 class AppStorage extends _$AppStorage {
   AppStorage() : super(_openConnection());
 
@@ -46,14 +45,19 @@ class AppStorage extends _$AppStorage {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) async {
-          await m.createAll();
-        },
-      );
+    onUpgrade: (m, from, to) async {
+      if (from == 1 && to == 2) {
+        await m.createTable(offlineBooks);
+      }
+    },
+    onCreate: (m) async {
+      await m.createAll();
+    },
+  );
 }
 
 class AppStorageService {
@@ -78,7 +82,9 @@ class AppStorageService {
       return currentSettings;
     }
 
-    await _storage.update(_storage.readerSettings).replace(
+    await _storage
+        .update(_storage.readerSettings)
+        .replace(
           ReaderSettingsCompanion.insert(
             id: const Value(appSettingsId),
             readingFontSize: Value(textSizeFactor),
@@ -91,12 +97,15 @@ class AppStorageService {
 
   Future<ReaderSetting> _getReaderSettings() async {
     // Get current settings
-    final result =
-        await _storage.select(_storage.readerSettings).getSingleOrNull();
+    final result = await _storage
+        .select(_storage.readerSettings)
+        .getSingleOrNull();
 
     // If settings are not found, insert the default settings
     if (result == null) {
-      await _storage.into(_storage.readerSettings).insert(
+      await _storage
+          .into(_storage.readerSettings)
+          .insert(
             ReaderSettingsCompanion.insert(
               id: const Value(appSettingsId),
               readingFontSize: const Value(0.5),
@@ -123,7 +132,9 @@ class AppStorageService {
       return currentSettings;
     }
 
-    await _storage.update(_storage.appSettings).replace(
+    await _storage
+        .update(_storage.appSettings)
+        .replace(
           AppSettingsCompanion.insert(
             id: const Value(appSettingsId),
             theme: Value(theme.name),
@@ -135,12 +146,15 @@ class AppStorageService {
 
   Future<AppSetting> _getAppSettings() async {
     // Get current settings
-    final result =
-        await _storage.select(_storage.appSettings).getSingleOrNull();
+    final result = await _storage
+        .select(_storage.appSettings)
+        .getSingleOrNull();
 
     // If settings are not found, insert the default settings
     if (result == null) {
-      await _storage.into(_storage.appSettings).insert(
+      await _storage
+          .into(_storage.appSettings)
+          .insert(
             AppSettingsCompanion.insert(
               id: const Value(appSettingsId),
               theme: Value(AppTheme.adaptive.name),
@@ -176,7 +190,9 @@ class AppStorageService {
       await deleteCacheForKey(callKey);
     }
     try {
-      await _storage.into(_storage.appCache).insert(
+      await _storage
+          .into(_storage.appCache)
+          .insert(
             AppCacheCompanion.insert(
               callKey: callKey,
               response: jsonEncode(response.data),
@@ -194,9 +210,9 @@ class AppStorageService {
       callKey,
     );
     try {
-      final result = await (_storage.select(_storage.appCache)
-            ..where((cache) => cache.callKey.equals(callKey)))
-          .getSingleOrNull();
+      final result = await (_storage.select(
+        _storage.appCache,
+      )..where((cache) => cache.callKey.equals(callKey))).getSingleOrNull();
 
       if (result == null) {
         return null;
@@ -219,9 +235,56 @@ class AppStorageService {
   }
 
   Future<void> deleteCacheForKey(String callKey) async {
-    await (_storage.delete(_storage.appCache)
-          ..where((cache) => cache.callKey.equals(callKey)))
-        .go();
+    await (_storage.delete(
+      _storage.appCache,
+    )..where((cache) => cache.callKey.equals(callKey))).go();
   }
+
   // ------------------------------------------------
+
+  // Offline Books
+  // ------------------------------------------------
+
+  Future<bool> saveOfflineBook(String slug, OfflineBookModel book) async {
+    final bookJson = jsonEncode(book.toJson());
+    final existingBook = await readOfflineBook(slug);
+
+    if (existingBook != null) {
+      // Update existing book
+      await _storage
+          .update(_storage.offlineBooks)
+          .replace(
+            OfflineBooksCompanion(slug: Value(slug), bookJson: Value(bookJson)),
+          );
+      return true;
+    } else {
+      // Insert new book
+      await _storage
+          .into(_storage.offlineBooks)
+          .insert(
+            OfflineBooksCompanion.insert(slug: slug, bookJson: Value(bookJson)),
+          );
+      return true;
+    }
+  }
+
+  Future<OfflineBookModel?> readOfflineBook(String slug) async {
+    final result = await (_storage.select(
+      _storage.offlineBooks,
+    )..where((book) => book.slug.equals(slug))).getSingleOrNull();
+
+    if (result == null || result.bookJson.isEmpty) {
+      return null;
+    }
+
+    try {
+      return OfflineBookModel.fromJson(jsonDecode(result.bookJson));
+    } catch (e) {
+      AppLogger.instance.e(
+        'AppStorageService',
+        'Error parsing offline book JSON: $e',
+      );
+      return null;
+    }
+  }
 }

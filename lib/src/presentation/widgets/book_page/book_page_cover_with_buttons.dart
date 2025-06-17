@@ -8,6 +8,7 @@ import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
@@ -86,6 +87,15 @@ class BookPageCoverWithButtons extends StatelessWidget {
                       const SizedBox(height: Dimensions.mediumPadding),
                     ],
                     _HeartButton(book: book),
+                    TextButtonWithIcon(
+                      nonActiveText: 'Pobierz audiobook',
+                      nonActiveIcon: Icons.download,
+                      onPressed: () {
+                        BlocProvider.of<DownloadCubit>(
+                          context,
+                        ).downloadAudiobook(book: book);
+                      },
+                    ),
                   ],
                 ),
               ),

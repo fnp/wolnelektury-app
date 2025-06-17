@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/minimized_player/minimized_player_cubit.dart';
@@ -20,6 +21,7 @@ class DashboardProviders extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => RouterCubit()),
+        BlocProvider(create: (_) => DownloadCubit(get.get(), get.get())),
         BlocProvider(create: (_) => FavouritesCubit(get.get())),
         BlocProvider(
           create: (_) => AudioCubit(get.get(), get.get()),

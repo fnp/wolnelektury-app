@@ -155,7 +155,8 @@ as List<AudioBookPart>,
 /// @nodoc
 mixin _$AudioBookPart {
 
- String get name; String get artist; String get director; String get url; double get duration; int get size;
+ String get name; String get artist; String get director; String get type;// Either a URL to the audio file or a path to a local file
+ String get url; double get duration; int get size; bool get isOffline;
 /// Create a copy of AudioBookPart
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -168,16 +169,16 @@ $AudioBookPartCopyWith<AudioBookPart> get copyWith => _$AudioBookPartCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AudioBookPart&&(identical(other.name, name) || other.name == name)&&(identical(other.artist, artist) || other.artist == artist)&&(identical(other.director, director) || other.director == director)&&(identical(other.url, url) || other.url == url)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.size, size) || other.size == size));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AudioBookPart&&(identical(other.name, name) || other.name == name)&&(identical(other.artist, artist) || other.artist == artist)&&(identical(other.director, director) || other.director == director)&&(identical(other.type, type) || other.type == type)&&(identical(other.url, url) || other.url == url)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.size, size) || other.size == size)&&(identical(other.isOffline, isOffline) || other.isOffline == isOffline));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,artist,director,url,duration,size);
+int get hashCode => Object.hash(runtimeType,name,artist,director,type,url,duration,size,isOffline);
 
 @override
 String toString() {
-  return 'AudioBookPart(name: $name, artist: $artist, director: $director, url: $url, duration: $duration, size: $size)';
+  return 'AudioBookPart(name: $name, artist: $artist, director: $director, type: $type, url: $url, duration: $duration, size: $size, isOffline: $isOffline)';
 }
 
 
@@ -188,7 +189,7 @@ abstract mixin class $AudioBookPartCopyWith<$Res>  {
   factory $AudioBookPartCopyWith(AudioBookPart value, $Res Function(AudioBookPart) _then) = _$AudioBookPartCopyWithImpl;
 @useResult
 $Res call({
- String name, String artist, String director, String url, double duration, int size
+ String name, String artist, String director, String type, String url, double duration, int size, bool isOffline
 });
 
 
@@ -205,15 +206,17 @@ class _$AudioBookPartCopyWithImpl<$Res>
 
 /// Create a copy of AudioBookPart
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? artist = null,Object? director = null,Object? url = null,Object? duration = null,Object? size = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? artist = null,Object? director = null,Object? type = null,Object? url = null,Object? duration = null,Object? size = null,Object? isOffline = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,artist: null == artist ? _self.artist : artist // ignore: cast_nullable_to_non_nullable
 as String,director: null == director ? _self.director : director // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
 as double,size: null == size ? _self.size : size // ignore: cast_nullable_to_non_nullable
-as int,
+as int,isOffline: null == isOffline ? _self.isOffline : isOffline // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -224,15 +227,18 @@ as int,
 @JsonSerializable()
 
 class _AudioBookPart implements AudioBookPart {
-  const _AudioBookPart({required this.name, required this.artist, required this.director, required this.url, required this.duration, required this.size});
+  const _AudioBookPart({required this.name, required this.artist, required this.director, required this.type, required this.url, required this.duration, required this.size, this.isOffline = false});
   factory _AudioBookPart.fromJson(Map<String, dynamic> json) => _$AudioBookPartFromJson(json);
 
 @override final  String name;
 @override final  String artist;
 @override final  String director;
+@override final  String type;
+// Either a URL to the audio file or a path to a local file
 @override final  String url;
 @override final  double duration;
 @override final  int size;
+@override@JsonKey() final  bool isOffline;
 
 /// Create a copy of AudioBookPart
 /// with the given fields replaced by the non-null parameter values.
@@ -247,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AudioBookPart&&(identical(other.name, name) || other.name == name)&&(identical(other.artist, artist) || other.artist == artist)&&(identical(other.director, director) || other.director == director)&&(identical(other.url, url) || other.url == url)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.size, size) || other.size == size));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AudioBookPart&&(identical(other.name, name) || other.name == name)&&(identical(other.artist, artist) || other.artist == artist)&&(identical(other.director, director) || other.director == director)&&(identical(other.type, type) || other.type == type)&&(identical(other.url, url) || other.url == url)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.size, size) || other.size == size)&&(identical(other.isOffline, isOffline) || other.isOffline == isOffline));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,artist,director,url,duration,size);
+int get hashCode => Object.hash(runtimeType,name,artist,director,type,url,duration,size,isOffline);
 
 @override
 String toString() {
-  return 'AudioBookPart(name: $name, artist: $artist, director: $director, url: $url, duration: $duration, size: $size)';
+  return 'AudioBookPart(name: $name, artist: $artist, director: $director, type: $type, url: $url, duration: $duration, size: $size, isOffline: $isOffline)';
 }
 
 
@@ -267,7 +273,7 @@ abstract mixin class _$AudioBookPartCopyWith<$Res> implements $AudioBookPartCopy
   factory _$AudioBookPartCopyWith(_AudioBookPart value, $Res Function(_AudioBookPart) _then) = __$AudioBookPartCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String artist, String director, String url, double duration, int size
+ String name, String artist, String director, String type, String url, double duration, int size, bool isOffline
 });
 
 
@@ -284,15 +290,17 @@ class __$AudioBookPartCopyWithImpl<$Res>
 
 /// Create a copy of AudioBookPart
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? artist = null,Object? director = null,Object? url = null,Object? duration = null,Object? size = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? artist = null,Object? director = null,Object? type = null,Object? url = null,Object? duration = null,Object? size = null,Object? isOffline = null,}) {
   return _then(_AudioBookPart(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,artist: null == artist ? _self.artist : artist // ignore: cast_nullable_to_non_nullable
 as String,director: null == director ? _self.director : director // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
 as double,size: null == size ? _self.size : size // ignore: cast_nullable_to_non_nullable
-as int,
+as int,isOffline: null == isOffline ? _self.isOffline : isOffline // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

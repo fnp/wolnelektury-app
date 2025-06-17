@@ -28,7 +28,9 @@ class BookOverviewWidgetButton extends StatelessWidget {
       onTap: onTap,
       child: SizedBox.square(
         dimension: 25,
-        child: DecoratedBox(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.fastOutSlowIn,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: isActive ? activeBackgroundColor : nonActiveBackgroundColor,
