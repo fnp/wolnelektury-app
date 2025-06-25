@@ -68,7 +68,10 @@ class AudioCubit extends SafeCubit<AudioState> {
   }
 
   // Select book for AudioPlayer
-  Future<void> pickBook(BookModel book) async {
+  Future<void> pickBook(
+    BookModel book, {
+    List<AudioBookPart>? offlineParts,
+  }) async {
     if (state.book?.slug == book.slug) {
       // Book already selected, check if we need to set progress
       await _getAndSetProgress();
@@ -81,6 +84,21 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(book: book));
 
     emit(state.copyWith(isLoadingAudiobook: true));
+    if (offlineParts != null && offlineParts.isNotEmpty) {
+      // If we have offline parts, we can create audiobook from them
+      emit(
+        state.copyWith(
+          audiobook: AudiobookModel.create(parts: offlineParts),
+          isLoadingAudiobook: false,
+        ),
+      );
+      // Prepare playlist if player is not already playing
+      if (!_player.playing) {
+        _preparePlaylist();
+      }
+      return;
+    }
+
     final audiobookResponse = await _audiobookRepository.getAudiobook(
       slug: book.slug,
     );
@@ -316,6 +334,20 @@ class AudioCubit extends SafeCubit<AudioState> {
     );
 
     final playlist = state.audiobook!.parts.map((part) {
+      if (part.isOffline) {
+        return AudioSource.file(
+          part.url,
+          tag: MediaItem(
+            // Specify a unique ID for each media item:
+            id: part.name,
+            // Metadata to display in the notification:
+            album: state.book?.title,
+            title: part.name,
+            artUri: Uri.parse(state.book?.coverUrl ?? ''),
+            duration: Duration(seconds: part.duration.floor()),
+          ),
+        );
+      }
       return AudioSource.uri(
         Uri.parse(part.url),
         tag: MediaItem(
@@ -337,6 +369,7 @@ class AudioCubit extends SafeCubit<AudioState> {
       'AudioCubit',
       'Prepared playling for book ${state.book?.title}',
     );
+    //TODO try catch here, handle error
     await Future.wait([
       _audioSession.initializationFuture,
       _player.setAudioSources(

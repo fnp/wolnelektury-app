@@ -32,6 +32,9 @@ class OfflineBooks extends Table {
   TextColumn get slug => text().customConstraint('NOT NULL UNIQUE')();
   // Stringified JSON of OfflineBookModel
   TextColumn get bookJson => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column> get primaryKey => {slug};
 }
 
 @DriftDatabase(tables: [AppSettings, AppCache, ReaderSettings, OfflineBooks])
@@ -268,6 +271,28 @@ class AppStorageService {
     }
   }
 
+  Future<List<OfflineBookModel>> readAllOfflineBooks() async {
+    final results = await _storage.select(_storage.offlineBooks).get();
+
+    return results
+        .map((result) {
+          if (result.bookJson.isEmpty) {
+            return null;
+          }
+          try {
+            return OfflineBookModel.fromJson(jsonDecode(result.bookJson));
+          } catch (e) {
+            AppLogger.instance.e(
+              'AppStorageService',
+              'Error parsing offline book JSON: $e',
+            );
+            return null;
+          }
+        })
+        .whereType<OfflineBookModel>()
+        .toList();
+  }
+
   Future<OfflineBookModel?> readOfflineBook(String slug) async {
     final result = await (_storage.select(
       _storage.offlineBooks,
@@ -286,5 +311,17 @@ class AppStorageService {
       );
       return null;
     }
+  }
+
+  Future<bool> removeOfflineBook(String slug) async {
+    final existingBook = await readOfflineBook(slug);
+    if (existingBook == null) {
+      return false; // Book not found
+    }
+
+    await (_storage.delete(
+      _storage.offlineBooks,
+    )..where((book) => book.slug.equals(slug))).go();
+    return true;
   }
 }

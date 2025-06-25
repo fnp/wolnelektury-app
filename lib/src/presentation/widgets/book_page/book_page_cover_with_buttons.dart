@@ -6,11 +6,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
-import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
-import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
+import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_listen_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
@@ -21,18 +22,23 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
+enum BookButtonType { all, offlineAudiobook }
+
 class BookPageCoverWithButtons extends StatelessWidget {
   final BookModel book;
+  final AudiobookModel? offlineAudiobook;
   final VoidCallback? onDelete;
+  final BookButtonType buttonTypes;
   const BookPageCoverWithButtons({
     super.key,
     required this.book,
+    this.buttonTypes = BookButtonType.all,
+    this.offlineAudiobook,
     this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
-    final audioCubit = BlocProvider.of<AudioCubit>(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth / 2;
@@ -56,46 +62,30 @@ class BookPageCoverWithButtons extends StatelessWidget {
                               onDelete: onDelete!,
                             ),
                     ),
-                    TextButtonWithIcon(
-                      nonActiveText: LocaleKeys.common_icon_button_read.tr(),
-                      nonActiveIcon: CustomIcons.book_5,
-                      onPressed: () {
-                        router.pushNamed(
-                          readingPageConfig.name,
-                          pathParameters: {'slug': book.slug},
-                          extra: book,
-                        );
-                      },
-                    ),
-                    const SizedBox(height: Dimensions.mediumPadding),
-                    if (book.hasAudiobook) ...[
+                    if (buttonTypes == BookButtonType.all)
                       TextButtonWithIcon(
-                        nonActiveText: LocaleKeys.common_icon_button_listen
-                            .tr(),
-                        nonActiveIcon: CustomIcons.headphones,
+                        nonActiveText: LocaleKeys.common_icon_button_read.tr(),
+                        nonActiveIcon: CustomIcons.book_5,
                         onPressed: () {
-                          // Select proper book
-                          audioCubit.pickBook(book);
-                          // Show audio dialog
-                          AudioDialog.show(
-                            context: context,
-                            onClosed: () => audioCubit.dialogShown(false),
-                            slug: book.slug,
+                          router.pushNamed(
+                            readingPageConfig.name,
+                            pathParameters: {'slug': book.slug},
+                            extra: book,
                           );
                         },
                       ),
+                    if (book.hasAudiobook ||
+                        buttonTypes == BookButtonType.offlineAudiobook) ...[
                       const SizedBox(height: Dimensions.mediumPadding),
+                      BookPageCoverListenButton(
+                        book: book,
+                        offlineAudiobook: offlineAudiobook,
+                      ),
                     ],
-                    _HeartButton(book: book),
-                    TextButtonWithIcon(
-                      nonActiveText: 'Pobierz audiobook',
-                      nonActiveIcon: Icons.download,
-                      onPressed: () {
-                        BlocProvider.of<DownloadCubit>(
-                          context,
-                        ).downloadAudiobook(book: book);
-                      },
-                    ),
+                    if (buttonTypes == BookButtonType.all) ...[
+                      const SizedBox(height: Dimensions.mediumPadding),
+                      _HeartButton(book: book),
+                    ],
                   ],
                 ),
               ),
@@ -119,11 +109,19 @@ class _TitleWithAutorsAndDelete extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(child: _TitleWithAuthors(book: book)),
-        CustomButton(
-          icon: CustomIcons.delete_forever,
-          onPressed: onDelete,
-          backgroundColor: CustomColors.red,
-          iconColor: CustomColors.white,
+        BlocBuilder<DownloadCubit, DownloadState>(
+          buildWhen: (p, c) => p.downloadingBookSlug != c.downloadingBookSlug,
+          builder: (context, state) {
+            return AnimatedBoxFade(
+              isChildVisible: state.downloadingBookSlug != book.slug,
+              child: CustomButton(
+                icon: CustomIcons.delete_forever,
+                onPressed: onDelete,
+                backgroundColor: CustomColors.red,
+                iconColor: CustomColors.white,
+              ),
+            );
+          },
         ),
       ],
     );

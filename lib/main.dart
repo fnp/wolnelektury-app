@@ -10,6 +10,7 @@ import 'package:wolnelektury/src/config/initializers/service_initializer.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(lazy: false, create: (context) => ConnectivityCubit()),
         BlocProvider(
           lazy: false,
           create: (context) => SettingsCubit(get.get()),

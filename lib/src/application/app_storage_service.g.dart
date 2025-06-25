@@ -778,7 +778,7 @@ class $OfflineBooksTable extends OfflineBooks
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {slug};
   @override
   OfflineBook map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';

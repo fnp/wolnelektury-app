@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/offline/offline_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/audiobooks/my_library_audiobooks_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/bookmarks/my_library_bookmarks_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/liked/my_library_liked_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/lists/my_library_lists_section.dart';
@@ -32,6 +34,11 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: context.read<ListCreatorCubit>()..init()),
+        BlocProvider(
+          create: (context) {
+            return OfflineCubit(get.get())..loadOfflineBooks();
+          },
+        ),
         BlocProvider(
           create: (context) {
             return BookmarksCubit(get.get())..getMyLibraryBookmarks();
@@ -87,7 +94,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
               children: const [
                 MyLibraryListsSection(),
                 MyLibraryLikedSection(),
-                Text('Tutaj będą offline audiobooki :-)'),
+                MyLibraryAudiobooksSection(),
                 MyLibraryBookmarksSection(),
               ],
             ),

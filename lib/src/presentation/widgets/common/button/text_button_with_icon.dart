@@ -7,25 +7,33 @@ class TextButtonWithIcon extends StatelessWidget {
   const TextButtonWithIcon({
     super.key,
     required this.nonActiveText,
-    required this.nonActiveIcon,
+    this.nonActiveIcon,
     this.onPressed,
     this.isActive = false,
     this.activeColor,
+    this.nonActiveColor,
     this.activeText,
     this.activeIcon,
-  });
+    this.trailing,
+  }) : assert(
+         nonActiveIcon != null || trailing != null,
+         'Either nonActiveIcon or trailing must be provided',
+       );
 
   final Color? activeColor;
+  final Color? nonActiveColor;
 
   final String nonActiveText;
   final String? activeText;
 
-  final IconData nonActiveIcon;
+  final IconData? nonActiveIcon;
   final IconData? activeIcon;
 
   final bool isActive;
 
   final VoidCallback? onPressed;
+
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -36,26 +44,25 @@ class TextButtonWithIcon extends StatelessWidget {
       child: InkWellWrapper(
         splashColor: CustomColors.grey.withValues(alpha: 0.3),
         highlightColor: CustomColors.grey.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(
-          Dimensions.borderRadiusOfCircle,
-        ),
+        borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
         onTap: onPressed,
         child: Ink(
           decoration: BoxDecoration(
-            color:
-                isActive ? activeColor : theme.colorScheme.secondaryContainer,
+            color: isActive
+                ? activeColor
+                : nonActiveColor ?? theme.colorScheme.secondaryContainer,
             borderRadius: BorderRadius.circular(
               Dimensions.borderRadiusOfCircle,
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: Dimensions.veryLargePadding,
-              right: Dimensions.mediumPadding,
-            ),
-            child: Row(
-              children: [
-                FittedBox(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: Dimensions.veryLargePadding,
+                ),
+                child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
                     isActive ? activeText ?? nonActiveText : nonActiveText,
@@ -65,28 +72,32 @@ class TextButtonWithIcon extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Spacer(),
+              ),
+              if (trailing != null)
+                trailing!
+              else
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Dimensions.smallPadding,
+                  padding: const EdgeInsets.only(
+                    top: Dimensions.smallPadding,
+                    bottom: Dimensions.smallPadding,
+                    right: Dimensions.mediumPadding,
                   ),
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
-                    transitionBuilder: (child, animation) => ScaleTransition(
-                      scale: animation,
-                      child: child,
-                    ),
+                    transitionBuilder: (child, animation) =>
+                        ScaleTransition(scale: animation, child: child),
                     child: Icon(
                       isActive ? activeIcon ?? nonActiveIcon : nonActiveIcon,
                       key: ValueKey<IconData>(
-                        isActive ? activeIcon ?? nonActiveIcon : nonActiveIcon,
+                        isActive
+                            ? activeIcon ?? nonActiveIcon!
+                            : nonActiveIcon!,
                       ),
                       size: 22,
                     ),
                   ),
                 ),
-              ],
-            ),
+            ],
           ),
         ),
       ),

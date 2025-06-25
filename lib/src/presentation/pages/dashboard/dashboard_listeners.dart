@@ -5,6 +5,7 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
@@ -27,17 +28,11 @@ class DashboardListeners extends StatelessWidget {
           },
           listener: (context, state) {
             if (state.isLoginSuccess == true) {
-              CustomSnackbar.success(
-                context,
-                LocaleKeys.login_success.tr(),
-              );
+              CustomSnackbar.success(context, LocaleKeys.login_success.tr());
               BlocProvider.of<FavouritesCubit>(context).init();
             }
             if (state.isLoginSuccess == false) {
-              CustomSnackbar.error(
-                context,
-                LocaleKeys.login_errors_login.tr(),
-              );
+              CustomSnackbar.error(context, LocaleKeys.login_errors_login.tr());
             }
           },
         ),
@@ -46,10 +41,7 @@ class DashboardListeners extends StatelessWidget {
             return p.user != null && c.user == null;
           },
           listener: (context, state) {
-            CustomSnackbar.success(
-              context,
-              LocaleKeys.login_logout.tr(),
-            );
+            CustomSnackbar.success(context, LocaleKeys.login_logout.tr());
           },
         ),
         BlocListener<RouterCubit, RouterState>(
@@ -76,6 +68,54 @@ class DashboardListeners extends StatelessWidget {
               CustomSnackbar.error(
                 context,
                 LocaleKeys.book_lists_sheet_error.tr(),
+              );
+            }
+          },
+        ),
+        BlocListener<DownloadCubit, DownloadState>(
+          listenWhen: (p, c) => p.progress != 1 && c.progress == 1,
+          listener: (context, state) {
+            CustomSnackbar.success(context, 'Zakończone pobieranie audiobooka');
+          },
+        ),
+        BlocListener<DownloadCubit, DownloadState>(
+          listenWhen: (p, c) =>
+              p.downloadingBookSlug == null && c.downloadingBookSlug != null,
+          listener: (context, state) {
+            CustomSnackbar.success(context, 'Rozpoczęto pobieranie audiobooka');
+          },
+        ),
+        BlocListener<DownloadCubit, DownloadState>(
+          listenWhen: (p, c) =>
+              p.isAlreadyDownloadingError != c.isAlreadyDownloadingError,
+          listener: (context, state) {
+            if (state.isAlreadyDownloadingError == true) {
+              CustomSnackbar.error(
+                context,
+                'Inny audiobook jest już pobierany',
+              );
+            }
+          },
+        ),
+        BlocListener<DownloadCubit, DownloadState>(
+          listenWhen: (p, c) => p.isGenericError != c.isGenericError,
+          listener: (context, state) {
+            if (state.isGenericError == true) {
+              CustomSnackbar.error(
+                context,
+                'Wystąpił błąd podczas pobierania audiobooka',
+              );
+            }
+          },
+        ),
+        BlocListener<DownloadCubit, DownloadState>(
+          listenWhen: (p, c) =>
+              p.isAlreadyDownloadedError != c.isAlreadyDownloadedError,
+          listener: (context, state) {
+            if (state.isAlreadyDownloadedError == true) {
+              CustomSnackbar.success(
+                context,
+                'Audiobook jest już pobrany i dostępny offline',
               );
             }
           },

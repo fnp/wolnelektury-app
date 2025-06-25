@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DownloadState {
 
- double get progress;
+ double get progress; String? get downloadingBookSlug; bool get isAlreadyDownloadingError; bool get isAlreadyDownloadedError; bool get isGenericError;
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $DownloadStateCopyWith<DownloadState> get copyWith => _$DownloadStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DownloadState&&(identical(other.progress, progress) || other.progress == progress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DownloadState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.downloadingBookSlug, downloadingBookSlug) || other.downloadingBookSlug == downloadingBookSlug)&&(identical(other.isAlreadyDownloadingError, isAlreadyDownloadingError) || other.isAlreadyDownloadingError == isAlreadyDownloadingError)&&(identical(other.isAlreadyDownloadedError, isAlreadyDownloadedError) || other.isAlreadyDownloadedError == isAlreadyDownloadedError)&&(identical(other.isGenericError, isGenericError) || other.isGenericError == isGenericError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,progress);
+int get hashCode => Object.hash(runtimeType,progress,downloadingBookSlug,isAlreadyDownloadingError,isAlreadyDownloadedError,isGenericError);
 
 @override
 String toString() {
-  return 'DownloadState(progress: $progress)';
+  return 'DownloadState(progress: $progress, downloadingBookSlug: $downloadingBookSlug, isAlreadyDownloadingError: $isAlreadyDownloadingError, isAlreadyDownloadedError: $isAlreadyDownloadedError, isGenericError: $isGenericError)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $DownloadStateCopyWith<$Res>  {
   factory $DownloadStateCopyWith(DownloadState value, $Res Function(DownloadState) _then) = _$DownloadStateCopyWithImpl;
 @useResult
 $Res call({
- double progress
+ double progress, String? downloadingBookSlug, bool isAlreadyDownloadingError, bool isAlreadyDownloadedError, bool isGenericError
 });
 
 
@@ -63,10 +63,14 @@ class _$DownloadStateCopyWithImpl<$Res>
 
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? downloadingBookSlug = freezed,Object? isAlreadyDownloadingError = null,Object? isAlreadyDownloadedError = null,Object? isGenericError = null,}) {
   return _then(_self.copyWith(
 progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as double,
+as double,downloadingBookSlug: freezed == downloadingBookSlug ? _self.downloadingBookSlug : downloadingBookSlug // ignore: cast_nullable_to_non_nullable
+as String?,isAlreadyDownloadingError: null == isAlreadyDownloadingError ? _self.isAlreadyDownloadingError : isAlreadyDownloadingError // ignore: cast_nullable_to_non_nullable
+as bool,isAlreadyDownloadedError: null == isAlreadyDownloadedError ? _self.isAlreadyDownloadedError : isAlreadyDownloadedError // ignore: cast_nullable_to_non_nullable
+as bool,isGenericError: null == isGenericError ? _self.isGenericError : isGenericError // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -77,10 +81,14 @@ as double,
 
 
 class _DownloadState implements DownloadState {
-  const _DownloadState({this.progress = 0});
+  const _DownloadState({this.progress = 0, this.downloadingBookSlug, this.isAlreadyDownloadingError = false, this.isAlreadyDownloadedError = false, this.isGenericError = false});
   
 
 @override@JsonKey() final  double progress;
+@override final  String? downloadingBookSlug;
+@override@JsonKey() final  bool isAlreadyDownloadingError;
+@override@JsonKey() final  bool isAlreadyDownloadedError;
+@override@JsonKey() final  bool isGenericError;
 
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
@@ -92,16 +100,16 @@ _$DownloadStateCopyWith<_DownloadState> get copyWith => __$DownloadStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DownloadState&&(identical(other.progress, progress) || other.progress == progress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DownloadState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.downloadingBookSlug, downloadingBookSlug) || other.downloadingBookSlug == downloadingBookSlug)&&(identical(other.isAlreadyDownloadingError, isAlreadyDownloadingError) || other.isAlreadyDownloadingError == isAlreadyDownloadingError)&&(identical(other.isAlreadyDownloadedError, isAlreadyDownloadedError) || other.isAlreadyDownloadedError == isAlreadyDownloadedError)&&(identical(other.isGenericError, isGenericError) || other.isGenericError == isGenericError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,progress);
+int get hashCode => Object.hash(runtimeType,progress,downloadingBookSlug,isAlreadyDownloadingError,isAlreadyDownloadedError,isGenericError);
 
 @override
 String toString() {
-  return 'DownloadState(progress: $progress)';
+  return 'DownloadState(progress: $progress, downloadingBookSlug: $downloadingBookSlug, isAlreadyDownloadingError: $isAlreadyDownloadingError, isAlreadyDownloadedError: $isAlreadyDownloadedError, isGenericError: $isGenericError)';
 }
 
 
@@ -112,7 +120,7 @@ abstract mixin class _$DownloadStateCopyWith<$Res> implements $DownloadStateCopy
   factory _$DownloadStateCopyWith(_DownloadState value, $Res Function(_DownloadState) _then) = __$DownloadStateCopyWithImpl;
 @override @useResult
 $Res call({
- double progress
+ double progress, String? downloadingBookSlug, bool isAlreadyDownloadingError, bool isAlreadyDownloadedError, bool isGenericError
 });
 
 
@@ -129,10 +137,14 @@ class __$DownloadStateCopyWithImpl<$Res>
 
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? progress = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? progress = null,Object? downloadingBookSlug = freezed,Object? isAlreadyDownloadingError = null,Object? isAlreadyDownloadedError = null,Object? isGenericError = null,}) {
   return _then(_DownloadState(
 progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as double,
+as double,downloadingBookSlug: freezed == downloadingBookSlug ? _self.downloadingBookSlug : downloadingBookSlug // ignore: cast_nullable_to_non_nullable
+as String?,isAlreadyDownloadingError: null == isAlreadyDownloadingError ? _self.isAlreadyDownloadingError : isAlreadyDownloadingError // ignore: cast_nullable_to_non_nullable
+as bool,isAlreadyDownloadedError: null == isAlreadyDownloadedError ? _self.isAlreadyDownloadedError : isAlreadyDownloadedError // ignore: cast_nullable_to_non_nullable
+as bool,isGenericError: null == isGenericError ? _self.isGenericError : isGenericError // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

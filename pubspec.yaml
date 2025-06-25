@@ -31,6 +31,7 @@ dependencies:
   bloc: ^9.0.0
   cached_network_image: 3.4.1
   collection: ^1.19.1
+  connectivity_plus: 6.1.4
   dio: 5.7.0
   drift: 2.26.1
   drift_flutter: 0.2.4

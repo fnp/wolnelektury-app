@@ -9,6 +9,7 @@ part 'offline_book_model.g.dart';
 sealed class OfflineBookModel with _$OfflineBookModel {
   const factory OfflineBookModel({
     required BookModel book,
+    @Default(false) bool isAudiobookCorrectlyDownloaded,
     AudiobookModel? audiobook,
   }) = _OfflineBookModel;
 
