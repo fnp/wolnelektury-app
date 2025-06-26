@@ -39,9 +39,7 @@ class AudioDialogSettingsPartSelector extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(
-          height: Dimensions.smallPadding,
-        ),
+        const SizedBox(height: Dimensions.smallPadding),
         SizedBox(
           height: Dimensions.elementHeight,
           child: DecoratedBox(
@@ -70,10 +68,10 @@ class AudioDialogSettingsPartSelector extends StatelessWidget {
                             LocaleKeys
                                 .audio_dialog_settings_part_selector_specific
                                 .tr(
-                              namedArgs: {
-                                'part': state.playToPart.toString(),
-                              },
-                            ),
+                                  namedArgs: {
+                                    'part': state.playToPart.toString(),
+                                  },
+                                ),
                             style: textStyle,
                           ),
                         ),
@@ -84,7 +82,7 @@ class AudioDialogSettingsPartSelector extends StatelessWidget {
                             audioCubit.resetPlayToPart();
                           },
                           child: const Icon(
-                            Icons.close,
+                            CustomIcons.close,
                             color: CustomColors.darkModeGrey,
                             size: 16,
                           ),
@@ -104,10 +102,7 @@ class AudioDialogSettingsPartSelector extends StatelessWidget {
                           ),
                           child: SizedBox.square(
                             dimension: 30,
-                            child: Icon(
-                              Icons.remove,
-                              size: 16,
-                            ),
+                            child: Icon(Icons.remove, size: 16),
                           ),
                         ),
                       ),
@@ -122,10 +117,7 @@ class AudioDialogSettingsPartSelector extends StatelessWidget {
                           ),
                           child: SizedBox.square(
                             dimension: 30,
-                            child: Icon(
-                              CustomIcons.add,
-                              size: 16,
-                            ),
+                            child: Icon(CustomIcons.add, size: 16),
                           ),
                         ),
                       ),

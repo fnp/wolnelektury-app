@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class DialogWrapper extends StatefulWidget {
@@ -88,7 +89,7 @@ class _DialogWrapperState extends State<DialogWrapper>
                 ),
               ),
               CustomButton(
-                icon: Icons.close,
+                icon: CustomIcons.close,
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

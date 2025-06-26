@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:file_saver/file_saver.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -25,11 +26,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
   // Resets the error states in the DownloadState
   void _resetErrors() {
     emit(
-      state.copyWith(
-        isAlreadyDownloadingError: false,
-        isGenericError: false,
-        isAlreadyDownloadedError: false,
-      ),
+      state.copyWith(isAlreadyDownloadingError: false, isGenericError: false),
     );
   }
 
@@ -39,7 +36,10 @@ class DownloadCubit extends SafeCubit<DownloadState> {
   }
 
   // Initiates the download of an audiobook
-  Future<void> downloadAudiobook({required BookModel book}) async {
+  Future<void> downloadAudiobook({
+    required BookModel book,
+    VoidCallback? onFinish,
+  }) async {
     // Reset any previous error states
     _resetErrors();
     // Check if any book is already being downloaded
@@ -66,15 +66,13 @@ class DownloadCubit extends SafeCubit<DownloadState> {
           emit(state.copyWith(isGenericError: true));
           return;
         }
-        // If already downloaded, reset the state
-        if (state.isAlreadyDownloadedError) {
-          emit(const DownloadState());
-          return;
-        }
         // If download is not cancelled, update progress to 100%
         if (!_isCancelled) updateProgress(1);
         // Clear the downloading state after completion
         emit(state.copyWith(downloadingBookSlug: null));
+        // Call the onFinish callback if provided
+        onFinish?.call();
+        // Delay to ensure the UI updates before resetting the state
         await Future.delayed(const Duration(milliseconds: 200));
         emit(const DownloadState());
       },
@@ -94,12 +92,6 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     List<AudioBookPart> currentParts = List<AudioBookPart>.from(
       existingBook?.audiobook?.parts ?? [],
     );
-
-    // Book is already properly downloaded, no need to download again, go back
-    if (existingBook != null && existingBook.isAudiobookCorrectlyDownloaded) {
-      emit(state.copyWith(isAlreadyDownloadedError: true));
-      return;
-    }
 
     // Book is downloaded, but not all parts are saved correctly,
     // clear the old files and proceed with the new ones
@@ -147,7 +139,6 @@ class DownloadCubit extends SafeCubit<DownloadState> {
         ext: part.type,
         link: LinkDetails(link: part.url),
       );
-
       // Rewrite the part with the new URL and mark it as offline file
       final effectivePart = part.copyWith(url: result, isOffline: true);
       final isLastPart = i == total - 1;
@@ -176,7 +167,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
       }
 
       // Update the progress based on the current part index
-      updateProgress((i + 1) / total * 0.9);
+      updateProgress((i + 1) / total * 0.95);
     }
   }
 

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,13 +8,12 @@ import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
-import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookPageCoverListenButton extends StatelessWidget {
@@ -109,10 +110,11 @@ class BookPageCoverListenButton extends StatelessWidget {
   }
 }
 
-class _DownloadButton extends StatelessWidget {
+class _DownloadButton extends StatefulWidget {
   final bool isDownloading;
   final String? downloadingBookSlug;
   final BookModel book;
+
   const _DownloadButton({
     required this.isDownloading,
     this.downloadingBookSlug,
@@ -120,35 +122,105 @@ class _DownloadButton extends StatelessWidget {
   });
 
   @override
+  State<_DownloadButton> createState() => _DownloadButtonState();
+}
+
+class _DownloadButtonState extends State<_DownloadButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _rotationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _rotationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    );
+    if (widget.isDownloading) {
+      _rotationController.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _DownloadButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isDownloading && !_rotationController.isAnimating) {
+      _rotationController.repeat();
+    } else if (!widget.isDownloading && _rotationController.isAnimating) {
+      _rotationController.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _rotationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final downloaderCubit = BlocProvider.of<DownloadCubit>(context);
-    return AnimatedBoxFade(
-      isChildVisible: isDownloading && downloadingBookSlug == book.slug,
-      collapsedChild: CustomButton(
-        icon: Icons.download,
-        backgroundColor: CustomColors.green,
-        onPressed: () {
-          downloaderCubit.downloadAudiobook(book: book);
-        },
-      ),
-      child: Stack(
-        children: [
-          const SizedBox.square(
-            dimension: Dimensions.elementHeight,
-            child: Padding(
-              padding: EdgeInsets.all(Dimensions.smallPadding),
-              child: CustomLoader(strokeWidth: 1, color: Colors.grey),
-            ),
-          ),
-          CustomButton(
-            icon: Icons.cancel_outlined,
-            backgroundColor: Colors.transparent,
-            onPressed: () {
-              downloaderCubit.cancelDownload();
+    final singleBookCubit = BlocProvider.of<SingleBookCubit>(context);
+    final isCurrentDownload =
+        widget.isDownloading && widget.downloadingBookSlug == widget.book.slug;
+
+    return BlocBuilder<SingleBookCubit, SingleBookState>(
+      buildWhen: (p, c) {
+        return p.isAudiobookDownloaded != c.isAudiobookDownloaded ||
+            p.isLoading != c.isLoading;
+      },
+      builder: (context, state) {
+        Widget child = const SizedBox.shrink();
+        if (state.isAudiobookDownloaded) {
+          child = const CustomButton(
+            key: ValueKey('check_button'),
+            icon: Icons.check,
+            backgroundColor: CustomColors.green,
+            onPressed: null,
+          );
+        } else if (isCurrentDownload) {
+          child = AnimatedBuilder(
+            key: const ValueKey('rotating_button'),
+            animation: _rotationController,
+            builder: (context, child) {
+              return Transform.rotate(
+                angle: _rotationController.value * 2 * math.pi,
+                child: child,
+              );
             },
+            child: CustomButton(
+              icon: CustomIcons.close,
+              backgroundColor: CustomColors.primaryYellowColor,
+              onPressed: () {
+                downloaderCubit.cancelDownload();
+              },
+            ),
+          );
+        } else {
+          child = CustomButton(
+            key: const ValueKey('download_button'),
+            icon: CustomIcons.download,
+            backgroundColor: CustomColors.primaryYellowColor,
+            onPressed: () {
+              if (state.isLoading) return;
+              downloaderCubit.downloadAudiobook(
+                book: widget.book,
+                onFinish: () {
+                  singleBookCubit.markAsDownloaded();
+                },
+              );
+            },
+          );
+        }
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          transitionBuilder: (child, animation) => FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(scale: animation, child: child),
           ),
-        ],
-      ),
+          child: child,
+        );
+      },
     );
   }
 }

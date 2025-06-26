@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class AuthorPageDetailsDialog extends StatelessWidget {
@@ -52,7 +53,7 @@ class AuthorPageDetailsDialog extends StatelessWidget {
                       ),
                     ),
                     CustomButton(
-                      icon: Icons.close,
+                      icon: CustomIcons.close,
                       onPressed: () {
                         Navigator.of(context).pop();
                       },

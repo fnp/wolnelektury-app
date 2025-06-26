@@ -22,7 +22,7 @@ class MyLibraryBookmarkBook extends StatelessWidget {
     return BlocProvider(
       key: ValueKey(isLoading.hashCode),
       create: (context) {
-        final singleBookCubit = SingleBookCubit(get.get());
+        final singleBookCubit = SingleBookCubit(get.get(), get.get());
         if (isLoading) {
           return singleBookCubit;
         }

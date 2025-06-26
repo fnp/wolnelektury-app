@@ -24,7 +24,7 @@ class AudioDialogTopBar extends StatelessWidget {
             return CustomButton(
               backgroundColor: CustomColors.red,
               iconColor: CustomColors.white,
-              icon: Icons.close,
+              icon: CustomIcons.close,
               onPressed: () {
                 if (state.isPreparingSession) {
                   return;

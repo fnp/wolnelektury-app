@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_listen_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
@@ -51,42 +53,49 @@ class BookPageCoverWithButtons extends StatelessWidget {
               Expanded(child: _Image(coverUrl: book.coverUrl)),
               const SizedBox(width: Dimensions.mediumPadding),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: onDelete == null
-                          ? _TitleWithAuthors(book: book)
-                          : _TitleWithAutorsAndDelete(
-                              book: book,
-                              onDelete: onDelete!,
-                            ),
-                    ),
-                    if (buttonTypes == BookButtonType.all)
-                      TextButtonWithIcon(
-                        nonActiveText: LocaleKeys.common_icon_button_read.tr(),
-                        nonActiveIcon: CustomIcons.book_5,
-                        onPressed: () {
-                          router.pushNamed(
-                            readingPageConfig.name,
-                            pathParameters: {'slug': book.slug},
-                            extra: book,
-                          );
-                        },
+                child: BlocProvider(
+                  create: (context) {
+                    return SingleBookCubit(get.get(), get.get())
+                      ..checkIfAudiobookDownloaded(book.slug);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: onDelete == null
+                            ? _TitleWithAuthors(book: book)
+                            : _TitleWithAutorsAndDelete(
+                                book: book,
+                                onDelete: onDelete!,
+                              ),
                       ),
-                    if (book.hasAudiobook ||
-                        buttonTypes == BookButtonType.offlineAudiobook) ...[
-                      const SizedBox(height: Dimensions.mediumPadding),
-                      BookPageCoverListenButton(
-                        book: book,
-                        offlineAudiobook: offlineAudiobook,
-                      ),
+                      if (buttonTypes == BookButtonType.all)
+                        TextButtonWithIcon(
+                          nonActiveText: LocaleKeys.common_icon_button_read
+                              .tr(),
+                          nonActiveIcon: CustomIcons.book_5,
+                          onPressed: () {
+                            router.pushNamed(
+                              readingPageConfig.name,
+                              pathParameters: {'slug': book.slug},
+                              extra: book,
+                            );
+                          },
+                        ),
+                      if (book.hasAudiobook ||
+                          buttonTypes == BookButtonType.offlineAudiobook) ...[
+                        const SizedBox(height: Dimensions.mediumPadding),
+                        BookPageCoverListenButton(
+                          book: book,
+                          offlineAudiobook: offlineAudiobook,
+                        ),
+                      ],
+                      if (buttonTypes == BookButtonType.all) ...[
+                        const SizedBox(height: Dimensions.mediumPadding),
+                        _HeartButton(book: book),
+                      ],
                     ],
-                    if (buttonTypes == BookButtonType.all) ...[
-                      const SizedBox(height: Dimensions.mediumPadding),
-                      _HeartButton(book: book),
-                    ],
-                  ],
+                  ),
                 ),
               ),
             ],

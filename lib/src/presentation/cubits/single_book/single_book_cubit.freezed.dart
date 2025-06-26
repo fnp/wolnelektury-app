@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SingleBookState {
 
- bool get isLoading; BookModel? get book;
+ bool get isLoading; bool get isAudiobookDownloaded; BookModel? get book;
 /// Create a copy of SingleBookState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $SingleBookStateCopyWith<SingleBookState> get copyWith => _$SingleBookStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SingleBookState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.book, book) || other.book == book));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SingleBookState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isAudiobookDownloaded, isAudiobookDownloaded) || other.isAudiobookDownloaded == isAudiobookDownloaded)&&(identical(other.book, book) || other.book == book));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,book);
+int get hashCode => Object.hash(runtimeType,isLoading,isAudiobookDownloaded,book);
 
 @override
 String toString() {
-  return 'SingleBookState(isLoading: $isLoading, book: $book)';
+  return 'SingleBookState(isLoading: $isLoading, isAudiobookDownloaded: $isAudiobookDownloaded, book: $book)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $SingleBookStateCopyWith<$Res>  {
   factory $SingleBookStateCopyWith(SingleBookState value, $Res Function(SingleBookState) _then) = _$SingleBookStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, BookModel? book
+ bool isLoading, bool isAudiobookDownloaded, BookModel? book
 });
 
 
@@ -63,9 +63,10 @@ class _$SingleBookStateCopyWithImpl<$Res>
 
 /// Create a copy of SingleBookState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? book = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isAudiobookDownloaded = null,Object? book = freezed,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isAudiobookDownloaded: null == isAudiobookDownloaded ? _self.isAudiobookDownloaded : isAudiobookDownloaded // ignore: cast_nullable_to_non_nullable
 as bool,book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
 as BookModel?,
   ));
@@ -90,10 +91,11 @@ $BookModelCopyWith<$Res>? get book {
 
 
 class _SingleBookState implements SingleBookState {
-  const _SingleBookState({this.isLoading = false, this.book});
+  const _SingleBookState({this.isLoading = false, this.isAudiobookDownloaded = false, this.book});
   
 
 @override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isAudiobookDownloaded;
 @override final  BookModel? book;
 
 /// Create a copy of SingleBookState
@@ -106,16 +108,16 @@ _$SingleBookStateCopyWith<_SingleBookState> get copyWith => __$SingleBookStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SingleBookState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.book, book) || other.book == book));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SingleBookState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isAudiobookDownloaded, isAudiobookDownloaded) || other.isAudiobookDownloaded == isAudiobookDownloaded)&&(identical(other.book, book) || other.book == book));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,book);
+int get hashCode => Object.hash(runtimeType,isLoading,isAudiobookDownloaded,book);
 
 @override
 String toString() {
-  return 'SingleBookState(isLoading: $isLoading, book: $book)';
+  return 'SingleBookState(isLoading: $isLoading, isAudiobookDownloaded: $isAudiobookDownloaded, book: $book)';
 }
 
 
@@ -126,7 +128,7 @@ abstract mixin class _$SingleBookStateCopyWith<$Res> implements $SingleBookState
   factory _$SingleBookStateCopyWith(_SingleBookState value, $Res Function(_SingleBookState) _then) = __$SingleBookStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, BookModel? book
+ bool isLoading, bool isAudiobookDownloaded, BookModel? book
 });
 
 
@@ -143,9 +145,10 @@ class __$SingleBookStateCopyWithImpl<$Res>
 
 /// Create a copy of SingleBookState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? book = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isAudiobookDownloaded = null,Object? book = freezed,}) {
   return _then(_SingleBookState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isAudiobookDownloaded: null == isAudiobookDownloaded ? _self.isAudiobookDownloaded : isAudiobookDownloaded // ignore: cast_nullable_to_non_nullable
 as bool,book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
 as BookModel?,
   ));

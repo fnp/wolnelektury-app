@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wolnelektury/src/application/app_storage_service.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
@@ -9,7 +10,9 @@ part 'single_book_state.dart';
 
 class SingleBookCubit extends SafeCubit<SingleBookState> {
   final BooksRepository _booksRepository;
-  SingleBookCubit(this._booksRepository) : super(const SingleBookState());
+  final AppStorageService _appStorageService;
+  SingleBookCubit(this._booksRepository, this._appStorageService)
+    : super(const SingleBookState());
 
   Future<void> loadBookData({
     required String slug,
@@ -26,5 +29,20 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
         emit(state.copyWith(isLoading: false));
       },
     );
+  }
+
+  Future<void> checkIfAudiobookDownloaded(String slug) async {
+    emit(state.copyWith(isLoading: true));
+    final isDownloaded = await _appStorageService.readOfflineBook(slug);
+    if (isDownloaded != null &&
+        isDownloaded.audiobook != null &&
+        isDownloaded.isAudiobookCorrectlyDownloaded) {
+      emit(state.copyWith(isAudiobookDownloaded: true));
+    }
+    emit(state.copyWith(isLoading: false));
+  }
+
+  void markAsDownloaded() {
+    emit(state.copyWith(isAudiobookDownloaded: true));
   }
 }

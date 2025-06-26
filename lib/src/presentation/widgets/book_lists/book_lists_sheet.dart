@@ -81,7 +81,7 @@ class BookListsSheet extends StatelessWidget {
                       ),
                       CustomButton(
                         backgroundColor: CustomColors.white,
-                        icon: Icons.close,
+                        icon: CustomIcons.close,
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     ],

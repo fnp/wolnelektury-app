@@ -10,6 +10,7 @@ import 'package:wolnelektury/src/presentation/widgets/common/button/custom_butto
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class CatalogueFiltering extends StatelessWidget {
@@ -182,7 +183,7 @@ class _SearchWithXState extends State<_SearchWithX> {
             ),
           ),
           CustomButton(
-            icon: Icons.close,
+            icon: CustomIcons.close,
             iconColor: theme.colorScheme.onSurface,
             backgroundColor: theme.colorScheme.tertiaryContainer,
             onPressed: () {

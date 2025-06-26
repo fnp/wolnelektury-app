@@ -13,7 +13,9 @@ class LastReadBookElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SingleBookCubit(get.get())..loadBookData(slug: slug),
+      create: (context) {
+        return SingleBookCubit(get.get(), get.get())..loadBookData(slug: slug);
+      },
       child: Builder(
         builder: (context) {
           return BlocBuilder<SingleBookCubit, SingleBookState>(

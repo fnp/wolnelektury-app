@@ -115,6 +115,11 @@ class CustomIcons {
     fontFamily: _kFontFam,
     fontPackage: _kFontPkg,
   );
+  static const IconData download = IconData(
+    0xe812,
+    fontFamily: _kFontFam,
+    fontPackage: _kFontPkg,
+  );
   static const IconData playlist_add = IconData(
     0xe813,
     fontFamily: _kFontFam,
@@ -157,6 +162,11 @@ class CustomIcons {
   );
   static const IconData expand_circle_down = IconData(
     0xe81b,
+    fontFamily: _kFontFam,
+    fontPackage: _kFontPkg,
+  );
+  static const IconData close = IconData(
+    0xe81c,
     fontFamily: _kFontFam,
     fontPackage: _kFontPkg,
   );

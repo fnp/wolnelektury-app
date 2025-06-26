@@ -4,6 +4,7 @@ part of 'single_book_cubit.dart';
 sealed class SingleBookState with _$SingleBookState {
   const factory SingleBookState({
     @Default(false) bool isLoading,
+    @Default(false) bool isAudiobookDownloaded,
     BookModel? book,
   }) = _SingleBookState;
 }
