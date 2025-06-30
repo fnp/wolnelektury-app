@@ -36,79 +36,98 @@ class DashboardAppBar extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AnimatedSize(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.fastOutSlowIn,
-                    child: BlocBuilder<RouterCubit, RouterState>(
-                      buildWhen: (p, c) => p.isMainPage != c.isMainPage,
-                      builder: (context, state) {
-                        if (!state.isMainPage) {
-                          return SizedBox.square(
-                            dimension: Dimensions.elementHeight,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(
-                                Dimensions.borderRadiusOfCircle,
+                  SizedBox(
+                    width: Dimensions.elementHeight * 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.fastOutSlowIn,
+                          child: BlocBuilder<RouterCubit, RouterState>(
+                            buildWhen: (p, c) => p.isMainPage != c.isMainPage,
+                            builder: (context, state) {
+                              if (!state.isMainPage) {
+                                return SizedBox.square(
+                                  dimension: Dimensions.elementHeight,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(
+                                      Dimensions.borderRadiusOfCircle,
+                                    ),
+                                    onTap: () {
+                                      if (state.isMainPage) return;
+                                      router.pop();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 6),
+                                      child: Icon(
+                                        Icons.arrow_back_ios,
+                                        color: theme.colorScheme.onSurface,
+                                        size: 22,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              return const SizedBox();
+                            },
+                          ),
+                        ),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.fastOutSlowIn,
+                          child:
+                              BlocBuilder<ConnectivityCubit, ConnectivityState>(
+                                buildWhen: (p, c) =>
+                                    p.isConnected != c.isConnected,
+                                builder: (context, state) {
+                                  if (!state.isConnected) {
+                                    return const CustomButton(
+                                      icon: CustomIcons.signal_disconnected,
+                                      iconColor: CustomColors.black,
+                                      backgroundColor: Colors.transparent,
+                                    );
+                                  }
+                                  return const SizedBox();
+                                },
                               ),
-                              onTap: () {
-                                if (state.isMainPage) return;
-                                router.pop();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 6),
-                                child: Icon(
-                                  Icons.arrow_back_ios,
-                                  color: theme.colorScheme.onSurface,
-                                  size: 22,
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                        return const SizedBox();
-                      },
-                    ),
-                  ),
-                  AnimatedSize(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.fastOutSlowIn,
-                    child: BlocBuilder<ConnectivityCubit, ConnectivityState>(
-                      buildWhen: (p, c) => p.isConnected != c.isConnected,
-                      builder: (context, state) {
-                        if (!state.isConnected) {
-                          return const CustomButton(
-                            icon: CustomIcons.signal_disconnected,
-                            iconColor: CustomColors.black,
-                            backgroundColor: Colors.transparent,
-                          );
-                        }
-                        return const SizedBox();
-                      },
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(child: SvgPicture.asset(Images.logo, width: 165)),
-                  const CustomButton(
-                    icon: Icons.search,
-                    iconColor: CustomColors.black,
-                    backgroundColor: CustomColors.primaryYellowColor,
-                  ),
-                  AnimatedSize(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.fastOutSlowIn,
-                    child: BlocBuilder<RouterCubit, RouterState>(
-                      buildWhen: (p, c) => p.isAccountPage != c.isAccountPage,
-                      builder: (context, state) {
-                        if (state.isAccountPage) {
-                          return CustomButton(
-                            icon: CustomIcons.settings,
-                            iconColor: CustomColors.black,
-                            backgroundColor: CustomColors.white,
-                            onPressed: () {
-                              router.pushNamed(settingsPageConfig.name);
+                  SizedBox(
+                    width: 80,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const CustomButton(
+                          icon: Icons.search,
+                          iconColor: CustomColors.black,
+                          backgroundColor: CustomColors.primaryYellowColor,
+                        ),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.fastOutSlowIn,
+                          child: BlocBuilder<RouterCubit, RouterState>(
+                            buildWhen: (p, c) =>
+                                p.isAccountPage != c.isAccountPage,
+                            builder: (context, state) {
+                              if (state.isAccountPage) {
+                                return CustomButton(
+                                  icon: CustomIcons.settings,
+                                  iconColor: CustomColors.black,
+                                  backgroundColor: CustomColors.white,
+                                  onPressed: () {
+                                    router.pushNamed(settingsPageConfig.name);
+                                  },
+                                );
+                              }
+                              return const SizedBox();
                             },
-                          );
-                        }
-                        return const SizedBox();
-                      },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
