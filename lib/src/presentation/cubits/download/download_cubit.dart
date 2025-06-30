@@ -5,6 +5,7 @@ import 'package:file_saver/file_saver.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/application/app_storage_service.dart';
 import 'package:wolnelektury/src/data/audiobook_repository.dart';
+import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/offline_book_model.dart';
@@ -17,16 +18,32 @@ part 'download_state.dart';
 class DownloadCubit extends SafeCubit<DownloadState> {
   final AppStorageService _appStorageService;
   final AudiobookRepository _audiobookRepository;
+  final BooksRepository _booksRepository;
 
   bool _isCancelled = false;
 
-  DownloadCubit(this._audiobookRepository, this._appStorageService)
-    : super(const DownloadState());
+  DownloadCubit(
+    this._audiobookRepository,
+    this._appStorageService,
+    this._booksRepository,
+  ) : super(const DownloadState());
 
   // Resets the error states in the DownloadState
-  void _resetErrors() {
+  void _resetAudiobookErrors() {
     emit(
-      state.copyWith(isAlreadyDownloadingError: false, isGenericError: false),
+      state.copyWith(
+        isAlreadyDownloadingAudiobookError: false,
+        isGenericAudiobookError: false,
+      ),
+    );
+  }
+
+  void _resetReaderErrors() {
+    emit(
+      state.copyWith(
+        isAlreadyDownloadingReaderError: false,
+        isGenericReaderError: false,
+      ),
     );
   }
 
@@ -35,26 +52,77 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     emit(state.copyWith(progress: progress));
   }
 
+  Future<void> saveReader({
+    required BookModel book,
+    VoidCallback? onFinish,
+  }) async {
+    _resetReaderErrors();
+    if (state.isDownloadingReader) {
+      emit(state.copyWith(isAlreadyDownloadingReaderError: true));
+      return;
+    }
+    emit(state.copyWith(downloadingBookReaderSlug: book.slug));
+    // Fetch the book reader JSON from the repository
+    final response = await _booksRepository.getBookJson(
+      slug: book.slug,
+      tryOffline: false,
+    );
+    response.handle(
+      success: (data, _) async {
+        try {
+          final existingBook = await _getLocalBook(book.slug);
+          // If the book already exists, we update the reader data
+          // Otherwise, we create a new OfflineBookModel with the book and reader data
+          final bookToSave = existingBook != null
+              ? existingBook.copyWith(reader: data)
+              : OfflineBookModel(book: book, reader: data);
+
+          // Save the book with the reader data to the app storage
+          await _appStorageService.saveOfflineBook(book.slug, bookToSave);
+        } catch (_) {
+          // If something goes wrong during saving, emit an error state
+          emit(state.copyWith(isGenericReaderError: true));
+        } finally {
+          onFinish?.call();
+          emit(state.copyWith(downloadingBookReaderSlug: null));
+        }
+      },
+      failure: (e) {
+        emit(
+          state.copyWith(
+            downloadingBookReaderSlug: null,
+            isGenericReaderError: true,
+          ),
+        );
+      },
+    );
+  }
+
   // Initiates the download of an audiobook
   Future<void> downloadAudiobook({
     required BookModel book,
     VoidCallback? onFinish,
   }) async {
     // Reset any previous error states
-    _resetErrors();
+    _resetAudiobookErrors();
     // Check if any book is already being downloaded
-    if (state.isDownloading) {
-      emit(state.copyWith(isAlreadyDownloadingError: true));
+    if (state.isDownloadingAudiobook) {
+      emit(state.copyWith(isAlreadyDownloadingAudiobookError: true));
       // Return if any book is currently being downloaded
       return;
     }
 
     _isCancelled = false;
     // Starting point of the download process
-    emit(state.copyWith(progress: 0.01, downloadingBookSlug: book.slug));
+    emit(
+      state.copyWith(progress: 0.01, downloadingBookAudiobookSlug: book.slug),
+    );
 
     // Fetch the audiobook parts from the repository/db
-    final parts = await _audiobookRepository.getAudiobook(slug: book.slug);
+    final parts = await _audiobookRepository.getAudiobook(
+      slug: book.slug,
+      tryOffline: false,
+    );
     parts.handle(
       success: (data, _) async {
         try {
@@ -63,20 +131,25 @@ class DownloadCubit extends SafeCubit<DownloadState> {
         } catch (e) {
           // Something went wrong, abort, display error
           await cancelDownload();
-          emit(state.copyWith(isGenericError: true));
+          emit(state.copyWith(isGenericAudiobookError: true));
           return;
         }
-        // If download is not cancelled, update progress to 100%
-        if (!_isCancelled) updateProgress(1);
+        if (!_isCancelled) {
+          // If download is not cancelled, update progress to 100%
+          updateProgress(1);
+          // Call the onFinish callback if provided
+          onFinish?.call();
+        }
         // Clear the downloading state after completion
-        emit(state.copyWith(downloadingBookSlug: null));
-        // Call the onFinish callback if provided
-        onFinish?.call();
+        emit(state.copyWith(downloadingBookAudiobookSlug: null));
         // Delay to ensure the UI updates before resetting the state
         await Future.delayed(const Duration(milliseconds: 200));
         emit(const DownloadState());
       },
-      failure: (_) {},
+      failure: (e) {
+        // If there was an error fetching the audiobook parts, display an error
+        emit(state.copyWith(isGenericAudiobookError: true));
+      },
     );
   }
 
@@ -89,13 +162,12 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     // Currently saved offline info about the book
     OfflineBookModel? existingBook = await _getLocalBook(book.slug);
     // List of the parts that are currently saved
-    List<AudioBookPart> currentParts = List<AudioBookPart>.from(
-      existingBook?.audiobook?.parts ?? [],
-    );
+    final currentParts = (existingBook?.audiobook?.parts ?? []).toList();
 
     // Book is downloaded, but not all parts are saved correctly,
     // clear the old files and proceed with the new ones
     if (existingBook != null &&
+        existingBook.audiobook != null &&
         existingBook.isAudiobookCorrectlyDownloaded == false) {
       await _deleteOfflineFiles(
         files:
@@ -105,7 +177,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
                 .toList() ??
             [],
       );
-      await _appStorageService.removeOfflineBook(book.slug);
+      await _removeAudiobook(existingBook.book.slug);
     }
 
     // Saving the parts one by one
@@ -124,7 +196,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
                     .toList() ??
                 [],
           );
-          await _appStorageService.removeOfflineBook(book.slug);
+          await _removeAudiobook(createdBook.book.slug);
         }
         // Reset the state to initial progress
         emit(state.copyWith(progress: 0));
@@ -143,66 +215,46 @@ class DownloadCubit extends SafeCubit<DownloadState> {
       final effectivePart = part.copyWith(url: result, isOffline: true);
       final isLastPart = i == total - 1;
 
-      // If it's the first part, we create a new book entry
-      if (i == 0) {
-        // Save the new book with the first part
-        await saveNewBook(book: book, parts: [effectivePart]);
-        // Get the newly created book to update the current parts
-        existingBook = await _getLocalBook(book.slug);
-        // Initialize current parts with the first part
-        currentParts = existingBook?.audiobook?.parts ?? [effectivePart];
-      }
-      // If it's not the first part, we update the existing book
-      else {
-        // Add the new part to the current parts
-        final newCurrentParts = List<AudioBookPart>.from(currentParts)
-          ..add(effectivePart);
-        currentParts = newCurrentParts;
-        // Save the existing book with the updated parts
-        await saveExistingBook(
-          book: existingBook!,
-          parts: currentParts,
-          isLastPart: isLastPart,
-        );
-      }
+      currentParts.add(effectivePart);
+
+      existingBook = await saveAudiobook(
+        book: book,
+        parts: currentParts,
+        isLastPart: isLastPart,
+      );
 
       // Update the progress based on the current part index
       updateProgress((i + 1) / total * 0.95);
     }
   }
 
-  // Saves an existing book with updated audiobook parts
-  Future<void> saveExistingBook({
-    required OfflineBookModel book,
+  Future<OfflineBookModel> saveAudiobook({
+    required BookModel book,
     required List<AudioBookPart> parts,
     required bool isLastPart,
   }) async {
-    final effectiveBook = book.copyWith(
-      audiobook: AudiobookModel.create(parts: parts),
+    final existingBook = await _getLocalBook(book.slug);
+    if (existingBook == null) {
+      // This means there's no existing book, we create a new one
+      final offlineBook = OfflineBookModel(
+        book: book,
+        audiobook: AudiobookModel.create(parts: parts),
+      );
+      await _appStorageService.saveOfflineBook(book.slug, offlineBook);
+      return offlineBook;
+    }
+    // If the book already exists, we update the audiobook parts
+    final updatedBook = existingBook.copyWith(
+      audiobook: parts.isEmpty ? null : AudiobookModel.create(parts: parts),
       isAudiobookCorrectlyDownloaded: isLastPart,
     );
-    await _saveOfflineBook(effectiveBook);
-  }
-
-  // Saves a new book with its audiobook parts
-  Future<void> saveNewBook({
-    required BookModel book,
-    required List<AudioBookPart> parts,
-  }) async {
-    final offlineBook = OfflineBookModel(
-      book: book,
-      audiobook: AudiobookModel.create(parts: parts),
-    );
-    await _saveOfflineBook(offlineBook);
+    await _appStorageService.saveOfflineBook(book.slug, updatedBook);
+    return updatedBook;
   }
 
   // Retrieves a local book by its slug
   Future<OfflineBookModel?> _getLocalBook(String slug) =>
       _appStorageService.readOfflineBook(slug);
-
-  // Saves an offline book to the app storage
-  Future<void> _saveOfflineBook(OfflineBookModel book) =>
-      _appStorageService.saveOfflineBook(book.book.slug, book);
 
   // Deletes offline files based on the provided list of file URLs
   Future<void> _deleteOfflineFiles({required List<String> files}) {
@@ -216,9 +268,20 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     );
   }
 
+  Future<void> _removeAudiobook(String slug) async {
+    final existingBook = await _getLocalBook(slug);
+    if (existingBook == null) return;
+    if (existingBook.reader == null) {
+      await _appStorageService.removeOfflineBook(existingBook.book.slug);
+      return;
+    }
+    // If the book has a reader, we just update the audiobook to null
+    await saveAudiobook(book: existingBook.book, parts: [], isLastPart: false);
+  }
+
   // Cancels the ongoing download process
   Future<void> cancelDownload() async {
     _isCancelled = true;
-    emit(state.copyWith(progress: 0, downloadingBookSlug: null));
+    emit(state.copyWith(progress: 0, downloadingBookAudiobookSlug: null));
   }
 }

@@ -21,7 +21,9 @@ class DashboardProviders extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => RouterCubit()),
-        BlocProvider(create: (_) => DownloadCubit(get.get(), get.get())),
+        BlocProvider(
+          create: (_) => DownloadCubit(get.get(), get.get(), get.get()),
+        ),
         BlocProvider(create: (_) => FavouritesCubit(get.get())),
         BlocProvider(
           create: (_) => AudioCubit(get.get(), get.get()),

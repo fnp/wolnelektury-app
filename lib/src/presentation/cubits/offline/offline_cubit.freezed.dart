@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OfflineState {
 
- bool get isLoading; List<OfflineBookModel> get books;
+ bool get isLoading; List<OfflineBookModel> get audiobooks; List<OfflineBookModel> get readers;
 /// Create a copy of OfflineState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $OfflineStateCopyWith<OfflineState> get copyWith => _$OfflineStateCopyWithImpl<O
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OfflineState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.books, books));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OfflineState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.audiobooks, audiobooks)&&const DeepCollectionEquality().equals(other.readers, readers));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(books));
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(audiobooks),const DeepCollectionEquality().hash(readers));
 
 @override
 String toString() {
-  return 'OfflineState(isLoading: $isLoading, books: $books)';
+  return 'OfflineState(isLoading: $isLoading, audiobooks: $audiobooks, readers: $readers)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $OfflineStateCopyWith<$Res>  {
   factory $OfflineStateCopyWith(OfflineState value, $Res Function(OfflineState) _then) = _$OfflineStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, List<OfflineBookModel> books
+ bool isLoading, List<OfflineBookModel> audiobooks, List<OfflineBookModel> readers
 });
 
 
@@ -63,10 +63,11 @@ class _$OfflineStateCopyWithImpl<$Res>
 
 /// Create a copy of OfflineState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? books = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? audiobooks = null,Object? readers = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,books: null == books ? _self.books : books // ignore: cast_nullable_to_non_nullable
+as bool,audiobooks: null == audiobooks ? _self.audiobooks : audiobooks // ignore: cast_nullable_to_non_nullable
+as List<OfflineBookModel>,readers: null == readers ? _self.readers : readers // ignore: cast_nullable_to_non_nullable
 as List<OfflineBookModel>,
   ));
 }
@@ -78,15 +79,22 @@ as List<OfflineBookModel>,
 
 
 class _OfflineState implements OfflineState {
-  const _OfflineState({this.isLoading = false, final  List<OfflineBookModel> books = const []}): _books = books;
+  const _OfflineState({this.isLoading = false, final  List<OfflineBookModel> audiobooks = const [], final  List<OfflineBookModel> readers = const []}): _audiobooks = audiobooks,_readers = readers;
   
 
 @override@JsonKey() final  bool isLoading;
- final  List<OfflineBookModel> _books;
-@override@JsonKey() List<OfflineBookModel> get books {
-  if (_books is EqualUnmodifiableListView) return _books;
+ final  List<OfflineBookModel> _audiobooks;
+@override@JsonKey() List<OfflineBookModel> get audiobooks {
+  if (_audiobooks is EqualUnmodifiableListView) return _audiobooks;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_books);
+  return EqualUnmodifiableListView(_audiobooks);
+}
+
+ final  List<OfflineBookModel> _readers;
+@override@JsonKey() List<OfflineBookModel> get readers {
+  if (_readers is EqualUnmodifiableListView) return _readers;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_readers);
 }
 
 
@@ -100,16 +108,16 @@ _$OfflineStateCopyWith<_OfflineState> get copyWith => __$OfflineStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OfflineState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._books, _books));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OfflineState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._audiobooks, _audiobooks)&&const DeepCollectionEquality().equals(other._readers, _readers));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_books));
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_audiobooks),const DeepCollectionEquality().hash(_readers));
 
 @override
 String toString() {
-  return 'OfflineState(isLoading: $isLoading, books: $books)';
+  return 'OfflineState(isLoading: $isLoading, audiobooks: $audiobooks, readers: $readers)';
 }
 
 
@@ -120,7 +128,7 @@ abstract mixin class _$OfflineStateCopyWith<$Res> implements $OfflineStateCopyWi
   factory _$OfflineStateCopyWith(_OfflineState value, $Res Function(_OfflineState) _then) = __$OfflineStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, List<OfflineBookModel> books
+ bool isLoading, List<OfflineBookModel> audiobooks, List<OfflineBookModel> readers
 });
 
 
@@ -137,10 +145,11 @@ class __$OfflineStateCopyWithImpl<$Res>
 
 /// Create a copy of OfflineState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? books = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? audiobooks = null,Object? readers = null,}) {
   return _then(_OfflineState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,books: null == books ? _self._books : books // ignore: cast_nullable_to_non_nullable
+as bool,audiobooks: null == audiobooks ? _self._audiobooks : audiobooks // ignore: cast_nullable_to_non_nullable
+as List<OfflineBookModel>,readers: null == readers ? _self._readers : readers // ignore: cast_nullable_to_non_nullable
 as List<OfflineBookModel>,
   ));
 }

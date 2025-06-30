@@ -17,28 +17,61 @@ class OfflineCubit extends SafeCubit<OfflineState> {
     final response = await _appStorageService.readAllOfflineBooks();
     emit(
       state.copyWith(
-        books: response..where((e) => e.audiobook != null),
+        audiobooks: response.where((e) => e.audiobook != null).toList(),
+        readers: response.where((e) => e.reader != null).toList(),
         isLoading: false,
       ),
     );
   }
 
-  Future<void> removeOfflineBook(OfflineBookModel book) async {
+  Future<void> removeOfflineReader(OfflineBookModel book) async {
+    final initReaders = List<OfflineBookModel>.from(state.readers);
+    final newReaders = initReaders
+      ..removeWhere((e) => e.book.slug == book.book.slug);
+    emit(state.copyWith(readers: newReaders));
+
+    if (book.audiobook == null) {
+      await _appStorageService.removeOfflineBook(book.book.slug);
+    } else {
+      await _appStorageService.saveOfflineBook(
+        book.book.slug,
+        book.copyWith(reader: null),
+      );
+    }
+  }
+
+  Future<void> removeOfflineAudiobook(OfflineBookModel book) async {
+    final offlineBook = await _appStorageService.readOfflineBook(
+      book.book.slug,
+    );
+
     try {
+      final offlineParts = offlineBook?.audiobook?.parts
+          .map((e) => e.url)
+          .toList();
+
       await _deleteOfflineFiles(
-        files: book.audiobook?.parts.map((e) => e.url).toList() ?? [],
+        files:
+            offlineParts ??
+            book.audiobook?.parts.map((e) => e.url).toList() ??
+            [],
       );
     } catch (e) {
       //TODO handle error
     }
-    final initBooks = List<OfflineBookModel>.from(state.books);
-    final newBooks = initBooks
+
+    final initAudiobooks = List<OfflineBookModel>.from(state.audiobooks);
+    final newAudiobooks = initAudiobooks
       ..removeWhere((e) => e.book.slug == book.book.slug);
-    emit(state.copyWith(books: newBooks));
-    final result = await _appStorageService.removeOfflineBook(book.book.slug);
-    if (!result) {
-      //TODO handle error
-      emit(state.copyWith(books: initBooks));
+    emit(state.copyWith(audiobooks: newAudiobooks));
+
+    if (book.reader == null) {
+      await _appStorageService.removeOfflineBook(book.book.slug);
+    } else {
+      await _appStorageService.saveOfflineBook(
+        book.book.slug,
+        book.copyWith(audiobook: null),
+      );
     }
   }
 

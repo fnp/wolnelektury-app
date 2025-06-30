@@ -4,6 +4,7 @@ part of 'offline_cubit.dart';
 sealed class OfflineState with _$OfflineState {
   const factory OfflineState({
     @Default(false) bool isLoading,
-    @Default([]) List<OfflineBookModel> books,
+    @Default([]) List<OfflineBookModel> audiobooks,
+    @Default([]) List<OfflineBookModel> readers,
   }) = _OfflineState;
 }

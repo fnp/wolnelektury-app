@@ -37,7 +37,8 @@ class ReaderBookModelContent {
     return ReaderBookModelContent(
       tag: ReaderBookTag.fromString(json['tag'] ?? 'unknown'),
       attr: json['attr'],
-      contents: (json['contents'] as List<dynamic>?)
+      contents:
+          (json['contents'] as List<dynamic>?)
               ?.map(
                 (item) => item is Map<String, dynamic>
                     ? ReaderBookModelContent.fromJson(item)
@@ -87,6 +88,8 @@ class ReaderBookModel {
   Map<String, dynamic> toJson() {
     return {
       'contents': contents.map((content) => content.toJson()).toList(),
+      'front1': headerLeft != null ? [headerLeft!.toJson()] : [],
+      'front2': headerRight != null ? [headerRight!.toJson()] : [],
     };
   }
 }

@@ -80,16 +80,18 @@ class DashboardListeners extends StatelessWidget {
         ),
         BlocListener<DownloadCubit, DownloadState>(
           listenWhen: (p, c) =>
-              p.downloadingBookSlug == null && c.downloadingBookSlug != null,
+              p.downloadingBookAudiobookSlug == null &&
+              c.downloadingBookAudiobookSlug != null,
           listener: (context, state) {
             CustomSnackbar.success(context, 'Rozpoczęto pobieranie audiobooka');
           },
         ),
         BlocListener<DownloadCubit, DownloadState>(
           listenWhen: (p, c) =>
-              p.isAlreadyDownloadingError != c.isAlreadyDownloadingError,
+              p.isAlreadyDownloadingAudiobookError !=
+              c.isAlreadyDownloadingAudiobookError,
           listener: (context, state) {
-            if (state.isAlreadyDownloadingError == true) {
+            if (state.isAlreadyDownloadingAudiobookError == true) {
               CustomSnackbar.error(
                 context,
                 'Inny audiobook jest już pobierany',
@@ -98,9 +100,10 @@ class DashboardListeners extends StatelessWidget {
           },
         ),
         BlocListener<DownloadCubit, DownloadState>(
-          listenWhen: (p, c) => p.isGenericError != c.isGenericError,
+          listenWhen: (p, c) =>
+              p.isGenericAudiobookError != c.isGenericAudiobookError,
           listener: (context, state) {
-            if (state.isGenericError == true) {
+            if (state.isGenericAudiobookError == true) {
               CustomSnackbar.error(
                 context,
                 'Wystąpił błąd podczas pobierania audiobooka',

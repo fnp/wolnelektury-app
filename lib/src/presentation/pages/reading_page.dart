@@ -4,6 +4,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
@@ -40,7 +41,7 @@ class _ReadingPageState extends State<ReadingPage> {
   Widget build(BuildContext context) {
     final slug = widget.slug ?? widget.book?.slug;
     final child = _Body(itemScrollController: itemScrollController);
-
+    final hasConnection = context.read<ConnectivityCubit>().state.isConnected;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -51,6 +52,7 @@ class _ReadingPageState extends State<ReadingPage> {
                 book: widget.book!,
                 itemScrollController: itemScrollController,
                 overrideProgressAnchor: widget.overrideProgressAnchor,
+                tryOffline: !hasConnection,
               );
             }
             return cubit;
@@ -58,8 +60,9 @@ class _ReadingPageState extends State<ReadingPage> {
         ),
         BlocProvider(
           lazy: false,
-          create: (context) =>
-              BookmarksCubit(get.get())..getBookBookmarks(slug: slug!),
+          create: (context) {
+            return BookmarksCubit(get.get())..getBookBookmarks(slug: slug!);
+          },
         ),
         if (widget.book == null)
           BlocProvider(
@@ -72,6 +75,7 @@ class _ReadingPageState extends State<ReadingPage> {
                       book: book,
                       itemScrollController: itemScrollController,
                       overrideProgressAnchor: widget.overrideProgressAnchor,
+                      tryOffline: !hasConnection,
                     );
                   },
                 ),

@@ -4,13 +4,13 @@ import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/offline/offline_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
-import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/audiobooks/my_library_audiobook.dart';
+import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/readers/my_library_reader.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class MyLibraryAudiobooksSection extends StatelessWidget {
-  const MyLibraryAudiobooksSection({super.key});
+class MyLibraryReadersSection extends StatelessWidget {
+  const MyLibraryReadersSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +29,13 @@ class MyLibraryAudiobooksSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                PageSubtitle(subtitle: MyLibraryEnum.audiobooks.title),
+                PageSubtitle(subtitle: MyLibraryEnum.readers.title),
                 Expanded(
                   // This is needed to refresh offline books data after finishing download
                   child: BlocListener<DownloadCubit, DownloadState>(
                     listenWhen: (p, c) {
-                      return p.downloadingBookAudiobookSlug != null &&
-                          c.downloadingBookAudiobookSlug == null;
+                      return p.downloadingBookReaderSlug != null &&
+                          c.downloadingBookReaderSlug == null;
                     },
                     listener: (context, state) {
                       offlineCubit.loadOfflineBooks();
@@ -50,11 +50,11 @@ class MyLibraryAudiobooksSection extends StatelessWidget {
                             return ListView.builder(
                               controller: scrollController,
                               itemBuilder: (context, index) {
-                                return MyLibraryAudiobook(
-                                  offlineBook: state.audiobooks[index],
+                                return MyLibraryReader(
+                                  offlineBook: state.readers[index],
                                 );
                               },
-                              itemCount: state.audiobooks.length,
+                              itemCount: state.readers.length,
                             );
                           },
                         );

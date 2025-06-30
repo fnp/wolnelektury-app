@@ -33,10 +33,14 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     required BookModel book,
     required ItemScrollController itemScrollController,
     int? overrideProgressAnchor,
+    bool tryOffline = false,
   }) async {
     final settings = await _storageService.readReadingSettings();
     emit(state.copyWith(isJsonLoading: true));
-    final bookJson = await _booksRepository.getBookJson(slug: book.slug);
+    final bookJson = await _booksRepository.getBookJson(
+      slug: book.slug,
+      tryOffline: tryOffline,
+    );
 
     bookJson.handle(
       success: (data, _) async {

@@ -31,18 +31,28 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
     );
   }
 
-  Future<void> checkIfAudiobookDownloaded(String slug) async {
+  Future<void> checkIfMediaAreDownloaded(String slug) async {
     emit(state.copyWith(isLoading: true));
     final isDownloaded = await _appStorageService.readOfflineBook(slug);
-    if (isDownloaded != null &&
-        isDownloaded.audiobook != null &&
-        isDownloaded.isAudiobookCorrectlyDownloaded) {
-      emit(state.copyWith(isAudiobookDownloaded: true));
+    if (isDownloaded != null) {
+      emit(
+        state.copyWith(
+          isAudiobookDownloaded:
+              isDownloaded.audiobook != null &&
+              isDownloaded.isAudiobookCorrectlyDownloaded,
+          isReaderDownloaded: isDownloaded.reader != null,
+        ),
+      );
     }
+
     emit(state.copyWith(isLoading: false));
   }
 
-  void markAsDownloaded() {
+  void markReaderAsDownloaded() {
+    emit(state.copyWith(isReaderDownloaded: true));
+  }
+
+  void markAudiobookAsDownloaded() {
     emit(state.copyWith(isAudiobookDownloaded: true));
   }
 }

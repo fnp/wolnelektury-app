@@ -7,42 +7,26 @@ import 'package:wolnelektury/src/data/lists_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/data/tags_repository.dart';
 
-Future<void> initializeRepositories({
-  required GetIt getIt,
-}) async {
+Future<void> initializeRepositories({required GetIt getIt}) async {
   getIt.registerSingleton<BooksRepository>(
-    BooksRepositoryImplementation(
-      getIt.get(),
-    ),
+    BooksRepositoryImplementation(getIt.get(), getIt.get()),
   );
   getIt.registerSingleton<AuthRepository>(
-    AuthRepositoryImplementation(
-      getIt.get(),
-    ),
+    AuthRepositoryImplementation(getIt.get()),
   );
   getIt.registerSingleton<TagsRepository>(
-    TagsRepositoryImplementation(
-      getIt.get(),
-    ),
+    TagsRepositoryImplementation(getIt.get()),
   );
   getIt.registerSingleton<AudiobookRepository>(
-    AudiobookRepositoryImplementation(
-      getIt.get(),
-    ),
+    AudiobookRepositoryImplementation(getIt.get(), getIt.get()),
   );
   getIt.registerSingleton<ProgressRepository>(
-    ProgressRepositoryImplementation(
-      getIt.get(),
-    ),
+    ProgressRepositoryImplementation(getIt.get()),
   );
   getIt.registerSingleton<AuthorRepository>(
-    AuthorRepositoryImplementation(
-      getIt.get(),
-    ),
+    AuthorRepositoryImplementation(getIt.get()),
   );
   getIt.registerSingleton<ListsRepository>(
-    ListsRepositoryImplementation(
-      getIt.get(),
-    ),
+    ListsRepositoryImplementation(getIt.get()),
   );
 }

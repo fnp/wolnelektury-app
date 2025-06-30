@@ -1,5 +1,6 @@
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
+import 'package:wolnelektury/src/application/app_storage_service.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
@@ -31,12 +32,14 @@ abstract class BooksRepository {
     required String slug,
   });
 
+  // Try to update offline book if exists or keep the data when user is not logged
   Future<DataState<BookmarkModel>> createBookmark({
     required String slug,
     required int anchorId,
     String? note,
   });
 
+  // Try to update offline book if exists or keep the data when user is not logged
   Future<DataState<BookmarkModel>> updateBookmark({
     required String href,
     required String slug,
@@ -44,9 +47,13 @@ abstract class BooksRepository {
     String? note,
   });
 
+  // Try to update offline book if exists or keep the data when user is not logged
   Future<DataState<void>> deleteBookmark({required String href});
 
-  Future<DataState<ReaderBookModel>> getBookJson({required String slug});
+  Future<DataState<ReaderBookModel>> getBookJson({
+    required String slug,
+    bool tryOffline = false,
+  });
 
   Future<DataState<BookModel>> getBookBySlug({required String slug});
 }
@@ -59,7 +66,8 @@ class BooksRepositoryImplementation extends BooksRepository {
   static const String _bookBookmarksEndpoint = '/bookmarks/book';
 
   final ApiService _apiService;
-  BooksRepositoryImplementation(this._apiService);
+  final AppStorageService _appStorageService;
+  BooksRepositoryImplementation(this._apiService, this._appStorageService);
 
   @override
   Future<DataState<BookModel>> getBookBySlug({required String slug}) async {
@@ -159,8 +167,22 @@ class BooksRepositoryImplementation extends BooksRepository {
   }
 
   @override
-  Future<DataState<ReaderBookModel>> getBookJson({required String slug}) async {
+  Future<DataState<ReaderBookModel>> getBookJson({
+    required String slug,
+    bool tryOffline = false,
+  }) async {
     try {
+      if (tryOffline) {
+        final offlineBook = await _appStorageService.readOfflineBook(slug);
+        if (offlineBook?.reader != null) {
+          final parsed = ReaderBookModel.fromJson(
+            offlineBook!.reader!.toJson(),
+          );
+          return DataState.success(data: parsed);
+        }
+        return const DataState.failure(Failure.notFound());
+      }
+
       final response = await _apiService.getRequest(
         '$_booksEndpoint/$slug.json',
       );

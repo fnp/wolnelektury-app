@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DownloadState {
 
- double get progress; String? get downloadingBookSlug; bool get isAlreadyDownloadingError; bool get isGenericError;
+ double get progress; String? get downloadingBookAudiobookSlug; String? get downloadingBookReaderSlug; bool get isAlreadyDownloadingAudiobookError; bool get isAlreadyDownloadingReaderError; bool get isGenericAudiobookError; bool get isGenericReaderError;
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $DownloadStateCopyWith<DownloadState> get copyWith => _$DownloadStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DownloadState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.downloadingBookSlug, downloadingBookSlug) || other.downloadingBookSlug == downloadingBookSlug)&&(identical(other.isAlreadyDownloadingError, isAlreadyDownloadingError) || other.isAlreadyDownloadingError == isAlreadyDownloadingError)&&(identical(other.isGenericError, isGenericError) || other.isGenericError == isGenericError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DownloadState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.downloadingBookAudiobookSlug, downloadingBookAudiobookSlug) || other.downloadingBookAudiobookSlug == downloadingBookAudiobookSlug)&&(identical(other.downloadingBookReaderSlug, downloadingBookReaderSlug) || other.downloadingBookReaderSlug == downloadingBookReaderSlug)&&(identical(other.isAlreadyDownloadingAudiobookError, isAlreadyDownloadingAudiobookError) || other.isAlreadyDownloadingAudiobookError == isAlreadyDownloadingAudiobookError)&&(identical(other.isAlreadyDownloadingReaderError, isAlreadyDownloadingReaderError) || other.isAlreadyDownloadingReaderError == isAlreadyDownloadingReaderError)&&(identical(other.isGenericAudiobookError, isGenericAudiobookError) || other.isGenericAudiobookError == isGenericAudiobookError)&&(identical(other.isGenericReaderError, isGenericReaderError) || other.isGenericReaderError == isGenericReaderError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,progress,downloadingBookSlug,isAlreadyDownloadingError,isGenericError);
+int get hashCode => Object.hash(runtimeType,progress,downloadingBookAudiobookSlug,downloadingBookReaderSlug,isAlreadyDownloadingAudiobookError,isAlreadyDownloadingReaderError,isGenericAudiobookError,isGenericReaderError);
 
 @override
 String toString() {
-  return 'DownloadState(progress: $progress, downloadingBookSlug: $downloadingBookSlug, isAlreadyDownloadingError: $isAlreadyDownloadingError, isGenericError: $isGenericError)';
+  return 'DownloadState(progress: $progress, downloadingBookAudiobookSlug: $downloadingBookAudiobookSlug, downloadingBookReaderSlug: $downloadingBookReaderSlug, isAlreadyDownloadingAudiobookError: $isAlreadyDownloadingAudiobookError, isAlreadyDownloadingReaderError: $isAlreadyDownloadingReaderError, isGenericAudiobookError: $isGenericAudiobookError, isGenericReaderError: $isGenericReaderError)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $DownloadStateCopyWith<$Res>  {
   factory $DownloadStateCopyWith(DownloadState value, $Res Function(DownloadState) _then) = _$DownloadStateCopyWithImpl;
 @useResult
 $Res call({
- double progress, String? downloadingBookSlug, bool isAlreadyDownloadingError, bool isGenericError
+ double progress, String? downloadingBookAudiobookSlug, String? downloadingBookReaderSlug, bool isAlreadyDownloadingAudiobookError, bool isAlreadyDownloadingReaderError, bool isGenericAudiobookError, bool isGenericReaderError
 });
 
 
@@ -63,12 +63,15 @@ class _$DownloadStateCopyWithImpl<$Res>
 
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? downloadingBookSlug = freezed,Object? isAlreadyDownloadingError = null,Object? isGenericError = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? downloadingBookAudiobookSlug = freezed,Object? downloadingBookReaderSlug = freezed,Object? isAlreadyDownloadingAudiobookError = null,Object? isAlreadyDownloadingReaderError = null,Object? isGenericAudiobookError = null,Object? isGenericReaderError = null,}) {
   return _then(_self.copyWith(
 progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as double,downloadingBookSlug: freezed == downloadingBookSlug ? _self.downloadingBookSlug : downloadingBookSlug // ignore: cast_nullable_to_non_nullable
-as String?,isAlreadyDownloadingError: null == isAlreadyDownloadingError ? _self.isAlreadyDownloadingError : isAlreadyDownloadingError // ignore: cast_nullable_to_non_nullable
-as bool,isGenericError: null == isGenericError ? _self.isGenericError : isGenericError // ignore: cast_nullable_to_non_nullable
+as double,downloadingBookAudiobookSlug: freezed == downloadingBookAudiobookSlug ? _self.downloadingBookAudiobookSlug : downloadingBookAudiobookSlug // ignore: cast_nullable_to_non_nullable
+as String?,downloadingBookReaderSlug: freezed == downloadingBookReaderSlug ? _self.downloadingBookReaderSlug : downloadingBookReaderSlug // ignore: cast_nullable_to_non_nullable
+as String?,isAlreadyDownloadingAudiobookError: null == isAlreadyDownloadingAudiobookError ? _self.isAlreadyDownloadingAudiobookError : isAlreadyDownloadingAudiobookError // ignore: cast_nullable_to_non_nullable
+as bool,isAlreadyDownloadingReaderError: null == isAlreadyDownloadingReaderError ? _self.isAlreadyDownloadingReaderError : isAlreadyDownloadingReaderError // ignore: cast_nullable_to_non_nullable
+as bool,isGenericAudiobookError: null == isGenericAudiobookError ? _self.isGenericAudiobookError : isGenericAudiobookError // ignore: cast_nullable_to_non_nullable
+as bool,isGenericReaderError: null == isGenericReaderError ? _self.isGenericReaderError : isGenericReaderError // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -80,13 +83,16 @@ as bool,
 
 
 class _DownloadState implements DownloadState {
-  const _DownloadState({this.progress = 0, this.downloadingBookSlug, this.isAlreadyDownloadingError = false, this.isGenericError = false});
+  const _DownloadState({this.progress = 0, this.downloadingBookAudiobookSlug, this.downloadingBookReaderSlug, this.isAlreadyDownloadingAudiobookError = false, this.isAlreadyDownloadingReaderError = false, this.isGenericAudiobookError = false, this.isGenericReaderError = false});
   
 
 @override@JsonKey() final  double progress;
-@override final  String? downloadingBookSlug;
-@override@JsonKey() final  bool isAlreadyDownloadingError;
-@override@JsonKey() final  bool isGenericError;
+@override final  String? downloadingBookAudiobookSlug;
+@override final  String? downloadingBookReaderSlug;
+@override@JsonKey() final  bool isAlreadyDownloadingAudiobookError;
+@override@JsonKey() final  bool isAlreadyDownloadingReaderError;
+@override@JsonKey() final  bool isGenericAudiobookError;
+@override@JsonKey() final  bool isGenericReaderError;
 
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
@@ -98,16 +104,16 @@ _$DownloadStateCopyWith<_DownloadState> get copyWith => __$DownloadStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DownloadState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.downloadingBookSlug, downloadingBookSlug) || other.downloadingBookSlug == downloadingBookSlug)&&(identical(other.isAlreadyDownloadingError, isAlreadyDownloadingError) || other.isAlreadyDownloadingError == isAlreadyDownloadingError)&&(identical(other.isGenericError, isGenericError) || other.isGenericError == isGenericError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DownloadState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.downloadingBookAudiobookSlug, downloadingBookAudiobookSlug) || other.downloadingBookAudiobookSlug == downloadingBookAudiobookSlug)&&(identical(other.downloadingBookReaderSlug, downloadingBookReaderSlug) || other.downloadingBookReaderSlug == downloadingBookReaderSlug)&&(identical(other.isAlreadyDownloadingAudiobookError, isAlreadyDownloadingAudiobookError) || other.isAlreadyDownloadingAudiobookError == isAlreadyDownloadingAudiobookError)&&(identical(other.isAlreadyDownloadingReaderError, isAlreadyDownloadingReaderError) || other.isAlreadyDownloadingReaderError == isAlreadyDownloadingReaderError)&&(identical(other.isGenericAudiobookError, isGenericAudiobookError) || other.isGenericAudiobookError == isGenericAudiobookError)&&(identical(other.isGenericReaderError, isGenericReaderError) || other.isGenericReaderError == isGenericReaderError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,progress,downloadingBookSlug,isAlreadyDownloadingError,isGenericError);
+int get hashCode => Object.hash(runtimeType,progress,downloadingBookAudiobookSlug,downloadingBookReaderSlug,isAlreadyDownloadingAudiobookError,isAlreadyDownloadingReaderError,isGenericAudiobookError,isGenericReaderError);
 
 @override
 String toString() {
-  return 'DownloadState(progress: $progress, downloadingBookSlug: $downloadingBookSlug, isAlreadyDownloadingError: $isAlreadyDownloadingError, isGenericError: $isGenericError)';
+  return 'DownloadState(progress: $progress, downloadingBookAudiobookSlug: $downloadingBookAudiobookSlug, downloadingBookReaderSlug: $downloadingBookReaderSlug, isAlreadyDownloadingAudiobookError: $isAlreadyDownloadingAudiobookError, isAlreadyDownloadingReaderError: $isAlreadyDownloadingReaderError, isGenericAudiobookError: $isGenericAudiobookError, isGenericReaderError: $isGenericReaderError)';
 }
 
 
@@ -118,7 +124,7 @@ abstract mixin class _$DownloadStateCopyWith<$Res> implements $DownloadStateCopy
   factory _$DownloadStateCopyWith(_DownloadState value, $Res Function(_DownloadState) _then) = __$DownloadStateCopyWithImpl;
 @override @useResult
 $Res call({
- double progress, String? downloadingBookSlug, bool isAlreadyDownloadingError, bool isGenericError
+ double progress, String? downloadingBookAudiobookSlug, String? downloadingBookReaderSlug, bool isAlreadyDownloadingAudiobookError, bool isAlreadyDownloadingReaderError, bool isGenericAudiobookError, bool isGenericReaderError
 });
 
 
@@ -135,12 +141,15 @@ class __$DownloadStateCopyWithImpl<$Res>
 
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? progress = null,Object? downloadingBookSlug = freezed,Object? isAlreadyDownloadingError = null,Object? isGenericError = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? progress = null,Object? downloadingBookAudiobookSlug = freezed,Object? downloadingBookReaderSlug = freezed,Object? isAlreadyDownloadingAudiobookError = null,Object? isAlreadyDownloadingReaderError = null,Object? isGenericAudiobookError = null,Object? isGenericReaderError = null,}) {
   return _then(_DownloadState(
 progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as double,downloadingBookSlug: freezed == downloadingBookSlug ? _self.downloadingBookSlug : downloadingBookSlug // ignore: cast_nullable_to_non_nullable
-as String?,isAlreadyDownloadingError: null == isAlreadyDownloadingError ? _self.isAlreadyDownloadingError : isAlreadyDownloadingError // ignore: cast_nullable_to_non_nullable
-as bool,isGenericError: null == isGenericError ? _self.isGenericError : isGenericError // ignore: cast_nullable_to_non_nullable
+as double,downloadingBookAudiobookSlug: freezed == downloadingBookAudiobookSlug ? _self.downloadingBookAudiobookSlug : downloadingBookAudiobookSlug // ignore: cast_nullable_to_non_nullable
+as String?,downloadingBookReaderSlug: freezed == downloadingBookReaderSlug ? _self.downloadingBookReaderSlug : downloadingBookReaderSlug // ignore: cast_nullable_to_non_nullable
+as String?,isAlreadyDownloadingAudiobookError: null == isAlreadyDownloadingAudiobookError ? _self.isAlreadyDownloadingAudiobookError : isAlreadyDownloadingAudiobookError // ignore: cast_nullable_to_non_nullable
+as bool,isAlreadyDownloadingReaderError: null == isAlreadyDownloadingReaderError ? _self.isAlreadyDownloadingReaderError : isAlreadyDownloadingReaderError // ignore: cast_nullable_to_non_nullable
+as bool,isGenericAudiobookError: null == isGenericAudiobookError ? _self.isGenericAudiobookError : isGenericAudiobookError // ignore: cast_nullable_to_non_nullable
+as bool,isGenericReaderError: null == isGenericReaderError ? _self.isGenericReaderError : isGenericReaderError // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

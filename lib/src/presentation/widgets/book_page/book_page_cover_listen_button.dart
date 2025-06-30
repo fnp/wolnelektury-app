@@ -18,11 +18,13 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookPageCoverListenButton extends StatelessWidget {
   final BookModel book;
+  final VoidCallback? onTap;
   final AudiobookModel? offlineAudiobook;
   const BookPageCoverListenButton({
     super.key,
     required this.book,
     this.offlineAudiobook,
+    this.onTap,
   });
 
   @override
@@ -46,9 +48,10 @@ class BookPageCoverListenButton extends StatelessWidget {
               BlocBuilder<DownloadCubit, DownloadState>(
                 buildWhen: (p, c) =>
                     p.progress != c.progress ||
-                    p.downloadingBookSlug != c.downloadingBookSlug,
+                    p.downloadingBookAudiobookSlug !=
+                        c.downloadingBookAudiobookSlug,
                 builder: (context, state) {
-                  if (state.downloadingBookSlug != book.slug) {
+                  if (state.downloadingBookAudiobookSlug != book.slug) {
                     return const SizedBox.shrink();
                   }
                   final progressWidth =
@@ -68,8 +71,9 @@ class BookPageCoverListenButton extends StatelessWidget {
               ),
               BlocBuilder<DownloadCubit, DownloadState>(
                 buildWhen: (p, c) {
-                  return p.isDownloading != c.isDownloading ||
-                      p.downloadingBookSlug != c.downloadingBookSlug;
+                  return p.isDownloadingAudiobook != c.isDownloadingAudiobook ||
+                      p.downloadingBookAudiobookSlug !=
+                          c.downloadingBookAudiobookSlug;
                 },
                 builder: (context, state) {
                   return TextButtonWithIcon(
@@ -77,13 +81,17 @@ class BookPageCoverListenButton extends StatelessWidget {
                     nonActiveText: LocaleKeys.common_icon_button_listen.tr(),
                     nonActiveIcon: CustomIcons.headphones,
                     onPressed: () {
-                      if (state.isDownloading) {
+                      if (state.isDownloadingAudiobook) {
+                        return;
+                      }
+                      if (onTap != null) {
+                        onTap!();
                         return;
                       }
                       // Select proper book
                       audioCubit.pickBook(
                         book,
-                        offlineParts: offlineAudiobook?.parts,
+                        tryOffline: offlineAudiobook != null,
                       );
                       // Show audio dialog
                       AudioDialog.show(
@@ -92,13 +100,12 @@ class BookPageCoverListenButton extends StatelessWidget {
                         slug: book.slug,
                       );
                     },
-                    trailing: offlineAudiobook == null || state.isDownloading
-                        ? _DownloadButton(
-                            isDownloading: state.isDownloading,
-                            downloadingBookSlug: state.downloadingBookSlug,
-                            book: book,
-                          )
-                        : null,
+                    trailing: _DownloadButton(
+                      isDownloadingAudiobook: state.isDownloadingAudiobook,
+                      downloadingBookAudiobookSlug:
+                          state.downloadingBookAudiobookSlug,
+                      book: book,
+                    ),
                   );
                 },
               ),
@@ -111,13 +118,13 @@ class BookPageCoverListenButton extends StatelessWidget {
 }
 
 class _DownloadButton extends StatefulWidget {
-  final bool isDownloading;
-  final String? downloadingBookSlug;
+  final bool isDownloadingAudiobook;
+  final String? downloadingBookAudiobookSlug;
   final BookModel book;
 
   const _DownloadButton({
-    required this.isDownloading,
-    this.downloadingBookSlug,
+    required this.isDownloadingAudiobook,
+    this.downloadingBookAudiobookSlug,
     required this.book,
   });
 
@@ -136,7 +143,7 @@ class _DownloadButtonState extends State<_DownloadButton>
       vsync: this,
       duration: const Duration(seconds: 3),
     );
-    if (widget.isDownloading) {
+    if (widget.isDownloadingAudiobook) {
       _rotationController.repeat();
     }
   }
@@ -144,9 +151,10 @@ class _DownloadButtonState extends State<_DownloadButton>
   @override
   void didUpdateWidget(covariant _DownloadButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.isDownloading && !_rotationController.isAnimating) {
+    if (widget.isDownloadingAudiobook && !_rotationController.isAnimating) {
       _rotationController.repeat();
-    } else if (!widget.isDownloading && _rotationController.isAnimating) {
+    } else if (!widget.isDownloadingAudiobook &&
+        _rotationController.isAnimating) {
       _rotationController.stop();
     }
   }
@@ -162,7 +170,8 @@ class _DownloadButtonState extends State<_DownloadButton>
     final downloaderCubit = BlocProvider.of<DownloadCubit>(context);
     final singleBookCubit = BlocProvider.of<SingleBookCubit>(context);
     final isCurrentDownload =
-        widget.isDownloading && widget.downloadingBookSlug == widget.book.slug;
+        widget.isDownloadingAudiobook &&
+        widget.downloadingBookAudiobookSlug == widget.book.slug;
 
     return BlocBuilder<SingleBookCubit, SingleBookState>(
       buildWhen: (p, c) {
@@ -206,7 +215,7 @@ class _DownloadButtonState extends State<_DownloadButton>
               downloaderCubit.downloadAudiobook(
                 book: widget.book,
                 onFinish: () {
-                  singleBookCubit.markAsDownloaded();
+                  singleBookCubit.markAudiobookAsDownloaded();
                 },
               );
             },

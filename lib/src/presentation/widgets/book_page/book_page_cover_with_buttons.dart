@@ -9,10 +9,12 @@ import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_listen_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_read_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
@@ -24,19 +26,23 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
-enum BookButtonType { all, offlineAudiobook }
+enum BookButtonType { all, offlineAudiobook, offlineReader }
 
 class BookPageCoverWithButtons extends StatelessWidget {
   final BookModel book;
   final AudiobookModel? offlineAudiobook;
+  final ReaderBookModel? offlineReader;
   final VoidCallback? onDelete;
+  final VoidCallback? onListen;
   final BookButtonType buttonTypes;
   const BookPageCoverWithButtons({
     super.key,
     required this.book,
     this.buttonTypes = BookButtonType.all,
     this.offlineAudiobook,
+    this.offlineReader,
     this.onDelete,
+    this.onListen,
   });
 
   @override
@@ -56,7 +62,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
                 child: BlocProvider(
                   create: (context) {
                     return SingleBookCubit(get.get(), get.get())
-                      ..checkIfAudiobookDownloaded(book.slug);
+                      ..checkIfMediaAreDownloaded(book.slug);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,23 +75,18 @@ class BookPageCoverWithButtons extends StatelessWidget {
                                 onDelete: onDelete!,
                               ),
                       ),
-                      if (buttonTypes == BookButtonType.all)
-                        TextButtonWithIcon(
-                          nonActiveText: LocaleKeys.common_icon_button_read
-                              .tr(),
-                          nonActiveIcon: CustomIcons.book_5,
-                          onPressed: () {
-                            router.pushNamed(
-                              readingPageConfig.name,
-                              pathParameters: {'slug': book.slug},
-                              extra: book,
-                            );
-                          },
+                      if (buttonTypes == BookButtonType.all ||
+                          buttonTypes == BookButtonType.offlineReader)
+                        BookPageCoverReadButton(
+                          book: book,
+                          offlineReader: offlineReader,
                         ),
-                      if (book.hasAudiobook ||
+                      if (book.hasAudiobook &&
+                              buttonTypes != BookButtonType.offlineReader ||
                           buttonTypes == BookButtonType.offlineAudiobook) ...[
                         const SizedBox(height: Dimensions.mediumPadding),
                         BookPageCoverListenButton(
+                          onTap: onListen,
                           book: book,
                           offlineAudiobook: offlineAudiobook,
                         ),
@@ -119,10 +120,11 @@ class _TitleWithAutorsAndDelete extends StatelessWidget {
       children: [
         Expanded(child: _TitleWithAuthors(book: book)),
         BlocBuilder<DownloadCubit, DownloadState>(
-          buildWhen: (p, c) => p.downloadingBookSlug != c.downloadingBookSlug,
+          buildWhen: (p, c) =>
+              p.downloadingBookAudiobookSlug != c.downloadingBookAudiobookSlug,
           builder: (context, state) {
             return AnimatedBoxFade(
-              isChildVisible: state.downloadingBookSlug != book.slug,
+              isChildVisible: state.downloadingBookAudiobookSlug != book.slug,
               child: CustomButton(
                 icon: CustomIcons.delete_forever,
                 onPressed: onDelete,

@@ -68,10 +68,7 @@ class AudioCubit extends SafeCubit<AudioState> {
   }
 
   // Select book for AudioPlayer
-  Future<void> pickBook(
-    BookModel book, {
-    List<AudioBookPart>? offlineParts,
-  }) async {
+  Future<void> pickBook(BookModel book, {bool tryOffline = false}) async {
     if (state.book?.slug == book.slug) {
       // Book already selected, check if we need to set progress
       await _getAndSetProgress();
@@ -84,20 +81,6 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(book: book));
 
     emit(state.copyWith(isLoadingAudiobook: true));
-    if (offlineParts != null && offlineParts.isNotEmpty) {
-      // If we have offline parts, we can create audiobook from them
-      emit(
-        state.copyWith(
-          audiobook: AudiobookModel.create(parts: offlineParts),
-          isLoadingAudiobook: false,
-        ),
-      );
-      // Prepare playlist if player is not already playing
-      if (!_player.playing) {
-        _preparePlaylist();
-      }
-      return;
-    }
 
     final audiobookResponse = await _audiobookRepository.getAudiobook(
       slug: book.slug,

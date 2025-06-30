@@ -14,6 +14,9 @@ _OfflineBookModel _$OfflineBookModelFromJson(Map<String, dynamic> json) =>
       audiobook: json['audiobook'] == null
           ? null
           : AudiobookModel.fromJson(json['audiobook'] as Map<String, dynamic>),
+      reader: json['reader'] == null
+          ? null
+          : ReaderBookModel.fromJson(json['reader'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$OfflineBookModelToJson(_OfflineBookModel instance) =>
@@ -21,4 +24,5 @@ Map<String, dynamic> _$OfflineBookModelToJson(_OfflineBookModel instance) =>
       'book': instance.book,
       'isAudiobookCorrectlyDownloaded': instance.isAudiobookCorrectlyDownloaded,
       'audiobook': instance.audiobook,
+      'reader': instance.reader,
     };
