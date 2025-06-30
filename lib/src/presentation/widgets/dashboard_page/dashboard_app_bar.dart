@@ -97,7 +97,7 @@ class DashboardAppBar extends StatelessWidget {
                   ),
                   Expanded(child: SvgPicture.asset(Images.logo, width: 165)),
                   SizedBox(
-                    width: 80,
+                    width: Dimensions.elementHeight * 2,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
