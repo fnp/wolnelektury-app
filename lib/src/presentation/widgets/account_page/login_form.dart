@@ -161,6 +161,7 @@ class _LoginFormState extends State<LoginForm> {
                               alignment: Alignment.centerRight,
                               child: Text(
                                 LocaleKeys.login_forgot,
+                                textAlign: TextAlign.center,
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   decoration: TextDecoration.underline,
                                   color: CustomColors.secondaryBlueColor,

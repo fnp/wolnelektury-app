@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ConnectivityState {
 
- ConnectivityResult? get result;
+ ConnectivityResult? get result; bool get showAlert;
 /// Create a copy of ConnectivityState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $ConnectivityStateCopyWith<ConnectivityState> get copyWith => _$ConnectivityStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectivityState&&(identical(other.result, result) || other.result == result));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectivityState&&(identical(other.result, result) || other.result == result)&&(identical(other.showAlert, showAlert) || other.showAlert == showAlert));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,result);
+int get hashCode => Object.hash(runtimeType,result,showAlert);
 
 @override
 String toString() {
-  return 'ConnectivityState(result: $result)';
+  return 'ConnectivityState(result: $result, showAlert: $showAlert)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $ConnectivityStateCopyWith<$Res>  {
   factory $ConnectivityStateCopyWith(ConnectivityState value, $Res Function(ConnectivityState) _then) = _$ConnectivityStateCopyWithImpl;
 @useResult
 $Res call({
- ConnectivityResult? result
+ ConnectivityResult? result, bool showAlert
 });
 
 
@@ -63,10 +63,11 @@ class _$ConnectivityStateCopyWithImpl<$Res>
 
 /// Create a copy of ConnectivityState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? result = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? result = freezed,Object? showAlert = null,}) {
   return _then(_self.copyWith(
 result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
-as ConnectivityResult?,
+as ConnectivityResult?,showAlert: null == showAlert ? _self.showAlert : showAlert // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -77,10 +78,11 @@ as ConnectivityResult?,
 
 
 class _ConnectivityState implements ConnectivityState {
-  const _ConnectivityState({this.result});
+  const _ConnectivityState({this.result, this.showAlert = false});
   
 
 @override final  ConnectivityResult? result;
+@override@JsonKey() final  bool showAlert;
 
 /// Create a copy of ConnectivityState
 /// with the given fields replaced by the non-null parameter values.
@@ -92,16 +94,16 @@ _$ConnectivityStateCopyWith<_ConnectivityState> get copyWith => __$ConnectivityS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConnectivityState&&(identical(other.result, result) || other.result == result));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConnectivityState&&(identical(other.result, result) || other.result == result)&&(identical(other.showAlert, showAlert) || other.showAlert == showAlert));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,result);
+int get hashCode => Object.hash(runtimeType,result,showAlert);
 
 @override
 String toString() {
-  return 'ConnectivityState(result: $result)';
+  return 'ConnectivityState(result: $result, showAlert: $showAlert)';
 }
 
 
@@ -112,7 +114,7 @@ abstract mixin class _$ConnectivityStateCopyWith<$Res> implements $ConnectivityS
   factory _$ConnectivityStateCopyWith(_ConnectivityState value, $Res Function(_ConnectivityState) _then) = __$ConnectivityStateCopyWithImpl;
 @override @useResult
 $Res call({
- ConnectivityResult? result
+ ConnectivityResult? result, bool showAlert
 });
 
 
@@ -129,10 +131,11 @@ class __$ConnectivityStateCopyWithImpl<$Res>
 
 /// Create a copy of ConnectivityState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? result = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? result = freezed,Object? showAlert = null,}) {
   return _then(_ConnectivityState(
 result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
-as ConnectivityResult?,
+as ConnectivityResult?,showAlert: null == showAlert ? _self.showAlert : showAlert // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

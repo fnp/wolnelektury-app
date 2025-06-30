@@ -27,16 +27,26 @@ class ConnectivityCubit extends SafeCubit<ConnectivityState> {
 
           final retryResults = await Connectivity().checkConnectivity();
 
-          if (retryResults.isNotEmpty) {
-            emit(state.copyWith(result: retryResults.first));
-          } else {
-            emit(state.copyWith(result: ConnectivityResult.none));
+          final resultToEmit = retryResults.isNotEmpty
+              ? retryResults.first
+              : ConnectivityResult.none;
+
+          emit(state.copyWith(result: resultToEmit, showAlert: false));
+
+          // If still no connectivity, start 5s cooldown
+          if (resultToEmit == ConnectivityResult.none) {
+            await Future.delayed(const Duration(seconds: 3));
+            emit(state.copyWith(showAlert: true));
           }
         } else {
-          emit(state.copyWith(result: initialResult));
+          emit(state.copyWith(result: initialResult, showAlert: false));
         }
       }
     });
+  }
+
+  void hideAlert() {
+    emit(state.copyWith(showAlert: false));
   }
 
   @override

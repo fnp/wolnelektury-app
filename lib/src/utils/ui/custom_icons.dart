@@ -170,4 +170,9 @@ class CustomIcons {
     fontFamily: _kFontFam,
     fontPackage: _kFontPkg,
   );
+  static const IconData signal_disconnected = IconData(
+    0xe81d,
+    fontFamily: _kFontFam,
+    fontPackage: _kFontPkg,
+  );
 }

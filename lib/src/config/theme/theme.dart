@@ -140,13 +140,11 @@ final _baseTheme = ThemeData(
 
 final yellowElevatedButton = ElevatedButton.styleFrom(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-  padding: const EdgeInsets.symmetric(
-    horizontal: Dimensions.veryLargePadding,
-    vertical: Dimensions.mediumPadding,
-  ),
+  padding: const EdgeInsets.symmetric(horizontal: Dimensions.veryLargePadding),
+  fixedSize: const Size.fromHeight(Dimensions.elementHeight),
   textStyle: const TextStyle(
     fontSize: 14,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     color: CustomColors.black,
     fontFamily: 'SourceSans3',
   ),
@@ -157,6 +155,11 @@ final blueElevatedButton = yellowElevatedButton.copyWith(
   backgroundColor: const WidgetStatePropertyAll(
     CustomColors.secondaryBlueColor,
   ),
+);
+
+final whiteElevatedButton = yellowElevatedButton.copyWith(
+  backgroundColor: const WidgetStatePropertyAll(Colors.white),
+  foregroundColor: const WidgetStatePropertyAll(CustomColors.black),
 );
 
 DialogThemeData _lightModeDialog = DialogThemeData(
@@ -182,7 +185,6 @@ DialogThemeData _darkModeDialog = DialogThemeData(
 final _lightModeInput = InputDecorationTheme(
   contentPadding: const EdgeInsets.symmetric(
     horizontal: Dimensions.veryLargePadding,
-    vertical: Dimensions.mediumPadding,
   ),
   hintStyle: const TextStyle(
     color: CustomColors.black,
@@ -208,6 +210,9 @@ final _lightModeInput = InputDecorationTheme(
 
 final _darkModeInput = _lightModeInput.copyWith(
   fillColor: CustomColors.darkModeGrey,
+  contentPadding: const EdgeInsets.symmetric(
+    horizontal: Dimensions.veryLargePadding,
+  ),
   hintStyle: const TextStyle(
     color: CustomColors.white,
     fontSize: 14,

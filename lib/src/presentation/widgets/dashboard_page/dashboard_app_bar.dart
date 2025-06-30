@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_size.dart';
@@ -35,17 +36,14 @@ class DashboardAppBar extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BlocBuilder<RouterCubit, RouterState>(
-                    buildWhen: (p, c) => p.isMainPage != c.isMainPage,
-                    builder: (context, state) {
-                      return AnimatedOpacity(
-                        duration: const Duration(milliseconds: 200),
-                        opacity: state.isMainPage ? 0 : 1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            right: Dimensions.mediumPadding,
-                          ),
-                          child: SizedBox.square(
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.fastOutSlowIn,
+                    child: BlocBuilder<RouterCubit, RouterState>(
+                      buildWhen: (p, c) => p.isMainPage != c.isMainPage,
+                      builder: (context, state) {
+                        if (!state.isMainPage) {
+                          return SizedBox.square(
                             dimension: Dimensions.elementHeight,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(
@@ -64,10 +62,28 @@ class DashboardAppBar extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      );
-                    },
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.fastOutSlowIn,
+                    child: BlocBuilder<ConnectivityCubit, ConnectivityState>(
+                      buildWhen: (p, c) => p.isConnected != c.isConnected,
+                      builder: (context, state) {
+                        if (!state.isConnected) {
+                          return const CustomButton(
+                            icon: CustomIcons.signal_disconnected,
+                            iconColor: CustomColors.black,
+                            backgroundColor: Colors.transparent,
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
                   ),
                   Expanded(child: SvgPicture.asset(Images.logo, width: 165)),
                   const CustomButton(

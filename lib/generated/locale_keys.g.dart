@@ -9,6 +9,9 @@ abstract class  LocaleKeys {
   static const dashboard_account_not_logged = 'dashboard.account_not_logged';
   static const dashboard_account_logged = 'dashboard.account_logged';
   static const dashboard = 'dashboard';
+  static const no_connection_content = 'no_connection.content';
+  static const no_connection_button = 'no_connection.button';
+  static const no_connection = 'no_connection';
   static const reading_sheet_bookmark_add = 'reading.sheet.bookmark_add';
   static const reading_sheet_bookmark_edit = 'reading.sheet.bookmark_edit';
   static const reading_sheet = 'reading.sheet';

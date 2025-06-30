@@ -6,6 +6,10 @@
         "account_not_logged": "logowanie",
         "account_logged": "moja\nbiblioteka"
     },
+    "no_connection": {
+        "content": "Ups… nie masz połączenia z internetem. Niektóre funkcje aplikacji są niedostępne.",
+        "button": "Rozumiem"
+    },
     "reading": {
         "sheet": {
             "bookmark_add": "dodaj zakładkę",
