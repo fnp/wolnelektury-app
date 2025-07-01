@@ -28,7 +28,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     this._booksRepository,
   ) : super(const DownloadState());
 
-  // Resets the error states in the DownloadState
+  // Resets the audiobook error states in the DownloadState
   void _resetAudiobookErrors() {
     emit(
       state.copyWith(
@@ -38,6 +38,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     );
   }
 
+  // Resets the reader error states in the DownloadState
   void _resetReaderErrors() {
     emit(
       state.copyWith(
@@ -52,6 +53,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     emit(state.copyWith(progress: progress));
   }
 
+  // Saves the book reader data to the app storage
   Future<void> saveReader({
     required BookModel book,
     VoidCallback? onFinish,

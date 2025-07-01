@@ -63,7 +63,14 @@ class _DashboardConnectionWrapperState
             );
           },
         ),
-        BlocBuilder<ConnectivityCubit, ConnectivityState>(
+        BlocConsumer<ConnectivityCubit, ConnectivityState>(
+          listenWhen: (p, c) => !p.showAlert && c.showAlert,
+          listener: (context, state) {
+            setState(() {
+              isDisposed = false;
+              isShrunk = false;
+            });
+          },
           buildWhen: (p, c) => p.showAlert != c.showAlert,
           builder: (context, state) {
             final double targetSize;

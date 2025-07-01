@@ -84,6 +84,7 @@ class AudioCubit extends SafeCubit<AudioState> {
 
     final audiobookResponse = await _audiobookRepository.getAudiobook(
       slug: book.slug,
+      tryOffline: tryOffline,
     );
 
     audiobookResponse.handle(

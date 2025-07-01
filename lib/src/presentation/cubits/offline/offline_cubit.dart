@@ -45,20 +45,16 @@ class OfflineCubit extends SafeCubit<OfflineState> {
       book.book.slug,
     );
 
-    try {
-      final offlineParts = offlineBook?.audiobook?.parts
-          .map((e) => e.url)
-          .toList();
+    final offlineParts = offlineBook?.audiobook?.parts
+        .map((e) => e.url)
+        .toList();
 
-      await _deleteOfflineFiles(
-        files:
-            offlineParts ??
-            book.audiobook?.parts.map((e) => e.url).toList() ??
-            [],
-      );
-    } catch (e) {
-      //TODO handle error
-    }
+    await _deleteOfflineFiles(
+      files:
+          offlineParts ??
+          book.audiobook?.parts.map((e) => e.url).toList() ??
+          [],
+    );
 
     final initAudiobooks = List<OfflineBookModel>.from(state.audiobooks);
     final newAudiobooks = initAudiobooks

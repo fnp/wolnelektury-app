@@ -189,7 +189,7 @@ class BookmarkWidget extends StatelessWidget {
                                       extra: book,
                                       pathParameters: {
                                         'slug': book.slug,
-                                        'anchor': bookmark.anchor.toString(),
+                                        'anchor': bookmark.anchor,
                                       },
                                     );
                                   },

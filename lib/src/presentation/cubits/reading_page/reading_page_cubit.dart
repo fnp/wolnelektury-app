@@ -56,7 +56,9 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
         await _getAndSetProgress(
           slug: book.slug,
           itemScrollController: itemScrollController,
-          overrideProgressAnchor: overrideProgressAnchor,
+          overrideProgressAnchor: overrideProgressAnchor == null
+              ? null
+              : overrideProgressAnchor + 1,
         );
       },
       failure: (failure) {

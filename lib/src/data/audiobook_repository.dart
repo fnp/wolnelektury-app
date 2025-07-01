@@ -28,10 +28,7 @@ class AudiobookRepositoryImplementation extends AudiobookRepository {
       if (tryOffline) {
         final offlineBook = await _appStorageService.readOfflineBook(slug);
         if (offlineBook?.audiobook != null) {
-          final parsed = AudiobookModel.fromJson(
-            offlineBook!.audiobook!.toJson(),
-          );
-          return DataState.success(data: parsed.parts);
+          return DataState.success(data: offlineBook!.audiobook!.parts);
         }
         return const DataState.failure(Failure.notFound());
       }
