@@ -69,20 +69,25 @@ class AudioCubit extends SafeCubit<AudioState> {
 
   // Select book for AudioPlayer
   Future<void> pickBook(BookModel book, {bool tryOffline = false}) async {
-    if (state.book?.slug == book.slug) {
+    final isSameAudiobookInitialized = state.book?.slug == book.slug;
+    final wasInitializedOnline = state.parts.any((e) => !e.isOffline);
+    final wasInitializedOffline = state.parts.any((e) => e.isOffline);
+
+    if (isSameAudiobookInitialized) {
       // Book already selected, check if we need to set progress
       await _getAndSetProgress();
-      // Previous parts aren't offline & picked book isn't offline as well, we can return
-      if (state.parts.any((e) => !e.isOffline) && !tryOffline) return;
-      // Otherwise we need to initialize player with the same book, but different parts
+
+      final modeChanged =
+          (wasInitializedOffline && !tryOffline) ||
+          (wasInitializedOnline && tryOffline);
+
+      if (!modeChanged) return;
     }
 
     // New book selected, reset all values
     await stop();
 
-    emit(state.copyWith(book: book));
-
-    emit(state.copyWith(isLoadingAudiobook: true));
+    emit(state.copyWith(book: book, isLoadingAudiobook: true));
 
     final audiobookResponse = await _audiobookRepository.getAudiobook(
       slug: book.slug,
