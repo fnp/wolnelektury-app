@@ -72,7 +72,9 @@ class AudioCubit extends SafeCubit<AudioState> {
     if (state.book?.slug == book.slug) {
       // Book already selected, check if we need to set progress
       await _getAndSetProgress();
-      return;
+      // Previous parts aren't offline & picked book isn't offline as well, we can return
+      if (state.parts.any((e) => !e.isOffline) && !tryOffline) return;
+      // Otherwise we need to initialize player with the same book, but different parts
     }
 
     // New book selected, reset all values
