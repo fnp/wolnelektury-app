@@ -74,11 +74,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
                         setState(() {
                           currentPageIndex = index;
                         });
-                        _pageController.animateToPage(
-                          index,
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.fastOutSlowIn,
-                        );
+                        _pageController.jumpToPage(index);
                       },
                     ),
                   ),

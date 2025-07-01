@@ -120,8 +120,10 @@ class _TitleWithAutorsAndDelete extends StatelessWidget {
       children: [
         Expanded(child: _TitleWithAuthors(book: book)),
         BlocBuilder<DownloadCubit, DownloadState>(
-          buildWhen: (p, c) =>
-              p.downloadingBookAudiobookSlug != c.downloadingBookAudiobookSlug,
+          buildWhen: (p, c) {
+            return p.downloadingBookAudiobookSlug !=
+                c.downloadingBookAudiobookSlug;
+          },
           builder: (context, state) {
             return AnimatedBoxFade(
               isChildVisible: state.downloadingBookAudiobookSlug != book.slug,

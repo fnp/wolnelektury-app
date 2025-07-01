@@ -71,12 +71,18 @@ class OfflineCubit extends SafeCubit<OfflineState> {
     }
   }
 
-  Future<void> _deleteOfflineFiles({required List<String> files}) {
-    return Future.wait(
-      files.map((file) async {
-        final fileToDelete = File(file);
-        await fileToDelete.delete();
-      }),
-    );
+  Future<void> _deleteOfflineFiles({required List<String> files}) async {
+    try {
+      await Future.wait(
+        files.map((file) async {
+          final fileToDelete = File(file);
+          if (await fileToDelete.exists()) {
+            await fileToDelete.delete();
+          }
+        }),
+      );
+    } catch (_) {
+      // If we could delete, it's deleted, if not, we just ignore the error
+    }
   }
 }

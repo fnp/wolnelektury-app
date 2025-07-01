@@ -259,15 +259,19 @@ class DownloadCubit extends SafeCubit<DownloadState> {
       _appStorageService.readOfflineBook(slug);
 
   // Deletes offline files based on the provided list of file URLs
-  Future<void> _deleteOfflineFiles({required List<String> files}) {
-    return Future.wait(
-      files.map((file) async {
-        final fileToDelete = File(file);
-        if (await fileToDelete.exists()) {
-          await fileToDelete.delete();
-        }
-      }),
-    );
+  Future<void> _deleteOfflineFiles({required List<String> files}) async {
+    try {
+      await Future.wait(
+        files.map((file) async {
+          final fileToDelete = File(file);
+          if (await fileToDelete.exists()) {
+            await fileToDelete.delete();
+          }
+        }),
+      );
+    } catch (_) {
+      // If we could delete, it's deleted, if not, we just ignore the error
+    }
   }
 
   Future<void> _removeAudiobook(String slug) async {
