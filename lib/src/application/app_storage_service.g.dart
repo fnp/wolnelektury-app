@@ -927,6 +927,567 @@ class OfflineBooksCompanion extends UpdateCompanion<OfflineBook> {
   }
 }
 
+class $ProgressesTable extends Progresses
+    with TableInfo<$ProgressesTable, ProgressesData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProgressesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _slugMeta = const VerificationMeta('slug');
+  @override
+  late final GeneratedColumn<String> slug = GeneratedColumn<String>(
+    'slug',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _progressJsonMeta = const VerificationMeta(
+    'progressJson',
+  );
+  @override
+  late final GeneratedColumn<String> progressJson = GeneratedColumn<String>(
+    'progress_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [slug, progressJson, updatedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'progresses';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ProgressesData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('slug')) {
+      context.handle(
+        _slugMeta,
+        slug.isAcceptableOrUnknown(data['slug']!, _slugMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_slugMeta);
+    }
+    if (data.containsKey('progress_json')) {
+      context.handle(
+        _progressJsonMeta,
+        progressJson.isAcceptableOrUnknown(
+          data['progress_json']!,
+          _progressJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_progressJsonMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {slug};
+  @override
+  ProgressesData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ProgressesData(
+      slug: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}slug'],
+      )!,
+      progressJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}progress_json'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ProgressesTable createAlias(String alias) {
+    return $ProgressesTable(attachedDatabase, alias);
+  }
+}
+
+class ProgressesData extends DataClass implements Insertable<ProgressesData> {
+  final String slug;
+  final String progressJson;
+  final DateTime updatedAt;
+  const ProgressesData({
+    required this.slug,
+    required this.progressJson,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['slug'] = Variable<String>(slug);
+    map['progress_json'] = Variable<String>(progressJson);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  ProgressesCompanion toCompanion(bool nullToAbsent) {
+    return ProgressesCompanion(
+      slug: Value(slug),
+      progressJson: Value(progressJson),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory ProgressesData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ProgressesData(
+      slug: serializer.fromJson<String>(json['slug']),
+      progressJson: serializer.fromJson<String>(json['progressJson']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'slug': serializer.toJson<String>(slug),
+      'progressJson': serializer.toJson<String>(progressJson),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  ProgressesData copyWith({
+    String? slug,
+    String? progressJson,
+    DateTime? updatedAt,
+  }) => ProgressesData(
+    slug: slug ?? this.slug,
+    progressJson: progressJson ?? this.progressJson,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  ProgressesData copyWithCompanion(ProgressesCompanion data) {
+    return ProgressesData(
+      slug: data.slug.present ? data.slug.value : this.slug,
+      progressJson: data.progressJson.present
+          ? data.progressJson.value
+          : this.progressJson,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProgressesData(')
+          ..write('slug: $slug, ')
+          ..write('progressJson: $progressJson, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(slug, progressJson, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ProgressesData &&
+          other.slug == this.slug &&
+          other.progressJson == this.progressJson &&
+          other.updatedAt == this.updatedAt);
+}
+
+class ProgressesCompanion extends UpdateCompanion<ProgressesData> {
+  final Value<String> slug;
+  final Value<String> progressJson;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const ProgressesCompanion({
+    this.slug = const Value.absent(),
+    this.progressJson = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ProgressesCompanion.insert({
+    required String slug,
+    required String progressJson,
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : slug = Value(slug),
+       progressJson = Value(progressJson);
+  static Insertable<ProgressesData> custom({
+    Expression<String>? slug,
+    Expression<String>? progressJson,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (slug != null) 'slug': slug,
+      if (progressJson != null) 'progress_json': progressJson,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ProgressesCompanion copyWith({
+    Value<String>? slug,
+    Value<String>? progressJson,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return ProgressesCompanion(
+      slug: slug ?? this.slug,
+      progressJson: progressJson ?? this.progressJson,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (slug.present) {
+      map['slug'] = Variable<String>(slug.value);
+    }
+    if (progressJson.present) {
+      map['progress_json'] = Variable<String>(progressJson.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProgressesCompanion(')
+          ..write('slug: $slug, ')
+          ..write('progressJson: $progressJson, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SyncInfoTable extends SyncInfo
+    with TableInfo<$SyncInfoTable, SyncInfoData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncInfoTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _receivedProgressSyncAtMeta =
+      const VerificationMeta('receivedProgressSyncAt');
+  @override
+  late final GeneratedColumn<DateTime> receivedProgressSyncAt =
+      GeneratedColumn<DateTime>(
+        'received_progress_sync_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _sentProgressSyncAtMeta =
+      const VerificationMeta('sentProgressSyncAt');
+  @override
+  late final GeneratedColumn<DateTime> sentProgressSyncAt =
+      GeneratedColumn<DateTime>(
+        'sent_progress_sync_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    receivedProgressSyncAt,
+    sentProgressSyncAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_info';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SyncInfoData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('received_progress_sync_at')) {
+      context.handle(
+        _receivedProgressSyncAtMeta,
+        receivedProgressSyncAt.isAcceptableOrUnknown(
+          data['received_progress_sync_at']!,
+          _receivedProgressSyncAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sent_progress_sync_at')) {
+      context.handle(
+        _sentProgressSyncAtMeta,
+        sentProgressSyncAt.isAcceptableOrUnknown(
+          data['sent_progress_sync_at']!,
+          _sentProgressSyncAtMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SyncInfoData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncInfoData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      receivedProgressSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}received_progress_sync_at'],
+      ),
+      sentProgressSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}sent_progress_sync_at'],
+      ),
+    );
+  }
+
+  @override
+  $SyncInfoTable createAlias(String alias) {
+    return $SyncInfoTable(attachedDatabase, alias);
+  }
+}
+
+class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
+  final int id;
+  final DateTime? receivedProgressSyncAt;
+  final DateTime? sentProgressSyncAt;
+  const SyncInfoData({
+    required this.id,
+    this.receivedProgressSyncAt,
+    this.sentProgressSyncAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || receivedProgressSyncAt != null) {
+      map['received_progress_sync_at'] = Variable<DateTime>(
+        receivedProgressSyncAt,
+      );
+    }
+    if (!nullToAbsent || sentProgressSyncAt != null) {
+      map['sent_progress_sync_at'] = Variable<DateTime>(sentProgressSyncAt);
+    }
+    return map;
+  }
+
+  SyncInfoCompanion toCompanion(bool nullToAbsent) {
+    return SyncInfoCompanion(
+      id: Value(id),
+      receivedProgressSyncAt: receivedProgressSyncAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receivedProgressSyncAt),
+      sentProgressSyncAt: sentProgressSyncAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sentProgressSyncAt),
+    );
+  }
+
+  factory SyncInfoData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncInfoData(
+      id: serializer.fromJson<int>(json['id']),
+      receivedProgressSyncAt: serializer.fromJson<DateTime?>(
+        json['receivedProgressSyncAt'],
+      ),
+      sentProgressSyncAt: serializer.fromJson<DateTime?>(
+        json['sentProgressSyncAt'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'receivedProgressSyncAt': serializer.toJson<DateTime?>(
+        receivedProgressSyncAt,
+      ),
+      'sentProgressSyncAt': serializer.toJson<DateTime?>(sentProgressSyncAt),
+    };
+  }
+
+  SyncInfoData copyWith({
+    int? id,
+    Value<DateTime?> receivedProgressSyncAt = const Value.absent(),
+    Value<DateTime?> sentProgressSyncAt = const Value.absent(),
+  }) => SyncInfoData(
+    id: id ?? this.id,
+    receivedProgressSyncAt: receivedProgressSyncAt.present
+        ? receivedProgressSyncAt.value
+        : this.receivedProgressSyncAt,
+    sentProgressSyncAt: sentProgressSyncAt.present
+        ? sentProgressSyncAt.value
+        : this.sentProgressSyncAt,
+  );
+  SyncInfoData copyWithCompanion(SyncInfoCompanion data) {
+    return SyncInfoData(
+      id: data.id.present ? data.id.value : this.id,
+      receivedProgressSyncAt: data.receivedProgressSyncAt.present
+          ? data.receivedProgressSyncAt.value
+          : this.receivedProgressSyncAt,
+      sentProgressSyncAt: data.sentProgressSyncAt.present
+          ? data.sentProgressSyncAt.value
+          : this.sentProgressSyncAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncInfoData(')
+          ..write('id: $id, ')
+          ..write('receivedProgressSyncAt: $receivedProgressSyncAt, ')
+          ..write('sentProgressSyncAt: $sentProgressSyncAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, receivedProgressSyncAt, sentProgressSyncAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncInfoData &&
+          other.id == this.id &&
+          other.receivedProgressSyncAt == this.receivedProgressSyncAt &&
+          other.sentProgressSyncAt == this.sentProgressSyncAt);
+}
+
+class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
+  final Value<int> id;
+  final Value<DateTime?> receivedProgressSyncAt;
+  final Value<DateTime?> sentProgressSyncAt;
+  const SyncInfoCompanion({
+    this.id = const Value.absent(),
+    this.receivedProgressSyncAt = const Value.absent(),
+    this.sentProgressSyncAt = const Value.absent(),
+  });
+  SyncInfoCompanion.insert({
+    this.id = const Value.absent(),
+    this.receivedProgressSyncAt = const Value.absent(),
+    this.sentProgressSyncAt = const Value.absent(),
+  });
+  static Insertable<SyncInfoData> custom({
+    Expression<int>? id,
+    Expression<DateTime>? receivedProgressSyncAt,
+    Expression<DateTime>? sentProgressSyncAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (receivedProgressSyncAt != null)
+        'received_progress_sync_at': receivedProgressSyncAt,
+      if (sentProgressSyncAt != null)
+        'sent_progress_sync_at': sentProgressSyncAt,
+    });
+  }
+
+  SyncInfoCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime?>? receivedProgressSyncAt,
+    Value<DateTime?>? sentProgressSyncAt,
+  }) {
+    return SyncInfoCompanion(
+      id: id ?? this.id,
+      receivedProgressSyncAt:
+          receivedProgressSyncAt ?? this.receivedProgressSyncAt,
+      sentProgressSyncAt: sentProgressSyncAt ?? this.sentProgressSyncAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (receivedProgressSyncAt.present) {
+      map['received_progress_sync_at'] = Variable<DateTime>(
+        receivedProgressSyncAt.value,
+      );
+    }
+    if (sentProgressSyncAt.present) {
+      map['sent_progress_sync_at'] = Variable<DateTime>(
+        sentProgressSyncAt.value,
+      );
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncInfoCompanion(')
+          ..write('id: $id, ')
+          ..write('receivedProgressSyncAt: $receivedProgressSyncAt, ')
+          ..write('sentProgressSyncAt: $sentProgressSyncAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppStorage extends GeneratedDatabase {
   _$AppStorage(QueryExecutor e) : super(e);
   $AppStorageManager get managers => $AppStorageManager(this);
@@ -934,6 +1495,8 @@ abstract class _$AppStorage extends GeneratedDatabase {
   late final $AppCacheTable appCache = $AppCacheTable(this);
   late final $ReaderSettingsTable readerSettings = $ReaderSettingsTable(this);
   late final $OfflineBooksTable offlineBooks = $OfflineBooksTable(this);
+  late final $ProgressesTable progresses = $ProgressesTable(this);
+  late final $SyncInfoTable syncInfo = $SyncInfoTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -943,6 +1506,8 @@ abstract class _$AppStorage extends GeneratedDatabase {
     appCache,
     readerSettings,
     offlineBooks,
+    progresses,
+    syncInfo,
   ];
 }
 
@@ -1533,6 +2098,330 @@ typedef $$OfflineBooksTableProcessedTableManager =
       OfflineBook,
       PrefetchHooks Function()
     >;
+typedef $$ProgressesTableCreateCompanionBuilder =
+    ProgressesCompanion Function({
+      required String slug,
+      required String progressJson,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+typedef $$ProgressesTableUpdateCompanionBuilder =
+    ProgressesCompanion Function({
+      Value<String> slug,
+      Value<String> progressJson,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$ProgressesTableFilterComposer
+    extends Composer<_$AppStorage, $ProgressesTable> {
+  $$ProgressesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get progressJson => $composableBuilder(
+    column: $table.progressJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ProgressesTableOrderingComposer
+    extends Composer<_$AppStorage, $ProgressesTable> {
+  $$ProgressesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get progressJson => $composableBuilder(
+    column: $table.progressJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ProgressesTableAnnotationComposer
+    extends Composer<_$AppStorage, $ProgressesTable> {
+  $$ProgressesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get slug =>
+      $composableBuilder(column: $table.slug, builder: (column) => column);
+
+  GeneratedColumn<String> get progressJson => $composableBuilder(
+    column: $table.progressJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$ProgressesTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $ProgressesTable,
+          ProgressesData,
+          $$ProgressesTableFilterComposer,
+          $$ProgressesTableOrderingComposer,
+          $$ProgressesTableAnnotationComposer,
+          $$ProgressesTableCreateCompanionBuilder,
+          $$ProgressesTableUpdateCompanionBuilder,
+          (
+            ProgressesData,
+            BaseReferences<_$AppStorage, $ProgressesTable, ProgressesData>,
+          ),
+          ProgressesData,
+          PrefetchHooks Function()
+        > {
+  $$ProgressesTableTableManager(_$AppStorage db, $ProgressesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ProgressesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ProgressesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ProgressesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> slug = const Value.absent(),
+                Value<String> progressJson = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProgressesCompanion(
+                slug: slug,
+                progressJson: progressJson,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String slug,
+                required String progressJson,
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProgressesCompanion.insert(
+                slug: slug,
+                progressJson: progressJson,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ProgressesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $ProgressesTable,
+      ProgressesData,
+      $$ProgressesTableFilterComposer,
+      $$ProgressesTableOrderingComposer,
+      $$ProgressesTableAnnotationComposer,
+      $$ProgressesTableCreateCompanionBuilder,
+      $$ProgressesTableUpdateCompanionBuilder,
+      (
+        ProgressesData,
+        BaseReferences<_$AppStorage, $ProgressesTable, ProgressesData>,
+      ),
+      ProgressesData,
+      PrefetchHooks Function()
+    >;
+typedef $$SyncInfoTableCreateCompanionBuilder =
+    SyncInfoCompanion Function({
+      Value<int> id,
+      Value<DateTime?> receivedProgressSyncAt,
+      Value<DateTime?> sentProgressSyncAt,
+    });
+typedef $$SyncInfoTableUpdateCompanionBuilder =
+    SyncInfoCompanion Function({
+      Value<int> id,
+      Value<DateTime?> receivedProgressSyncAt,
+      Value<DateTime?> sentProgressSyncAt,
+    });
+
+class $$SyncInfoTableFilterComposer
+    extends Composer<_$AppStorage, $SyncInfoTable> {
+  $$SyncInfoTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get receivedProgressSyncAt => $composableBuilder(
+    column: $table.receivedProgressSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get sentProgressSyncAt => $composableBuilder(
+    column: $table.sentProgressSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SyncInfoTableOrderingComposer
+    extends Composer<_$AppStorage, $SyncInfoTable> {
+  $$SyncInfoTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get receivedProgressSyncAt => $composableBuilder(
+    column: $table.receivedProgressSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get sentProgressSyncAt => $composableBuilder(
+    column: $table.sentProgressSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SyncInfoTableAnnotationComposer
+    extends Composer<_$AppStorage, $SyncInfoTable> {
+  $$SyncInfoTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get receivedProgressSyncAt => $composableBuilder(
+    column: $table.receivedProgressSyncAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get sentProgressSyncAt => $composableBuilder(
+    column: $table.sentProgressSyncAt,
+    builder: (column) => column,
+  );
+}
+
+class $$SyncInfoTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $SyncInfoTable,
+          SyncInfoData,
+          $$SyncInfoTableFilterComposer,
+          $$SyncInfoTableOrderingComposer,
+          $$SyncInfoTableAnnotationComposer,
+          $$SyncInfoTableCreateCompanionBuilder,
+          $$SyncInfoTableUpdateCompanionBuilder,
+          (
+            SyncInfoData,
+            BaseReferences<_$AppStorage, $SyncInfoTable, SyncInfoData>,
+          ),
+          SyncInfoData,
+          PrefetchHooks Function()
+        > {
+  $$SyncInfoTableTableManager(_$AppStorage db, $SyncInfoTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncInfoTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncInfoTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncInfoTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime?> receivedProgressSyncAt = const Value.absent(),
+                Value<DateTime?> sentProgressSyncAt = const Value.absent(),
+              }) => SyncInfoCompanion(
+                id: id,
+                receivedProgressSyncAt: receivedProgressSyncAt,
+                sentProgressSyncAt: sentProgressSyncAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime?> receivedProgressSyncAt = const Value.absent(),
+                Value<DateTime?> sentProgressSyncAt = const Value.absent(),
+              }) => SyncInfoCompanion.insert(
+                id: id,
+                receivedProgressSyncAt: receivedProgressSyncAt,
+                sentProgressSyncAt: sentProgressSyncAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SyncInfoTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $SyncInfoTable,
+      SyncInfoData,
+      $$SyncInfoTableFilterComposer,
+      $$SyncInfoTableOrderingComposer,
+      $$SyncInfoTableAnnotationComposer,
+      $$SyncInfoTableCreateCompanionBuilder,
+      $$SyncInfoTableUpdateCompanionBuilder,
+      (
+        SyncInfoData,
+        BaseReferences<_$AppStorage, $SyncInfoTable, SyncInfoData>,
+      ),
+      SyncInfoData,
+      PrefetchHooks Function()
+    >;
 
 class $AppStorageManager {
   final _$AppStorage _db;
@@ -1545,4 +2434,8 @@ class $AppStorageManager {
       $$ReaderSettingsTableTableManager(_db, _db.readerSettings);
   $$OfflineBooksTableTableManager get offlineBooks =>
       $$OfflineBooksTableTableManager(_db, _db.offlineBooks);
+  $$ProgressesTableTableManager get progresses =>
+      $$ProgressesTableTableManager(_db, _db.progresses);
+  $$SyncInfoTableTableManager get syncInfo =>
+      $$SyncInfoTableTableManager(_db, _db.syncInfo);
 }

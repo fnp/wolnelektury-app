@@ -1,89 +1,124 @@
+import 'dart:convert';
+
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
+import 'package:wolnelektury/src/application/app_storage_service.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
-import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
-import 'package:wolnelektury/src/utils/serializer/serializer.dart';
+
+enum ProgressType { text, audio }
 
 abstract class ProgressRepository {
-  Future<DataState<List<ProgressModel>>> getProgresses({String? url});
-  Future<DataState<TextProgressModel>> getTextProgressByBook({
-    required String slug,
+  Future<DataState<List<ProgressModel>>> getProgresses({
+    int offset = 0,
+    int limit = 20,
   });
-  Future<DataState<AudioProgressModel>> getAudioProgressByBook({
+
+  Future<DataState<ProgressModel>> getProgressByBook({required String slug});
+
+  Future<DataState<void>> setProgress({
     required String slug,
-  });
-  // Try to update offline book if exists or keep the data when user is not logged
-  Future<DataState<TextProgressModel>> setTextProgress({
-    required String slug,
-    required int textAnchor,
-  });
-  // Try to update offline book if exists or keep the data when user is not logged
-  Future<DataState<void>> setAudioProgress({
-    required String slug,
-    required int position,
+    required ProgressModel progress,
+    required ProgressType type,
+    bool tryOnline = true,
   });
 }
 
 class ProgressRepositoryImplementation extends ProgressRepository {
-  static const String progressEndpoint = '/progress/';
-  static String progressByBookEndpoint(String slug) => '/progress/$slug/';
   static String progressTextEndpoint(String slug) => '/progress/$slug/text/';
   static String progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
 
   final ApiService _apiService;
+  final AppStorageService _appStorageService;
 
-  ProgressRepositoryImplementation(this._apiService);
+  ProgressRepositoryImplementation(this._apiService, this._appStorageService);
 
   @override
-  Future<DataState<TextProgressModel>> getTextProgressByBook({
+  Future<DataState<List<ProgressModel>>> getProgresses({
+    int offset = 0,
+    int limit = 20,
+  }) async {
+    try {
+      final response = await _appStorageService.getProgresses(
+        offset: offset,
+        limit: limit,
+      );
+
+      if (response.isEmpty) {
+        return const DataState.failure(Failure.notFound());
+      }
+      final progresses = response
+          .map((e) => ProgressModel.fromJson(jsonDecode(e)))
+          .toList();
+      return DataState.success(data: progresses);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<ProgressModel>> getProgressByBook({
     required String slug,
   }) async {
     try {
-      final response = await _apiService.getRequest(
-        progressByBookEndpoint(slug),
-        useCache: CacheEnum.ignore,
-      );
-
-      if (response.hasError) {
-        return const DataState.failure(Failure.badResponse());
+      final response = await _appStorageService.getProgressBySlug(slug);
+      if (response == null) {
+        return const DataState.failure(Failure.notFound());
       }
-
-      return DataState.success(
-        data: TextProgressModel.fromJson(response.data!.first),
-      );
+      final progress = ProgressModel.fromJson(jsonDecode(response));
+      return DataState.success(data: progress);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
     }
   }
 
   @override
-  Future<DataState<List<ProgressModel>>> getProgresses({String? url}) async {
+  Future<DataState<void>> setProgress({
+    required String slug,
+    required ProgressModel progress,
+    required ProgressType type,
+    // Try online when internet is available and user is logged in.
+    bool tryOnline = true,
+  }) async {
     try {
-      final effectiveUrl = url ?? progressEndpoint;
+      await _appStorageService.upsertMultipleProgressData([
+        (
+          slug: slug,
+          progressJson: jsonEncode(
+            progress.copyWith(updatedAt: DateTime.now()).toJson(),
+          ),
+          updatedAt: DateTime.now(),
+        ),
+      ]);
 
-      final response = await _apiService.getRequest(
-        effectiveUrl,
-        useCache: CacheEnum.ignore,
-      );
-
-      if (response.hasError) {
-        return const DataState.failure(Failure.badResponse());
+      if (tryOnline) {
+        // Mark the sync date
+        await _appStorageService.updateSyncData(
+          sentProgressSyncAt: DateTime.now(),
+        );
+        switch (type) {
+          case ProgressType.text:
+            if (progress.textAnchor == null) break;
+            return _setTextProgressInDb(
+              slug: slug,
+              textAnchor: progress.textAnchor!,
+            );
+          case ProgressType.audio:
+            if (progress.audioTimestamp == null) break;
+            return _setAudioProgressInDb(
+              slug: slug,
+              position: progress.audioTimestamp!,
+            );
+        }
       }
 
-      return DataState.fromApiResponse(
-        response: response,
-        converter: (data) {
-          return serializer(data: data, serializer: ProgressModel.fromJson);
-        },
-      );
+      return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
     }
   }
 
-  @override
-  Future<DataState<void>> setAudioProgress({
+  Future<DataState<void>> _setAudioProgressInDb({
     required String slug,
     required int position,
   }) async {
@@ -103,10 +138,9 @@ class ProgressRepositoryImplementation extends ProgressRepository {
     }
   }
 
-  @override
-  Future<DataState<TextProgressModel>> setTextProgress({
+  Future<DataState<void>> _setTextProgressInDb({
     required String slug,
-    required int textAnchor,
+    required String textAnchor,
   }) async {
     try {
       final response = await _apiService.putRequest(
@@ -118,31 +152,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         return const DataState.failure(Failure.badResponse());
       }
 
-      return DataState.success(
-        data: TextProgressModel.fromJson(response.data!.first),
-      );
-    } catch (e) {
-      return const DataState.failure(Failure.badResponse());
-    }
-  }
-
-  @override
-  Future<DataState<AudioProgressModel>> getAudioProgressByBook({
-    required String slug,
-  }) async {
-    try {
-      final response = await _apiService.getRequest(
-        progressAudioEndpoint(slug),
-        useCache: CacheEnum.ignore,
-      );
-
-      if (response.hasError) {
-        return const DataState.failure(Failure.badResponse());
-      }
-
-      return DataState.success(
-        data: AudioProgressModel.fromJson(response.data!.first),
-      );
+      return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
     }

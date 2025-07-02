@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
@@ -13,6 +15,7 @@ import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
+import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class AudioDialog extends StatelessWidget {
@@ -47,39 +50,52 @@ class AudioDialog extends StatelessWidget {
             key: messengerKey,
             child: Scaffold(
               backgroundColor: Colors.transparent,
-              body: Builder(
-                builder: (context) {
-                  final audioCubit = BlocProvider.of<AudioCubit>(context);
-                  return Stack(
-                    children: [
-                      Positioned.fill(
-                        child: BlocBuilder<AudioCubit, AudioState>(
-                          buildWhen: (p, c) =>
-                              p.isSettingsOpened != c.isSettingsOpened ||
-                              p.isPreparingPlaylist != c.isPreparingPlaylist ||
-                              p.isBookmarksOpened != c.isBookmarksOpened,
-                          builder: (context, state) {
-                            return GestureDetector(
-                              onTap: () {
-                                if (state.isSettingsOpened) {
-                                  audioCubit.toggleSettings(false);
-                                  return;
-                                }
-                                if (state.isBookmarksOpened) {
-                                  audioCubit.toggleBookmarks(false);
-                                  return;
-                                }
-
-                                Navigator.of(context).pop();
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      const AudioDialog(),
-                    ],
+              body: BlocListener<AudioCubit, AudioState>(
+                listenWhen: (p, c) {
+                  return !p.isError && c.isError;
+                },
+                listener: (context, state) {
+                  CustomSnackbar.error(
+                    context,
+                    LocaleKeys.audio_dialog_error.tr(),
+                    messengerKey: messengerKey,
                   );
                 },
+                child: Builder(
+                  builder: (context) {
+                    final audioCubit = BlocProvider.of<AudioCubit>(context);
+                    return Stack(
+                      children: [
+                        Positioned.fill(
+                          child: BlocBuilder<AudioCubit, AudioState>(
+                            buildWhen: (p, c) =>
+                                p.isSettingsOpened != c.isSettingsOpened ||
+                                p.isPreparingPlaylist !=
+                                    c.isPreparingPlaylist ||
+                                p.isBookmarksOpened != c.isBookmarksOpened,
+                            builder: (context, state) {
+                              return GestureDetector(
+                                onTap: () {
+                                  if (state.isSettingsOpened) {
+                                    audioCubit.toggleSettings(false);
+                                    return;
+                                  }
+                                  if (state.isBookmarksOpened) {
+                                    audioCubit.toggleBookmarks(false);
+                                    return;
+                                  }
+
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        const AudioDialog(),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),

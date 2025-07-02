@@ -37,7 +37,31 @@ class OfflineBooks extends Table {
   Set<Column> get primaryKey => {slug};
 }
 
-@DriftDatabase(tables: [AppSettings, AppCache, ReaderSettings, OfflineBooks])
+class Progresses extends Table {
+  TextColumn get slug => text()();
+  TextColumn get progressJson => text()();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {slug};
+}
+
+class SyncInfo extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  DateTimeColumn get receivedProgressSyncAt => dateTime().nullable()();
+  DateTimeColumn get sentProgressSyncAt => dateTime().nullable()();
+}
+
+@DriftDatabase(
+  tables: [
+    AppSettings,
+    AppCache,
+    ReaderSettings,
+    OfflineBooks,
+    Progresses,
+    SyncInfo,
+  ],
+)
 class AppStorage extends _$AppStorage {
   AppStorage() : super(_openConnection());
 
@@ -48,13 +72,23 @@ class AppStorage extends _$AppStorage {
   }
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onUpgrade: (m, from, to) async {
-      if (from == 1 && to == 2) {
+      if (from < 2) {
         await m.createTable(offlineBooks);
+      }
+      if (from < 3) {
+        await m.createTable(progresses);
+        await m.createTable(syncInfo);
+        await m.createIndex(
+          Index(
+            'progresses_updated_at_idx',
+            'CREATE INDEX progresses_updated_at_idx ON progresses(updated_at)',
+          ),
+        );
       }
     },
     onCreate: (m) async {
@@ -323,5 +357,109 @@ class AppStorageService {
       _storage.offlineBooks,
     )..where((book) => book.slug.equals(slug))).go();
     return true;
+  }
+
+  // ------------------------------------------------
+
+  // Progresses
+  // ------------------------------------------------
+  Future<SyncInfoData> getSyncData() async {
+    final syncData = await _storage.select(_storage.syncInfo).getSingleOrNull();
+    if (syncData == null) {
+      await _storage
+          .into(_storage.syncInfo)
+          .insert(
+            const SyncInfoCompanion(
+              id: Value(appSettingsId),
+              receivedProgressSyncAt: Value(null),
+              sentProgressSyncAt: Value(null),
+            ),
+          );
+      return const SyncInfoData(
+        id: appSettingsId,
+        receivedProgressSyncAt: null,
+        sentProgressSyncAt: null,
+      );
+    }
+    return syncData;
+  }
+
+  Future<void> updateSyncData({
+    DateTime? receivedProgressSyncAt,
+    DateTime? sentProgressSyncAt,
+  }) async {
+    final syncData = await getSyncData();
+    final updatedFields = SyncInfoCompanion(
+      id: Value(syncData.id),
+      receivedProgressSyncAt: receivedProgressSyncAt != null
+          ? Value(receivedProgressSyncAt)
+          : const Value.absent(),
+      sentProgressSyncAt: sentProgressSyncAt != null
+          ? Value(sentProgressSyncAt)
+          : const Value.absent(),
+    );
+
+    await _storage.update(_storage.syncInfo).replace(updatedFields);
+  }
+
+  Future<List<String>> getProgressToSync() async {
+    final syncData = await getSyncData();
+
+    // Jeśli `sentProgressSyncAt` jest nullem, zwracamy wszystko
+    final query = _storage.select(_storage.progresses)
+      ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]);
+
+    if (syncData.sentProgressSyncAt != null) {
+      query.where(
+        (tbl) => tbl.updatedAt.isBiggerThanValue(syncData.sentProgressSyncAt!),
+      );
+    }
+
+    final result = await query.get();
+
+    return result.map((e) => e.progressJson).toList();
+  }
+
+  Future<void> upsertMultipleProgressData(
+    List<({String slug, String progressJson, DateTime updatedAt})> progresses,
+  ) async {
+    if (progresses.isEmpty) return;
+
+    final companions = progresses.map((p) {
+      return ProgressesCompanion(
+        slug: Value(p.slug),
+        progressJson: Value(p.progressJson),
+        updatedAt: Value(p.updatedAt),
+      );
+    }).toList();
+
+    await _storage.batch((batch) {
+      batch.insertAllOnConflictUpdate(_storage.progresses, companions);
+    });
+  }
+
+  Future<String?> getProgressBySlug(String slug) async {
+    final result = await (_storage.select(
+      _storage.progresses,
+    )..where((tbl) => tbl.slug.equals(slug))).getSingleOrNull();
+
+    if (result == null || result.progressJson.isEmpty) {
+      return null;
+    }
+
+    return result.progressJson;
+  }
+
+  Future<List<String>> getProgresses({
+    required int offset,
+    required int limit,
+  }) async {
+    final result =
+        await (_storage.select(_storage.progresses)
+              ..limit(limit, offset: offset)
+              ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
+            .get();
+
+    return result.map((e) => e.progressJson).toList();
   }
 }

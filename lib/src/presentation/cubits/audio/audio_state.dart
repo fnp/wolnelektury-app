@@ -22,6 +22,12 @@ sealed class AudioState with _$AudioState {
     @Default(0) int sleepTimer,
     @Default(AudioPlayerSpeedEnum.x1) AudioPlayerSpeedEnum speed,
     @Default(0) int playToPart,
+
+    // Error
+    @Default(false) bool isError,
+
+    // Progress
+    ProgressModel? progress,
   }) = _AudioState;
 }
 

@@ -15,7 +15,7 @@ sealed class ReadingPageState with _$ReadingPageState {
     @Default(false) bool isAddingBookmark,
 
     // Progress
-    TextProgressModel? progress,
+    ProgressModel? progress,
   }) = _ReadingPageState;
 }
 

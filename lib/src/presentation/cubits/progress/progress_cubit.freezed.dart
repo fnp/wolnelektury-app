@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProgressState {
 
- bool get isLoading; bool get isLoadingMore; List<ProgressModel> get progresses; ApiResponsePagination get pagination;
+ bool get isLoading; bool get isLoadingMore; List<ProgressModel> get progresses;
 /// Create a copy of ProgressState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $ProgressStateCopyWith<ProgressState> get copyWith => _$ProgressStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgressState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.progresses, progresses)&&(identical(other.pagination, pagination) || other.pagination == pagination));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgressState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.progresses, progresses));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isLoadingMore,const DeepCollectionEquality().hash(progresses),pagination);
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingMore,const DeepCollectionEquality().hash(progresses));
 
 @override
 String toString() {
-  return 'ProgressState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, progresses: $progresses, pagination: $pagination)';
+  return 'ProgressState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, progresses: $progresses)';
 }
 
 
@@ -46,11 +46,11 @@ abstract mixin class $ProgressStateCopyWith<$Res>  {
   factory $ProgressStateCopyWith(ProgressState value, $Res Function(ProgressState) _then) = _$ProgressStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, bool isLoadingMore, List<ProgressModel> progresses, ApiResponsePagination pagination
+ bool isLoading, bool isLoadingMore, List<ProgressModel> progresses
 });
 
 
-$ApiResponsePaginationCopyWith<$Res> get pagination;
+
 
 }
 /// @nodoc
@@ -63,25 +63,15 @@ class _$ProgressStateCopyWithImpl<$Res>
 
 /// Create a copy of ProgressState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isLoadingMore = null,Object? progresses = null,Object? pagination = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isLoadingMore = null,Object? progresses = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,progresses: null == progresses ? _self.progresses : progresses // ignore: cast_nullable_to_non_nullable
-as List<ProgressModel>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
-as ApiResponsePagination,
+as List<ProgressModel>,
   ));
 }
-/// Create a copy of ProgressState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ApiResponsePaginationCopyWith<$Res> get pagination {
-  
-  return $ApiResponsePaginationCopyWith<$Res>(_self.pagination, (value) {
-    return _then(_self.copyWith(pagination: value));
-  });
-}
+
 }
 
 
@@ -89,7 +79,7 @@ $ApiResponsePaginationCopyWith<$Res> get pagination {
 
 
 class _ProgressState implements ProgressState {
-  const _ProgressState({this.isLoading = false, this.isLoadingMore = false, final  List<ProgressModel> progresses = const [], this.pagination = const ApiResponsePagination()}): _progresses = progresses;
+  const _ProgressState({this.isLoading = false, this.isLoadingMore = false, final  List<ProgressModel> progresses = const []}): _progresses = progresses;
   
 
 @override@JsonKey() final  bool isLoading;
@@ -101,7 +91,6 @@ class _ProgressState implements ProgressState {
   return EqualUnmodifiableListView(_progresses);
 }
 
-@override@JsonKey() final  ApiResponsePagination pagination;
 
 /// Create a copy of ProgressState
 /// with the given fields replaced by the non-null parameter values.
@@ -113,16 +102,16 @@ _$ProgressStateCopyWith<_ProgressState> get copyWith => __$ProgressStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgressState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other._progresses, _progresses)&&(identical(other.pagination, pagination) || other.pagination == pagination));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgressState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other._progresses, _progresses));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isLoadingMore,const DeepCollectionEquality().hash(_progresses),pagination);
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingMore,const DeepCollectionEquality().hash(_progresses));
 
 @override
 String toString() {
-  return 'ProgressState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, progresses: $progresses, pagination: $pagination)';
+  return 'ProgressState(isLoading: $isLoading, isLoadingMore: $isLoadingMore, progresses: $progresses)';
 }
 
 
@@ -133,11 +122,11 @@ abstract mixin class _$ProgressStateCopyWith<$Res> implements $ProgressStateCopy
   factory _$ProgressStateCopyWith(_ProgressState value, $Res Function(_ProgressState) _then) = __$ProgressStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, bool isLoadingMore, List<ProgressModel> progresses, ApiResponsePagination pagination
+ bool isLoading, bool isLoadingMore, List<ProgressModel> progresses
 });
 
 
-@override $ApiResponsePaginationCopyWith<$Res> get pagination;
+
 
 }
 /// @nodoc
@@ -150,26 +139,16 @@ class __$ProgressStateCopyWithImpl<$Res>
 
 /// Create a copy of ProgressState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isLoadingMore = null,Object? progresses = null,Object? pagination = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isLoadingMore = null,Object? progresses = null,}) {
   return _then(_ProgressState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,progresses: null == progresses ? _self._progresses : progresses // ignore: cast_nullable_to_non_nullable
-as List<ProgressModel>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
-as ApiResponsePagination,
+as List<ProgressModel>,
   ));
 }
 
-/// Create a copy of ProgressState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ApiResponsePaginationCopyWith<$Res> get pagination {
-  
-  return $ApiResponsePaginationCopyWith<$Res>(_self.pagination, (value) {
-    return _then(_self.copyWith(pagination: value));
-  });
-}
+
 }
 
 // dart format on

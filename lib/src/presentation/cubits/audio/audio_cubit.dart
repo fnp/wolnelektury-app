@@ -9,6 +9,7 @@ import 'package:wolnelektury/src/data/audiobook_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/presentation/enums/audio_player_speed_enum.dart';
 import 'package:wolnelektury/src/utils/audio/custom_audio_session.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
@@ -190,7 +191,7 @@ class AudioCubit extends SafeCubit<AudioState> {
 
   Future<void> play() async {
     // Require audio session to play
-    emit(state.copyWith(isPreparingSession: true));
+    emit(state.copyWith(isPreparingSession: true, isError: false));
     final canPlay = await _audioSession.setActive(true);
     emit(state.copyWith(isPreparingSession: false));
     // Couldn't get audio session, return
@@ -360,17 +361,21 @@ class AudioCubit extends SafeCubit<AudioState> {
       'AudioCubit',
       'Prepared playling for book ${state.book?.title}',
     );
-    //TODO try catch here, handle error
-    await Future.wait([
-      _audioSession.initializationFuture,
-      _player.setAudioSources(
-        playlist,
-        initialIndex: foundPosition.$2,
-        initialPosition: Duration(seconds: foundPosition.$1),
-      ),
-      _player.setLoopMode(LoopMode.off),
-      _player.setSpeed(AudioPlayerSpeedEnum.x1.value),
-    ]);
+
+    try {
+      await Future.wait([
+        _audioSession.initializationFuture,
+        _player.setAudioSources(
+          playlist,
+          initialIndex: foundPosition.$2,
+          initialPosition: Duration(seconds: foundPosition.$1),
+        ),
+        _player.setLoopMode(LoopMode.off),
+        _player.setSpeed(AudioPlayerSpeedEnum.x1.value),
+      ]);
+    } catch (e) {
+      emit(state.copyWith(isError: true));
+    }
     _attachPositionListener();
     emit(state.copyWith(isPreparingPlaylist: false));
   }
@@ -470,16 +475,26 @@ class AudioCubit extends SafeCubit<AudioState> {
       'AudioCubit',
       'Saving progress at position: $position',
     );
-    _progressRepository.setAudioProgress(
+    ProgressModel progress;
+    if (state.progress != null) {
+      progress = state.progress!.copyWith(audioTimestamp: position);
+    } else {
+      progress = ProgressModel.fromAudio(
+        slug: state.book!.slug,
+        audioTimestamp: position,
+      );
+    }
+    _progressRepository.setProgress(
       slug: state.book!.slug,
-      position: position,
+      progress: progress,
+      type: ProgressType.audio,
     );
   }
 
   // This function gets the progress of the audiobook from the repository
   // and sets the position in UI, used in setting player position as well
   Future<(int, int)> _getAndSetProgress() async {
-    final existingProgress = await _progressRepository.getAudioProgressByBook(
+    final existingProgress = await _progressRepository.getProgressByBook(
       slug: state.book!.slug,
     );
     (int, int) foundPosition = (0, 0);
@@ -495,6 +510,7 @@ class AudioCubit extends SafeCubit<AudioState> {
         emit(
           state.copyWith(
             statePosition: timestamp,
+            progress: data,
             currentlyPlayingPart: foundPosition.$2,
           ),
         );

@@ -82,7 +82,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       );
       return;
     }
-    final progress = await _progressRepository.getTextProgressByBook(
+    final progress = await _progressRepository.getProgressByBook(
       slug: state.currentSlug!,
     );
     progress.handle(
@@ -124,14 +124,25 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       'ReadingPageCubit',
       'Setting progress of the book ${state.currentSlug} to $anchor',
     );
-    final newProgress = await _progressRepository.setTextProgress(
+    ProgressModel progress;
+    if (state.progress == null) {
+      progress = ProgressModel.fromText(
+        slug: state.currentSlug!,
+        textAnchor: anchor.toString(),
+      );
+    } else {
+      progress = state.progress!.copyWith(textAnchor: anchor.toString());
+    }
+
+    final newProgress = await _progressRepository.setProgress(
       slug: state.currentSlug!,
-      textAnchor: anchor,
+      progress: progress,
+      type: ProgressType.text,
     );
 
     newProgress.handle(
       success: (data, _) {
-        emit(state.copyWith(progress: data));
+        emit(state.copyWith(progress: progress));
       },
       failure: (_) {},
     );

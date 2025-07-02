@@ -17,7 +17,7 @@ mixin _$ReadingPageState {
 
  String? get currentSlug; double get textSizeFactor; ReaderFontType get fontType; bool get isJsonLoading; ReaderBookModel? get book;// ParagraphSheet
  int? get selectedIndex; ReaderBookModelContent? get selectedParagraph; bool get isAddingBookmark;// Progress
- TextProgressModel? get progress;
+ ProgressModel? get progress;
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $ReadingPageStateCopyWith<$Res>  {
   factory $ReadingPageStateCopyWith(ReadingPageState value, $Res Function(ReadingPageState) _then) = _$ReadingPageStateCopyWithImpl;
 @useResult
 $Res call({
- String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, TextProgressModel? progress
+ String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress
 });
 
 
-$TextProgressModelCopyWith<$Res>? get progress;
+$ProgressModelCopyWith<$Res>? get progress;
 
 }
 /// @nodoc
@@ -76,19 +76,19 @@ as ReaderBookModel?,selectedIndex: freezed == selectedIndex ? _self.selectedInde
 as int?,selectedParagraph: freezed == selectedParagraph ? _self.selectedParagraph : selectedParagraph // ignore: cast_nullable_to_non_nullable
 as ReaderBookModelContent?,isAddingBookmark: null == isAddingBookmark ? _self.isAddingBookmark : isAddingBookmark // ignore: cast_nullable_to_non_nullable
 as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as TextProgressModel?,
+as ProgressModel?,
   ));
 }
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$TextProgressModelCopyWith<$Res>? get progress {
+$ProgressModelCopyWith<$Res>? get progress {
     if (_self.progress == null) {
     return null;
   }
 
-  return $TextProgressModelCopyWith<$Res>(_self.progress!, (value) {
+  return $ProgressModelCopyWith<$Res>(_self.progress!, (value) {
     return _then(_self.copyWith(progress: value));
   });
 }
@@ -112,7 +112,7 @@ class _ReadingPageState implements ReadingPageState {
 @override final  ReaderBookModelContent? selectedParagraph;
 @override@JsonKey() final  bool isAddingBookmark;
 // Progress
-@override final  TextProgressModel? progress;
+@override final  ProgressModel? progress;
 
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
@@ -144,11 +144,11 @@ abstract mixin class _$ReadingPageStateCopyWith<$Res> implements $ReadingPageSta
   factory _$ReadingPageStateCopyWith(_ReadingPageState value, $Res Function(_ReadingPageState) _then) = __$ReadingPageStateCopyWithImpl;
 @override @useResult
 $Res call({
- String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, TextProgressModel? progress
+ String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress
 });
 
 
-@override $TextProgressModelCopyWith<$Res>? get progress;
+@override $ProgressModelCopyWith<$Res>? get progress;
 
 }
 /// @nodoc
@@ -172,7 +172,7 @@ as ReaderBookModel?,selectedIndex: freezed == selectedIndex ? _self.selectedInde
 as int?,selectedParagraph: freezed == selectedParagraph ? _self.selectedParagraph : selectedParagraph // ignore: cast_nullable_to_non_nullable
 as ReaderBookModelContent?,isAddingBookmark: null == isAddingBookmark ? _self.isAddingBookmark : isAddingBookmark // ignore: cast_nullable_to_non_nullable
 as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as TextProgressModel?,
+as ProgressModel?,
   ));
 }
 
@@ -180,12 +180,12 @@ as TextProgressModel?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$TextProgressModelCopyWith<$Res>? get progress {
+$ProgressModelCopyWith<$Res>? get progress {
     if (_self.progress == null) {
     return null;
   }
 
-  return $TextProgressModelCopyWith<$Res>(_self.progress!, (value) {
+  return $ProgressModelCopyWith<$Res>(_self.progress!, (value) {
     return _then(_self.copyWith(progress: value));
   });
 }

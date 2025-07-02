@@ -70,6 +70,7 @@ abstract class  LocaleKeys {
   static const donation_button = 'donation.button';
   static const donation = 'donation';
   static const audio_dialog_part = 'audio_dialog.part';
+  static const audio_dialog_error = 'audio_dialog.error';
   static const audio_dialog_paragraph = 'audio_dialog.paragraph';
   static const audio_dialog_delete_paragraph = 'audio_dialog.delete_paragraph';
   static const audio_dialog_settings_sleep_timer = 'audio_dialog.settings.sleep_timer';

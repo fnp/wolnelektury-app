@@ -93,6 +93,7 @@ class MyLibraryListsSection extends StatelessWidget {
 
                           final effIndex = state.isAdding ? index - 1 : index;
 
+                          //TODO SKELETONIZER OF LISTS CALL
                           return MyLibraryList(
                             key: ValueKey(state.allLists[effIndex].slug),
                             bookList: state.allLists[effIndex],

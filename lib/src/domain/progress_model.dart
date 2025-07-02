@@ -6,41 +6,36 @@ part 'progress_model.g.dart';
 @freezed
 sealed class ProgressModel with _$ProgressModel {
   const factory ProgressModel({
-    String? book,
     @JsonKey(name: 'book_slug') String? slug,
-    @JsonKey(name: 'last_mode') String? lastMode,
-    @JsonKey(name: 'text_percent') double? textPercent,
     @JsonKey(name: 'text_anchor') String? textAnchor,
-    @JsonKey(name: 'audio_percent') double? audioPercent,
-    @JsonKey(name: 'audio_timestamp') double? audioTimestamp,
-    @JsonKey(name: 'implicit_text_percent') double? implicitTextPercent,
-    @JsonKey(name: 'implicit_text_anchor') String? implicitTextAnchor,
-    @JsonKey(name: 'implicit_audio_percent') double? implicitAudioPercent,
-    @JsonKey(name: 'implicit_audio_timestamp') double? implicitAudioTimestamp,
+    @JsonKey(name: 'audio_timestamp') int? audioTimestamp,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProgressModel;
 
   factory ProgressModel.fromJson(Map<String, dynamic> json) =>
       _$ProgressModelFromJson(json);
-}
 
-@freezed
-sealed class TextProgressModel with _$TextProgressModel {
-  const factory TextProgressModel({
-    @JsonKey(name: 'text_percent') double? textPercent,
-    @JsonKey(name: 'text_anchor') String? textAnchor,
-  }) = _TextProgressModel;
+  factory ProgressModel.fromAudio({
+    required String slug,
+    required int audioTimestamp,
+  }) {
+    return ProgressModel(
+      slug: slug,
+      audioTimestamp: audioTimestamp,
+      textAnchor: null,
+      updatedAt: DateTime.now(),
+    );
+  }
 
-  factory TextProgressModel.fromJson(Map<String, dynamic> json) =>
-      _$TextProgressModelFromJson(json);
-}
-
-@freezed
-sealed class AudioProgressModel with _$AudioProgressModel {
-  const factory AudioProgressModel({
-    @JsonKey(name: 'audio_timestamp') int? audioTimestamp,
-    @JsonKey(name: 'audio_percent') double? audioPercent,
-  }) = _AudioProgressModel;
-
-  factory AudioProgressModel.fromJson(Map<String, dynamic> json) =>
-      _$AudioProgressModelFromJson(json);
+  factory ProgressModel.fromText({
+    required String slug,
+    required String textAnchor,
+  }) {
+    return ProgressModel(
+      slug: slug,
+      audioTimestamp: null,
+      textAnchor: textAnchor,
+      updatedAt: DateTime.now(),
+    );
+  }
 }
