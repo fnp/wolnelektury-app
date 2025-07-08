@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 
 part 'connectivity_cubit.freezed.dart';
@@ -39,14 +41,23 @@ class ConnectivityCubit extends SafeCubit<ConnectivityState> {
             emit(state.copyWith(showAlert: true));
           }
         } else {
-          emit(state.copyWith(result: initialResult, showAlert: false));
+          emit(
+            state.copyWith(
+              result: initialResult,
+              showAlert: false,
+              disableNavigation: false,
+            ),
+          );
         }
       }
     });
   }
 
-  void hideAlert() {
+  Future<void> hideAlert() async {
     emit(state.copyWith(showAlert: false));
+    await Future.delayed(const Duration(seconds: 1));
+    router.goNamed(accountPageConfig.name);
+    emit(state.copyWith(disableNavigation: true));
   }
 
   @override

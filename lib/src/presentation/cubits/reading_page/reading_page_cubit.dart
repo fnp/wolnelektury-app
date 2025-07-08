@@ -96,7 +96,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
         if (anchor == null) return;
         final foundIndex = state.findElementIndexByParagraphIndex(anchor);
         if (foundIndex != null) {
-          await Future.delayed(const Duration(milliseconds: 1));
+          await Future.delayed(const Duration(milliseconds: 500));
           itemScrollController.scrollTo(
             index: foundIndex + 1,
             duration: const Duration(milliseconds: 500),

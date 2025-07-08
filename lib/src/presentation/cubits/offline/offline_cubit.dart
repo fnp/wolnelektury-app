@@ -24,7 +24,38 @@ class OfflineCubit extends SafeCubit<OfflineState> {
     );
   }
 
-  Future<void> removeOfflineReader(OfflineBookModel book) async {
+  Future<void> removeOfflineReader({required OfflineBookModel book}) async {
+    if (state.readerToDelete != null) {
+      _removeOfflineReader(state.readerToDelete!);
+    }
+    emit(state.copyWith(readerToDelete: book));
+
+    await Future.delayed(const Duration(seconds: 5));
+    if (state.readerToDelete?.book.slug == book.book.slug) {
+      _removeOfflineReader(book, shouldHandle: true);
+    }
+  }
+
+  Future<void> removeOfflineAudiobook({required OfflineBookModel book}) async {
+    if (state.audiobookToDelete != null) {
+      _removeOfflineAudiobook(state.audiobookToDelete!);
+    }
+    emit(state.copyWith(audiobookToDelete: book));
+
+    await Future.delayed(const Duration(seconds: 5));
+    if (state.audiobookToDelete?.book.slug == book.book.slug) {
+      _removeOfflineAudiobook(book, shouldHandle: true);
+    }
+  }
+
+  Future<void> removeAudiobookInstantly(OfflineBookModel book) async {
+    await _removeOfflineAudiobook(book);
+  }
+
+  Future<void> _removeOfflineReader(
+    OfflineBookModel book, {
+    bool shouldHandle = false,
+  }) async {
     final initReaders = List<OfflineBookModel>.from(state.readers);
     final newReaders = initReaders
       ..removeWhere((e) => e.book.slug == book.book.slug);
@@ -38,9 +69,22 @@ class OfflineCubit extends SafeCubit<OfflineState> {
         book.copyWith(reader: null),
       );
     }
+    if (!shouldHandle) return;
+    emit(state.copyWith(readerToDelete: null));
   }
 
-  Future<void> removeOfflineAudiobook(OfflineBookModel book) async {
+  void undoRemovingOfflineReader() {
+    emit(state.copyWith(readerToDelete: null));
+  }
+
+  void undoRemovingOfflineAudiobook() {
+    emit(state.copyWith(audiobookToDelete: null));
+  }
+
+  Future<void> _removeOfflineAudiobook(
+    OfflineBookModel book, {
+    bool shouldHandle = false,
+  }) async {
     final offlineBook = await _appStorageService.readOfflineBook(
       book.book.slug,
     );
@@ -69,6 +113,8 @@ class OfflineCubit extends SafeCubit<OfflineState> {
         book.copyWith(audiobook: null),
       );
     }
+    if (!shouldHandle) return;
+    emit(state.copyWith(audiobookToDelete: null));
   }
 
   Future<void> _deleteOfflineFiles({required List<String> files}) async {

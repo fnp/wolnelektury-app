@@ -6,7 +6,7 @@ part 'progress_model.g.dart';
 @freezed
 sealed class ProgressModel with _$ProgressModel {
   const factory ProgressModel({
-    @JsonKey(name: 'book_slug') String? slug,
+    @JsonKey(name: 'book_slug') required String slug,
     @JsonKey(name: 'text_anchor') String? textAnchor,
     @JsonKey(name: 'audio_timestamp') int? audioTimestamp,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,

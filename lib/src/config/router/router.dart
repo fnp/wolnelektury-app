@@ -17,6 +17,13 @@ import 'package:wolnelektury/src/presentation/pages/settings_page.dart';
 extension GoRouterX on GoRouter {
   String get location =>
       routerDelegate.currentConfiguration.last.matchedLocation;
+
+  void clearStackAndNavigateNamed(String name) {
+    while (canPop()) {
+      pop();
+    }
+    pushReplacementNamed(name);
+  }
 }
 
 final routerNavigationKey = GlobalKey<NavigatorState>();

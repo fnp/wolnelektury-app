@@ -14,7 +14,8 @@ import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/re
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class MyLibraryPage extends StatefulWidget {
-  const MyLibraryPage({super.key});
+  final bool isOfflineMode;
+  const MyLibraryPage({super.key, required this.isOfflineMode});
 
   @override
   State<MyLibraryPage> createState() => _MyLibraryPageState();
@@ -22,6 +23,7 @@ class MyLibraryPage extends StatefulWidget {
 
 class _MyLibraryPageState extends State<MyLibraryPage> {
   int currentPageIndex = 0;
+  double _opacity = 1;
   final PageController _pageController = PageController();
   final AutoScrollController _scrollController = AutoScrollController();
 
@@ -33,6 +35,11 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final efectiveEnums = widget.isOfflineMode
+        ? MyLibraryEnum.values
+              .where((element) => element.isAvailableOffline)
+              .toList()
+        : MyLibraryEnum.values;
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: context.read<ListCreatorCubit>()..init()),
@@ -54,10 +61,11 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
                 return const SizedBox(width: Dimensions.mediumPadding);
               },
               scrollDirection: Axis.horizontal,
-              itemCount: MyLibraryEnum.values.length,
+              itemCount: efectiveEnums.length,
+
               itemBuilder: (_, index) {
                 final isFirst = index == 0;
-                final isLast = index == MyLibraryEnum.values.length - 1;
+                final isLast = index == efectiveEnums.length - 1;
                 return AutoScrollTag(
                   key: ValueKey(index),
                   controller: _scrollController,
@@ -69,12 +77,22 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
                     ),
                     child: MyLibraryPill(
                       isSelected: currentPageIndex == index,
-                      pillType: MyLibraryEnum.values[index],
-                      onTap: () {
+                      pillType: efectiveEnums[index],
+                      onTap: () async {
                         setState(() {
                           currentPageIndex = index;
+                          _opacity = 0;
                         });
-                        _pageController.jumpToPage(index);
+                        // Delay to allow the opacity animation to start
+                        // This decreases the flickering effect a lot
+                        await Future.delayed(
+                          const Duration(milliseconds: 200),
+                        ).then((_) {
+                          _pageController.jumpToPage(index);
+                          setState(() {
+                            _opacity = 1;
+                          });
+                        });
                       },
                     ),
                   ),
@@ -83,24 +101,31 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
             ),
           ),
           Expanded(
-            child: PageView(
-              onPageChanged: (value) {
-                setState(() {
-                  currentPageIndex = value;
-                  _scrollController.scrollToIndex(
-                    value,
-                    preferPosition: AutoScrollPosition.end,
-                  );
-                });
-              },
-              controller: _pageController,
-              children: const [
-                MyLibraryListsSection(),
-                MyLibraryLikedSection(),
-                MyLibraryBookmarksSection(),
-                MyLibraryAudiobooksSection(),
-                MyLibraryReadersSection(),
-              ],
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.fastOutSlowIn,
+              opacity: _opacity,
+              child: PageView(
+                onPageChanged: (value) {
+                  setState(() {
+                    currentPageIndex = value;
+                    _scrollController.scrollToIndex(
+                      value,
+                      preferPosition: AutoScrollPosition.end,
+                    );
+                  });
+                },
+                controller: _pageController,
+                children: [
+                  if (!widget.isOfflineMode) ...[
+                    const MyLibraryListsSection(),
+                    const MyLibraryLikedSection(),
+                    const MyLibraryBookmarksSection(),
+                  ],
+                  const MyLibraryAudiobooksSection(),
+                  const MyLibraryReadersSection(),
+                ],
+              ),
             ),
           ),
         ],

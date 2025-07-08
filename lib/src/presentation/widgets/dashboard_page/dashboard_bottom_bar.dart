@@ -5,6 +5,7 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/donation/donation_dialog.dart';
@@ -118,57 +119,79 @@ class _NavigationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    const animationDuration = Duration(milliseconds: 300);
 
-    return BlocBuilder<RouterCubit, RouterState>(
-      buildWhen: (p, c) =>
-          p.location == path && c.location != path ||
-          p.location != path && c.location == path,
-      builder: (context, state) {
-        return Expanded(
-          child: InkWell(
-            splashColor: theme.colorScheme.surface,
-            highlightColor: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(Dimensions.smallBorderRadius),
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.mediumPadding,
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: Dimensions.largePadding),
-                  Padding(
-                    padding: shouldCorrectPadding
-                        ? const EdgeInsets.only(right: 1)
-                        : EdgeInsets.zero,
-                    child: Icon(
-                      icon,
-                      size: 24,
-                      color: state.location == path
-                          ? CustomColors.secondaryBlueColor
-                          : theme.colorScheme.onTertiaryContainer,
+    return BlocBuilder<ConnectivityCubit, ConnectivityState>(
+      buildWhen: (p, c) {
+        return p.isConnected != c.isConnected ||
+            p.disableNavigation != c.disableNavigation;
+      },
+      builder: (context, connState) {
+        return BlocBuilder<RouterCubit, RouterState>(
+          buildWhen: (p, c) =>
+              p.location == path && c.location != path ||
+              p.location != path && c.location == path,
+          builder: (context, state) {
+            final blockRoute =
+                !connState.isConnected &&
+                connState.disableNavigation &&
+                path != accountPageConfig.path;
+            return Expanded(
+              child: IgnorePointer(
+                ignoring: blockRoute,
+                child: AnimatedOpacity(
+                  duration: animationDuration,
+                  opacity: blockRoute ? 0.3 : 1.0,
+                  child: InkWell(
+                    splashColor: theme.colorScheme.surface,
+                    highlightColor: theme.colorScheme.surface,
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.smallBorderRadius,
+                    ),
+                    onTap: onTap,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.mediumPadding,
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: Dimensions.largePadding),
+                          Padding(
+                            padding: shouldCorrectPadding
+                                ? const EdgeInsets.only(right: 1)
+                                : EdgeInsets.zero,
+                            child: Icon(
+                              icon,
+                              size: 24,
+                              color: state.location == path
+                                  ? CustomColors.secondaryBlueColor
+                                  : theme.colorScheme.onTertiaryContainer,
+                            ),
+                          ),
+                          const SizedBox(height: Dimensions.smallPadding),
+                          Text(
+                            text,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontFeatures: [const FontFeature.enable('smcp')],
+                              fontWeight: FontWeight.bold,
+                              height: 1.09,
+                              fontSize: 11,
+                              color: state.location == path
+                                  ? CustomColors.secondaryBlueColor
+                                  : theme.colorScheme.onTertiaryContainer,
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: Dimensions.smallPadding),
-                  Text(
-                    text,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontFeatures: [const FontFeature.enable('smcp')],
-                      fontWeight: FontWeight.bold,
-                      height: 1.09,
-                      fontSize: 11,
-                      color: state.location == path
-                          ? CustomColors.secondaryBlueColor
-                          : theme.colorScheme.onTertiaryContainer,
-                    ),
-                  ),
-                  const Spacer(),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

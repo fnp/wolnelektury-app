@@ -15,4 +15,16 @@ extension MyLibraryEnumExtension on MyLibraryEnum {
         return 'Moje listy';
     }
   }
+
+  bool get isAvailableOffline {
+    switch (this) {
+      case MyLibraryEnum.audiobooks:
+      case MyLibraryEnum.readers:
+        return true;
+      case MyLibraryEnum.bookmarks:
+      case MyLibraryEnum.liked:
+      case MyLibraryEnum.lists:
+        return false;
+    }
+  }
 }

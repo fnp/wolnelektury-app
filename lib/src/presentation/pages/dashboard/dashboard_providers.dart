@@ -53,7 +53,7 @@ class DashboardProviders extends StatelessWidget {
             );
           },
         ),
-        BlocProvider(create: (_) => AuthCubit(get.get())..tryAutoLogin()),
+        BlocProvider(create: (_) => get.get<AuthCubit>()..tryAutoLogin()),
       ],
       child: child,
     );

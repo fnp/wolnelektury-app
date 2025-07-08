@@ -35,6 +35,22 @@
                 "cancel": "Anuluj",
                 "delete": "Usuń"
             }
+        },
+        "offline": {
+            "corrupted_audiobook": {
+                "title": "Pliki audiobooku są uszkodzone",
+                "content": "Pliki audiobooka są uszkodzone lub niekompletne",
+                "delete": "Usuń",
+                "download": "Pobierz"
+            },
+            "snackbar": {
+                "reader_removed": "Czytnik został usunięty",
+                "audiobook_removed": "Audiobook został usunięty",
+                "audiobook_error": "Wystąpił błąd podczas pobierania audiobooku",
+                "audiobook_already_downloading": "Inny audiobook jest już pobierany",
+                "audiobook_downloading_start": "Rozpoczęto pobieranie audiobooku",
+                "audiobook_downloading_success": "Audiobook został pobrany"
+            }
         }
     },
     "login": {

@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/dialog_wrapper.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
@@ -31,14 +33,14 @@ class MyLibraryAudiobookCorruptedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DialogWrapper(
-      title: 'Pliki audiobooka są uszkodzone',
+      title: LocaleKeys.my_library_offline_corrupted_audiobook_title.tr(),
       icon: CustomIcons.delete_forever,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: Dimensions.veryLargePadding,
         children: [
           Text(
-            'Pliki audiobooka są uszkodzone lub niekompletne.',
+            LocaleKeys.my_library_offline_corrupted_audiobook_content.tr(),
             style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w500,
             ),
@@ -54,7 +56,8 @@ class MyLibraryAudiobookCorruptedDialog extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  'Pobierz',
+                  LocaleKeys.my_library_offline_corrupted_audiobook_download
+                      .tr(),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -67,7 +70,7 @@ class MyLibraryAudiobookCorruptedDialog extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  'Usuń',
+                  LocaleKeys.my_library_offline_corrupted_audiobook_delete.tr(),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

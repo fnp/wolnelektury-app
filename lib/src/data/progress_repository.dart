@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 enum ProgressType { text, audio }
@@ -20,8 +23,10 @@ abstract class ProgressRepository {
     required String slug,
     required ProgressModel progress,
     required ProgressType type,
-    bool tryOnline = true,
   });
+
+  Future<DataState<void>> sendOutProgressSync();
+  Future<DataState<void>> receiveInProgressSync();
 }
 
 class ProgressRepositoryImplementation extends ProgressRepository {
@@ -32,6 +37,49 @@ class ProgressRepositoryImplementation extends ProgressRepository {
   final AppStorageService _appStorageService;
 
   ProgressRepositoryImplementation(this._apiService, this._appStorageService);
+
+  @override
+  Future<DataState<void>> receiveInProgressSync() async {
+    try {
+      final syncData = await _appStorageService.getSyncData();
+      final lastReceived = syncData.receivedProgressSyncAt;
+
+      //TODO Api call with lastReceived as a parameter
+      final progresses = [];
+      // If success ⬇
+      await _appStorageService.upsertMultipleProgressData([]);
+      await _appStorageService.updateSyncData(
+        receivedProgressSyncAt: DateTime.now(),
+      );
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<void>> sendOutProgressSync() async {
+    try {
+      final progresses = await _appStorageService.getProgressToSync();
+      print('Number of progresses to sync: ${progresses.length}');
+      // All up to date
+      if (progresses.isEmpty) {
+        await _appStorageService.updateSyncData(
+          sentProgressSyncAt: DateTime.now(),
+        );
+        return const DataState.success(data: null);
+      }
+
+      // TODO API CALL WITH ALL THE PROGRESSES NEEDING TO BE SYNCED
+      // If success ⬇
+      await _appStorageService.updateSyncData(
+        sentProgressSyncAt: DateTime.now(),
+      );
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
 
   @override
   Future<DataState<List<ProgressModel>>> getProgresses({
@@ -77,8 +125,6 @@ class ProgressRepositoryImplementation extends ProgressRepository {
     required String slug,
     required ProgressModel progress,
     required ProgressType type,
-    // Try online when internet is available and user is logged in.
-    bool tryOnline = true,
   }) async {
     try {
       await _appStorageService.upsertMultipleProgressData([
@@ -91,7 +137,11 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         ),
       ]);
 
-      if (tryOnline) {
+      final connection = await Connectivity().checkConnectivity();
+      final isLogged = get.get<AuthCubit>().state.isAuthenticated;
+      final tryOnline = connection.first != ConnectivityResult.none;
+
+      if (tryOnline && isLogged) {
         // Mark the sync date
         await _appStorageService.updateSyncData(
           sentProgressSyncAt: DateTime.now(),

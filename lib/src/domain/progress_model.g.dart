@@ -8,7 +8,7 @@ part of 'progress_model.dart';
 
 _ProgressModel _$ProgressModelFromJson(Map<String, dynamic> json) =>
     _ProgressModel(
-      slug: json['book_slug'] as String?,
+      slug: json['book_slug'] as String,
       textAnchor: json['text_anchor'] as String?,
       audioTimestamp: (json['audio_timestamp'] as num?)?.toInt(),
       updatedAt: json['updated_at'] == null

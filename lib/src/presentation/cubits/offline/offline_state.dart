@@ -6,5 +6,9 @@ sealed class OfflineState with _$OfflineState {
     @Default(false) bool isLoading,
     @Default([]) List<OfflineBookModel> audiobooks,
     @Default([]) List<OfflineBookModel> readers,
+
+    // Deletion
+    OfflineBookModel? audiobookToDelete,
+    OfflineBookModel? readerToDelete,
   }) = _OfflineState;
 }

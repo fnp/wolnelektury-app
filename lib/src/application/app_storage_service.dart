@@ -405,7 +405,6 @@ class AppStorageService {
   Future<List<String>> getProgressToSync() async {
     final syncData = await getSyncData();
 
-    // Jeśli `sentProgressSyncAt` jest nullem, zwracamy wszystko
     final query = _storage.select(_storage.progresses)
       ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]);
 

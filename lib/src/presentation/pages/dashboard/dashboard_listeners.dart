@@ -5,11 +5,13 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/synchronizer/synchronizer_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 
@@ -29,7 +31,8 @@ class DashboardListeners extends StatelessWidget {
           listener: (context, state) {
             if (state.isLoginSuccess == true) {
               CustomSnackbar.success(context, LocaleKeys.login_success.tr());
-              BlocProvider.of<FavouritesCubit>(context).init();
+              context.read<FavouritesCubit>().init();
+              context.read<SynchronizerCubit>().sentOutProgressSync();
             }
             if (state.isLoginSuccess == false) {
               CustomSnackbar.error(context, LocaleKeys.login_errors_login.tr());
@@ -47,9 +50,9 @@ class DashboardListeners extends StatelessWidget {
         BlocListener<RouterCubit, RouterState>(
           listenWhen: (p, c) => p.location != c.location,
           listener: (context, state) {
-            BlocProvider.of<ScrollCubit>(context).showAppBar();
+            context.read<ScrollCubit>().showAppBar();
             if (state.location != cataloguePageConfig.path) {
-              final modeCubit = BlocProvider.of<AppModeCubit>(context);
+              final modeCubit = context.read<AppModeCubit>();
               if (modeCubit.state.mode == AppModeEnum.listCreationMode) {
                 modeCubit.changeMode(AppModeEnum.defaultMode);
               }
@@ -75,39 +78,64 @@ class DashboardListeners extends StatelessWidget {
         BlocListener<DownloadCubit, DownloadState>(
           listenWhen: (p, c) => p.progress != 1 && c.progress == 1,
           listener: (context, state) {
-            CustomSnackbar.success(context, 'Zakończono pobieranie audiobooka');
+            CustomSnackbar.success(
+              context,
+              LocaleKeys
+                  .my_library_offline_snackbar_audiobook_downloading_success
+                  .tr(),
+            );
           },
         ),
         BlocListener<DownloadCubit, DownloadState>(
-          listenWhen: (p, c) =>
-              p.downloadingBookAudiobookSlug == null &&
-              c.downloadingBookAudiobookSlug != null,
+          listenWhen: (p, c) {
+            return p.downloadingBookAudiobookSlug == null &&
+                c.downloadingBookAudiobookSlug != null;
+          },
           listener: (context, state) {
-            CustomSnackbar.success(context, 'Rozpoczęto pobieranie audiobooka');
+            CustomSnackbar.success(
+              context,
+              LocaleKeys.my_library_offline_snackbar_audiobook_downloading_start
+                  .tr(),
+            );
           },
         ),
         BlocListener<DownloadCubit, DownloadState>(
-          listenWhen: (p, c) =>
-              p.isAlreadyDownloadingAudiobookError !=
-              c.isAlreadyDownloadingAudiobookError,
+          listenWhen: (p, c) {
+            return p.isAlreadyDownloadingAudiobookError !=
+                c.isAlreadyDownloadingAudiobookError;
+          },
           listener: (context, state) {
             if (state.isAlreadyDownloadingAudiobookError == true) {
               CustomSnackbar.error(
                 context,
-                'Inny audiobook jest już pobierany',
+                LocaleKeys
+                    .my_library_offline_snackbar_audiobook_already_downloading
+                    .tr(),
               );
             }
           },
         ),
         BlocListener<DownloadCubit, DownloadState>(
-          listenWhen: (p, c) =>
-              p.isGenericAudiobookError != c.isGenericAudiobookError,
+          listenWhen: (p, c) {
+            return p.isGenericAudiobookError != c.isGenericAudiobookError;
+          },
           listener: (context, state) {
             if (state.isGenericAudiobookError == true) {
               CustomSnackbar.error(
                 context,
-                'Wystąpił błąd podczas pobierania audiobooka',
+                LocaleKeys.my_library_offline_snackbar_audiobook_error.tr(),
               );
+            }
+          },
+        ),
+        BlocListener<ConnectivityCubit, ConnectivityState>(
+          listenWhen: (p, c) {
+            return !p.isConnected && c.isConnected;
+          },
+          listener: (context, state) {
+            final authCubit = context.read<AuthCubit>();
+            if (authCubit.state.isAuthenticated) {
+              context.read<SynchronizerCubit>().sentOutProgressSync();
             }
           },
         ),

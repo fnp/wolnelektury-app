@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ConnectivityState {
 
- ConnectivityResult? get result; bool get showAlert;
+ ConnectivityResult? get result; bool get showAlert; bool get disableNavigation;
 /// Create a copy of ConnectivityState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $ConnectivityStateCopyWith<ConnectivityState> get copyWith => _$ConnectivityStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectivityState&&(identical(other.result, result) || other.result == result)&&(identical(other.showAlert, showAlert) || other.showAlert == showAlert));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectivityState&&(identical(other.result, result) || other.result == result)&&(identical(other.showAlert, showAlert) || other.showAlert == showAlert)&&(identical(other.disableNavigation, disableNavigation) || other.disableNavigation == disableNavigation));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,result,showAlert);
+int get hashCode => Object.hash(runtimeType,result,showAlert,disableNavigation);
 
 @override
 String toString() {
-  return 'ConnectivityState(result: $result, showAlert: $showAlert)';
+  return 'ConnectivityState(result: $result, showAlert: $showAlert, disableNavigation: $disableNavigation)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $ConnectivityStateCopyWith<$Res>  {
   factory $ConnectivityStateCopyWith(ConnectivityState value, $Res Function(ConnectivityState) _then) = _$ConnectivityStateCopyWithImpl;
 @useResult
 $Res call({
- ConnectivityResult? result, bool showAlert
+ ConnectivityResult? result, bool showAlert, bool disableNavigation
 });
 
 
@@ -63,10 +63,11 @@ class _$ConnectivityStateCopyWithImpl<$Res>
 
 /// Create a copy of ConnectivityState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? result = freezed,Object? showAlert = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? result = freezed,Object? showAlert = null,Object? disableNavigation = null,}) {
   return _then(_self.copyWith(
 result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
 as ConnectivityResult?,showAlert: null == showAlert ? _self.showAlert : showAlert // ignore: cast_nullable_to_non_nullable
+as bool,disableNavigation: null == disableNavigation ? _self.disableNavigation : disableNavigation // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -78,11 +79,12 @@ as bool,
 
 
 class _ConnectivityState implements ConnectivityState {
-  const _ConnectivityState({this.result, this.showAlert = false});
+  const _ConnectivityState({this.result, this.showAlert = false, this.disableNavigation = false});
   
 
 @override final  ConnectivityResult? result;
 @override@JsonKey() final  bool showAlert;
+@override@JsonKey() final  bool disableNavigation;
 
 /// Create a copy of ConnectivityState
 /// with the given fields replaced by the non-null parameter values.
@@ -94,16 +96,16 @@ _$ConnectivityStateCopyWith<_ConnectivityState> get copyWith => __$ConnectivityS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConnectivityState&&(identical(other.result, result) || other.result == result)&&(identical(other.showAlert, showAlert) || other.showAlert == showAlert));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConnectivityState&&(identical(other.result, result) || other.result == result)&&(identical(other.showAlert, showAlert) || other.showAlert == showAlert)&&(identical(other.disableNavigation, disableNavigation) || other.disableNavigation == disableNavigation));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,result,showAlert);
+int get hashCode => Object.hash(runtimeType,result,showAlert,disableNavigation);
 
 @override
 String toString() {
-  return 'ConnectivityState(result: $result, showAlert: $showAlert)';
+  return 'ConnectivityState(result: $result, showAlert: $showAlert, disableNavigation: $disableNavigation)';
 }
 
 
@@ -114,7 +116,7 @@ abstract mixin class _$ConnectivityStateCopyWith<$Res> implements $ConnectivityS
   factory _$ConnectivityStateCopyWith(_ConnectivityState value, $Res Function(_ConnectivityState) _then) = __$ConnectivityStateCopyWithImpl;
 @override @useResult
 $Res call({
- ConnectivityResult? result, bool showAlert
+ ConnectivityResult? result, bool showAlert, bool disableNavigation
 });
 
 
@@ -131,10 +133,11 @@ class __$ConnectivityStateCopyWithImpl<$Res>
 
 /// Create a copy of ConnectivityState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? result = freezed,Object? showAlert = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? result = freezed,Object? showAlert = null,Object? disableNavigation = null,}) {
   return _then(_ConnectivityState(
 result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
 as ConnectivityResult?,showAlert: null == showAlert ? _self.showAlert : showAlert // ignore: cast_nullable_to_non_nullable
+as bool,disableNavigation: null == disableNavigation ? _self.disableNavigation : disableNavigation // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

@@ -3,6 +3,7 @@ import 'package:wolnelektury/src/presentation/widgets/account_page/login_form.da
 import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/my_library_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/account_page/register_form.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -11,9 +12,16 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: AuthWrapper(
-        authChild: (_) => const MyLibraryPage(),
-        nonAuthChild: const _Forms(),
+      child: ConnectivityWrapper(
+        builder: (context, hasConnection) {
+          if (!hasConnection) {
+            return const MyLibraryPage(isOfflineMode: true);
+          }
+          return AuthWrapper(
+            authChild: (_) => const MyLibraryPage(isOfflineMode: false),
+            nonAuthChild: const _Forms(),
+          );
+        },
       ),
     );
   }

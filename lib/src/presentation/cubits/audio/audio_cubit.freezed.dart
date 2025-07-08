@@ -30,12 +30,12 @@ $AudioStateCopyWith<AudioState> get copyWith => _$AudioStateCopyWithImpl<AudioSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AudioState&&(identical(other.book, book) || other.book == book)&&(identical(other.audiobook, audiobook) || other.audiobook == audiobook)&&const DeepCollectionEquality().equals(other.isDialogShown, isDialogShown)&&const DeepCollectionEquality().equals(other.isLoadingAudiobook, isLoadingAudiobook)&&(identical(other.statePosition, statePosition) || other.statePosition == statePosition)&&(identical(other.localPosition, localPosition) || other.localPosition == localPosition)&&(identical(other.currentlyPlayingPart, currentlyPlayingPart) || other.currentlyPlayingPart == currentlyPlayingPart)&&(identical(other.isPlaying, isPlaying) || other.isPlaying == isPlaying)&&(identical(other.isPreparingSession, isPreparingSession) || other.isPreparingSession == isPreparingSession)&&(identical(other.isPreparingPlaylist, isPreparingPlaylist) || other.isPreparingPlaylist == isPreparingPlaylist)&&(identical(other.isSettingsOpened, isSettingsOpened) || other.isSettingsOpened == isSettingsOpened)&&(identical(other.isBookmarksOpened, isBookmarksOpened) || other.isBookmarksOpened == isBookmarksOpened)&&(identical(other.sleepTimer, sleepTimer) || other.sleepTimer == sleepTimer)&&(identical(other.speed, speed) || other.speed == speed)&&(identical(other.playToPart, playToPart) || other.playToPart == playToPart)&&(identical(other.isError, isError) || other.isError == isError)&&const DeepCollectionEquality().equals(other.progress, progress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AudioState&&(identical(other.book, book) || other.book == book)&&(identical(other.audiobook, audiobook) || other.audiobook == audiobook)&&const DeepCollectionEquality().equals(other.isDialogShown, isDialogShown)&&const DeepCollectionEquality().equals(other.isLoadingAudiobook, isLoadingAudiobook)&&(identical(other.statePosition, statePosition) || other.statePosition == statePosition)&&(identical(other.localPosition, localPosition) || other.localPosition == localPosition)&&(identical(other.currentlyPlayingPart, currentlyPlayingPart) || other.currentlyPlayingPart == currentlyPlayingPart)&&(identical(other.isPlaying, isPlaying) || other.isPlaying == isPlaying)&&(identical(other.isPreparingSession, isPreparingSession) || other.isPreparingSession == isPreparingSession)&&(identical(other.isPreparingPlaylist, isPreparingPlaylist) || other.isPreparingPlaylist == isPreparingPlaylist)&&(identical(other.isSettingsOpened, isSettingsOpened) || other.isSettingsOpened == isSettingsOpened)&&(identical(other.isBookmarksOpened, isBookmarksOpened) || other.isBookmarksOpened == isBookmarksOpened)&&(identical(other.sleepTimer, sleepTimer) || other.sleepTimer == sleepTimer)&&(identical(other.speed, speed) || other.speed == speed)&&(identical(other.playToPart, playToPart) || other.playToPart == playToPart)&&(identical(other.isError, isError) || other.isError == isError)&&(identical(other.progress, progress) || other.progress == progress));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,book,audiobook,const DeepCollectionEquality().hash(isDialogShown),const DeepCollectionEquality().hash(isLoadingAudiobook),statePosition,localPosition,currentlyPlayingPart,isPlaying,isPreparingSession,isPreparingPlaylist,isSettingsOpened,isBookmarksOpened,sleepTimer,speed,playToPart,isError,const DeepCollectionEquality().hash(progress));
+int get hashCode => Object.hash(runtimeType,book,audiobook,const DeepCollectionEquality().hash(isDialogShown),const DeepCollectionEquality().hash(isLoadingAudiobook),statePosition,localPosition,currentlyPlayingPart,isPlaying,isPreparingSession,isPreparingPlaylist,isSettingsOpened,isBookmarksOpened,sleepTimer,speed,playToPart,isError,progress);
 
 @override
 String toString() {
@@ -54,7 +54,7 @@ $Res call({
 });
 
 
-$BookModelCopyWith<$Res>? get book;$AudiobookModelCopyWith<$Res>? get audiobook;
+$BookModelCopyWith<$Res>? get book;$AudiobookModelCopyWith<$Res>? get audiobook;$ProgressModelCopyWith<$Res>? get progress;
 
 }
 /// @nodoc
@@ -113,6 +113,18 @@ $AudiobookModelCopyWith<$Res>? get audiobook {
   return $AudiobookModelCopyWith<$Res>(_self.audiobook!, (value) {
     return _then(_self.copyWith(audiobook: value));
   });
+}/// Create a copy of AudioState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProgressModelCopyWith<$Res>? get progress {
+    if (_self.progress == null) {
+    return null;
+  }
+
+  return $ProgressModelCopyWith<$Res>(_self.progress!, (value) {
+    return _then(_self.copyWith(progress: value));
+  });
 }
 }
 
@@ -156,12 +168,12 @@ _$AudioStateCopyWith<_AudioState> get copyWith => __$AudioStateCopyWithImpl<_Aud
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AudioState&&(identical(other.book, book) || other.book == book)&&(identical(other.audiobook, audiobook) || other.audiobook == audiobook)&&const DeepCollectionEquality().equals(other.isDialogShown, isDialogShown)&&const DeepCollectionEquality().equals(other.isLoadingAudiobook, isLoadingAudiobook)&&(identical(other.statePosition, statePosition) || other.statePosition == statePosition)&&(identical(other.localPosition, localPosition) || other.localPosition == localPosition)&&(identical(other.currentlyPlayingPart, currentlyPlayingPart) || other.currentlyPlayingPart == currentlyPlayingPart)&&(identical(other.isPlaying, isPlaying) || other.isPlaying == isPlaying)&&(identical(other.isPreparingSession, isPreparingSession) || other.isPreparingSession == isPreparingSession)&&(identical(other.isPreparingPlaylist, isPreparingPlaylist) || other.isPreparingPlaylist == isPreparingPlaylist)&&(identical(other.isSettingsOpened, isSettingsOpened) || other.isSettingsOpened == isSettingsOpened)&&(identical(other.isBookmarksOpened, isBookmarksOpened) || other.isBookmarksOpened == isBookmarksOpened)&&(identical(other.sleepTimer, sleepTimer) || other.sleepTimer == sleepTimer)&&(identical(other.speed, speed) || other.speed == speed)&&(identical(other.playToPart, playToPart) || other.playToPart == playToPart)&&(identical(other.isError, isError) || other.isError == isError)&&const DeepCollectionEquality().equals(other.progress, progress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AudioState&&(identical(other.book, book) || other.book == book)&&(identical(other.audiobook, audiobook) || other.audiobook == audiobook)&&const DeepCollectionEquality().equals(other.isDialogShown, isDialogShown)&&const DeepCollectionEquality().equals(other.isLoadingAudiobook, isLoadingAudiobook)&&(identical(other.statePosition, statePosition) || other.statePosition == statePosition)&&(identical(other.localPosition, localPosition) || other.localPosition == localPosition)&&(identical(other.currentlyPlayingPart, currentlyPlayingPart) || other.currentlyPlayingPart == currentlyPlayingPart)&&(identical(other.isPlaying, isPlaying) || other.isPlaying == isPlaying)&&(identical(other.isPreparingSession, isPreparingSession) || other.isPreparingSession == isPreparingSession)&&(identical(other.isPreparingPlaylist, isPreparingPlaylist) || other.isPreparingPlaylist == isPreparingPlaylist)&&(identical(other.isSettingsOpened, isSettingsOpened) || other.isSettingsOpened == isSettingsOpened)&&(identical(other.isBookmarksOpened, isBookmarksOpened) || other.isBookmarksOpened == isBookmarksOpened)&&(identical(other.sleepTimer, sleepTimer) || other.sleepTimer == sleepTimer)&&(identical(other.speed, speed) || other.speed == speed)&&(identical(other.playToPart, playToPart) || other.playToPart == playToPart)&&(identical(other.isError, isError) || other.isError == isError)&&(identical(other.progress, progress) || other.progress == progress));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,book,audiobook,const DeepCollectionEquality().hash(isDialogShown),const DeepCollectionEquality().hash(isLoadingAudiobook),statePosition,localPosition,currentlyPlayingPart,isPlaying,isPreparingSession,isPreparingPlaylist,isSettingsOpened,isBookmarksOpened,sleepTimer,speed,playToPart,isError,const DeepCollectionEquality().hash(progress));
+int get hashCode => Object.hash(runtimeType,book,audiobook,const DeepCollectionEquality().hash(isDialogShown),const DeepCollectionEquality().hash(isLoadingAudiobook),statePosition,localPosition,currentlyPlayingPart,isPlaying,isPreparingSession,isPreparingPlaylist,isSettingsOpened,isBookmarksOpened,sleepTimer,speed,playToPart,isError,progress);
 
 @override
 String toString() {
@@ -180,7 +192,7 @@ $Res call({
 });
 
 
-@override $BookModelCopyWith<$Res>? get book;@override $AudiobookModelCopyWith<$Res>? get audiobook;
+@override $BookModelCopyWith<$Res>? get book;@override $AudiobookModelCopyWith<$Res>? get audiobook;@override $ProgressModelCopyWith<$Res>? get progress;
 
 }
 /// @nodoc
@@ -239,6 +251,18 @@ $AudiobookModelCopyWith<$Res>? get audiobook {
 
   return $AudiobookModelCopyWith<$Res>(_self.audiobook!, (value) {
     return _then(_self.copyWith(audiobook: value));
+  });
+}/// Create a copy of AudioState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProgressModelCopyWith<$Res>? get progress {
+    if (_self.progress == null) {
+    return null;
+  }
+
+  return $ProgressModelCopyWith<$Res>(_self.progress!, (value) {
+    return _then(_self.copyWith(progress: value));
   });
 }
 }
