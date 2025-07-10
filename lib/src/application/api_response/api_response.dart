@@ -28,19 +28,23 @@ sealed class ApiResponse with _$ApiResponse {
       );
     }
 
-    final convertedResponse = response.data is Map
-        ? List<Map<String, dynamic>>.from([response.data])
-        : List<Map<String, dynamic>>.from(response.data);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return ApiResponse(
-        data: convertedResponse,
-        statusCode: response.statusCode,
-      );
-    } else {
-      return ApiResponse(
-        error: 'Error: ${response.statusCode}',
-        statusCode: response.statusCode,
-      );
+    try {
+      final convertedResponse = response.data is Map
+          ? List<Map<String, dynamic>>.from([response.data])
+          : List<Map<String, dynamic>>.from(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return ApiResponse(
+          data: convertedResponse,
+          statusCode: response.statusCode,
+        );
+      } else {
+        return ApiResponse(
+          error: 'Error: ${response.statusCode}',
+          statusCode: response.statusCode,
+        );
+      }
+    } catch (e) {
+      return ApiResponse(statusCode: response.statusCode);
     }
   }
 

@@ -17,6 +17,10 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
     emit(state.copyWith(isLoading: true, isError: false));
     AppLogger.instance.d('SynchronizerCubit: sentOutProgressSync called', null);
     final result = await _progressRepository.sendOutProgressSync();
+    AppLogger.instance.d(
+      'SynchronizerCubit',
+      'sentOutProgressSync result is $result',
+    );
     result.handle(
       success: (data, _) async {
         await _receiveInProgressSync();
@@ -33,6 +37,10 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
   Future<void> _receiveInProgressSync() async {
     AppLogger.instance.d('SynchronizerCubit: receiveProgressSync called', null);
     final result = await _progressRepository.receiveInProgressSync();
+    AppLogger.instance.d(
+      'SynchronizerCubit',
+      'receiveInProgressSync result is $result',
+    );
     result.handle(
       success: (_, _) {},
       failure: (failure) {

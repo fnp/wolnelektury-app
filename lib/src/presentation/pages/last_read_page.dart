@@ -45,20 +45,13 @@ class LastReadPage extends StatelessWidget {
                         return ListView.separated(
                           padding: _padding,
                           separatorBuilder: (context, index) {
-                            return const SizedBox(
-                              height: Dimensions.spacer,
-                            );
+                            return const SizedBox(height: Dimensions.spacer);
                           },
                           controller: controller,
                           itemCount: state.progresses.length,
                           itemBuilder: (context, index) {
                             final element = state.progresses[index];
-                            if (element.slug == null) {
-                              return const SizedBox.shrink();
-                            }
-                            return LastReadBookElement(
-                              slug: element.slug!,
-                            );
+                            return LastReadBookElement(slug: element.slug);
                           },
                         );
                       },
@@ -79,24 +72,17 @@ class _SkeletonizedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<BookModel> list = List.generate(
-      3,
-      (index) => BookModel.empty(),
-    );
+    final List<BookModel> list = List.generate(3, (index) => BookModel.empty());
 
     return Skeletonizer(
       child: ListView.separated(
         padding: LastReadPage._padding,
         separatorBuilder: (context, index) {
-          return const SizedBox(
-            height: Dimensions.spacer,
-          );
+          return const SizedBox(height: Dimensions.spacer);
         },
         itemCount: list.length,
         itemBuilder: (context, index) {
-          return BookPageCoverWithButtons(
-            book: list[index],
-          );
+          return BookPageCoverWithButtons(book: list[index]);
         },
       ),
     );

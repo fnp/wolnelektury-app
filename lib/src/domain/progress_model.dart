@@ -9,7 +9,6 @@ sealed class ProgressModel with _$ProgressModel {
     @JsonKey(name: 'book_slug') required String slug,
     @JsonKey(name: 'text_anchor') String? textAnchor,
     @JsonKey(name: 'audio_timestamp') int? audioTimestamp,
-    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProgressModel;
 
   factory ProgressModel.fromJson(Map<String, dynamic> json) =>
@@ -23,7 +22,6 @@ sealed class ProgressModel with _$ProgressModel {
       slug: slug,
       audioTimestamp: audioTimestamp,
       textAnchor: null,
-      updatedAt: DateTime.now(),
     );
   }
 
@@ -35,7 +33,6 @@ sealed class ProgressModel with _$ProgressModel {
       slug: slug,
       audioTimestamp: null,
       textAnchor: textAnchor,
-      updatedAt: DateTime.now(),
     );
   }
 }

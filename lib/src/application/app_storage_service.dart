@@ -214,8 +214,7 @@ class AppStorageService {
   Future<void> saveCache(Response<dynamic> response) async {
     AppLogger.instance.d(
       'AppStorageService',
-      'Saving cache for call for:',
-      response.requestOptions.path,
+      'Saving cache for call for: ${response.requestOptions.path}',
     );
     final callKey = _createCallKey(response.requestOptions);
     final existingCacheForKey = await readCache(callKey);
@@ -243,8 +242,7 @@ class AppStorageService {
   Future<Response<dynamic>?> readCache(String callKey) async {
     AppLogger.instance.d(
       'AppStorageService',
-      'Retrieving cache for call to',
-      callKey,
+      'Retrieving cache for call to $callKey',
     );
     try {
       final result = await (_storage.select(
@@ -402,7 +400,7 @@ class AppStorageService {
     await _storage.update(_storage.syncInfo).replace(updatedFields);
   }
 
-  Future<List<String>> getProgressToSync() async {
+  Future<List<ProgressesData>> getProgressToSync() async {
     final syncData = await getSyncData();
 
     final query = _storage.select(_storage.progresses)
@@ -415,12 +413,11 @@ class AppStorageService {
     }
 
     final result = await query.get();
-
-    return result.map((e) => e.progressJson).toList();
+    return result;
   }
 
   Future<void> upsertMultipleProgressData(
-    List<({String slug, String progressJson, DateTime updatedAt})> progresses,
+    List<({String slug, String progressJson, DateTime? timestamp})> progresses,
   ) async {
     if (progresses.isEmpty) return;
 
@@ -428,7 +425,7 @@ class AppStorageService {
       return ProgressesCompanion(
         slug: Value(p.slug),
         progressJson: Value(p.progressJson),
-        updatedAt: Value(p.updatedAt),
+        updatedAt: Value(p.timestamp ?? DateTime.now()),
       );
     }).toList();
 

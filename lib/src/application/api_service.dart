@@ -65,15 +65,21 @@ class ApiService {
     return ApiResponse.fromApiServiceResponse(response);
   }
 
-  Future<ApiResponse> postRequest(String endpoint, dynamic data) async {
+  Future<ApiResponse> postRequest(
+    String endpoint,
+    dynamic data, {
+    String? contentType,
+  }) async {
     final accessToken = await AppSecureStorageService().readAccessToken();
     try {
       final response = await _dio.post(
         endpoint,
         data: data,
-        options: createOptions(accessToken: accessToken),
+        options: createOptions(
+          accessToken: accessToken,
+          contentType: contentType,
+        ),
       );
-
       return ApiResponse.fromApiServiceResponse(response);
     } on DioException catch (e) {
       return _dioExceptionHandler(e);
@@ -164,11 +170,12 @@ class ApiService {
     }
   }
 
-  Options? createOptions({String? accessToken}) {
+  Options? createOptions({String? accessToken, String? contentType}) {
     return accessToken != null
         ? Options(
             headers: {'Authorization': 'Token $accessToken'},
             receiveTimeout: const Duration(seconds: 10),
+            contentType: contentType,
           )
         : null;
   }

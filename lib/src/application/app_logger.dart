@@ -11,8 +11,8 @@ class AppLogger {
   }
 
   /// Log a message at level [Level.debug].
-  void d(String tag, dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _appLogger.d('$tag: $message, $error, $stackTrace');
+  void d(String tag, dynamic message) {
+    _appLogger.d('$tag: $message');
   }
 
   /// Log a message at level [Level.info].

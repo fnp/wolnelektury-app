@@ -1,12 +1,16 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
+import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/application/app_storage_service.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 enum ProgressType { text, audio }
@@ -32,6 +36,8 @@ abstract class ProgressRepository {
 class ProgressRepositoryImplementation extends ProgressRepository {
   static String progressTextEndpoint(String slug) => '/progress/$slug/text/';
   static String progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
+  static const String sendSyncProgressEndpoint = '/sync/';
+  static String receiveSyncProgressEndpoint(String ts) => '/sync/?ts=$ts';
 
   final ApiService _apiService;
   final AppStorageService _appStorageService;
@@ -44,13 +50,54 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       final syncData = await _appStorageService.getSyncData();
       final lastReceived = syncData.receivedProgressSyncAt;
 
-      //TODO Api call with lastReceived as a parameter
-      final progresses = [];
-      // If success ⬇
-      await _appStorageService.upsertMultipleProgressData([]);
+      AppLogger.instance.d(
+        'ProgressRepository',
+        'Asking for sync with last date $lastReceived',
+      );
+
+      final response = await _apiService.getRequest(
+        receiveSyncProgressEndpoint(
+          ((lastReceived?.millisecondsSinceEpoch ?? 0) / 1000)
+              .round()
+              .toString(),
+        ),
+        useCache: CacheEnum.ignore,
+      );
+
+      if (!response.hasData) {
+        await _appStorageService.updateSyncData(
+          receivedProgressSyncAt: DateTime.now(),
+        );
+        return const DataState.failure(Failure.notFound());
+      }
+
+      final progresses = response.data!.map((e) {
+        return ProgressModel.fromJson(e['object']);
+      }).toList();
+
+      AppLogger.instance.d(
+        'ProgressRepository',
+        'Received number of progresses: ${progresses.length}',
+      );
+
+      await _appStorageService.upsertMultipleProgressData(
+        progresses.mapIndexed((index, e) {
+          final timestampInSeconds = response.data![index]['timestamp'] ?? 0;
+          final updatedAt = DateTime.fromMillisecondsSinceEpoch(
+            timestampInSeconds * 1000,
+          );
+          return (
+            slug: e.slug,
+            progressJson: jsonEncode(e.toJson()),
+            timestamp: updatedAt,
+          );
+        }).toList(),
+      );
+
       await _appStorageService.updateSyncData(
         receivedProgressSyncAt: DateTime.now(),
       );
+
       return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
@@ -61,17 +108,39 @@ class ProgressRepositoryImplementation extends ProgressRepository {
   Future<DataState<void>> sendOutProgressSync() async {
     try {
       final progresses = await _appStorageService.getProgressToSync();
-      print('Number of progresses to sync: ${progresses.length}');
-      // All up to date
+      AppLogger.instance.d(
+        'ProgressRepository',
+        'Sending out number of progresses : ${progresses.length}',
+      );
+
+      // All is up to date
       if (progresses.isEmpty) {
         await _appStorageService.updateSyncData(
           sentProgressSyncAt: DateTime.now(),
         );
         return const DataState.success(data: null);
       }
+      final response = await _apiService.postRequest(
+        sendSyncProgressEndpoint,
+        progresses.map((e) {
+          final progress = ProgressModel.fromJson(jsonDecode(e.progressJson));
+          return {
+            'object': {
+              'text_anchor': progress.textAnchor,
+              'audio_timestamp': progress.audioTimestamp,
+            },
+            'id': e.slug,
+            'type': 'progress',
+            'timestamp': (e.updatedAt.millisecondsSinceEpoch / 1000).round(),
+          };
+        }).toList(),
+        contentType: Headers.jsonContentType,
+      );
 
-      // TODO API CALL WITH ALL THE PROGRESSES NEEDING TO BE SYNCED
-      // If success ⬇
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+      await Future.delayed(const Duration(milliseconds: 1));
       await _appStorageService.updateSyncData(
         sentProgressSyncAt: DateTime.now(),
       );
@@ -130,10 +199,8 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       await _appStorageService.upsertMultipleProgressData([
         (
           slug: slug,
-          progressJson: jsonEncode(
-            progress.copyWith(updatedAt: DateTime.now()).toJson(),
-          ),
-          updatedAt: DateTime.now(),
+          progressJson: jsonEncode(progress.toJson()),
+          timestamp: null,
         ),
       ]);
 
