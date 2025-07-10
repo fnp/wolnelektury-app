@@ -263,7 +263,6 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
         emit(state.copyWith(deletingSlug: null));
       },
       failure: (failure) {
-        //todo snackbar error
         emit(state.copyWith(isDeleteFailure: true, deletingSlug: null));
       },
     );

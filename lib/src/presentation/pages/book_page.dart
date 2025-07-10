@@ -5,29 +5,22 @@ import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookPage extends StatelessWidget {
-  const BookPage({
-    super.key,
-    this.book,
-  });
+  const BookPage({super.key, this.book});
 
   final BookModel? book;
 
   @override
   Widget build(BuildContext context) {
     if (book == null) {
-      // todo error handling
+      // todo empty page
       return const Center(child: Text('Error'));
     }
-    return _Content(
-      book: book!,
-    );
+    return _Content(book: book!);
   }
 }
 
 class _Content extends StatelessWidget {
-  const _Content({
-    required this.book,
-  });
+  const _Content({required this.book});
 
   final BookModel book;
 
@@ -35,15 +28,11 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(
-          Dimensions.mediumPadding,
-        ),
+        padding: const EdgeInsets.all(Dimensions.mediumPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            BookPageCoverWithButtons(
-              book: book,
-            ),
+            BookPageCoverWithButtons(book: book),
             if (book.description != null)
               Flexible(
                 child: Padding(
@@ -51,11 +40,7 @@ class _Content extends StatelessWidget {
                     vertical: 30,
                     horizontal: 40,
                   ),
-                  child: SelectionArea(
-                    child: Html(
-                      data: book.description!,
-                    ),
-                  ),
+                  child: SelectionArea(child: Html(data: book.description!)),
                 ),
               ),
           ],

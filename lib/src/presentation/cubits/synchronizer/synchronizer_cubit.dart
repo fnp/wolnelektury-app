@@ -15,7 +15,7 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
   // This is called once user is logged in or the internet connection is restored.
   Future<void> sentOutProgressSync() async {
     emit(state.copyWith(isLoading: true, isError: false));
-    AppLogger.instance.d('SynchronizerCubit: sentOutProgressSync called', null);
+    AppLogger.instance.d('SynchronizerCubit', 'sentOutProgressSync called');
     final result = await _progressRepository.sendOutProgressSync();
     AppLogger.instance.d(
       'SynchronizerCubit',

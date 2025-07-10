@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
@@ -49,9 +48,7 @@ class _Body extends StatelessWidget {
     final theme = Theme.of(context);
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (_) => BooksCubit(get.get())..getBooks(),
-        ),
+        BlocProvider(create: (_) => BooksCubit(get.get())..getBooks()),
         BlocProvider(
           create: (_) => FilteringCubit(get.get())..getTags(),
           lazy: false,
@@ -62,41 +59,48 @@ class _Body extends StatelessWidget {
           return BlocListener<FilteringCubit, FilteringState>(
             listenWhen: (p, c) => p.selectedTags != c.selectedTags,
             listener: (context, state) {
-              BlocProvider.of<BooksCubit>(context).getBooks(
-                tags: state.selectedTags,
-              );
+              context.read<BooksCubit>().getBooks(tags: state.selectedTags);
             },
-            child: CustomScrollPage(
-              onLoadMore: () {
-                BlocProvider.of<BooksCubit>(context).loadMore();
-              },
-              builder: (controller) {
-                return CustomScrollView(
-                  controller: controller,
-                  slivers: [
-                    SliverStickyHeader(
-                      overlapsContent: false,
-                      header: ColoredBox(
-                        color: theme.colorScheme.surface,
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.mediumPadding,
-                            vertical: Dimensions.veryLargePadding,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(child: CatalogueSorting()),
-                              SizedBox(width: Dimensions.mediumPadding),
-                              Expanded(child: CatalogueFiltering()),
-                            ],
-                          ),
-                        ),
-                      ),
-                      sliver: const _BooksList(),
+            child: Column(
+              children: [
+                ColoredBox(
+                  color: theme.colorScheme.surface,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.mediumPadding,
+                      vertical: Dimensions.veryLargePadding,
                     ),
-                  ],
-                );
-              },
+                    child: Row(
+                      children: [
+                        Expanded(child: CatalogueSorting()),
+                        SizedBox(width: Dimensions.mediumPadding),
+                        Expanded(child: CatalogueFiltering()),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: BlocBuilder<BooksCubit, BooksState>(
+                    buildWhen: (p, c) {
+                      return p.isLoading != c.isLoading;
+                    },
+                    builder: (context, state) {
+                      return CustomScrollPage(
+                        key: ValueKey(state.isLoading),
+                        onLoadMore: () {
+                          context.read<BooksCubit>().loadMore();
+                        },
+                        builder: (controller) {
+                          return CustomScrollView(
+                            controller: controller,
+                            slivers: const [_BooksList()],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           );
         },
@@ -110,10 +114,7 @@ class _BooksList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final skeletonizedBooks = List.filled(
-      9,
-      BookModel.empty(),
-    );
+    final skeletonizedBooks = List.filled(9, BookModel.empty());
 
     return SliverPadding(
       padding: const EdgeInsets.only(
@@ -124,13 +125,11 @@ class _BooksList extends StatelessWidget {
       sliver: BlocBuilder<BooksCubit, BooksState>(
         buildWhen: (p, c) => p.isLoading != c.isLoading || p.books != c.books,
         builder: (context, state) {
-          final effectiveBooks =
-              state.isLoading ? skeletonizedBooks : state.books;
+          final effectiveBooks = state.isLoading
+              ? skeletonizedBooks
+              : state.books;
 
-          return BookList(
-            isLoading: state.isLoading,
-            books: effectiveBooks,
-          );
+          return BookList(isLoading: state.isLoading, books: effectiveBooks);
         },
       ),
     );

@@ -110,7 +110,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       final progresses = await _appStorageService.getProgressToSync();
       AppLogger.instance.d(
         'ProgressRepository',
-        'Sending out number of progresses : ${progresses.length}',
+        'Sending out number of progresses: ${progresses.length}',
       );
 
       // All is up to date
