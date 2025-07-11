@@ -1,4 +1,4 @@
-enum MyLibraryEnum { lists, liked, bookmarks, audiobooks, readers }
+enum MyLibraryEnum { lists, liked, bookmarks, audiobooks, readers, login }
 
 extension MyLibraryEnumExtension on MyLibraryEnum {
   String get title {
@@ -6,25 +6,33 @@ extension MyLibraryEnumExtension on MyLibraryEnum {
       case MyLibraryEnum.audiobooks:
         return 'Audiobooki';
       case MyLibraryEnum.readers:
-        return 'Czytniki';
+        return 'Książki';
       case MyLibraryEnum.bookmarks:
         return 'Moje zakładki';
       case MyLibraryEnum.liked:
         return 'Polubione';
       case MyLibraryEnum.lists:
         return 'Moje listy';
+      case MyLibraryEnum.login:
+        return 'Zaloguj się';
     }
   }
+}
 
-  bool get isAvailableOffline {
-    switch (this) {
-      case MyLibraryEnum.audiobooks:
-      case MyLibraryEnum.readers:
-        return true;
-      case MyLibraryEnum.bookmarks:
-      case MyLibraryEnum.liked:
-      case MyLibraryEnum.lists:
-        return false;
-    }
-  }
+List<MyLibraryEnum> get availableOfflineEnums {
+  return [MyLibraryEnum.audiobooks, MyLibraryEnum.readers];
+}
+
+List<MyLibraryEnum> get availableOnlineAuthEnums {
+  return [
+    MyLibraryEnum.audiobooks,
+    MyLibraryEnum.readers,
+    MyLibraryEnum.lists,
+    MyLibraryEnum.liked,
+    MyLibraryEnum.bookmarks,
+  ];
+}
+
+List<MyLibraryEnum> get availableOnlineNoAuthEnums {
+  return [MyLibraryEnum.audiobooks, MyLibraryEnum.readers, MyLibraryEnum.login];
 }

@@ -15,9 +15,9 @@ const lastReadPageConfig = _RouteConfig(
   path: '/bookmarkPage',
 );
 
-const accountPageConfig = _RouteConfig(
-  name: 'accountPage',
-  path: '/accountPage',
+const myLibraryPageConfig = _RouteConfig(
+  name: 'myLibraryPage',
+  path: '/myLibraryPage',
 );
 
 const settingsPageConfig = _RouteConfig(

@@ -79,9 +79,6 @@ class BookPageCoverListenButton extends StatelessWidget {
                     nonActiveText: LocaleKeys.common_icon_button_listen.tr(),
                     nonActiveIcon: CustomIcons.headphones,
                     onPressed: () {
-                      if (state.isDownloadingAudiobook) {
-                        return;
-                      }
                       if (onTap != null) {
                         onTap!();
                         return;

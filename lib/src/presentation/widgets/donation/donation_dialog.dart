@@ -12,10 +12,7 @@ class DonationDialog extends StatelessWidget {
   const DonationDialog({super.key});
 
   static void show(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => const DonationDialog(),
-    );
+    showDialog(context: context, builder: (_) => const DonationDialog());
   }
 
   @override
@@ -49,7 +46,7 @@ class DonationDialog extends StatelessWidget {
                   style: yellowElevatedButton,
                   onPressed: () {
                     Navigator.of(context).pop();
-                    router.goNamed(accountPageConfig.name);
+                    router.goNamed(myLibraryPageConfig.name);
                   },
                   child: Text(
                     LocaleKeys.donation_button,

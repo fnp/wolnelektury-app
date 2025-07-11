@@ -78,10 +78,10 @@ class DashboardBottomBar extends StatelessWidget {
                               ),
                               _NavigationItem(
                                 onTap: () {
-                                  router.goNamed(accountPageConfig.name);
+                                  router.goNamed(myLibraryPageConfig.name);
                                 },
                                 shouldCorrectPadding: true,
-                                path: accountPageConfig.path,
+                                path: myLibraryPageConfig.path,
                                 icon: CustomIcons.for_you,
                                 text: LocaleKeys.dashboard_account_logged.tr(),
                               ),
@@ -135,7 +135,7 @@ class _NavigationItem extends StatelessWidget {
             final blockRoute =
                 !connState.isConnected &&
                 connState.disableNavigation &&
-                path != accountPageConfig.path;
+                path != myLibraryPageConfig.path;
             return Expanded(
               child: IgnorePointer(
                 ignoring: blockRoute,

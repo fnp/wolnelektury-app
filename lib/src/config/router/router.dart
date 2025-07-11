@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
-import 'package:wolnelektury/src/presentation/pages/account_page.dart';
 import 'package:wolnelektury/src/presentation/pages/author_page.dart';
 import 'package:wolnelektury/src/presentation/pages/book_page.dart';
 import 'package:wolnelektury/src/presentation/pages/catalogue_page.dart';
@@ -13,6 +12,7 @@ import 'package:wolnelektury/src/presentation/pages/last_read_page.dart';
 import 'package:wolnelektury/src/presentation/pages/not_found_page.dart';
 import 'package:wolnelektury/src/presentation/pages/reading_page.dart';
 import 'package:wolnelektury/src/presentation/pages/settings_page.dart';
+import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/my_library_page.dart';
 
 extension GoRouterX on GoRouter {
   String get location =>
@@ -33,7 +33,7 @@ final dashboardNavigationKey = GlobalKey<NavigatorState>();
 final mainPathsOrder = [
   cataloguePageConfig.path,
   lastReadPageConfig.path,
-  accountPageConfig.path,
+  myLibraryPageConfig.path,
 ];
 
 final GoRouter router = GoRouter(
@@ -75,8 +75,8 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
-          path: accountPageConfig.path,
-          name: accountPageConfig.name,
+          path: myLibraryPageConfig.path,
+          name: myLibraryPageConfig.name,
           pageBuilder: (context, state) {
             final RouterCubit routerCubit = context.read<RouterCubit>();
             final reversed = _isReversedTransition(routerCubit);
@@ -84,7 +84,7 @@ final GoRouter router = GoRouter(
             return _slideTransition(
               context: context,
               state: state,
-              child: const AccountPage(),
+              child: const MyLibraryPage(),
               reversed: reversed,
             );
           },

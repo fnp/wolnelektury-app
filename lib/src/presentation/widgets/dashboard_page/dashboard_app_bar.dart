@@ -111,9 +111,9 @@ class DashboardAppBar extends StatelessWidget {
                           curve: Curves.fastOutSlowIn,
                           child: BlocBuilder<RouterCubit, RouterState>(
                             buildWhen: (p, c) =>
-                                p.isAccountPage != c.isAccountPage,
+                                p.isMyLibraryPage != c.isMyLibraryPage,
                             builder: (context, state) {
-                              if (state.isAccountPage) {
+                              if (state.isMyLibraryPage) {
                                 return CustomButton(
                                   icon: CustomIcons.settings,
                                   iconColor: CustomColors.black,

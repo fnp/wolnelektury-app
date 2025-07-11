@@ -4,52 +4,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
-import 'package:wolnelektury/src/presentation/widgets/account_page/register/register_form_agreement_checkbox.dart';
-import 'package:wolnelektury/src/presentation/widgets/account_page/register/register_form_info_box.dart';
-import 'package:wolnelektury/src/presentation/widgets/account_page/register_flow_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/page_header.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_label.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_validation_error.dart';
+import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/login/my_library_register_flow_dialog.dart';
+import 'package:wolnelektury/src/presentation/widgets/my_library_page/register/register_form_agreement_checkbox.dart';
+import 'package:wolnelektury/src/presentation/widgets/my_library_page/register/register_form_info_box.dart';
 import 'package:wolnelektury/src/utils/regex/regexes.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class RegisterForm extends StatelessWidget {
-  const RegisterForm({
-    super.key,
-    required this.onLogin,
-    required this.maxHeightConstraint,
-  });
+class MyLibraryRegisterForm extends StatelessWidget {
+  const MyLibraryRegisterForm({super.key, required this.onLogin});
 
   final VoidCallback onLogin;
-  final double maxHeightConstraint;
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: maxHeightConstraint),
-      child: Padding(
-        padding: const EdgeInsets.all(Dimensions.mediumPadding),
-        child: Column(
-          spacing: Dimensions.veryLargePadding,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PageHeader(title: LocaleKeys.login_title_alternative.tr()),
-                const SizedBox(height: Dimensions.veryLargePadding),
-                _Form(onLogin: onLogin),
-              ],
-            ),
-            const RegisterFormInfoBox(),
-          ],
-        ),
-      ),
+    return Column(
+      spacing: Dimensions.veryLargePadding,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _Form(onLogin: onLogin),
+        const MyLibraryRegisterFormInfoBox(),
+      ],
     );
   }
 }
@@ -104,7 +85,7 @@ class _FormState extends State<_Form> {
       listenWhen: (p, c) => p.isRegisterSuccess != c.isRegisterSuccess,
       listener: (context, state) {
         if (state.isRegisterSuccess == true) {
-          RegisterFlowDialog.show(
+          MyLibraryRegisterFlowDialog.show(
             context: context,
             email: _emailController.text,
             password: _passwordController.text,
@@ -203,7 +184,7 @@ class _FormState extends State<_Form> {
                   children:
                       state.agreements?.options
                           .map(
-                            (e) => RegisterFormAgreementCheckbox(
+                            (e) => MyLibraryRegisterFormAgreementCheckbox(
                               agreement: e,
                               isError: showAgreementError,
                             ),

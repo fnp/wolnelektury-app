@@ -8,18 +8,23 @@ import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_fiel
 import 'package:wolnelektury/src/utils/regex/regexes.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ForgotPasswordDialog extends StatefulWidget {
-  const ForgotPasswordDialog({super.key});
+class MyLibraryForgotPasswordDialog extends StatefulWidget {
+  const MyLibraryForgotPasswordDialog({super.key});
 
   static void show({required BuildContext context}) {
-    showDialog(context: context, builder: (_) => const ForgotPasswordDialog());
+    showDialog(
+      context: context,
+      builder: (_) => const MyLibraryForgotPasswordDialog(),
+    );
   }
 
   @override
-  State<ForgotPasswordDialog> createState() => _ForgotPasswordDialogState();
+  State<MyLibraryForgotPasswordDialog> createState() =>
+      _MyLibraryForgotPasswordDialogState();
 }
 
-class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
+class _MyLibraryForgotPasswordDialogState
+    extends State<MyLibraryForgotPasswordDialog> {
   late ThemeData theme;
   final _controller = TextEditingController();
   bool showEmailError = false;

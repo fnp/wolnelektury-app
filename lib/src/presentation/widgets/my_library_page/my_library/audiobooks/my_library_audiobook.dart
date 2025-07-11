@@ -5,8 +5,8 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/offline_book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/offline/offline_cubit.dart';
-import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/audiobooks/my_library_audiobook_corrupted_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_with_buttons.dart';
+import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/audiobooks/my_library_audiobook_corrupted_dialog.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 

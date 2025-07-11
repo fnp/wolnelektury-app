@@ -9,8 +9,8 @@ import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class RegisterFlowDialog extends StatelessWidget {
-  const RegisterFlowDialog({
+class MyLibraryRegisterFlowDialog extends StatelessWidget {
+  const MyLibraryRegisterFlowDialog({
     super.key,
     required this.email,
     required this.password,
@@ -31,10 +31,7 @@ class RegisterFlowDialog extends StatelessWidget {
       context: context,
       builder: (_) => BlocProvider.value(
         value: context.read<AuthCubit>(),
-        child: RegisterFlowDialog(
-          email: email,
-          password: password,
-        ),
+        child: MyLibraryRegisterFlowDialog(email: email, password: password),
       ),
     );
   }
@@ -72,9 +69,7 @@ class RegisterFlowDialog extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ).tr(),
-            const SizedBox(
-              height: Dimensions.spacer,
-            ),
+            const SizedBox(height: Dimensions.spacer),
             Row(
               children: [
                 BlocBuilder<AuthCubit, AuthState>(

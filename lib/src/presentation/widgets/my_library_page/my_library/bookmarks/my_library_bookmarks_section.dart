@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
+import 'package:wolnelektury/src/domain/bookmark_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
-import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/liked/my_library_liked_book.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
+import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/bookmarks/my_library_bookmark_book.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class MyLibraryLikedSection extends StatelessWidget {
-  const MyLibraryLikedSection({super.key});
+class MyLibraryBookmarksSection extends StatelessWidget {
+  const MyLibraryBookmarksSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,24 +19,32 @@ class MyLibraryLikedSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          PageSubtitle(subtitle: MyLibraryEnum.liked.title),
+          PageSubtitle(subtitle: MyLibraryEnum.bookmarks.title),
           Expanded(
-            child: BlocBuilder<FavouritesCubit, FavouritesState>(
-              buildWhen: (p, c) => p.itemsPerPage != c.itemsPerPage,
+            child: BlocBuilder<BookmarksCubit, BookmarksState>(
+              buildWhen: (p, c) => p.isLoading != c.isLoading,
               builder: (context, state) {
+                final effectiveBookmarks = state.isLoading
+                    ? List.generate(
+                        5,
+                        (_) => BookmarkModel.skeletonized(),
+                      ).toList()
+                    : state.bookmarks;
                 return CustomScrollPage(
                   onLoadMore: () {
-                    context.read<FavouritesCubit>().increaseItemsPerPage();
+                    context.read<BookmarksCubit>().loadMoreMyLibraryBookmarks();
                   },
                   builder: (scrollController) {
                     return ListView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       controller: scrollController,
                       itemBuilder: (context, index) {
-                        return MyLibraryLikedBook(
-                          bookSlug: state.favourites[index],
+                        return MyLibraryBookmarkBook(
+                          bookmark: effectiveBookmarks[index],
+                          isLoading: state.isLoading,
                         );
                       },
-                      itemCount: state.effectiveLength,
+                      itemCount: effectiveBookmarks.length,
                     );
                   },
                 );

@@ -5,8 +5,8 @@ import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class RegisterFormAgreementCheckbox extends StatelessWidget {
-  const RegisterFormAgreementCheckbox({
+class MyLibraryRegisterFormAgreementCheckbox extends StatelessWidget {
+  const MyLibraryRegisterFormAgreementCheckbox({
     super.key,
     required this.agreement,
     required this.isError,
@@ -41,28 +41,24 @@ class RegisterFormAgreementCheckbox extends StatelessWidget {
                         : CustomColors.secondaryBlueColor,
                     width: 2,
                   ),
-                  fillColor: WidgetStateProperty.resolveWith(
-                    (states) {
-                      if (states.contains(WidgetState.error)) {
-                        return CustomColors.red.withValues(
-                          alpha: 0.2,
-                        );
-                      }
-                      if (states.contains(WidgetState.disabled)) {
-                        return Colors.transparent;
-                      }
-                      if (states.contains(WidgetState.selected)) {
-                        return CustomColors.primaryYellowColor;
-                      }
-                      return null;
-                    },
-                  ),
+                  fillColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.error)) {
+                      return CustomColors.red.withValues(alpha: 0.2);
+                    }
+                    if (states.contains(WidgetState.disabled)) {
+                      return Colors.transparent;
+                    }
+                    if (states.contains(WidgetState.selected)) {
+                      return CustomColors.primaryYellowColor;
+                    }
+                    return null;
+                  }),
                   visualDensity: VisualDensity.compact,
                   value: state.isAgreementChecked(agreement.id),
                   onChanged: (_) {
-                    BlocProvider.of<AuthCubit>(context).toggleAgreement(
-                      agreement.id,
-                    );
+                    BlocProvider.of<AuthCubit>(
+                      context,
+                    ).toggleAgreement(agreement.id);
                   },
                 ),
               ),

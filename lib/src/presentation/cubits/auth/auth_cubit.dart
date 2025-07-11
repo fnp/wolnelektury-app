@@ -132,4 +132,8 @@ class AuthCubit extends SafeCubit<AuthState> {
       state.copyWith(agreements: agreements.copyWith(options: updatedOptions)),
     );
   }
+
+  void switchUi(bool shouldShowRegisterForm) {
+    emit(state.copyWith(shouldShowRegisterForm: shouldShowRegisterForm));
+  }
 }

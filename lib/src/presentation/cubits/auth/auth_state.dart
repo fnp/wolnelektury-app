@@ -10,6 +10,9 @@ sealed class AuthState with _$AuthState {
     bool? isLoginSuccessFromRegisterFlow,
     UserModel? user,
     RegisterAgreementModel? agreements,
+
+    // UI
+    @Default(false) bool shouldShowRegisterForm,
   }) = _AuthState;
 }
 

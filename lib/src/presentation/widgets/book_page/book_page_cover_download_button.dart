@@ -101,7 +101,6 @@ class BookPageCoverDownloadButtonState
         icon: CustomIcons.download,
         backgroundColor: CustomColors.primaryYellowColor,
         onPressed: () {
-          if (widget.isDownloading) return;
           widget.onDownloadStart.call();
         },
       );

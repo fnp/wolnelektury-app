@@ -9,14 +9,11 @@ import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 
-class RegisterFormInfoBox extends StatelessWidget {
-  const RegisterFormInfoBox({super.key});
+class MyLibraryRegisterFormInfoBox extends StatelessWidget {
+  const MyLibraryRegisterFormInfoBox({super.key});
 
   Future<void> _launchInBrowser(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    )) {
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       return;
     }
   }

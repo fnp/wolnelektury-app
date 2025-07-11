@@ -109,6 +109,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     _resetAudiobookErrors();
     // Check if any book is already being downloaded
     if (state.isDownloadingAudiobook) {
+      print('here');
       emit(state.copyWith(isAlreadyDownloadingAudiobookError: true));
       // Return if any book is currently being downloaded
       return;
@@ -204,7 +205,6 @@ class DownloadCubit extends SafeCubit<DownloadState> {
         emit(state.copyWith(progress: 0));
         return;
       }
-
       // Proceed with saving the part
       final part = parts[i];
       // Save the file using FileSaver

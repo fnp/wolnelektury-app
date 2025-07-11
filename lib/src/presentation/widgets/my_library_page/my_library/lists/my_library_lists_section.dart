@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
-import 'package:wolnelektury/src/presentation/widgets/account_page/my_library/lists/my_library_list.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_lists/book_lists_sheet.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
+import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/lists/my_library_list.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
@@ -78,6 +78,7 @@ class MyLibraryListsSection extends StatelessWidget {
                           ? state.allLists.length + 1
                           : state.allLists.length;
                       return ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         controller: scrollController,
                         itemCount: effLength,
                         itemBuilder: (context, index) {

@@ -56,7 +56,7 @@ class ConnectivityCubit extends SafeCubit<ConnectivityState> {
   Future<void> hideAlert() async {
     emit(state.copyWith(showAlert: false));
     await Future.delayed(const Duration(seconds: 1));
-    router.goNamed(accountPageConfig.name);
+    router.goNamed(myLibraryPageConfig.name);
     emit(state.copyWith(disableNavigation: true));
   }
 
