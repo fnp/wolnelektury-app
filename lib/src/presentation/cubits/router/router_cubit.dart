@@ -40,7 +40,6 @@ class RouterCubit extends SafeCubit<RouterState> {
   }
 
   void changeMyLibraryEnum(MyLibraryEnum myLibraryEnum) {
-    print('Changing MyLibraryEnum to: $myLibraryEnum');
     emit(state.copyWith(lastEnteredMyLibraryEnum: myLibraryEnum));
   }
 
