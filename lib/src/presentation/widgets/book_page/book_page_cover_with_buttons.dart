@@ -33,7 +33,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
   final AudiobookModel? offlineAudiobook;
   final ReaderBookModel? offlineReader;
   final VoidCallback? onDelete;
-  final VoidCallback? onListen;
+  final VoidCallback? areFilesCorruptedCallback;
   final BookButtonType buttonTypes;
   const BookPageCoverWithButtons({
     super.key,
@@ -42,7 +42,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
     this.offlineAudiobook,
     this.offlineReader,
     this.onDelete,
-    this.onListen,
+    this.areFilesCorruptedCallback,
   });
 
   @override
@@ -86,9 +86,9 @@ class BookPageCoverWithButtons extends StatelessWidget {
                           buttonTypes == BookButtonType.offlineAudiobook) ...[
                         const SizedBox(height: Dimensions.mediumPadding),
                         BookPageCoverListenButton(
-                          onTap: onListen,
                           book: book,
                           offlineAudiobook: offlineAudiobook,
+                          areFilesCorruptedCallback: areFilesCorruptedCallback,
                         ),
                       ],
                       if (buttonTypes == BookButtonType.all) ...[

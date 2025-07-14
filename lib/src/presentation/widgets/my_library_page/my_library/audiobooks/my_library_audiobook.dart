@@ -51,7 +51,8 @@ class MyLibraryAudiobook extends StatelessWidget {
                         },
                       );
                     },
-                    onListen: !offlineBook.isAudiobookCorrectlyDownloaded
+                    areFilesCorruptedCallback:
+                        !offlineBook.isAudiobookCorrectlyDownloaded
                         ? () {
                             MyLibraryAudiobookCorruptedDialog.show(
                               context: context,

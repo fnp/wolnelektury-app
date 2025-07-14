@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RouterState {
 
- String get location; String get previousLocation;
+ String get location; String get previousLocation; MyLibraryEnum get lastEnteredMyLibraryEnum;
 /// Create a copy of RouterState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $RouterStateCopyWith<RouterState> get copyWith => _$RouterStateCopyWithImpl<Rout
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RouterState&&(identical(other.location, location) || other.location == location)&&(identical(other.previousLocation, previousLocation) || other.previousLocation == previousLocation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RouterState&&(identical(other.location, location) || other.location == location)&&(identical(other.previousLocation, previousLocation) || other.previousLocation == previousLocation)&&(identical(other.lastEnteredMyLibraryEnum, lastEnteredMyLibraryEnum) || other.lastEnteredMyLibraryEnum == lastEnteredMyLibraryEnum));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,location,previousLocation);
+int get hashCode => Object.hash(runtimeType,location,previousLocation,lastEnteredMyLibraryEnum);
 
 @override
 String toString() {
-  return 'RouterState(location: $location, previousLocation: $previousLocation)';
+  return 'RouterState(location: $location, previousLocation: $previousLocation, lastEnteredMyLibraryEnum: $lastEnteredMyLibraryEnum)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $RouterStateCopyWith<$Res>  {
   factory $RouterStateCopyWith(RouterState value, $Res Function(RouterState) _then) = _$RouterStateCopyWithImpl;
 @useResult
 $Res call({
- String location, String previousLocation
+ String location, String previousLocation, MyLibraryEnum lastEnteredMyLibraryEnum
 });
 
 
@@ -63,11 +63,12 @@ class _$RouterStateCopyWithImpl<$Res>
 
 /// Create a copy of RouterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? location = null,Object? previousLocation = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? location = null,Object? previousLocation = null,Object? lastEnteredMyLibraryEnum = null,}) {
   return _then(_self.copyWith(
 location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String,previousLocation: null == previousLocation ? _self.previousLocation : previousLocation // ignore: cast_nullable_to_non_nullable
-as String,
+as String,lastEnteredMyLibraryEnum: null == lastEnteredMyLibraryEnum ? _self.lastEnteredMyLibraryEnum : lastEnteredMyLibraryEnum // ignore: cast_nullable_to_non_nullable
+as MyLibraryEnum,
   ));
 }
 
@@ -78,11 +79,12 @@ as String,
 
 
 class _RouterState implements RouterState {
-  const _RouterState({required this.location, required this.previousLocation});
+  const _RouterState({required this.location, required this.previousLocation, this.lastEnteredMyLibraryEnum = MyLibraryEnum.audiobooks});
   
 
 @override final  String location;
 @override final  String previousLocation;
+@override@JsonKey() final  MyLibraryEnum lastEnteredMyLibraryEnum;
 
 /// Create a copy of RouterState
 /// with the given fields replaced by the non-null parameter values.
@@ -94,16 +96,16 @@ _$RouterStateCopyWith<_RouterState> get copyWith => __$RouterStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RouterState&&(identical(other.location, location) || other.location == location)&&(identical(other.previousLocation, previousLocation) || other.previousLocation == previousLocation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RouterState&&(identical(other.location, location) || other.location == location)&&(identical(other.previousLocation, previousLocation) || other.previousLocation == previousLocation)&&(identical(other.lastEnteredMyLibraryEnum, lastEnteredMyLibraryEnum) || other.lastEnteredMyLibraryEnum == lastEnteredMyLibraryEnum));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,location,previousLocation);
+int get hashCode => Object.hash(runtimeType,location,previousLocation,lastEnteredMyLibraryEnum);
 
 @override
 String toString() {
-  return 'RouterState(location: $location, previousLocation: $previousLocation)';
+  return 'RouterState(location: $location, previousLocation: $previousLocation, lastEnteredMyLibraryEnum: $lastEnteredMyLibraryEnum)';
 }
 
 
@@ -114,7 +116,7 @@ abstract mixin class _$RouterStateCopyWith<$Res> implements $RouterStateCopyWith
   factory _$RouterStateCopyWith(_RouterState value, $Res Function(_RouterState) _then) = __$RouterStateCopyWithImpl;
 @override @useResult
 $Res call({
- String location, String previousLocation
+ String location, String previousLocation, MyLibraryEnum lastEnteredMyLibraryEnum
 });
 
 
@@ -131,11 +133,12 @@ class __$RouterStateCopyWithImpl<$Res>
 
 /// Create a copy of RouterState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? location = null,Object? previousLocation = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? location = null,Object? previousLocation = null,Object? lastEnteredMyLibraryEnum = null,}) {
   return _then(_RouterState(
 location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String,previousLocation: null == previousLocation ? _self.previousLocation : previousLocation // ignore: cast_nullable_to_non_nullable
-as String,
+as String,lastEnteredMyLibraryEnum: null == lastEnteredMyLibraryEnum ? _self.lastEnteredMyLibraryEnum : lastEnteredMyLibraryEnum // ignore: cast_nullable_to_non_nullable
+as MyLibraryEnum,
   ));
 }
 

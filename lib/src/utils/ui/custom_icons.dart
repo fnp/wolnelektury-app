@@ -175,4 +175,9 @@ class CustomIcons {
     fontFamily: _kFontFam,
     fontPackage: _kFontPkg,
   );
+  static const IconData error = IconData(
+    0xe81e,
+    fontFamily: _kFontFam,
+    fontPackage: _kFontPkg,
+  );
 }

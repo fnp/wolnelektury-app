@@ -5,6 +5,7 @@ import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/audiobooks/my_library_audiobooks_section.dart';
@@ -71,7 +72,7 @@ class _Body extends StatefulWidget {
 class _BodyState extends State<_Body> {
   int currentPageIndex = 0;
   double _opacity = 1;
-  final PageController _pageController = PageController();
+  PageController _pageController = PageController();
   final AutoScrollController _scrollController = AutoScrollController();
 
   @override
@@ -81,7 +82,26 @@ class _BodyState extends State<_Body> {
   }
 
   @override
+  void initState() {
+    final routerCubit = context.read<RouterCubit>();
+    final lastEnteredMyLibraryEnum = routerCubit.state.lastEnteredMyLibraryEnum;
+    currentPageIndex = widget.myLibraryEnums.indexOf(lastEnteredMyLibraryEnum);
+    if (currentPageIndex < 0) {
+      currentPageIndex = 0;
+    }
+    if (currentPageIndex != 0) {
+      _scrollController.scrollToIndex(
+        currentPageIndex,
+        preferPosition: AutoScrollPosition.middle,
+      );
+      _pageController = PageController(initialPage: currentPageIndex);
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final routerCubit = context.read<RouterCubit>();
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: context.read<ListCreatorCubit>()..init()),
@@ -121,6 +141,9 @@ class _BodyState extends State<_Body> {
                       isSelected: currentPageIndex == index,
                       pillType: widget.myLibraryEnums[index],
                       onTap: () async {
+                        routerCubit.changeMyLibraryEnum(
+                          widget.myLibraryEnums[index],
+                        );
                         setState(() {
                           currentPageIndex = index;
                           _opacity = 0;
@@ -151,28 +174,41 @@ class _BodyState extends State<_Body> {
                 onPageChanged: (value) {
                   setState(() {
                     currentPageIndex = value;
+                    routerCubit.changeMyLibraryEnum(
+                      widget.myLibraryEnums[value],
+                    );
                     _scrollController.scrollToIndex(
                       value,
-                      preferPosition: AutoScrollPosition.end,
+                      preferPosition: AutoScrollPosition.middle,
                     );
                   });
                 },
                 controller: _pageController,
-                children: [
-                  if (widget.hasConnection && widget.isAuth) ...[
-                    const MyLibraryListsSection(),
-                    const MyLibraryLikedSection(),
-                    const MyLibraryBookmarksSection(),
-                  ],
-                  const MyLibraryAudiobooksSection(),
-                  const MyLibraryReadersSection(),
-                  if (!widget.isAuth) const MyLibraryMyLibraryLoginForms(),
-                ],
+                children: widget.myLibraryEnums
+                    .map((myLibraryEnum) => getChildByEnum(myLibraryEnum))
+                    .toList(),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget getChildByEnum(MyLibraryEnum myLibraryEnum) {
+    switch (myLibraryEnum) {
+      case MyLibraryEnum.lists:
+        return const MyLibraryListsSection();
+      case MyLibraryEnum.liked:
+        return const MyLibraryLikedSection();
+      case MyLibraryEnum.bookmarks:
+        return const MyLibraryBookmarksSection();
+      case MyLibraryEnum.audiobooks:
+        return const MyLibraryAudiobooksSection();
+      case MyLibraryEnum.readers:
+        return const MyLibraryReadersSection();
+      case MyLibraryEnum.login:
+        return const MyLibraryMyLibraryLoginForms();
+    }
   }
 }

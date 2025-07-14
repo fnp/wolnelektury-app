@@ -33,8 +33,10 @@ class MyLibraryAudiobookCorruptedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DialogWrapper(
-      title: LocaleKeys.my_library_offline_corrupted_audiobook_title.tr(),
-      icon: CustomIcons.delete_forever,
+      title: LocaleKeys.my_library_offline_corrupted_audiobook_title
+          .tr()
+          .toUpperCase(),
+      icon: CustomIcons.error,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: Dimensions.veryLargePadding,
@@ -45,35 +47,41 @@ class MyLibraryAudiobookCorruptedDialog extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
+          const SizedBox(height: Dimensions.spacer),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             spacing: Dimensions.mediumPadding,
             children: [
-              ElevatedButton(
-                style: yellowElevatedButton,
-                onPressed: () {
-                  onDownloadAgain();
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  LocaleKeys.my_library_offline_corrupted_audiobook_download
-                      .tr(),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+              Expanded(
+                child: ElevatedButton(
+                  style: yellowElevatedButton,
+                  onPressed: () {
+                    onDownloadAgain();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    LocaleKeys.my_library_offline_corrupted_audiobook_download
+                        .tr(),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  onDelete();
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  LocaleKeys.my_library_offline_corrupted_audiobook_delete.tr(),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    onDelete();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    LocaleKeys.my_library_offline_corrupted_audiobook_delete
+                        .tr(),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

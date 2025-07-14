@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 
 part 'router_cubit.freezed.dart';
@@ -9,12 +10,12 @@ part 'router_state.dart';
 
 class RouterCubit extends SafeCubit<RouterState> {
   RouterCubit()
-      : super(
-          RouterState(
-            location: router.location,
-            previousLocation: router.location,
-          ),
-        ) {
+    : super(
+        RouterState(
+          location: router.location,
+          previousLocation: router.location,
+        ),
+      ) {
     _initRouterListener();
   }
 
@@ -36,6 +37,11 @@ class RouterCubit extends SafeCubit<RouterState> {
         ),
       );
     }
+  }
+
+  void changeMyLibraryEnum(MyLibraryEnum myLibraryEnum) {
+    print('Changing MyLibraryEnum to: $myLibraryEnum');
+    emit(state.copyWith(lastEnteredMyLibraryEnum: myLibraryEnum));
   }
 
   @override

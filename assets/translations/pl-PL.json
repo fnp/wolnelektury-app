@@ -38,8 +38,8 @@
         },
         "offline": {
             "corrupted_audiobook": {
-                "title": "Pliki audiobooku są uszkodzone",
-                "content": "Pliki audiobooka są uszkodzone lub niekompletne",
+                "title": "Nie udało się odtworzyć audiobooku",
+                "content": "Pliki audiobooku są uszkodzone lub niekompletne",
                 "delete": "Usuń",
                 "download": "Pobierz"
             },
@@ -97,7 +97,7 @@
     },
     "audio_dialog": {
         "part": "Rozdział {part}",
-        "error": "Nie udało się odtworzyć audiobooka",
+        "error": "Nie udało się odtworzyć audiobooku",
         "paragraph": "Akapit {paragraph}",
         "delete_paragraph": "Pomyślnie usunąłeś zakładkę",
         "settings": {

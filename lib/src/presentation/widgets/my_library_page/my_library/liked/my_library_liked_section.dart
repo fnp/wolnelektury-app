@@ -33,6 +33,7 @@ class MyLibraryLikedSection extends StatelessWidget {
                       controller: scrollController,
                       itemBuilder: (context, index) {
                         return MyLibraryLikedBook(
+                          key: ValueKey(state.favourites[index]),
                           bookSlug: state.favourites[index],
                         );
                       },

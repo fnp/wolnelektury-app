@@ -109,7 +109,9 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   }
 
   Future<void> setProgress({required int? anchor}) async {
-    if (state.currentSlug == null || anchor == null) return;
+    // Anchor == 1 preventing to set progress to the first paragraph while
+    // reader is loaded.
+    if (state.currentSlug == null || anchor == null || anchor == 1) return;
     if (state.progress?.textAnchor == anchor.toString()) return;
 
     final now = DateTime.now();

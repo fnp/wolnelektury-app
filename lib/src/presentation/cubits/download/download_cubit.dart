@@ -29,7 +29,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
   ) : super(const DownloadState());
 
   // Resets the audiobook error states in the DownloadState
-  void _resetAudiobookErrors() {
+  void resetAudiobookErrors() {
     emit(
       state.copyWith(
         isAlreadyDownloadingAudiobookError: false,
@@ -39,7 +39,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
   }
 
   // Resets the reader error states in the DownloadState
-  void _resetReaderErrors() {
+  void resetReaderErrors() {
     emit(
       state.copyWith(
         isAlreadyDownloadingReaderError: false,
@@ -58,7 +58,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     required BookModel book,
     VoidCallback? onFinish,
   }) async {
-    _resetReaderErrors();
+    resetReaderErrors();
     if (state.isDownloadingReader) {
       emit(state.copyWith(isAlreadyDownloadingReaderError: true));
       return;
@@ -106,10 +106,9 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     VoidCallback? onFinish,
   }) async {
     // Reset any previous error states
-    _resetAudiobookErrors();
+    resetAudiobookErrors();
     // Check if any book is already being downloaded
     if (state.isDownloadingAudiobook) {
-      print('here');
       emit(state.copyWith(isAlreadyDownloadingAudiobookError: true));
       // Return if any book is currently being downloaded
       return;
@@ -241,6 +240,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
       final offlineBook = OfflineBookModel(
         book: book,
         audiobook: AudiobookModel.create(parts: parts),
+        isAudiobookCorrectlyDownloaded: isLastPart,
       );
       await _appStorageService.saveOfflineBook(book.slug, offlineBook);
       return offlineBook;

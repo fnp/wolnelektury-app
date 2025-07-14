@@ -16,13 +16,14 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookPageCoverListenButton extends StatelessWidget {
   final BookModel book;
-  final VoidCallback? onTap;
   final AudiobookModel? offlineAudiobook;
+  // Only pass this when files are corrupted, it's flag itself
+  final VoidCallback? areFilesCorruptedCallback;
   const BookPageCoverListenButton({
     super.key,
     required this.book,
     this.offlineAudiobook,
-    this.onTap,
+    this.areFilesCorruptedCallback,
   });
 
   @override
@@ -71,7 +72,8 @@ class BookPageCoverListenButton extends StatelessWidget {
                 buildWhen: (p, c) {
                   return p.isDownloadingAudiobook != c.isDownloadingAudiobook ||
                       p.downloadingBookAudiobookSlug !=
-                          c.downloadingBookAudiobookSlug;
+                          c.downloadingBookAudiobookSlug ||
+                      p.isGenericAudiobookError != c.isGenericAudiobookError;
                 },
                 builder: (context, state) {
                   return TextButtonWithIcon(
@@ -79,8 +81,8 @@ class BookPageCoverListenButton extends StatelessWidget {
                     nonActiveText: LocaleKeys.common_icon_button_listen.tr(),
                     nonActiveIcon: CustomIcons.headphones,
                     onPressed: () {
-                      if (onTap != null) {
-                        onTap!();
+                      if (areFilesCorruptedCallback != null) {
+                        areFilesCorruptedCallback!.call();
                         return;
                       }
                       // Select proper book
@@ -96,9 +98,11 @@ class BookPageCoverListenButton extends StatelessWidget {
                       );
                     },
                     trailing: _DownloadButton(
+                      isError: state.isGenericAudiobookError,
                       isDownloading: state.isDownloadingAudiobook,
                       downloadingSlug: state.downloadingBookAudiobookSlug,
                       book: book,
+                      areFilesCorruptedCallback: areFilesCorruptedCallback,
                     ),
                   );
                 },
@@ -113,11 +117,15 @@ class BookPageCoverListenButton extends StatelessWidget {
 
 class _DownloadButton extends StatelessWidget {
   final bool isDownloading;
+  final bool isError;
   final String? downloadingSlug;
+  final VoidCallback? areFilesCorruptedCallback;
   final BookModel book;
   const _DownloadButton({
     required this.isDownloading,
     required this.book,
+    this.isError = false,
+    this.areFilesCorruptedCallback,
     this.downloadingSlug,
   });
 
@@ -132,11 +140,13 @@ class _DownloadButton extends StatelessWidget {
       },
       builder: (context, state) {
         return BookPageCoverDownloadButton(
+          isError: isError,
           isDownloading: isDownloading,
           isDownloaded: state.isAudiobookDownloaded,
           isLoadingBookInfo: state.isLoading,
           downloadingSlug: downloadingSlug,
           book: book,
+          areFilesCorruptedCallback: areFilesCorruptedCallback,
           onDownloadStart: () {
             downloaderCubit.downloadAudiobook(
               book: book,

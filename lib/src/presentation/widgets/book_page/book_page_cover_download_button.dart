@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
@@ -9,7 +11,9 @@ import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 class BookPageCoverDownloadButton extends StatefulWidget {
   final bool isDownloading;
   final bool isDownloaded;
+  final bool isError;
   final bool isLoadingBookInfo;
+  final VoidCallback? areFilesCorruptedCallback;
   final String? downloadingSlug;
   final BookModel book;
   final VoidCallback? onDownloadCancel;
@@ -23,6 +27,8 @@ class BookPageCoverDownloadButton extends StatefulWidget {
     required this.onDownloadStart,
     this.downloadingSlug,
     this.onDownloadCancel,
+    this.areFilesCorruptedCallback,
+    this.isError = false,
     super.key,
   });
 
@@ -39,6 +45,7 @@ class BookPageCoverDownloadButtonState
   @override
   void initState() {
     super.initState();
+    context.read<DownloadCubit>().resetAudiobookErrors();
     _rotationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
@@ -68,8 +75,26 @@ class BookPageCoverDownloadButtonState
   Widget build(BuildContext context) {
     final isCurrentDownload =
         widget.isDownloading && widget.downloadingSlug == widget.book.slug;
+
     Widget child = const SizedBox.shrink();
     if (widget.isLoadingBookInfo) {
+      return child;
+    }
+    if ((widget.areFilesCorruptedCallback != null || widget.isError) &&
+        !isCurrentDownload) {
+      child = CustomButton(
+        key: const ValueKey('corrupted_files_button'),
+        icon: CustomIcons.error,
+        backgroundColor: CustomColors.red,
+        iconColor: CustomColors.white,
+        onPressed: () {
+          if (widget.isError) {
+            widget.onDownloadStart.call();
+            return;
+          }
+          widget.areFilesCorruptedCallback?.call();
+        },
+      );
       return child;
     }
     if (widget.isDownloaded) {

@@ -52,7 +52,9 @@ class FavouritesCubit extends SafeCubit<FavouritesState> {
     final previousFavourites = state.favourites;
     final newFavourites = List<String>.from(state.favourites);
     newFavourites.remove(slug);
+    print('Removing from favourites: $slug');
     emit(state.copyWith(favourites: newFavourites));
+    print('New favourites: $newFavourites');
     final response = await _booksRepository.toggleFavourite(
       slug: slug,
       targetValue: false,
