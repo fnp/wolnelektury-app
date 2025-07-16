@@ -9,6 +9,7 @@ import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/application/app_storage_service.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
+import 'package:wolnelektury/src/domain/sync_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
@@ -29,21 +30,29 @@ abstract class ProgressRepository {
     required ProgressType type,
   });
 
+  // todo This should be probably moved to the SyncRepository
+  // and handle all types of syncs
   Future<DataState<void>> sendOutProgressSync();
   Future<DataState<void>> receiveInProgressSync();
+  // --------------------------------------------
 }
 
 class ProgressRepositoryImplementation extends ProgressRepository {
   static String progressTextEndpoint(String slug) => '/progress/$slug/text/';
   static String progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
+  // todo This should be probably moved to the SyncRepository
+  // and handle all types of syncs
   static const String sendSyncProgressEndpoint = '/sync/';
   static String receiveSyncProgressEndpoint(String ts) => '/sync/?ts=$ts';
+  // --------------------------------------------
 
   final ApiService _apiService;
   final AppStorageService _appStorageService;
 
   ProgressRepositoryImplementation(this._apiService, this._appStorageService);
 
+  // todo This should be probably moved to the SyncRepository
+  // and handle all types of syncs
   @override
   Future<DataState<void>> receiveInProgressSync() async {
     try {
@@ -71,9 +80,12 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         return const DataState.failure(Failure.notFound());
       }
 
-      final progresses = response.data!.map((e) {
-        return ProgressModel.fromJson(e['object']);
-      }).toList();
+      // TODO in future this should handle all types (progress, user_list, etc.)
+      final List<ProgressModel> progresses = response.data!
+          .map((e) => SyncModel.fromJson(e))
+          .whereType<SyncModelProgress>()
+          .map((e) => e.object)
+          .toList();
 
       AppLogger.instance.d(
         'ProgressRepository',
@@ -124,15 +136,12 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         sendSyncProgressEndpoint,
         progresses.map((e) {
           final progress = ProgressModel.fromJson(jsonDecode(e.progressJson));
-          return {
-            'object': {
-              'text_anchor': progress.textAnchor,
-              'audio_timestamp': progress.audioTimestamp,
-            },
-            'id': e.slug,
-            'type': 'progress',
-            'timestamp': (e.updatedAt.millisecondsSinceEpoch / 1000).round(),
-          };
+          return SyncModelProgress(
+            id: e.slug,
+            timestamp: (e.updatedAt.millisecondsSinceEpoch) ~/ 1000,
+            type: SyncType.progress,
+            object: progress,
+          ).toJson();
         }).toList(),
         contentType: Headers.jsonContentType,
       );
@@ -149,6 +158,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       return const DataState.failure(Failure.badResponse());
     }
   }
+  // --------------------------------------------
 
   @override
   Future<DataState<List<ProgressModel>>> getProgresses({
