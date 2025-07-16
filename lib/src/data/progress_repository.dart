@@ -6,7 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
-import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_progresses_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_sync_service.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/domain/sync_model.dart';
@@ -47,16 +48,21 @@ class ProgressRepositoryImplementation extends ProgressRepository {
   // --------------------------------------------
 
   final ApiService _apiService;
-  final AppStorageService _appStorageService;
+  final AppStorageSyncService _syncStorage;
+  final AppStorageProgressesService _progressStorage;
 
-  ProgressRepositoryImplementation(this._apiService, this._appStorageService);
+  ProgressRepositoryImplementation(
+    this._apiService,
+    this._syncStorage,
+    this._progressStorage,
+  );
 
   // todo This should be probably moved to the SyncRepository
   // and handle all types of syncs
   @override
   Future<DataState<void>> receiveInProgressSync() async {
     try {
-      final syncData = await _appStorageService.getSyncData();
+      final syncData = await _syncStorage.getSyncData();
       final lastReceived = syncData.receivedProgressSyncAt;
 
       AppLogger.instance.d(
@@ -74,7 +80,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       );
 
       if (!response.hasData) {
-        await _appStorageService.updateSyncData(
+        await _syncStorage.updateSyncData(
           receivedProgressSyncAt: DateTime.now(),
         );
         return const DataState.failure(Failure.notFound());
@@ -92,7 +98,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         'Received number of progresses: ${progresses.length}',
       );
 
-      await _appStorageService.upsertMultipleProgressData(
+      await _progressStorage.upsertMultipleProgressData(
         progresses.mapIndexed((index, e) {
           final timestampInSeconds = response.data![index]['timestamp'] ?? 0;
           final updatedAt = DateTime.fromMillisecondsSinceEpoch(
@@ -106,9 +112,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         }).toList(),
       );
 
-      await _appStorageService.updateSyncData(
-        receivedProgressSyncAt: DateTime.now(),
-      );
+      await _syncStorage.updateSyncData(receivedProgressSyncAt: DateTime.now());
 
       return const DataState.success(data: null);
     } catch (e) {
@@ -119,7 +123,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
   @override
   Future<DataState<void>> sendOutProgressSync() async {
     try {
-      final progresses = await _appStorageService.getProgressToSync();
+      final progresses = await _syncStorage.getProgressToSync();
       AppLogger.instance.d(
         'ProgressRepository',
         'Sending out number of progresses: ${progresses.length}',
@@ -127,9 +131,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
 
       // All is up to date
       if (progresses.isEmpty) {
-        await _appStorageService.updateSyncData(
-          sentProgressSyncAt: DateTime.now(),
-        );
+        await _syncStorage.updateSyncData(sentProgressSyncAt: DateTime.now());
         return const DataState.success(data: null);
       }
       final response = await _apiService.postRequest(
@@ -150,9 +152,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         return const DataState.failure(Failure.badResponse());
       }
       await Future.delayed(const Duration(milliseconds: 1));
-      await _appStorageService.updateSyncData(
-        sentProgressSyncAt: DateTime.now(),
-      );
+      await _syncStorage.updateSyncData(sentProgressSyncAt: DateTime.now());
       return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
@@ -166,7 +166,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
     int limit = 20,
   }) async {
     try {
-      final response = await _appStorageService.getProgresses(
+      final response = await _progressStorage.getProgresses(
         offset: offset,
         limit: limit,
       );
@@ -188,7 +188,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
     required String slug,
   }) async {
     try {
-      final response = await _appStorageService.getProgressBySlug(slug);
+      final response = await _progressStorage.getProgressBySlug(slug);
       if (response == null) {
         return const DataState.failure(Failure.notFound());
       }
@@ -206,7 +206,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
     required ProgressType type,
   }) async {
     try {
-      await _appStorageService.upsertMultipleProgressData([
+      await _progressStorage.upsertMultipleProgressData([
         (
           slug: slug,
           progressJson: jsonEncode(progress.toJson()),
@@ -220,9 +220,7 @@ class ProgressRepositoryImplementation extends ProgressRepository {
 
       if (tryOnline && isLogged) {
         // Mark the sync date
-        await _appStorageService.updateSyncData(
-          sentProgressSyncAt: DateTime.now(),
-        );
+        await _syncStorage.updateSyncData(sentProgressSyncAt: DateTime.now());
         switch (type) {
           case ProgressType.text:
             if (progress.textAnchor == null) break;

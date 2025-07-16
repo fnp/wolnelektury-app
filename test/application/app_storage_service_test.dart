@@ -1,15 +1,16 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_settings_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_service.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
 
 void main() {
   late AppStorage appStorage;
-  late AppStorageService appStorageService;
+  late AppStorageSettingsService appStorageService;
 
   setUp(() {
     appStorage = AppStorage.forTesting(NativeDatabase.memory());
-    appStorageService = AppStorageService(appStorage);
+    appStorageService = AppStorageSettingsService(appStorage);
   });
 
   tearDown(() async {

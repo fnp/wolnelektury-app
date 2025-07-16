@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/app_secure_storage_service.dart';
-import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_cache_service.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 
 class ApiService {
   final Dio _dio;
-  final AppStorageService _storageService;
-  ApiService(this._dio, this._storageService);
+  final AppStorageCacheService _cacheStorage;
+  ApiService(this._dio, this._cacheStorage);
 
   Future<ApiResponse> getRequest(
     String endpoint, {
@@ -15,7 +15,7 @@ class ApiService {
     useCache = CacheEnum.use,
   }) async {
     if (useCache == CacheEnum.use) {
-      final response = await _storageService.readCache(endpoint);
+      final response = await _cacheStorage.readCache(endpoint);
       if (response != null && response.data != null) {
         final parsedResponse = _handleResponse(response);
         // If cache has data, return it
@@ -36,7 +36,7 @@ class ApiService {
       if (useCache == CacheEnum.use) {
         // Save cache if response has data
         if (!parsedResponse.hasData) return parsedResponse;
-        await _storageService.saveCache(response);
+        await _cacheStorage.saveCache(response);
       }
 
       return parsedResponse;

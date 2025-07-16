@@ -1,5 +1,5 @@
 import 'package:wolnelektury/src/application/api_service.dart';
-import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_offline_service.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';
@@ -15,9 +15,9 @@ class AudiobookRepositoryImplementation extends AudiobookRepository {
   static String _audiobooksEndpoint(String slug) => '/books/$slug/media/mp3/';
 
   final ApiService _apiService;
-  final AppStorageService _appStorageService;
+  final AppStorageOfflineService _offlineStorage;
 
-  AudiobookRepositoryImplementation(this._apiService, this._appStorageService);
+  AudiobookRepositoryImplementation(this._apiService, this._offlineStorage);
 
   @override
   Future<DataState<List<AudioBookPart>>> getAudiobook({
@@ -26,7 +26,7 @@ class AudiobookRepositoryImplementation extends AudiobookRepository {
   }) async {
     try {
       if (tryOffline) {
-        final offlineBook = await _appStorageService.readOfflineBook(slug);
+        final offlineBook = await _offlineStorage.readOfflineBook(slug);
         if (offlineBook?.audiobook != null) {
           return DataState.success(data: offlineBook!.audiobook!.parts);
         }

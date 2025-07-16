@@ -25,7 +25,7 @@ sealed class SyncModel with _$SyncModel {
     required String id,
     required int timestamp,
     required SyncType type,
-    //todo tu będą listy
+    //todo tu będzie np. model zakładki
     required dynamic object,
   }) = SyncModelUserList;
 

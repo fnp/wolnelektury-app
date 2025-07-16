@@ -1,6 +1,6 @@
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
-import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_offline_service.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
@@ -66,8 +66,8 @@ class BooksRepositoryImplementation extends BooksRepository {
   static const String _bookBookmarksEndpoint = '/bookmarks/book';
 
   final ApiService _apiService;
-  final AppStorageService _appStorageService;
-  BooksRepositoryImplementation(this._apiService, this._appStorageService);
+  final AppStorageOfflineService _offlineStorage;
+  BooksRepositoryImplementation(this._apiService, this._offlineStorage);
 
   @override
   Future<DataState<BookModel>> getBookBySlug({required String slug}) async {
@@ -173,7 +173,7 @@ class BooksRepositoryImplementation extends BooksRepository {
   }) async {
     try {
       if (tryOffline) {
-        final offlineBook = await _appStorageService.readOfflineBook(slug);
+        final offlineBook = await _offlineStorage.readOfflineBook(slug);
         if (offlineBook?.reader != null) {
           final parsed = ReaderBookModel.fromJson(
             offlineBook!.reader!.toJson(),

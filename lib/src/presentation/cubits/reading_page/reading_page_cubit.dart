@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
-import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_settings_service.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
@@ -20,11 +20,11 @@ part 'reading_page_state.dart';
 class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   DateTime? _lastProgressSent;
   static const double _fontSizeMultiplier = 9;
-  final AppStorageService _storageService;
+  final AppStorageSettingsService _settingsStorage;
   final BooksRepository _booksRepository;
   final ProgressRepository _progressRepository;
   ReadingPageCubit(
-    this._storageService,
+    this._settingsStorage,
     this._booksRepository,
     this._progressRepository,
   ) : super(const ReadingPageState());
@@ -35,7 +35,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     int? overrideProgressAnchor,
     bool tryOffline = false,
   }) async {
-    final settings = await _storageService.readReadingSettings();
+    final settings = await _settingsStorage.readReadingSettings();
     emit(state.copyWith(isJsonLoading: true));
     final bookJson = await _booksRepository.getBookJson(
       slug: book.slug,
@@ -159,7 +159,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   }
 
   Future<void> saveSettings() async {
-    await _storageService.setReadingSettings(
+    await _settingsStorage.setReadingSettings(
       textSizeFactor: state.textSizeFactor,
       fontType: state.fontType,
     );

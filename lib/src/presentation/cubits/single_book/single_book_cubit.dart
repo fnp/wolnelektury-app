@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_offline_service.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
@@ -10,8 +10,8 @@ part 'single_book_state.dart';
 
 class SingleBookCubit extends SafeCubit<SingleBookState> {
   final BooksRepository _booksRepository;
-  final AppStorageService _appStorageService;
-  SingleBookCubit(this._booksRepository, this._appStorageService)
+  final AppStorageOfflineService _offlineStorage;
+  SingleBookCubit(this._booksRepository, this._offlineStorage)
     : super(const SingleBookState());
 
   Future<void> loadBookData({
@@ -33,7 +33,7 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
 
   Future<void> checkIfMediaAreDownloaded(String slug) async {
     emit(state.copyWith(isLoading: true));
-    final isDownloaded = await _appStorageService.readOfflineBook(slug);
+    final isDownloaded = await _offlineStorage.readOfflineBook(slug);
     if (isDownloaded != null) {
       emit(
         state.copyWith(

@@ -39,7 +39,8 @@ SyncModel _$SyncModelFromJson(
 /// @nodoc
 mixin _$SyncModel {
 
- String get id; int get timestamp; SyncType get type; dynamic get object;
+ String get id; int get timestamp; SyncType get type;//todo tu będzie np. model zakładki
+ dynamic get object;
 /// Create a copy of SyncModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -195,6 +196,7 @@ class SyncModelUserList implements SyncModel {
 @override final  String id;
 @override final  int timestamp;
 @override final  SyncType type;
+//todo tu będzie np. model zakładki
 @override final  dynamic object;
 
 /// Create a copy of SyncModel

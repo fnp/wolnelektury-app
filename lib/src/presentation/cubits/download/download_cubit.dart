@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:file_saver/file_saver.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wolnelektury/src/application/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_offline_service.dart';
 import 'package:wolnelektury/src/data/audiobook_repository.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
@@ -16,7 +16,7 @@ part 'download_cubit.freezed.dart';
 part 'download_state.dart';
 
 class DownloadCubit extends SafeCubit<DownloadState> {
-  final AppStorageService _appStorageService;
+  final AppStorageOfflineService _offlineStorage;
   final AudiobookRepository _audiobookRepository;
   final BooksRepository _booksRepository;
 
@@ -24,7 +24,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
 
   DownloadCubit(
     this._audiobookRepository,
-    this._appStorageService,
+    this._offlineStorage,
     this._booksRepository,
   ) : super(const DownloadState());
 
@@ -80,7 +80,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
               : OfflineBookModel(book: book, reader: data);
 
           // Save the book with the reader data to the app storage
-          await _appStorageService.saveOfflineBook(book.slug, bookToSave);
+          await _offlineStorage.saveOfflineBook(book.slug, bookToSave);
         } catch (_) {
           // If something goes wrong during saving, emit an error state
           emit(state.copyWith(isGenericReaderError: true));
@@ -242,7 +242,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
         audiobook: AudiobookModel.create(parts: parts),
         isAudiobookCorrectlyDownloaded: isLastPart,
       );
-      await _appStorageService.saveOfflineBook(book.slug, offlineBook);
+      await _offlineStorage.saveOfflineBook(book.slug, offlineBook);
       return offlineBook;
     }
     // If the book already exists, we update the audiobook parts
@@ -250,13 +250,13 @@ class DownloadCubit extends SafeCubit<DownloadState> {
       audiobook: parts.isEmpty ? null : AudiobookModel.create(parts: parts),
       isAudiobookCorrectlyDownloaded: isLastPart,
     );
-    await _appStorageService.saveOfflineBook(book.slug, updatedBook);
+    await _offlineStorage.saveOfflineBook(book.slug, updatedBook);
     return updatedBook;
   }
 
   // Retrieves a local book by its slug
   Future<OfflineBookModel?> _getLocalBook(String slug) =>
-      _appStorageService.readOfflineBook(slug);
+      _offlineStorage.readOfflineBook(slug);
 
   // Deletes offline files based on the provided list of file URLs
   Future<void> _deleteOfflineFiles({required List<String> files}) async {
@@ -278,7 +278,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     final existingBook = await _getLocalBook(slug);
     if (existingBook == null) return;
     if (existingBook.reader == null) {
-      await _appStorageService.removeOfflineBook(existingBook.book.slug);
+      await _offlineStorage.removeOfflineBook(existingBook.book.slug);
       return;
     }
     // If the book has a reader, we just update the audiobook to null

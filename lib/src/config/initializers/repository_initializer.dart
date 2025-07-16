@@ -23,7 +23,7 @@ Future<void> initializeRepositories({required GetIt getIt}) async {
     AudiobookRepositoryImplementation(getIt.get(), getIt.get()),
   );
   getIt.registerSingleton<ProgressRepository>(
-    ProgressRepositoryImplementation(getIt.get(), getIt.get()),
+    ProgressRepositoryImplementation(getIt.get(), getIt.get(), getIt.get()),
   );
   getIt.registerSingleton<AuthorRepository>(
     AuthorRepositoryImplementation(getIt.get()),
