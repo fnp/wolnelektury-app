@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'favourites_cubit.dart';
+part of 'likes_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,21 +13,21 @@ part of 'favourites_cubit.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$FavouritesState {
+mixin _$LikesState {
 
 // List of slugs
  List<String> get favourites; int get itemsPerPage;
-/// Create a copy of FavouritesState
+/// Create a copy of LikesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$FavouritesStateCopyWith<FavouritesState> get copyWith => _$FavouritesStateCopyWithImpl<FavouritesState>(this as FavouritesState, _$identity);
+$LikesStateCopyWith<LikesState> get copyWith => _$LikesStateCopyWithImpl<LikesState>(this as LikesState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavouritesState&&const DeepCollectionEquality().equals(other.favourites, favourites)&&(identical(other.itemsPerPage, itemsPerPage) || other.itemsPerPage == itemsPerPage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikesState&&const DeepCollectionEquality().equals(other.favourites, favourites)&&(identical(other.itemsPerPage, itemsPerPage) || other.itemsPerPage == itemsPerPage));
 }
 
 
@@ -36,15 +36,15 @@ int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(
 
 @override
 String toString() {
-  return 'FavouritesState(favourites: $favourites, itemsPerPage: $itemsPerPage)';
+  return 'LikesState(favourites: $favourites, itemsPerPage: $itemsPerPage)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $FavouritesStateCopyWith<$Res>  {
-  factory $FavouritesStateCopyWith(FavouritesState value, $Res Function(FavouritesState) _then) = _$FavouritesStateCopyWithImpl;
+abstract mixin class $LikesStateCopyWith<$Res>  {
+  factory $LikesStateCopyWith(LikesState value, $Res Function(LikesState) _then) = _$LikesStateCopyWithImpl;
 @useResult
 $Res call({
  List<String> favourites, int itemsPerPage
@@ -55,14 +55,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$FavouritesStateCopyWithImpl<$Res>
-    implements $FavouritesStateCopyWith<$Res> {
-  _$FavouritesStateCopyWithImpl(this._self, this._then);
+class _$LikesStateCopyWithImpl<$Res>
+    implements $LikesStateCopyWith<$Res> {
+  _$LikesStateCopyWithImpl(this._self, this._then);
 
-  final FavouritesState _self;
-  final $Res Function(FavouritesState) _then;
+  final LikesState _self;
+  final $Res Function(LikesState) _then;
 
-/// Create a copy of FavouritesState
+/// Create a copy of LikesState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? favourites = null,Object? itemsPerPage = null,}) {
   return _then(_self.copyWith(
@@ -78,7 +78,7 @@ as int,
 /// @nodoc
 
 
-class _FavouritesState implements FavouritesState {
+class _FavouritesState implements LikesState {
   const _FavouritesState({final  List<String> favourites = const [], this.itemsPerPage = 10}): _favourites = favourites;
   
 
@@ -93,7 +93,7 @@ class _FavouritesState implements FavouritesState {
 
 @override@JsonKey() final  int itemsPerPage;
 
-/// Create a copy of FavouritesState
+/// Create a copy of LikesState
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -112,14 +112,14 @@ int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(
 
 @override
 String toString() {
-  return 'FavouritesState(favourites: $favourites, itemsPerPage: $itemsPerPage)';
+  return 'LikesState(favourites: $favourites, itemsPerPage: $itemsPerPage)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$FavouritesStateCopyWith<$Res> implements $FavouritesStateCopyWith<$Res> {
+abstract mixin class _$FavouritesStateCopyWith<$Res> implements $LikesStateCopyWith<$Res> {
   factory _$FavouritesStateCopyWith(_FavouritesState value, $Res Function(_FavouritesState) _then) = __$FavouritesStateCopyWithImpl;
 @override @useResult
 $Res call({
@@ -138,7 +138,7 @@ class __$FavouritesStateCopyWithImpl<$Res>
   final _FavouritesState _self;
   final $Res Function(_FavouritesState) _then;
 
-/// Create a copy of FavouritesState
+/// Create a copy of LikesState
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? favourites = null,Object? itemsPerPage = null,}) {
   return _then(_FavouritesState(

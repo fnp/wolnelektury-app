@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 import 'package:wolnelektury/src/domain/offline_book_model.dart';
 
 class AppStorageOfflineService {

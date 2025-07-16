@@ -1,21 +1,21 @@
 import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wolnelektury/src/data/books_repository.dart';
+import 'package:wolnelektury/src/data/likes_repository.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
-part 'favourites_cubit.freezed.dart';
-part 'favourites_state.dart';
+part 'likes_cubit.freezed.dart';
+part 'likes_state.dart';
 
-class FavouritesCubit extends SafeCubit<FavouritesState> {
-  final BooksRepository _booksRepository;
-  FavouritesCubit(this._booksRepository) : super(const FavouritesState()) {
+class LikesCubit extends SafeCubit<LikesState> {
+  final LikesRepository _favouritesRepository;
+  LikesCubit(this._favouritesRepository) : super(const LikesState()) {
     init();
   }
 
   Future<void> init() async {
-    final response = await _booksRepository.getFavourites();
+    final response = await _favouritesRepository.getFavourites();
     response.handle(
       success: (favourites, _) {
         emit(state.copyWith(favourites: favourites));
@@ -35,11 +35,10 @@ class FavouritesCubit extends SafeCubit<FavouritesState> {
     final newFavourites = List<String>.from(state.favourites);
     newFavourites.add(slug);
     emit(state.copyWith(favourites: newFavourites));
-    final response = await _booksRepository.toggleFavourite(
+    final response = await _favouritesRepository.toggleFavourite(
       slug: slug,
       targetValue: true,
     );
-
     response.handle(
       success: (_, __) {},
       failure: (failure) {
@@ -52,10 +51,8 @@ class FavouritesCubit extends SafeCubit<FavouritesState> {
     final previousFavourites = state.favourites;
     final newFavourites = List<String>.from(state.favourites);
     newFavourites.remove(slug);
-    print('Removing from favourites: $slug');
     emit(state.copyWith(favourites: newFavourites));
-    print('New favourites: $newFavourites');
-    final response = await _booksRepository.toggleFavourite(
+    final response = await _favouritesRepository.toggleFavourite(
       slug: slug,
       targetValue: false,
     );

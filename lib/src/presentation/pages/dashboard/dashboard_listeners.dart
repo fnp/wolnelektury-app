@@ -7,7 +7,7 @@ import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dar
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
@@ -31,7 +31,7 @@ class DashboardListeners extends StatelessWidget {
           listener: (context, state) {
             if (state.isLoginSuccess == true) {
               CustomSnackbar.success(context, LocaleKeys.login_success.tr());
-              context.read<FavouritesCubit>().init();
+              context.read<LikesCubit>().init();
               context.read<SynchronizerCubit>().sentOutProgressSync();
             }
             if (state.isLoginSuccess == false) {

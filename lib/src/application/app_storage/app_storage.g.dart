@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app_storage_service.dart';
+part of 'app_storage.dart';
 
 // ignore_for_file: type=lint
 class $AppSettingsTable extends AppSettings
@@ -1238,11 +1238,36 @@ class $SyncInfoTable extends SyncInfo
         type: DriftSqlType.dateTime,
         requiredDuringInsert: false,
       );
+  static const VerificationMeta _receivedLikesSyncAtMeta =
+      const VerificationMeta('receivedLikesSyncAt');
+  @override
+  late final GeneratedColumn<DateTime> receivedLikesSyncAt =
+      GeneratedColumn<DateTime>(
+        'received_likes_sync_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _sentLikesSyncAtMeta = const VerificationMeta(
+    'sentLikesSyncAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> sentLikesSyncAt =
+      GeneratedColumn<DateTime>(
+        'sent_likes_sync_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     receivedProgressSyncAt,
     sentProgressSyncAt,
+    receivedLikesSyncAt,
+    sentLikesSyncAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1277,6 +1302,24 @@ class $SyncInfoTable extends SyncInfo
         ),
       );
     }
+    if (data.containsKey('received_likes_sync_at')) {
+      context.handle(
+        _receivedLikesSyncAtMeta,
+        receivedLikesSyncAt.isAcceptableOrUnknown(
+          data['received_likes_sync_at']!,
+          _receivedLikesSyncAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sent_likes_sync_at')) {
+      context.handle(
+        _sentLikesSyncAtMeta,
+        sentLikesSyncAt.isAcceptableOrUnknown(
+          data['sent_likes_sync_at']!,
+          _sentLikesSyncAtMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1298,6 +1341,14 @@ class $SyncInfoTable extends SyncInfo
         DriftSqlType.dateTime,
         data['${effectivePrefix}sent_progress_sync_at'],
       ),
+      receivedLikesSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}received_likes_sync_at'],
+      ),
+      sentLikesSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}sent_likes_sync_at'],
+      ),
     );
   }
 
@@ -1311,10 +1362,14 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
   final int id;
   final DateTime? receivedProgressSyncAt;
   final DateTime? sentProgressSyncAt;
+  final DateTime? receivedLikesSyncAt;
+  final DateTime? sentLikesSyncAt;
   const SyncInfoData({
     required this.id,
     this.receivedProgressSyncAt,
     this.sentProgressSyncAt,
+    this.receivedLikesSyncAt,
+    this.sentLikesSyncAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1328,6 +1383,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     if (!nullToAbsent || sentProgressSyncAt != null) {
       map['sent_progress_sync_at'] = Variable<DateTime>(sentProgressSyncAt);
     }
+    if (!nullToAbsent || receivedLikesSyncAt != null) {
+      map['received_likes_sync_at'] = Variable<DateTime>(receivedLikesSyncAt);
+    }
+    if (!nullToAbsent || sentLikesSyncAt != null) {
+      map['sent_likes_sync_at'] = Variable<DateTime>(sentLikesSyncAt);
+    }
     return map;
   }
 
@@ -1340,6 +1401,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       sentProgressSyncAt: sentProgressSyncAt == null && nullToAbsent
           ? const Value.absent()
           : Value(sentProgressSyncAt),
+      receivedLikesSyncAt: receivedLikesSyncAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receivedLikesSyncAt),
+      sentLikesSyncAt: sentLikesSyncAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sentLikesSyncAt),
     );
   }
 
@@ -1356,6 +1423,10 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       sentProgressSyncAt: serializer.fromJson<DateTime?>(
         json['sentProgressSyncAt'],
       ),
+      receivedLikesSyncAt: serializer.fromJson<DateTime?>(
+        json['receivedLikesSyncAt'],
+      ),
+      sentLikesSyncAt: serializer.fromJson<DateTime?>(json['sentLikesSyncAt']),
     );
   }
   @override
@@ -1367,6 +1438,8 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
         receivedProgressSyncAt,
       ),
       'sentProgressSyncAt': serializer.toJson<DateTime?>(sentProgressSyncAt),
+      'receivedLikesSyncAt': serializer.toJson<DateTime?>(receivedLikesSyncAt),
+      'sentLikesSyncAt': serializer.toJson<DateTime?>(sentLikesSyncAt),
     };
   }
 
@@ -1374,6 +1447,8 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     int? id,
     Value<DateTime?> receivedProgressSyncAt = const Value.absent(),
     Value<DateTime?> sentProgressSyncAt = const Value.absent(),
+    Value<DateTime?> receivedLikesSyncAt = const Value.absent(),
+    Value<DateTime?> sentLikesSyncAt = const Value.absent(),
   }) => SyncInfoData(
     id: id ?? this.id,
     receivedProgressSyncAt: receivedProgressSyncAt.present
@@ -1382,6 +1457,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     sentProgressSyncAt: sentProgressSyncAt.present
         ? sentProgressSyncAt.value
         : this.sentProgressSyncAt,
+    receivedLikesSyncAt: receivedLikesSyncAt.present
+        ? receivedLikesSyncAt.value
+        : this.receivedLikesSyncAt,
+    sentLikesSyncAt: sentLikesSyncAt.present
+        ? sentLikesSyncAt.value
+        : this.sentLikesSyncAt,
   );
   SyncInfoData copyWithCompanion(SyncInfoCompanion data) {
     return SyncInfoData(
@@ -1392,6 +1473,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       sentProgressSyncAt: data.sentProgressSyncAt.present
           ? data.sentProgressSyncAt.value
           : this.sentProgressSyncAt,
+      receivedLikesSyncAt: data.receivedLikesSyncAt.present
+          ? data.receivedLikesSyncAt.value
+          : this.receivedLikesSyncAt,
+      sentLikesSyncAt: data.sentLikesSyncAt.present
+          ? data.sentLikesSyncAt.value
+          : this.sentLikesSyncAt,
     );
   }
 
@@ -1400,41 +1487,58 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     return (StringBuffer('SyncInfoData(')
           ..write('id: $id, ')
           ..write('receivedProgressSyncAt: $receivedProgressSyncAt, ')
-          ..write('sentProgressSyncAt: $sentProgressSyncAt')
+          ..write('sentProgressSyncAt: $sentProgressSyncAt, ')
+          ..write('receivedLikesSyncAt: $receivedLikesSyncAt, ')
+          ..write('sentLikesSyncAt: $sentLikesSyncAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, receivedProgressSyncAt, sentProgressSyncAt);
+  int get hashCode => Object.hash(
+    id,
+    receivedProgressSyncAt,
+    sentProgressSyncAt,
+    receivedLikesSyncAt,
+    sentLikesSyncAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is SyncInfoData &&
           other.id == this.id &&
           other.receivedProgressSyncAt == this.receivedProgressSyncAt &&
-          other.sentProgressSyncAt == this.sentProgressSyncAt);
+          other.sentProgressSyncAt == this.sentProgressSyncAt &&
+          other.receivedLikesSyncAt == this.receivedLikesSyncAt &&
+          other.sentLikesSyncAt == this.sentLikesSyncAt);
 }
 
 class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
   final Value<int> id;
   final Value<DateTime?> receivedProgressSyncAt;
   final Value<DateTime?> sentProgressSyncAt;
+  final Value<DateTime?> receivedLikesSyncAt;
+  final Value<DateTime?> sentLikesSyncAt;
   const SyncInfoCompanion({
     this.id = const Value.absent(),
     this.receivedProgressSyncAt = const Value.absent(),
     this.sentProgressSyncAt = const Value.absent(),
+    this.receivedLikesSyncAt = const Value.absent(),
+    this.sentLikesSyncAt = const Value.absent(),
   });
   SyncInfoCompanion.insert({
     this.id = const Value.absent(),
     this.receivedProgressSyncAt = const Value.absent(),
     this.sentProgressSyncAt = const Value.absent(),
+    this.receivedLikesSyncAt = const Value.absent(),
+    this.sentLikesSyncAt = const Value.absent(),
   });
   static Insertable<SyncInfoData> custom({
     Expression<int>? id,
     Expression<DateTime>? receivedProgressSyncAt,
     Expression<DateTime>? sentProgressSyncAt,
+    Expression<DateTime>? receivedLikesSyncAt,
+    Expression<DateTime>? sentLikesSyncAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1442,6 +1546,9 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
         'received_progress_sync_at': receivedProgressSyncAt,
       if (sentProgressSyncAt != null)
         'sent_progress_sync_at': sentProgressSyncAt,
+      if (receivedLikesSyncAt != null)
+        'received_likes_sync_at': receivedLikesSyncAt,
+      if (sentLikesSyncAt != null) 'sent_likes_sync_at': sentLikesSyncAt,
     });
   }
 
@@ -1449,12 +1556,16 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     Value<int>? id,
     Value<DateTime?>? receivedProgressSyncAt,
     Value<DateTime?>? sentProgressSyncAt,
+    Value<DateTime?>? receivedLikesSyncAt,
+    Value<DateTime?>? sentLikesSyncAt,
   }) {
     return SyncInfoCompanion(
       id: id ?? this.id,
       receivedProgressSyncAt:
           receivedProgressSyncAt ?? this.receivedProgressSyncAt,
       sentProgressSyncAt: sentProgressSyncAt ?? this.sentProgressSyncAt,
+      receivedLikesSyncAt: receivedLikesSyncAt ?? this.receivedLikesSyncAt,
+      sentLikesSyncAt: sentLikesSyncAt ?? this.sentLikesSyncAt,
     );
   }
 
@@ -1474,6 +1585,14 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
         sentProgressSyncAt.value,
       );
     }
+    if (receivedLikesSyncAt.present) {
+      map['received_likes_sync_at'] = Variable<DateTime>(
+        receivedLikesSyncAt.value,
+      );
+    }
+    if (sentLikesSyncAt.present) {
+      map['sent_likes_sync_at'] = Variable<DateTime>(sentLikesSyncAt.value);
+    }
     return map;
   }
 
@@ -1482,7 +1601,216 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     return (StringBuffer('SyncInfoCompanion(')
           ..write('id: $id, ')
           ..write('receivedProgressSyncAt: $receivedProgressSyncAt, ')
-          ..write('sentProgressSyncAt: $sentProgressSyncAt')
+          ..write('sentProgressSyncAt: $sentProgressSyncAt, ')
+          ..write('receivedLikesSyncAt: $receivedLikesSyncAt, ')
+          ..write('sentLikesSyncAt: $sentLikesSyncAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LikesTable extends Likes with TableInfo<$LikesTable, Like> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LikesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _slugMeta = const VerificationMeta('slug');
+  @override
+  late final GeneratedColumn<String> slug = GeneratedColumn<String>(
+    'slug',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [slug, updatedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'likes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Like> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('slug')) {
+      context.handle(
+        _slugMeta,
+        slug.isAcceptableOrUnknown(data['slug']!, _slugMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_slugMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {slug};
+  @override
+  Like map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Like(
+      slug: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}slug'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $LikesTable createAlias(String alias) {
+    return $LikesTable(attachedDatabase, alias);
+  }
+}
+
+class Like extends DataClass implements Insertable<Like> {
+  final String slug;
+  final DateTime updatedAt;
+  const Like({required this.slug, required this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['slug'] = Variable<String>(slug);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  LikesCompanion toCompanion(bool nullToAbsent) {
+    return LikesCompanion(slug: Value(slug), updatedAt: Value(updatedAt));
+  }
+
+  factory Like.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Like(
+      slug: serializer.fromJson<String>(json['slug']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'slug': serializer.toJson<String>(slug),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  Like copyWith({String? slug, DateTime? updatedAt}) =>
+      Like(slug: slug ?? this.slug, updatedAt: updatedAt ?? this.updatedAt);
+  Like copyWithCompanion(LikesCompanion data) {
+    return Like(
+      slug: data.slug.present ? data.slug.value : this.slug,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Like(')
+          ..write('slug: $slug, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(slug, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Like &&
+          other.slug == this.slug &&
+          other.updatedAt == this.updatedAt);
+}
+
+class LikesCompanion extends UpdateCompanion<Like> {
+  final Value<String> slug;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const LikesCompanion({
+    this.slug = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  LikesCompanion.insert({
+    required String slug,
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : slug = Value(slug);
+  static Insertable<Like> custom({
+    Expression<String>? slug,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (slug != null) 'slug': slug,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LikesCompanion copyWith({
+    Value<String>? slug,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return LikesCompanion(
+      slug: slug ?? this.slug,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (slug.present) {
+      map['slug'] = Variable<String>(slug.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LikesCompanion(')
+          ..write('slug: $slug, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -1497,6 +1825,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
   late final $OfflineBooksTable offlineBooks = $OfflineBooksTable(this);
   late final $ProgressesTable progresses = $ProgressesTable(this);
   late final $SyncInfoTable syncInfo = $SyncInfoTable(this);
+  late final $LikesTable likes = $LikesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1508,6 +1837,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
     offlineBooks,
     progresses,
     syncInfo,
+    likes,
   ];
 }
 
@@ -2267,12 +2597,16 @@ typedef $$SyncInfoTableCreateCompanionBuilder =
       Value<int> id,
       Value<DateTime?> receivedProgressSyncAt,
       Value<DateTime?> sentProgressSyncAt,
+      Value<DateTime?> receivedLikesSyncAt,
+      Value<DateTime?> sentLikesSyncAt,
     });
 typedef $$SyncInfoTableUpdateCompanionBuilder =
     SyncInfoCompanion Function({
       Value<int> id,
       Value<DateTime?> receivedProgressSyncAt,
       Value<DateTime?> sentProgressSyncAt,
+      Value<DateTime?> receivedLikesSyncAt,
+      Value<DateTime?> sentLikesSyncAt,
     });
 
 class $$SyncInfoTableFilterComposer
@@ -2296,6 +2630,16 @@ class $$SyncInfoTableFilterComposer
 
   ColumnFilters<DateTime> get sentProgressSyncAt => $composableBuilder(
     column: $table.sentProgressSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get receivedLikesSyncAt => $composableBuilder(
+    column: $table.receivedLikesSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get sentLikesSyncAt => $composableBuilder(
+    column: $table.sentLikesSyncAt,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -2323,6 +2667,16 @@ class $$SyncInfoTableOrderingComposer
     column: $table.sentProgressSyncAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get receivedLikesSyncAt => $composableBuilder(
+    column: $table.receivedLikesSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get sentLikesSyncAt => $composableBuilder(
+    column: $table.sentLikesSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SyncInfoTableAnnotationComposer
@@ -2344,6 +2698,16 @@ class $$SyncInfoTableAnnotationComposer
 
   GeneratedColumn<DateTime> get sentProgressSyncAt => $composableBuilder(
     column: $table.sentProgressSyncAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get receivedLikesSyncAt => $composableBuilder(
+    column: $table.receivedLikesSyncAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get sentLikesSyncAt => $composableBuilder(
+    column: $table.sentLikesSyncAt,
     builder: (column) => column,
   );
 }
@@ -2382,20 +2746,28 @@ class $$SyncInfoTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<DateTime?> receivedProgressSyncAt = const Value.absent(),
                 Value<DateTime?> sentProgressSyncAt = const Value.absent(),
+                Value<DateTime?> receivedLikesSyncAt = const Value.absent(),
+                Value<DateTime?> sentLikesSyncAt = const Value.absent(),
               }) => SyncInfoCompanion(
                 id: id,
                 receivedProgressSyncAt: receivedProgressSyncAt,
                 sentProgressSyncAt: sentProgressSyncAt,
+                receivedLikesSyncAt: receivedLikesSyncAt,
+                sentLikesSyncAt: sentLikesSyncAt,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 Value<DateTime?> receivedProgressSyncAt = const Value.absent(),
                 Value<DateTime?> sentProgressSyncAt = const Value.absent(),
+                Value<DateTime?> receivedLikesSyncAt = const Value.absent(),
+                Value<DateTime?> sentLikesSyncAt = const Value.absent(),
               }) => SyncInfoCompanion.insert(
                 id: id,
                 receivedProgressSyncAt: receivedProgressSyncAt,
                 sentProgressSyncAt: sentProgressSyncAt,
+                receivedLikesSyncAt: receivedLikesSyncAt,
+                sentLikesSyncAt: sentLikesSyncAt,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -2422,6 +2794,141 @@ typedef $$SyncInfoTableProcessedTableManager =
       SyncInfoData,
       PrefetchHooks Function()
     >;
+typedef $$LikesTableCreateCompanionBuilder =
+    LikesCompanion Function({
+      required String slug,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+typedef $$LikesTableUpdateCompanionBuilder =
+    LikesCompanion Function({
+      Value<String> slug,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$LikesTableFilterComposer extends Composer<_$AppStorage, $LikesTable> {
+  $$LikesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$LikesTableOrderingComposer extends Composer<_$AppStorage, $LikesTable> {
+  $$LikesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$LikesTableAnnotationComposer
+    extends Composer<_$AppStorage, $LikesTable> {
+  $$LikesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get slug =>
+      $composableBuilder(column: $table.slug, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$LikesTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $LikesTable,
+          Like,
+          $$LikesTableFilterComposer,
+          $$LikesTableOrderingComposer,
+          $$LikesTableAnnotationComposer,
+          $$LikesTableCreateCompanionBuilder,
+          $$LikesTableUpdateCompanionBuilder,
+          (Like, BaseReferences<_$AppStorage, $LikesTable, Like>),
+          Like,
+          PrefetchHooks Function()
+        > {
+  $$LikesTableTableManager(_$AppStorage db, $LikesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LikesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LikesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LikesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> slug = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => LikesCompanion(
+                slug: slug,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String slug,
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => LikesCompanion.insert(
+                slug: slug,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$LikesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $LikesTable,
+      Like,
+      $$LikesTableFilterComposer,
+      $$LikesTableOrderingComposer,
+      $$LikesTableAnnotationComposer,
+      $$LikesTableCreateCompanionBuilder,
+      $$LikesTableUpdateCompanionBuilder,
+      (Like, BaseReferences<_$AppStorage, $LikesTable, Like>),
+      Like,
+      PrefetchHooks Function()
+    >;
 
 class $AppStorageManager {
   final _$AppStorage _db;
@@ -2438,4 +2945,6 @@ class $AppStorageManager {
       $$ProgressesTableTableManager(_db, _db.progresses);
   $$SyncInfoTableTableManager get syncInfo =>
       $$SyncInfoTableTableManager(_db, _db.syncInfo);
+  $$LikesTableTableManager get likes =>
+      $$LikesTableTableManager(_db, _db.likes);
 }

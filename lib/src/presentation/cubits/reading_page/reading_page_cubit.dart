@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_settings_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';

@@ -1,11 +1,12 @@
 import 'package:get_it/get_it.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_cache_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_offline_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_progresses_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_settings_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_sync_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_cache_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_likes_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_offline_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_progresses_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
 import 'package:wolnelektury/src/config/dio.dart';
 
 Future<void> initializeServices({required GetIt getIt}) async {
@@ -27,6 +28,9 @@ Future<void> initializeServices({required GetIt getIt}) async {
   );
   getIt.registerSingleton<AppStorageSettingsService>(
     AppStorageSettingsService(appStorage),
+  );
+  getIt.registerSingleton<AppStorageLikesService>(
+    AppStorageLikesService(appStorage),
   );
 
   // Initialization of the services

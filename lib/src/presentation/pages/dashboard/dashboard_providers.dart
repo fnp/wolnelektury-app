@@ -4,7 +4,7 @@ import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/minimized_player/minimized_player_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
@@ -24,7 +24,7 @@ class DashboardProviders extends StatelessWidget {
         BlocProvider(
           create: (_) => DownloadCubit(get.get(), get.get(), get.get()),
         ),
-        BlocProvider(create: (_) => FavouritesCubit(get.get())),
+        BlocProvider(create: (_) => LikesCubit(get.get())),
         BlocProvider(
           create: (_) => AudioCubit(get.get(), get.get()),
           lazy: false,

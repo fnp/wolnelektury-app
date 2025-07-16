@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
-part 'app_storage_service.g.dart';
+part 'app_storage.g.dart';
 
 class AppSettings extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -39,10 +39,22 @@ class Progresses extends Table {
   Set<Column> get primaryKey => {slug};
 }
 
+class Likes extends Table {
+  TextColumn get slug => text()();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {slug};
+}
+
 class SyncInfo extends Table {
   IntColumn get id => integer().autoIncrement()();
+  //
   DateTimeColumn get receivedProgressSyncAt => dateTime().nullable()();
   DateTimeColumn get sentProgressSyncAt => dateTime().nullable()();
+  //
+  DateTimeColumn get receivedLikesSyncAt => dateTime().nullable()();
+  DateTimeColumn get sentLikesSyncAt => dateTime().nullable()();
 }
 
 @DriftDatabase(
@@ -53,6 +65,7 @@ class SyncInfo extends Table {
     OfflineBooks,
     Progresses,
     SyncInfo,
+    Likes,
   ],
 )
 class AppStorage extends _$AppStorage {
@@ -65,7 +78,7 @@ class AppStorage extends _$AppStorage {
   }
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -80,6 +93,17 @@ class AppStorage extends _$AppStorage {
           Index(
             'progresses_updated_at_idx',
             'CREATE INDEX progresses_updated_at_idx ON progresses(updated_at)',
+          ),
+        );
+      }
+      if (from < 4) {
+        await m.addColumn(syncInfo, syncInfo.sentLikesSyncAt);
+        await m.addColumn(syncInfo, syncInfo.receivedLikesSyncAt);
+        await m.createTable(likes);
+        await m.createIndex(
+          Index(
+            'likes_updated_at_idx',
+            'CREATE INDEX likes_updated_at_idx ON likes(updated_at)',
           ),
         );
       }

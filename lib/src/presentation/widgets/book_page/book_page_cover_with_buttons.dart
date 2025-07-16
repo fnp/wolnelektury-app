@@ -11,7 +11,7 @@ import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_listen_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_read_button.dart';
@@ -221,8 +221,8 @@ class _HeartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final favouritesCubit = BlocProvider.of<FavouritesCubit>(context);
-    return BlocBuilder<FavouritesCubit, FavouritesState>(
+    final favouritesCubit = BlocProvider.of<LikesCubit>(context);
+    return BlocBuilder<LikesCubit, LikesState>(
       buildWhen: (p, c) => p.favourites != c.favourites,
       builder: (context, state) {
         final isLiked = state.favourites.contains(book.slug);

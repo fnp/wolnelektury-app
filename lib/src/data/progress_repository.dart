@@ -1,17 +1,17 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_progresses_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_sync_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_progresses_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/domain/sync_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
@@ -31,8 +31,6 @@ abstract class ProgressRepository {
     required ProgressType type,
   });
 
-  // todo This should be probably moved to the SyncRepository
-  // and handle all types of syncs
   Future<DataState<void>> sendOutProgressSync();
   Future<DataState<void>> receiveInProgressSync();
   // --------------------------------------------
@@ -41,8 +39,6 @@ abstract class ProgressRepository {
 class ProgressRepositoryImplementation extends ProgressRepository {
   static String progressTextEndpoint(String slug) => '/progress/$slug/text/';
   static String progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
-  // todo This should be probably moved to the SyncRepository
-  // and handle all types of syncs
   static const String sendSyncProgressEndpoint = '/sync/';
   static String receiveSyncProgressEndpoint(String ts) => '/sync/?ts=$ts';
   // --------------------------------------------
@@ -57,8 +53,6 @@ class ProgressRepositoryImplementation extends ProgressRepository {
     this._progressStorage,
   );
 
-  // todo This should be probably moved to the SyncRepository
-  // and handle all types of syncs
   @override
   Future<DataState<void>> receiveInProgressSync() async {
     try {
@@ -86,7 +80,6 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         return const DataState.failure(Failure.notFound());
       }
 
-      // TODO in future this should handle all types (progress, user_list, etc.)
       final List<ProgressModel> progresses = response.data!
           .map((e) => SyncModel.fromJson(e))
           .whereType<SyncModelProgress>()
@@ -214,11 +207,10 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         ),
       ]);
 
-      final connection = await Connectivity().checkConnectivity();
+      final isConnected = get.get<ConnectivityCubit>().state.isConnected;
       final isLogged = get.get<AuthCubit>().state.isAuthenticated;
-      final tryOnline = connection.first != ConnectivityResult.none;
 
-      if (tryOnline && isLogged) {
+      if (isConnected && isLogged) {
         // Mark the sync date
         await _syncStorage.updateSyncData(sentProgressSyncAt: DateTime.now());
         switch (type) {

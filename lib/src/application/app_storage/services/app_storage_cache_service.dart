@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 
 class AppStorageCacheService {
   static const Duration cacheValidity = Duration(days: 7);

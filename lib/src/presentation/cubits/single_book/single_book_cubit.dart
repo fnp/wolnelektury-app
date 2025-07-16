@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_offline_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_offline_service.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';

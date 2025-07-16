@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
-import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_with_buttons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -27,7 +27,7 @@ class MyLibraryLikedBook extends StatelessWidget {
           if (!state.isLoading && state.book == null) {
             return const SizedBox.shrink();
           }
-          return BlocBuilder<FavouritesCubit, FavouritesState>(
+          return BlocBuilder<LikesCubit, LikesState>(
             buildWhen: (p, c) {
               return p.isLiked(bookSlug) != c.isLiked(bookSlug);
             },

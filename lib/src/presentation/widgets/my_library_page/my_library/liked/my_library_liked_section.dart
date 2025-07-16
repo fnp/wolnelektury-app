@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wolnelektury/src/presentation/cubits/favourites/favourites_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
@@ -20,12 +20,12 @@ class MyLibraryLikedSection extends StatelessWidget {
         children: [
           PageSubtitle(subtitle: MyLibraryEnum.liked.title),
           Expanded(
-            child: BlocBuilder<FavouritesCubit, FavouritesState>(
+            child: BlocBuilder<LikesCubit, LikesState>(
               buildWhen: (p, c) => p.itemsPerPage != c.itemsPerPage,
               builder: (context, state) {
                 return CustomScrollPage(
                   onLoadMore: () {
-                    context.read<FavouritesCubit>().increaseItemsPerPage();
+                    context.read<LikesCubit>().increaseItemsPerPage();
                   },
                   builder: (scrollController) {
                     return ListView.builder(

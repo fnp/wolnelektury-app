@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_settings_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 

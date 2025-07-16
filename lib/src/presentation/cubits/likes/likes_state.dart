@@ -1,15 +1,15 @@
-part of 'favourites_cubit.dart';
+part of 'likes_cubit.dart';
 
 @freezed
-sealed class FavouritesState with _$FavouritesState {
-  const factory FavouritesState({
+sealed class LikesState with _$LikesState {
+  const factory LikesState({
     // List of slugs
     @Default([]) List<String> favourites,
     @Default(10) int itemsPerPage,
   }) = _FavouritesState;
 }
 
-extension FavouritesStateX on FavouritesState {
+extension FavouritesStateX on LikesState {
   int get effectiveLength => min(itemsPerPage, favourites.length);
   bool isLiked(String slug) {
     return favourites.contains(slug);

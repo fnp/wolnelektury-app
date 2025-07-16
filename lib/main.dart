@@ -49,7 +49,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(lazy: false, create: (context) => ConnectivityCubit()),
+        BlocProvider(
+          lazy: false,
+          create: (context) => get.get<ConnectivityCubit>(),
+        ),
         BlocProvider(
           lazy: false,
           create: (context) => SettingsCubit(get.get()),

@@ -29,7 +29,7 @@ sealed class SyncModel with _$SyncModel {
     required dynamic object,
   }) = SyncModelUserList;
 
-  //todo tu pewnie będa jeszcze polubione
+  //todo tu pewnie będą jeszcze polubione
 
   factory SyncModel.fromJson(Map<String, dynamic> json) =>
       _$SyncModelFromJson(json);

@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_service.dart';
+import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 
 class AppStorageProgressesService {
   final AppStorage _storage;

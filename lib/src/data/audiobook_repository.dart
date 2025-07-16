@@ -1,5 +1,5 @@
 import 'package:wolnelektury/src/application/api_service.dart';
-import 'package:wolnelektury/src/application/app_storage/app_storage_extensions/app_storage_offline_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_offline_service.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';
