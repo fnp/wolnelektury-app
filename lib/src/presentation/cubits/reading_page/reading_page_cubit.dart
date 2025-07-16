@@ -19,6 +19,7 @@ part 'reading_page_state.dart';
 
 class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   DateTime? _lastProgressSent;
+  bool _readyToSetProgress = false;
   static const double _fontSizeMultiplier = 9;
   final AppStorageSettingsService _settingsStorage;
   final BooksRepository _booksRepository;
@@ -75,11 +76,15 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   }) async {
     if (overrideProgressAnchor != null) {
       await Future.delayed(const Duration(milliseconds: 500));
-      itemScrollController.scrollTo(
-        index: overrideProgressAnchor,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn,
-      );
+      itemScrollController
+          .scrollTo(
+            index: overrideProgressAnchor,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.fastOutSlowIn,
+          )
+          .then((_) {
+            _readyToSetProgress = true;
+          });
       return;
     }
     final progress = await _progressRepository.getProgressByBook(
@@ -97,11 +102,15 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
         final foundIndex = state.findElementIndexByParagraphIndex(anchor);
         if (foundIndex != null) {
           await Future.delayed(const Duration(milliseconds: 500));
-          itemScrollController.scrollTo(
-            index: foundIndex + 1,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.fastOutSlowIn,
-          );
+          itemScrollController
+              .scrollTo(
+                index: foundIndex + 1,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.fastOutSlowIn,
+              )
+              .then((_) {
+                _readyToSetProgress = true;
+              });
         }
       },
       failure: (_) {},
@@ -109,9 +118,9 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   }
 
   Future<void> setProgress({required int? anchor}) async {
-    // Anchor == 1 preventing to set progress to the first paragraph while
-    // reader is loaded.
-    if (state.currentSlug == null || anchor == null || anchor == 1) return;
+    // Didn't end up scrolling to the position yet
+    if (!_readyToSetProgress) return;
+    if (state.currentSlug == null || anchor == null) return;
     if (state.progress?.textAnchor == anchor.toString()) return;
 
     final now = DateTime.now();
