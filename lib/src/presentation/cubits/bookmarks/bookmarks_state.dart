@@ -14,7 +14,6 @@ sealed class BookmarksState with _$BookmarksState {
     BookmarkModel? bookmarkToDelete,
     //
     @Default([]) List<BookmarkModel> bookmarks,
-    @Default(ApiResponsePagination()) ApiResponsePagination pagination,
   }) = _BookmarksState;
 }
 

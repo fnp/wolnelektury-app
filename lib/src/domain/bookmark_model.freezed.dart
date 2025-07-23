@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BookmarkModel {
 
-@JsonKey(name: 'book') String get slug; String get note; String get anchor; String get href;
+ String get location;@JsonKey(name: 'book') String get slug; String get note; String get anchor; String get href;
 /// Create a copy of BookmarkModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $BookmarkModelCopyWith<BookmarkModel> get copyWith => _$BookmarkModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookmarkModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.note, note) || other.note == note)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.href, href) || other.href == href));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookmarkModel&&(identical(other.location, location) || other.location == location)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.note, note) || other.note == note)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.href, href) || other.href == href));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,slug,note,anchor,href);
+int get hashCode => Object.hash(runtimeType,location,slug,note,anchor,href);
 
 @override
 String toString() {
-  return 'BookmarkModel(slug: $slug, note: $note, anchor: $anchor, href: $href)';
+  return 'BookmarkModel(location: $location, slug: $slug, note: $note, anchor: $anchor, href: $href)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $BookmarkModelCopyWith<$Res>  {
   factory $BookmarkModelCopyWith(BookmarkModel value, $Res Function(BookmarkModel) _then) = _$BookmarkModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'book') String slug, String note, String anchor, String href
+ String location,@JsonKey(name: 'book') String slug, String note, String anchor, String href
 });
 
 
@@ -66,9 +66,10 @@ class _$BookmarkModelCopyWithImpl<$Res>
 
 /// Create a copy of BookmarkModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? slug = null,Object? note = null,Object? anchor = null,Object? href = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? location = null,Object? slug = null,Object? note = null,Object? anchor = null,Object? href = null,}) {
   return _then(_self.copyWith(
-slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,anchor: null == anchor ? _self.anchor : anchor // ignore: cast_nullable_to_non_nullable
 as String,href: null == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
@@ -83,9 +84,10 @@ as String,
 @JsonSerializable()
 
 class _BookmarkModel implements BookmarkModel {
-  const _BookmarkModel({@JsonKey(name: 'book') required this.slug, required this.note, required this.anchor, required this.href});
+  const _BookmarkModel({required this.location, @JsonKey(name: 'book') required this.slug, required this.note, required this.anchor, required this.href});
   factory _BookmarkModel.fromJson(Map<String, dynamic> json) => _$BookmarkModelFromJson(json);
 
+@override final  String location;
 @override@JsonKey(name: 'book') final  String slug;
 @override final  String note;
 @override final  String anchor;
@@ -104,16 +106,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookmarkModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.note, note) || other.note == note)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.href, href) || other.href == href));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookmarkModel&&(identical(other.location, location) || other.location == location)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.note, note) || other.note == note)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.href, href) || other.href == href));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,slug,note,anchor,href);
+int get hashCode => Object.hash(runtimeType,location,slug,note,anchor,href);
 
 @override
 String toString() {
-  return 'BookmarkModel(slug: $slug, note: $note, anchor: $anchor, href: $href)';
+  return 'BookmarkModel(location: $location, slug: $slug, note: $note, anchor: $anchor, href: $href)';
 }
 
 
@@ -124,7 +126,7 @@ abstract mixin class _$BookmarkModelCopyWith<$Res> implements $BookmarkModelCopy
   factory _$BookmarkModelCopyWith(_BookmarkModel value, $Res Function(_BookmarkModel) _then) = __$BookmarkModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'book') String slug, String note, String anchor, String href
+ String location,@JsonKey(name: 'book') String slug, String note, String anchor, String href
 });
 
 
@@ -141,9 +143,10 @@ class __$BookmarkModelCopyWithImpl<$Res>
 
 /// Create a copy of BookmarkModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? slug = null,Object? note = null,Object? anchor = null,Object? href = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? location = null,Object? slug = null,Object? note = null,Object? anchor = null,Object? href = null,}) {
   return _then(_BookmarkModel(
-slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,anchor: null == anchor ? _self.anchor : anchor // ignore: cast_nullable_to_non_nullable
 as String,href: null == href ? _self.href : href // ignore: cast_nullable_to_non_nullable

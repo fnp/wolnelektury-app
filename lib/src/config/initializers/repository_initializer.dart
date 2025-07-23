@@ -17,7 +17,7 @@ Future<void> initializeRepositories({required GetIt getIt}) async {
     BooksRepositoryImplementation(getIt.get(), getIt.get()),
   );
   getIt.registerSingleton<BookmarksRepository>(
-    BookmarksRepositoryImplementation(getIt.get()),
+    BookmarksRepositoryImplementation(getIt.get(), getIt.get(), getIt.get()),
   );
   getIt.registerSingleton<AuthRepository>(
     AuthRepositoryImplementation(getIt.get()),

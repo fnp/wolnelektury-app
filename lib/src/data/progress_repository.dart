@@ -7,11 +7,9 @@ import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_progresses_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
-import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/data/mixin/repository_helper_mixin.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/domain/sync_model.dart';
-import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
@@ -33,15 +31,14 @@ abstract class ProgressRepository {
 
   Future<DataState<void>> sendOutProgressSync();
   Future<DataState<void>> receiveInProgressSync();
-  // --------------------------------------------
 }
 
-class ProgressRepositoryImplementation extends ProgressRepository {
+class ProgressRepositoryImplementation extends ProgressRepository
+    with RepositoryHelperMixin {
   static String progressTextEndpoint(String slug) => '/progress/$slug/text/';
   static String progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
   static const String sendSyncProgressEndpoint = '/sync/';
   static String receiveSyncProgressEndpoint(String ts) => '/sync/?ts=$ts';
-  // --------------------------------------------
 
   final ApiService _apiService;
   final AppStorageSyncService _syncStorage;
@@ -58,6 +55,10 @@ class ProgressRepositoryImplementation extends ProgressRepository {
     try {
       final syncData = await _syncStorage.getSyncData();
       final lastReceived = syncData.receivedProgressSyncAt;
+      final lastReceivedTimestamp =
+          ((lastReceived?.millisecondsSinceEpoch ?? 0) / 1000)
+              .round()
+              .toString();
 
       AppLogger.instance.d(
         'ProgressRepository',
@@ -65,14 +66,11 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       );
 
       final response = await _apiService.getRequest(
-        receiveSyncProgressEndpoint(
-          ((lastReceived?.millisecondsSinceEpoch ?? 0) / 1000)
-              .round()
-              .toString(),
-        ),
+        receiveSyncProgressEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
       );
 
+      // Simply nothing to sync
       if (!response.hasData) {
         await _syncStorage.updateSyncData(
           receivedProgressSyncAt: DateTime.now(),
@@ -80,11 +78,18 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         return const DataState.failure(Failure.notFound());
       }
 
-      final List<ProgressModel> progresses = response.data!
-          .map((e) => SyncModel.fromJson(e))
-          .whereType<SyncModelProgress>()
-          .map((e) => e.object)
-          .toList();
+      final List<SyncModelProgress> progresses = [];
+
+      for (final e in response.data!) {
+        try {
+          final syncModel = SyncModel.fromJson(e);
+          if (syncModel is SyncModelProgress) {
+            progresses.add(syncModel);
+          }
+        } catch (_) {
+          // Wrong JSON, skip
+        }
+      }
 
       AppLogger.instance.d(
         'ProgressRepository',
@@ -93,13 +98,15 @@ class ProgressRepositoryImplementation extends ProgressRepository {
 
       await _progressStorage.upsertMultipleProgressData(
         progresses.mapIndexed((index, e) {
-          final timestampInSeconds = response.data![index]['timestamp'] ?? 0;
+          print(
+            'ProgressRepository: $index - ${e.object.slug} - ${e.object.textAnchor}',
+          );
           final updatedAt = DateTime.fromMillisecondsSinceEpoch(
-            timestampInSeconds * 1000,
+            e.timestamp * 1000,
           );
           return (
-            slug: e.slug,
-            progressJson: jsonEncode(e.toJson()),
+            slug: e.object.slug,
+            progressJson: jsonEncode(e.object.toJson()),
             timestamp: updatedAt,
           );
         }).toList(),
@@ -151,7 +158,6 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       return const DataState.failure(Failure.badResponse());
     }
   }
-  // --------------------------------------------
 
   @override
   Future<DataState<List<ProgressModel>>> getProgresses({
@@ -167,9 +173,17 @@ class ProgressRepositoryImplementation extends ProgressRepository {
       if (response.isEmpty) {
         return const DataState.failure(Failure.notFound());
       }
-      final progresses = response
-          .map((e) => ProgressModel.fromJson(jsonDecode(e)))
-          .toList();
+
+      final List<ProgressModel> progresses = [];
+      for (final e in response) {
+        try {
+          final model = ProgressModel.fromJson(jsonDecode(e));
+          progresses.add(model);
+        } catch (_) {
+          // Wrong JSON, skip
+        }
+      }
+
       return DataState.success(data: progresses);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
@@ -207,26 +221,26 @@ class ProgressRepositoryImplementation extends ProgressRepository {
         ),
       ]);
 
-      final isConnected = get.get<ConnectivityCubit>().state.isConnected;
-      final isLogged = get.get<AuthCubit>().state.isAuthenticated;
-
-      if (isConnected && isLogged) {
-        // Mark the sync date
-        await _syncStorage.updateSyncData(sentProgressSyncAt: DateTime.now());
+      if (tryOnline) {
+        DataState dbResult = const DataState.failure(Failure.notFound());
         switch (type) {
           case ProgressType.text:
             if (progress.textAnchor == null) break;
-            return _setTextProgressInDb(
+            dbResult = await _setTextProgressInDb(
               slug: slug,
               textAnchor: progress.textAnchor!,
             );
           case ProgressType.audio:
             if (progress.audioTimestamp == null) break;
-            return _setAudioProgressInDb(
+            dbResult = await _setAudioProgressInDb(
               slug: slug,
               position: progress.audioTimestamp!,
             );
         }
+        if (dbResult.isSuccess) {
+          await _syncStorage.updateSyncData(sentProgressSyncAt: DateTime.now());
+        }
+        return dbResult;
       }
 
       return const DataState.success(data: null);

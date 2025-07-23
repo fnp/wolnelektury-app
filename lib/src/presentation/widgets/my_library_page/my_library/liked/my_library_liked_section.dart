@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/empty_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/liked/my_library_liked_book.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/images.dart';
 
 class MyLibraryLikedSection extends StatelessWidget {
   const MyLibraryLikedSection({super.key});
@@ -21,8 +25,22 @@ class MyLibraryLikedSection extends StatelessWidget {
           PageSubtitle(subtitle: MyLibraryEnum.liked.title),
           Expanded(
             child: BlocBuilder<LikesCubit, LikesState>(
-              buildWhen: (p, c) => p.itemsPerPage != c.itemsPerPage,
+              buildWhen: (p, c) {
+                return p.itemsPerPage != c.itemsPerPage ||
+                    p.favourites.isNotEmpty && c.favourites.isEmpty;
+              },
               builder: (context, state) {
+                if (state.favourites.isEmpty) {
+                  //todo translations
+                  return EmptyWidget(
+                    image: Images.empty,
+                    message: 'Nie polubiono jeszcze żadnych książek',
+                    buttonText: 'Przeglądaj katalog',
+                    onTap: () {
+                      router.goNamed(cataloguePageConfig.name);
+                    },
+                  );
+                }
                 return CustomScrollPage(
                   onLoadMore: () {
                     context.read<LikesCubit>().increaseItemsPerPage();

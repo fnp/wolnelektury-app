@@ -44,7 +44,7 @@
                 "download": "Pobierz"
             },
             "snackbar": {
-                "reader_removed": "Czytnik został usunięty",
+                "reader_removed": "Książka została usunięta",
                 "audiobook_removed": "Audiobook został usunięty",
                 "audiobook_error": "Wystąpił błąd podczas pobierania audiobooku",
                 "audiobook_already_downloading": "Inny audiobook jest już pobierany",

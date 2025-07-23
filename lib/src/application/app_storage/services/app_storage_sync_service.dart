@@ -36,6 +36,8 @@ class AppStorageSyncService {
     DateTime? sentProgressSyncAt,
     DateTime? receivedLikesSyncAt,
     DateTime? sentLikesSyncAt,
+    DateTime? receivedBookmarksSyncAt,
+    DateTime? sentBookmarksSyncAt,
   }) async {
     final syncData = await getSyncData();
     final updatedFields = SyncInfoCompanion(
@@ -51,6 +53,12 @@ class AppStorageSyncService {
           : const Value.absent(),
       sentLikesSyncAt: sentLikesSyncAt != null
           ? Value(sentLikesSyncAt)
+          : const Value.absent(),
+      receivedBookmarksSyncAt: receivedBookmarksSyncAt != null
+          ? Value(receivedBookmarksSyncAt)
+          : const Value.absent(),
+      sentBookmarksSyncAt: sentBookmarksSyncAt != null
+          ? Value(sentBookmarksSyncAt)
           : const Value.absent(),
     );
 
@@ -82,6 +90,22 @@ class AppStorageSyncService {
     if (syncData.sentLikesSyncAt != null) {
       query.where(
         (tbl) => tbl.updatedAt.isBiggerThanValue(syncData.sentLikesSyncAt!),
+      );
+    }
+
+    final result = await query.get();
+    return result;
+  }
+
+  Future<List<Bookmark>> getBookmarksToSync() async {
+    final syncData = await getSyncData();
+
+    final query = _storage.select(_storage.bookmarks)
+      ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]);
+
+    if (syncData.sentBookmarksSyncAt != null) {
+      query.where(
+        (tbl) => tbl.updatedAt.isBiggerThanValue(syncData.sentBookmarksSyncAt!),
       );
     }
 

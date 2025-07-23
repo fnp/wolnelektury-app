@@ -97,6 +97,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
           'Retrievied progress of the book ${state.currentSlug} with anchor ${data.textAnchor}',
         );
         emit(state.copyWith(progress: data));
+        //todo This will be String in future
         final int? anchor = int.tryParse(data.textAnchor ?? '');
         if (anchor == null) return;
         final foundIndex = state.findElementIndexByParagraphIndex(anchor);

@@ -1261,6 +1261,28 @@ class $SyncInfoTable extends SyncInfo
         type: DriftSqlType.dateTime,
         requiredDuringInsert: false,
       );
+  static const VerificationMeta _receivedBookmarksSyncAtMeta =
+      const VerificationMeta('receivedBookmarksSyncAt');
+  @override
+  late final GeneratedColumn<DateTime> receivedBookmarksSyncAt =
+      GeneratedColumn<DateTime>(
+        'received_bookmarks_sync_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _sentBookmarksSyncAtMeta =
+      const VerificationMeta('sentBookmarksSyncAt');
+  @override
+  late final GeneratedColumn<DateTime> sentBookmarksSyncAt =
+      GeneratedColumn<DateTime>(
+        'sent_bookmarks_sync_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1268,6 +1290,8 @@ class $SyncInfoTable extends SyncInfo
     sentProgressSyncAt,
     receivedLikesSyncAt,
     sentLikesSyncAt,
+    receivedBookmarksSyncAt,
+    sentBookmarksSyncAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1320,6 +1344,24 @@ class $SyncInfoTable extends SyncInfo
         ),
       );
     }
+    if (data.containsKey('received_bookmarks_sync_at')) {
+      context.handle(
+        _receivedBookmarksSyncAtMeta,
+        receivedBookmarksSyncAt.isAcceptableOrUnknown(
+          data['received_bookmarks_sync_at']!,
+          _receivedBookmarksSyncAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sent_bookmarks_sync_at')) {
+      context.handle(
+        _sentBookmarksSyncAtMeta,
+        sentBookmarksSyncAt.isAcceptableOrUnknown(
+          data['sent_bookmarks_sync_at']!,
+          _sentBookmarksSyncAtMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1349,6 +1391,14 @@ class $SyncInfoTable extends SyncInfo
         DriftSqlType.dateTime,
         data['${effectivePrefix}sent_likes_sync_at'],
       ),
+      receivedBookmarksSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}received_bookmarks_sync_at'],
+      ),
+      sentBookmarksSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}sent_bookmarks_sync_at'],
+      ),
     );
   }
 
@@ -1364,12 +1414,16 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
   final DateTime? sentProgressSyncAt;
   final DateTime? receivedLikesSyncAt;
   final DateTime? sentLikesSyncAt;
+  final DateTime? receivedBookmarksSyncAt;
+  final DateTime? sentBookmarksSyncAt;
   const SyncInfoData({
     required this.id,
     this.receivedProgressSyncAt,
     this.sentProgressSyncAt,
     this.receivedLikesSyncAt,
     this.sentLikesSyncAt,
+    this.receivedBookmarksSyncAt,
+    this.sentBookmarksSyncAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1389,6 +1443,14 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     if (!nullToAbsent || sentLikesSyncAt != null) {
       map['sent_likes_sync_at'] = Variable<DateTime>(sentLikesSyncAt);
     }
+    if (!nullToAbsent || receivedBookmarksSyncAt != null) {
+      map['received_bookmarks_sync_at'] = Variable<DateTime>(
+        receivedBookmarksSyncAt,
+      );
+    }
+    if (!nullToAbsent || sentBookmarksSyncAt != null) {
+      map['sent_bookmarks_sync_at'] = Variable<DateTime>(sentBookmarksSyncAt);
+    }
     return map;
   }
 
@@ -1407,6 +1469,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       sentLikesSyncAt: sentLikesSyncAt == null && nullToAbsent
           ? const Value.absent()
           : Value(sentLikesSyncAt),
+      receivedBookmarksSyncAt: receivedBookmarksSyncAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receivedBookmarksSyncAt),
+      sentBookmarksSyncAt: sentBookmarksSyncAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sentBookmarksSyncAt),
     );
   }
 
@@ -1427,6 +1495,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
         json['receivedLikesSyncAt'],
       ),
       sentLikesSyncAt: serializer.fromJson<DateTime?>(json['sentLikesSyncAt']),
+      receivedBookmarksSyncAt: serializer.fromJson<DateTime?>(
+        json['receivedBookmarksSyncAt'],
+      ),
+      sentBookmarksSyncAt: serializer.fromJson<DateTime?>(
+        json['sentBookmarksSyncAt'],
+      ),
     );
   }
   @override
@@ -1440,6 +1514,10 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       'sentProgressSyncAt': serializer.toJson<DateTime?>(sentProgressSyncAt),
       'receivedLikesSyncAt': serializer.toJson<DateTime?>(receivedLikesSyncAt),
       'sentLikesSyncAt': serializer.toJson<DateTime?>(sentLikesSyncAt),
+      'receivedBookmarksSyncAt': serializer.toJson<DateTime?>(
+        receivedBookmarksSyncAt,
+      ),
+      'sentBookmarksSyncAt': serializer.toJson<DateTime?>(sentBookmarksSyncAt),
     };
   }
 
@@ -1449,6 +1527,8 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     Value<DateTime?> sentProgressSyncAt = const Value.absent(),
     Value<DateTime?> receivedLikesSyncAt = const Value.absent(),
     Value<DateTime?> sentLikesSyncAt = const Value.absent(),
+    Value<DateTime?> receivedBookmarksSyncAt = const Value.absent(),
+    Value<DateTime?> sentBookmarksSyncAt = const Value.absent(),
   }) => SyncInfoData(
     id: id ?? this.id,
     receivedProgressSyncAt: receivedProgressSyncAt.present
@@ -1463,6 +1543,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     sentLikesSyncAt: sentLikesSyncAt.present
         ? sentLikesSyncAt.value
         : this.sentLikesSyncAt,
+    receivedBookmarksSyncAt: receivedBookmarksSyncAt.present
+        ? receivedBookmarksSyncAt.value
+        : this.receivedBookmarksSyncAt,
+    sentBookmarksSyncAt: sentBookmarksSyncAt.present
+        ? sentBookmarksSyncAt.value
+        : this.sentBookmarksSyncAt,
   );
   SyncInfoData copyWithCompanion(SyncInfoCompanion data) {
     return SyncInfoData(
@@ -1479,6 +1565,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       sentLikesSyncAt: data.sentLikesSyncAt.present
           ? data.sentLikesSyncAt.value
           : this.sentLikesSyncAt,
+      receivedBookmarksSyncAt: data.receivedBookmarksSyncAt.present
+          ? data.receivedBookmarksSyncAt.value
+          : this.receivedBookmarksSyncAt,
+      sentBookmarksSyncAt: data.sentBookmarksSyncAt.present
+          ? data.sentBookmarksSyncAt.value
+          : this.sentBookmarksSyncAt,
     );
   }
 
@@ -1489,7 +1581,9 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
           ..write('receivedProgressSyncAt: $receivedProgressSyncAt, ')
           ..write('sentProgressSyncAt: $sentProgressSyncAt, ')
           ..write('receivedLikesSyncAt: $receivedLikesSyncAt, ')
-          ..write('sentLikesSyncAt: $sentLikesSyncAt')
+          ..write('sentLikesSyncAt: $sentLikesSyncAt, ')
+          ..write('receivedBookmarksSyncAt: $receivedBookmarksSyncAt, ')
+          ..write('sentBookmarksSyncAt: $sentBookmarksSyncAt')
           ..write(')'))
         .toString();
   }
@@ -1501,6 +1595,8 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     sentProgressSyncAt,
     receivedLikesSyncAt,
     sentLikesSyncAt,
+    receivedBookmarksSyncAt,
+    sentBookmarksSyncAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -1510,7 +1606,9 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
           other.receivedProgressSyncAt == this.receivedProgressSyncAt &&
           other.sentProgressSyncAt == this.sentProgressSyncAt &&
           other.receivedLikesSyncAt == this.receivedLikesSyncAt &&
-          other.sentLikesSyncAt == this.sentLikesSyncAt);
+          other.sentLikesSyncAt == this.sentLikesSyncAt &&
+          other.receivedBookmarksSyncAt == this.receivedBookmarksSyncAt &&
+          other.sentBookmarksSyncAt == this.sentBookmarksSyncAt);
 }
 
 class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
@@ -1519,12 +1617,16 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
   final Value<DateTime?> sentProgressSyncAt;
   final Value<DateTime?> receivedLikesSyncAt;
   final Value<DateTime?> sentLikesSyncAt;
+  final Value<DateTime?> receivedBookmarksSyncAt;
+  final Value<DateTime?> sentBookmarksSyncAt;
   const SyncInfoCompanion({
     this.id = const Value.absent(),
     this.receivedProgressSyncAt = const Value.absent(),
     this.sentProgressSyncAt = const Value.absent(),
     this.receivedLikesSyncAt = const Value.absent(),
     this.sentLikesSyncAt = const Value.absent(),
+    this.receivedBookmarksSyncAt = const Value.absent(),
+    this.sentBookmarksSyncAt = const Value.absent(),
   });
   SyncInfoCompanion.insert({
     this.id = const Value.absent(),
@@ -1532,6 +1634,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     this.sentProgressSyncAt = const Value.absent(),
     this.receivedLikesSyncAt = const Value.absent(),
     this.sentLikesSyncAt = const Value.absent(),
+    this.receivedBookmarksSyncAt = const Value.absent(),
+    this.sentBookmarksSyncAt = const Value.absent(),
   });
   static Insertable<SyncInfoData> custom({
     Expression<int>? id,
@@ -1539,6 +1643,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     Expression<DateTime>? sentProgressSyncAt,
     Expression<DateTime>? receivedLikesSyncAt,
     Expression<DateTime>? sentLikesSyncAt,
+    Expression<DateTime>? receivedBookmarksSyncAt,
+    Expression<DateTime>? sentBookmarksSyncAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1549,6 +1655,10 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
       if (receivedLikesSyncAt != null)
         'received_likes_sync_at': receivedLikesSyncAt,
       if (sentLikesSyncAt != null) 'sent_likes_sync_at': sentLikesSyncAt,
+      if (receivedBookmarksSyncAt != null)
+        'received_bookmarks_sync_at': receivedBookmarksSyncAt,
+      if (sentBookmarksSyncAt != null)
+        'sent_bookmarks_sync_at': sentBookmarksSyncAt,
     });
   }
 
@@ -1558,6 +1668,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     Value<DateTime?>? sentProgressSyncAt,
     Value<DateTime?>? receivedLikesSyncAt,
     Value<DateTime?>? sentLikesSyncAt,
+    Value<DateTime?>? receivedBookmarksSyncAt,
+    Value<DateTime?>? sentBookmarksSyncAt,
   }) {
     return SyncInfoCompanion(
       id: id ?? this.id,
@@ -1566,6 +1678,9 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
       sentProgressSyncAt: sentProgressSyncAt ?? this.sentProgressSyncAt,
       receivedLikesSyncAt: receivedLikesSyncAt ?? this.receivedLikesSyncAt,
       sentLikesSyncAt: sentLikesSyncAt ?? this.sentLikesSyncAt,
+      receivedBookmarksSyncAt:
+          receivedBookmarksSyncAt ?? this.receivedBookmarksSyncAt,
+      sentBookmarksSyncAt: sentBookmarksSyncAt ?? this.sentBookmarksSyncAt,
     );
   }
 
@@ -1593,6 +1708,16 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     if (sentLikesSyncAt.present) {
       map['sent_likes_sync_at'] = Variable<DateTime>(sentLikesSyncAt.value);
     }
+    if (receivedBookmarksSyncAt.present) {
+      map['received_bookmarks_sync_at'] = Variable<DateTime>(
+        receivedBookmarksSyncAt.value,
+      );
+    }
+    if (sentBookmarksSyncAt.present) {
+      map['sent_bookmarks_sync_at'] = Variable<DateTime>(
+        sentBookmarksSyncAt.value,
+      );
+    }
     return map;
   }
 
@@ -1603,7 +1728,9 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
           ..write('receivedProgressSyncAt: $receivedProgressSyncAt, ')
           ..write('sentProgressSyncAt: $sentProgressSyncAt, ')
           ..write('receivedLikesSyncAt: $receivedLikesSyncAt, ')
-          ..write('sentLikesSyncAt: $sentLikesSyncAt')
+          ..write('sentLikesSyncAt: $sentLikesSyncAt, ')
+          ..write('receivedBookmarksSyncAt: $receivedBookmarksSyncAt, ')
+          ..write('sentBookmarksSyncAt: $sentBookmarksSyncAt')
           ..write(')'))
         .toString();
   }
@@ -1816,6 +1943,317 @@ class LikesCompanion extends UpdateCompanion<Like> {
   }
 }
 
+class $BookmarksTable extends Bookmarks
+    with TableInfo<$BookmarksTable, Bookmark> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BookmarksTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _slugMeta = const VerificationMeta('slug');
+  @override
+  late final GeneratedColumn<String> slug = GeneratedColumn<String>(
+    'slug',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _progressJsonMeta = const VerificationMeta(
+    'progressJson',
+  );
+  @override
+  late final GeneratedColumn<String> progressJson = GeneratedColumn<String>(
+    'progress_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, slug, progressJson, updatedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'bookmarks';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Bookmark> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('slug')) {
+      context.handle(
+        _slugMeta,
+        slug.isAcceptableOrUnknown(data['slug']!, _slugMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_slugMeta);
+    }
+    if (data.containsKey('progress_json')) {
+      context.handle(
+        _progressJsonMeta,
+        progressJson.isAcceptableOrUnknown(
+          data['progress_json']!,
+          _progressJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_progressJsonMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Bookmark map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Bookmark(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      slug: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}slug'],
+      )!,
+      progressJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}progress_json'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $BookmarksTable createAlias(String alias) {
+    return $BookmarksTable(attachedDatabase, alias);
+  }
+}
+
+class Bookmark extends DataClass implements Insertable<Bookmark> {
+  final String id;
+  final String slug;
+  final String progressJson;
+  final DateTime updatedAt;
+  const Bookmark({
+    required this.id,
+    required this.slug,
+    required this.progressJson,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['slug'] = Variable<String>(slug);
+    map['progress_json'] = Variable<String>(progressJson);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  BookmarksCompanion toCompanion(bool nullToAbsent) {
+    return BookmarksCompanion(
+      id: Value(id),
+      slug: Value(slug),
+      progressJson: Value(progressJson),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory Bookmark.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Bookmark(
+      id: serializer.fromJson<String>(json['id']),
+      slug: serializer.fromJson<String>(json['slug']),
+      progressJson: serializer.fromJson<String>(json['progressJson']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'slug': serializer.toJson<String>(slug),
+      'progressJson': serializer.toJson<String>(progressJson),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  Bookmark copyWith({
+    String? id,
+    String? slug,
+    String? progressJson,
+    DateTime? updatedAt,
+  }) => Bookmark(
+    id: id ?? this.id,
+    slug: slug ?? this.slug,
+    progressJson: progressJson ?? this.progressJson,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  Bookmark copyWithCompanion(BookmarksCompanion data) {
+    return Bookmark(
+      id: data.id.present ? data.id.value : this.id,
+      slug: data.slug.present ? data.slug.value : this.slug,
+      progressJson: data.progressJson.present
+          ? data.progressJson.value
+          : this.progressJson,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Bookmark(')
+          ..write('id: $id, ')
+          ..write('slug: $slug, ')
+          ..write('progressJson: $progressJson, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, slug, progressJson, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Bookmark &&
+          other.id == this.id &&
+          other.slug == this.slug &&
+          other.progressJson == this.progressJson &&
+          other.updatedAt == this.updatedAt);
+}
+
+class BookmarksCompanion extends UpdateCompanion<Bookmark> {
+  final Value<String> id;
+  final Value<String> slug;
+  final Value<String> progressJson;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const BookmarksCompanion({
+    this.id = const Value.absent(),
+    this.slug = const Value.absent(),
+    this.progressJson = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  BookmarksCompanion.insert({
+    required String id,
+    required String slug,
+    required String progressJson,
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       slug = Value(slug),
+       progressJson = Value(progressJson);
+  static Insertable<Bookmark> custom({
+    Expression<String>? id,
+    Expression<String>? slug,
+    Expression<String>? progressJson,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (slug != null) 'slug': slug,
+      if (progressJson != null) 'progress_json': progressJson,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  BookmarksCompanion copyWith({
+    Value<String>? id,
+    Value<String>? slug,
+    Value<String>? progressJson,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return BookmarksCompanion(
+      id: id ?? this.id,
+      slug: slug ?? this.slug,
+      progressJson: progressJson ?? this.progressJson,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (slug.present) {
+      map['slug'] = Variable<String>(slug.value);
+    }
+    if (progressJson.present) {
+      map['progress_json'] = Variable<String>(progressJson.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BookmarksCompanion(')
+          ..write('id: $id, ')
+          ..write('slug: $slug, ')
+          ..write('progressJson: $progressJson, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppStorage extends GeneratedDatabase {
   _$AppStorage(QueryExecutor e) : super(e);
   $AppStorageManager get managers => $AppStorageManager(this);
@@ -1826,6 +2264,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
   late final $ProgressesTable progresses = $ProgressesTable(this);
   late final $SyncInfoTable syncInfo = $SyncInfoTable(this);
   late final $LikesTable likes = $LikesTable(this);
+  late final $BookmarksTable bookmarks = $BookmarksTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1838,6 +2277,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
     progresses,
     syncInfo,
     likes,
+    bookmarks,
   ];
 }
 
@@ -2599,6 +3039,8 @@ typedef $$SyncInfoTableCreateCompanionBuilder =
       Value<DateTime?> sentProgressSyncAt,
       Value<DateTime?> receivedLikesSyncAt,
       Value<DateTime?> sentLikesSyncAt,
+      Value<DateTime?> receivedBookmarksSyncAt,
+      Value<DateTime?> sentBookmarksSyncAt,
     });
 typedef $$SyncInfoTableUpdateCompanionBuilder =
     SyncInfoCompanion Function({
@@ -2607,6 +3049,8 @@ typedef $$SyncInfoTableUpdateCompanionBuilder =
       Value<DateTime?> sentProgressSyncAt,
       Value<DateTime?> receivedLikesSyncAt,
       Value<DateTime?> sentLikesSyncAt,
+      Value<DateTime?> receivedBookmarksSyncAt,
+      Value<DateTime?> sentBookmarksSyncAt,
     });
 
 class $$SyncInfoTableFilterComposer
@@ -2640,6 +3084,16 @@ class $$SyncInfoTableFilterComposer
 
   ColumnFilters<DateTime> get sentLikesSyncAt => $composableBuilder(
     column: $table.sentLikesSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get receivedBookmarksSyncAt => $composableBuilder(
+    column: $table.receivedBookmarksSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get sentBookmarksSyncAt => $composableBuilder(
+    column: $table.sentBookmarksSyncAt,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -2677,6 +3131,16 @@ class $$SyncInfoTableOrderingComposer
     column: $table.sentLikesSyncAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get receivedBookmarksSyncAt => $composableBuilder(
+    column: $table.receivedBookmarksSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get sentBookmarksSyncAt => $composableBuilder(
+    column: $table.sentBookmarksSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SyncInfoTableAnnotationComposer
@@ -2708,6 +3172,16 @@ class $$SyncInfoTableAnnotationComposer
 
   GeneratedColumn<DateTime> get sentLikesSyncAt => $composableBuilder(
     column: $table.sentLikesSyncAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get receivedBookmarksSyncAt => $composableBuilder(
+    column: $table.receivedBookmarksSyncAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get sentBookmarksSyncAt => $composableBuilder(
+    column: $table.sentBookmarksSyncAt,
     builder: (column) => column,
   );
 }
@@ -2748,12 +3222,16 @@ class $$SyncInfoTableTableManager
                 Value<DateTime?> sentProgressSyncAt = const Value.absent(),
                 Value<DateTime?> receivedLikesSyncAt = const Value.absent(),
                 Value<DateTime?> sentLikesSyncAt = const Value.absent(),
+                Value<DateTime?> receivedBookmarksSyncAt = const Value.absent(),
+                Value<DateTime?> sentBookmarksSyncAt = const Value.absent(),
               }) => SyncInfoCompanion(
                 id: id,
                 receivedProgressSyncAt: receivedProgressSyncAt,
                 sentProgressSyncAt: sentProgressSyncAt,
                 receivedLikesSyncAt: receivedLikesSyncAt,
                 sentLikesSyncAt: sentLikesSyncAt,
+                receivedBookmarksSyncAt: receivedBookmarksSyncAt,
+                sentBookmarksSyncAt: sentBookmarksSyncAt,
               ),
           createCompanionCallback:
               ({
@@ -2762,12 +3240,16 @@ class $$SyncInfoTableTableManager
                 Value<DateTime?> sentProgressSyncAt = const Value.absent(),
                 Value<DateTime?> receivedLikesSyncAt = const Value.absent(),
                 Value<DateTime?> sentLikesSyncAt = const Value.absent(),
+                Value<DateTime?> receivedBookmarksSyncAt = const Value.absent(),
+                Value<DateTime?> sentBookmarksSyncAt = const Value.absent(),
               }) => SyncInfoCompanion.insert(
                 id: id,
                 receivedProgressSyncAt: receivedProgressSyncAt,
                 sentProgressSyncAt: sentProgressSyncAt,
                 receivedLikesSyncAt: receivedLikesSyncAt,
                 sentLikesSyncAt: sentLikesSyncAt,
+                receivedBookmarksSyncAt: receivedBookmarksSyncAt,
+                sentBookmarksSyncAt: sentBookmarksSyncAt,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -2929,6 +3411,183 @@ typedef $$LikesTableProcessedTableManager =
       Like,
       PrefetchHooks Function()
     >;
+typedef $$BookmarksTableCreateCompanionBuilder =
+    BookmarksCompanion Function({
+      required String id,
+      required String slug,
+      required String progressJson,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+typedef $$BookmarksTableUpdateCompanionBuilder =
+    BookmarksCompanion Function({
+      Value<String> id,
+      Value<String> slug,
+      Value<String> progressJson,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$BookmarksTableFilterComposer
+    extends Composer<_$AppStorage, $BookmarksTable> {
+  $$BookmarksTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get progressJson => $composableBuilder(
+    column: $table.progressJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$BookmarksTableOrderingComposer
+    extends Composer<_$AppStorage, $BookmarksTable> {
+  $$BookmarksTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get progressJson => $composableBuilder(
+    column: $table.progressJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$BookmarksTableAnnotationComposer
+    extends Composer<_$AppStorage, $BookmarksTable> {
+  $$BookmarksTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get slug =>
+      $composableBuilder(column: $table.slug, builder: (column) => column);
+
+  GeneratedColumn<String> get progressJson => $composableBuilder(
+    column: $table.progressJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$BookmarksTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $BookmarksTable,
+          Bookmark,
+          $$BookmarksTableFilterComposer,
+          $$BookmarksTableOrderingComposer,
+          $$BookmarksTableAnnotationComposer,
+          $$BookmarksTableCreateCompanionBuilder,
+          $$BookmarksTableUpdateCompanionBuilder,
+          (Bookmark, BaseReferences<_$AppStorage, $BookmarksTable, Bookmark>),
+          Bookmark,
+          PrefetchHooks Function()
+        > {
+  $$BookmarksTableTableManager(_$AppStorage db, $BookmarksTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BookmarksTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BookmarksTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BookmarksTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> slug = const Value.absent(),
+                Value<String> progressJson = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => BookmarksCompanion(
+                id: id,
+                slug: slug,
+                progressJson: progressJson,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String slug,
+                required String progressJson,
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => BookmarksCompanion.insert(
+                id: id,
+                slug: slug,
+                progressJson: progressJson,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$BookmarksTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $BookmarksTable,
+      Bookmark,
+      $$BookmarksTableFilterComposer,
+      $$BookmarksTableOrderingComposer,
+      $$BookmarksTableAnnotationComposer,
+      $$BookmarksTableCreateCompanionBuilder,
+      $$BookmarksTableUpdateCompanionBuilder,
+      (Bookmark, BaseReferences<_$AppStorage, $BookmarksTable, Bookmark>),
+      Bookmark,
+      PrefetchHooks Function()
+    >;
 
 class $AppStorageManager {
   final _$AppStorage _db;
@@ -2947,4 +3606,6 @@ class $AppStorageManager {
       $$SyncInfoTableTableManager(_db, _db.syncInfo);
   $$LikesTableTableManager get likes =>
       $$LikesTableTableManager(_db, _db.likes);
+  $$BookmarksTableTableManager get bookmarks =>
+      $$BookmarksTableTableManager(_db, _db.bookmarks);
 }

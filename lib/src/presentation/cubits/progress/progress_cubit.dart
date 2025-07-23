@@ -1,13 +1,13 @@
-import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
+import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 part 'progress_cubit.freezed.dart';
 part 'progress_state.dart';
 
-class ProgressCubit extends Cubit<ProgressState> {
+class ProgressCubit extends SafeCubit<ProgressState> {
   final ProgressRepository _progressRepository;
   ProgressCubit(this._progressRepository) : super(const ProgressState());
 
@@ -25,7 +25,7 @@ class ProgressCubit extends Cubit<ProgressState> {
   }
 
   Future<void> loadMore() async {
-    if (state.progresses.length % 10 != 0) return;
+    if (state.progresses.length % 10 != 0 || state.isLoadingMore) return;
     emit(state.copyWith(isLoadingMore: true));
     final books = await _progressRepository.getProgresses(
       offset: state.progresses.length,

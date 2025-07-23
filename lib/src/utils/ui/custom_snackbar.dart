@@ -22,6 +22,7 @@ class CustomSnackbar {
       padding: const EdgeInsets.symmetric(horizontal: Dimensions.largePadding),
       margin: const EdgeInsets.all(Dimensions.mediumPadding),
       elevation: 0,
+      duration: const Duration(seconds: 5),
       shape: ShapeBorder.lerp(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),

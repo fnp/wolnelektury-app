@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
@@ -102,96 +99,84 @@ class _BodyState extends State<_Body> {
   @override
   Widget build(BuildContext context) {
     final routerCubit = context.read<RouterCubit>();
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: context.read<ListCreatorCubit>()..init()),
-        BlocProvider(
-          create: (context) {
-            return BookmarksCubit(get.get())..getMyLibraryBookmarks();
-          },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: Dimensions.largePadding),
+        SizedBox(
+          height: Dimensions.elementHeight,
+          child: ListView.separated(
+            controller: _scrollController,
+            separatorBuilder: (_, __) {
+              return const SizedBox(width: Dimensions.mediumPadding);
+            },
+            scrollDirection: Axis.horizontal,
+            itemCount: widget.myLibraryEnums.length,
+
+            itemBuilder: (_, index) {
+              final isFirst = index == 0;
+              final isLast = index == widget.myLibraryEnums.length - 1;
+              return AutoScrollTag(
+                key: ValueKey(index),
+                controller: _scrollController,
+                index: index,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: isFirst ? Dimensions.mediumPadding : 0,
+                    right: isLast ? Dimensions.mediumPadding : 0,
+                  ),
+                  child: MyLibraryPill(
+                    isSelected: currentPageIndex == index,
+                    pillType: widget.myLibraryEnums[index],
+                    onTap: () async {
+                      routerCubit.changeMyLibraryEnum(
+                        widget.myLibraryEnums[index],
+                      );
+                      setState(() {
+                        currentPageIndex = index;
+                        _opacity = 0;
+                      });
+                      // Delay to allow the opacity animation to start
+                      // This decreases the flickering effect a lot
+                      await Future.delayed(
+                        const Duration(milliseconds: 200),
+                      ).then((_) {
+                        _pageController.jumpToPage(index);
+                        setState(() {
+                          _opacity = 1;
+                        });
+                      });
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        Expanded(
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.fastOutSlowIn,
+            opacity: _opacity,
+            child: PageView(
+              onPageChanged: (value) {
+                setState(() {
+                  currentPageIndex = value;
+                  routerCubit.changeMyLibraryEnum(widget.myLibraryEnums[value]);
+                  _scrollController.scrollToIndex(
+                    value,
+                    preferPosition: AutoScrollPosition.middle,
+                  );
+                });
+              },
+              controller: _pageController,
+              children: widget.myLibraryEnums
+                  .map((myLibraryEnum) => getChildByEnum(myLibraryEnum))
+                  .toList(),
+            ),
+          ),
         ),
       ],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: Dimensions.largePadding),
-          SizedBox(
-            height: Dimensions.elementHeight,
-            child: ListView.separated(
-              controller: _scrollController,
-              separatorBuilder: (_, __) {
-                return const SizedBox(width: Dimensions.mediumPadding);
-              },
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.myLibraryEnums.length,
-
-              itemBuilder: (_, index) {
-                final isFirst = index == 0;
-                final isLast = index == widget.myLibraryEnums.length - 1;
-                return AutoScrollTag(
-                  key: ValueKey(index),
-                  controller: _scrollController,
-                  index: index,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: isFirst ? Dimensions.mediumPadding : 0,
-                      right: isLast ? Dimensions.mediumPadding : 0,
-                    ),
-                    child: MyLibraryPill(
-                      isSelected: currentPageIndex == index,
-                      pillType: widget.myLibraryEnums[index],
-                      onTap: () async {
-                        routerCubit.changeMyLibraryEnum(
-                          widget.myLibraryEnums[index],
-                        );
-                        setState(() {
-                          currentPageIndex = index;
-                          _opacity = 0;
-                        });
-                        // Delay to allow the opacity animation to start
-                        // This decreases the flickering effect a lot
-                        await Future.delayed(
-                          const Duration(milliseconds: 200),
-                        ).then((_) {
-                          _pageController.jumpToPage(index);
-                          setState(() {
-                            _opacity = 1;
-                          });
-                        });
-                      },
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Expanded(
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.fastOutSlowIn,
-              opacity: _opacity,
-              child: PageView(
-                onPageChanged: (value) {
-                  setState(() {
-                    currentPageIndex = value;
-                    routerCubit.changeMyLibraryEnum(
-                      widget.myLibraryEnums[value],
-                    );
-                    _scrollController.scrollToIndex(
-                      value,
-                      preferPosition: AutoScrollPosition.middle,
-                    );
-                  });
-                },
-                controller: _pageController,
-                children: widget.myLibraryEnums
-                    .map((myLibraryEnum) => getChildByEnum(myLibraryEnum))
-                    .toList(),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

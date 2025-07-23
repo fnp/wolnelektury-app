@@ -4,13 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/progress/progress_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_with_buttons.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/empty_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
 import 'package:wolnelektury/src/presentation/widgets/last_read/last_read_book_element.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/images.dart';
 
 class LastReadPage extends StatelessWidget {
   static const EdgeInsets _padding = EdgeInsets.all(Dimensions.mediumPadding);
@@ -40,6 +44,18 @@ class LastReadPage extends StatelessWidget {
                       builder: (context, state) {
                         if (state.isLoading) {
                           return const _SkeletonizedView();
+                        }
+
+                        if (!state.isLoading && state.progresses.isEmpty) {
+                          //todo translations
+                          return EmptyWidget(
+                            image: Images.empty,
+                            message: 'Nie czytano jeszcze żadnych książek',
+                            buttonText: 'Przeglądaj katalog',
+                            onTap: () {
+                              router.goNamed(cataloguePageConfig.name);
+                            },
+                          );
                         }
 
                         return ListView.separated(

@@ -1,9 +1,7 @@
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_likes_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
-import 'package:wolnelektury/src/config/getter.dart';
-import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
+import 'package:wolnelektury/src/data/mixin/repository_helper_mixin.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 abstract class LikesRepository {
@@ -15,7 +13,8 @@ abstract class LikesRepository {
   });
 }
 
-class FavouritesRepositoryImplementation extends LikesRepository {
+class FavouritesRepositoryImplementation extends LikesRepository
+    with RepositoryHelperMixin {
   final ApiService _apiService;
   final AppStorageLikesService _likesStorage;
   final AppStorageSyncService _syncStorage;
@@ -55,13 +54,15 @@ class FavouritesRepositoryImplementation extends LikesRepository {
         }
       }
 
-      final isConnected = get.get<ConnectivityCubit>().state.isConnected;
-      final isLogged = get.get<AuthCubit>().state.isAuthenticated;
-
-      if (isConnected && isLogged) {
-        // Mark the sync date
-        await _syncStorage.updateSyncData(sentLikesSyncAt: DateTime.now());
-        await _setFavouriteInDb(slug: slug, targetValue: targetValue);
+      if (tryOnline) {
+        final dbResult = await _setFavouriteInDb(
+          slug: slug,
+          targetValue: targetValue,
+        );
+        if (dbResult.isSuccess) {
+          await _syncStorage.updateSyncData(sentLikesSyncAt: DateTime.now());
+        }
+        return dbResult;
       }
       return const DataState.success(data: null);
     } catch (e) {
@@ -79,6 +80,7 @@ class FavouritesRepositoryImplementation extends LikesRepository {
           '$_likesEndpoint/$slug/',
           null,
         );
+
         if (response.error != null) {
           return const DataState.failure(Failure.badResponse());
         }

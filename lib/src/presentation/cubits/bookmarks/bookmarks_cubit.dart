@@ -1,12 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/data/bookmarks_repository.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/presentation/enums/success_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
-import 'package:wolnelektury/src/utils/string/string_extension.dart';
 
 part 'bookmarks_cubit.freezed.dart';
 part 'bookmarks_state.dart';
@@ -24,13 +22,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     final bookmarks = await _bookmarksRepository.getBookmarks();
     bookmarks.handle(
       success: (data, p) {
-        emit(
-          state.copyWith(
-            bookmarks: data,
-            isLoading: false,
-            pagination: p ?? state.pagination,
-          ),
-        );
+        emit(state.copyWith(bookmarks: data, isLoading: false));
       },
       failure: (error) {
         emit(state.copyWith(isLoading: false));
@@ -39,19 +31,17 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   }
 
   Future<void> loadMoreMyLibraryBookmarks() async {
-    if (state.pagination.next == null || state.isLoadingMore) return;
-
+    if (state.bookmarks.length % 10 != 0 || state.isLoadingMore) return;
     emit(state.copyWith(isLoadingMore: true));
     final books = await _bookmarksRepository.getBookmarks(
-      url: state.pagination.next!.removeApiUrl,
+      offset: state.bookmarks.length,
     );
 
     books.handle(
-      success: (data, pagination) {
+      success: (data, _) {
         emit(
           state.copyWith(
             bookmarks: [...state.bookmarks, ...data],
-            pagination: pagination ?? state.pagination,
             isLoadingMore: false,
           ),
         );
@@ -85,20 +75,31 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
 
   Future<void> deleteBookmark({required BookmarkModel bookmark}) async {
     if (state.bookmarkToDelete != null) {
-      _delete(state.bookmarkToDelete!.href);
+      _delete(
+        location: state.bookmarkToDelete!.location,
+        href: state.bookmarkToDelete!.href,
+      );
     }
     emit(state.copyWith(bookmarkToDelete: bookmark));
 
     await Future.delayed(const Duration(seconds: 5));
-    if (state.bookmarkToDelete?.href == bookmark.href) {
-      _delete(bookmark.href, shouldHandle: true);
+    if (state.bookmarkToDelete?.location == bookmark.location) {
+      _delete(
+        location: bookmark.location,
+        href: bookmark.href,
+        shouldHandle: true,
+      );
     }
   }
 
-  Future<void> _delete(String href, {bool shouldHandle = false}) async {
-    _bookmarksRepository.deleteBookmark(href: href);
+  Future<void> _delete({
+    required String location,
+    required String href,
+    bool shouldHandle = false,
+  }) async {
+    _bookmarksRepository.deleteBookmark(id: location, href: href);
     final bookmarks = List<BookmarkModel>.from(state.bookmarks);
-    bookmarks.removeWhere((e) => e.href == href);
+    bookmarks.removeWhere((e) => e.location == location);
     emit(state.copyWith(bookmarks: bookmarks));
     if (!shouldHandle) return;
     emit(state.copyWith(bookmarkToDelete: null));
@@ -107,18 +108,16 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   Future<void> updateBookmark({required String note}) async {
     if (state.editingBookmark == null) return;
     emit(state.copyWith(isBookmarkSuccess: null));
+    final newBookmark = state.editingBookmark!.copyWith(note: note);
     final response = await _bookmarksRepository.updateBookmark(
-      href: state.editingBookmark!.href,
-      slug: state.editingBookmark!.slug,
-      anchorId: int.tryParse(state.editingBookmark!.anchor) ?? 0,
-      note: note,
+      updatedBookmark: newBookmark,
     );
 
     response.handle(
-      success: (data, _) {
+      success: (_, _) {
         final bookmarks = List<BookmarkModel>.from(state.bookmarks).map((e) {
-          if (e.href == data.href) {
-            return data;
+          if (e.href == newBookmark.href) {
+            return newBookmark;
           }
           return e;
         }).toList();
@@ -140,13 +139,16 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     if (state.editingBookmark == null) return;
     emit(state.copyWith(isBookmarkSuccess: null));
     final response = await _bookmarksRepository.deleteBookmark(
+      id: state.editingBookmark!.location,
       href: state.editingBookmark!.href,
     );
 
     response.handle(
       success: (data, _) {
         final bookmarks = List<BookmarkModel>.from(state.bookmarks);
-        bookmarks.removeWhere((e) => e.href == state.editingBookmark!.href);
+        bookmarks.removeWhere(
+          (e) => e.location == state.editingBookmark!.location,
+        );
         emit(
           state.copyWith(
             isBookmarkSuccess: (Success.delete, true),
@@ -167,13 +169,13 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
 
   Future<void> createBookmark({
     required String slug,
-    required int anchorId,
+    required String anchor,
     String? note,
   }) async {
     emit(state.copyWith(isBookmarkSuccess: null));
     final response = await _bookmarksRepository.createBookmark(
       slug: slug,
-      anchorId: anchorId,
+      anchor: anchor,
       note: note,
     );
 

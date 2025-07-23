@@ -156,7 +156,7 @@ class _BookmarkNote extends StatelessWidget {
         }
         bookmarkCubit.createBookmark(
           slug: slug,
-          anchorId: anchorId,
+          anchor: anchorId.toString(),
           note: note,
         );
       },

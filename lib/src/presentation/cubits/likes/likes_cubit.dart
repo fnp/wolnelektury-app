@@ -42,6 +42,7 @@ class LikesCubit extends SafeCubit<LikesState> {
     response.handle(
       success: (_, __) {},
       failure: (failure) {
+        //todo display snackbar
         emit(state.copyWith(favourites: previousFavourites));
       },
     );

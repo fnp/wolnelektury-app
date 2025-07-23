@@ -47,6 +47,16 @@ class Likes extends Table {
   Set<Column> get primaryKey => {slug};
 }
 
+class Bookmarks extends Table {
+  TextColumn get id => text()();
+  TextColumn get slug => text()();
+  TextColumn get progressJson => text()();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 class SyncInfo extends Table {
   IntColumn get id => integer().autoIncrement()();
   //
@@ -55,6 +65,9 @@ class SyncInfo extends Table {
   //
   DateTimeColumn get receivedLikesSyncAt => dateTime().nullable()();
   DateTimeColumn get sentLikesSyncAt => dateTime().nullable()();
+  //
+  DateTimeColumn get receivedBookmarksSyncAt => dateTime().nullable()();
+  DateTimeColumn get sentBookmarksSyncAt => dateTime().nullable()();
 }
 
 @DriftDatabase(
@@ -66,6 +79,7 @@ class SyncInfo extends Table {
     Progresses,
     SyncInfo,
     Likes,
+    Bookmarks,
   ],
 )
 class AppStorage extends _$AppStorage {
@@ -99,7 +113,16 @@ class AppStorage extends _$AppStorage {
       if (from < 4) {
         await m.addColumn(syncInfo, syncInfo.sentLikesSyncAt);
         await m.addColumn(syncInfo, syncInfo.receivedLikesSyncAt);
+        await m.addColumn(syncInfo, syncInfo.receivedBookmarksSyncAt);
+        await m.addColumn(syncInfo, syncInfo.sentBookmarksSyncAt);
         await m.createTable(likes);
+        await m.createTable(bookmarks);
+        await m.createIndex(
+          Index(
+            'bookmarks_updated_at_idx',
+            'CREATE INDEX bookmarks_updated_at_idx ON bookmarks(updated_at)',
+          ),
+        );
         await m.createIndex(
           Index(
             'likes_updated_at_idx',
