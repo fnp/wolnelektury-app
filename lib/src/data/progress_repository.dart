@@ -38,7 +38,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
   static String progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
   static const String sendSyncProgressEndpoint = '/sync/progress/';
   static String receiveSyncProgressEndpoint(String ts) =>
-      '/sync/progress/?ts=$ts';
+      '/sync/progress?ts=$ts';
 
   final ApiService _apiService;
   final AppStorageSyncService _syncStorage;
@@ -96,7 +96,6 @@ class ProgressRepositoryImplementation extends ProgressRepository
 
       await _progressStorage.upsertMultipleProgressData(
         progresses.mapIndexed((index, e) {
-          print('ProgressRepository: $index - ${e.slug} - ${e.textAnchor}');
           final updatedAt = DateTime.fromMillisecondsSinceEpoch(
             // Null timestamp shouldn't ever happen, but just in case
             (e.timestamp ?? 0) * 1000,
