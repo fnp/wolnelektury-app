@@ -36,8 +36,9 @@ class ProgressRepositoryImplementation extends ProgressRepository
     with RepositoryHelperMixin {
   static String progressTextEndpoint(String slug) => '/progress/$slug/text/';
   static String progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
-  static const String sendSyncProgressEndpoint = '/sync/';
-  static String receiveSyncProgressEndpoint(String ts) => '/sync/?ts=$ts';
+  static const String sendSyncProgressEndpoint = '/sync/progress/';
+  static String receiveSyncProgressEndpoint(String ts) =>
+      '/sync/progress/?ts=$ts';
 
   final ApiService _apiService;
   final AppStorageSyncService _syncStorage;
