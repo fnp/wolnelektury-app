@@ -16,7 +16,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProgressModel {
 
-@JsonKey(name: 'book_slug') String get slug;@JsonKey(name: 'text_anchor') String? get textAnchor;@JsonKey(name: 'audio_timestamp') int? get audioTimestamp;
+@JsonKey(name: 'book_slug') String get slug;@JsonKey(name: 'text_anchor') String? get textAnchor;@JsonKey(name: 'audio_timestamp') int? get audioTimestamp;// This field is optional and used for syncing purposes.
+ int? get timestamp;
 /// Create a copy of ProgressModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +30,16 @@ $ProgressModelCopyWith<ProgressModel> get copyWith => _$ProgressModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgressModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.textAnchor, textAnchor) || other.textAnchor == textAnchor)&&(identical(other.audioTimestamp, audioTimestamp) || other.audioTimestamp == audioTimestamp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgressModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.textAnchor, textAnchor) || other.textAnchor == textAnchor)&&(identical(other.audioTimestamp, audioTimestamp) || other.audioTimestamp == audioTimestamp)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,slug,textAnchor,audioTimestamp);
+int get hashCode => Object.hash(runtimeType,slug,textAnchor,audioTimestamp,timestamp);
 
 @override
 String toString() {
-  return 'ProgressModel(slug: $slug, textAnchor: $textAnchor, audioTimestamp: $audioTimestamp)';
+  return 'ProgressModel(slug: $slug, textAnchor: $textAnchor, audioTimestamp: $audioTimestamp, timestamp: $timestamp)';
 }
 
 
@@ -49,7 +50,7 @@ abstract mixin class $ProgressModelCopyWith<$Res>  {
   factory $ProgressModelCopyWith(ProgressModel value, $Res Function(ProgressModel) _then) = _$ProgressModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'book_slug') String slug,@JsonKey(name: 'text_anchor') String? textAnchor,@JsonKey(name: 'audio_timestamp') int? audioTimestamp
+@JsonKey(name: 'book_slug') String slug,@JsonKey(name: 'text_anchor') String? textAnchor,@JsonKey(name: 'audio_timestamp') int? audioTimestamp, int? timestamp
 });
 
 
@@ -66,11 +67,12 @@ class _$ProgressModelCopyWithImpl<$Res>
 
 /// Create a copy of ProgressModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? slug = null,Object? textAnchor = freezed,Object? audioTimestamp = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? slug = null,Object? textAnchor = freezed,Object? audioTimestamp = freezed,Object? timestamp = freezed,}) {
   return _then(_self.copyWith(
 slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,textAnchor: freezed == textAnchor ? _self.textAnchor : textAnchor // ignore: cast_nullable_to_non_nullable
 as String?,audioTimestamp: freezed == audioTimestamp ? _self.audioTimestamp : audioTimestamp // ignore: cast_nullable_to_non_nullable
+as int?,timestamp: freezed == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }
@@ -82,12 +84,14 @@ as int?,
 @JsonSerializable()
 
 class _ProgressModel implements ProgressModel {
-  const _ProgressModel({@JsonKey(name: 'book_slug') required this.slug, @JsonKey(name: 'text_anchor') this.textAnchor, @JsonKey(name: 'audio_timestamp') this.audioTimestamp});
+  const _ProgressModel({@JsonKey(name: 'book_slug') required this.slug, @JsonKey(name: 'text_anchor') this.textAnchor, @JsonKey(name: 'audio_timestamp') this.audioTimestamp, this.timestamp});
   factory _ProgressModel.fromJson(Map<String, dynamic> json) => _$ProgressModelFromJson(json);
 
 @override@JsonKey(name: 'book_slug') final  String slug;
 @override@JsonKey(name: 'text_anchor') final  String? textAnchor;
 @override@JsonKey(name: 'audio_timestamp') final  int? audioTimestamp;
+// This field is optional and used for syncing purposes.
+@override final  int? timestamp;
 
 /// Create a copy of ProgressModel
 /// with the given fields replaced by the non-null parameter values.
@@ -102,16 +106,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgressModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.textAnchor, textAnchor) || other.textAnchor == textAnchor)&&(identical(other.audioTimestamp, audioTimestamp) || other.audioTimestamp == audioTimestamp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgressModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.textAnchor, textAnchor) || other.textAnchor == textAnchor)&&(identical(other.audioTimestamp, audioTimestamp) || other.audioTimestamp == audioTimestamp)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,slug,textAnchor,audioTimestamp);
+int get hashCode => Object.hash(runtimeType,slug,textAnchor,audioTimestamp,timestamp);
 
 @override
 String toString() {
-  return 'ProgressModel(slug: $slug, textAnchor: $textAnchor, audioTimestamp: $audioTimestamp)';
+  return 'ProgressModel(slug: $slug, textAnchor: $textAnchor, audioTimestamp: $audioTimestamp, timestamp: $timestamp)';
 }
 
 
@@ -122,7 +126,7 @@ abstract mixin class _$ProgressModelCopyWith<$Res> implements $ProgressModelCopy
   factory _$ProgressModelCopyWith(_ProgressModel value, $Res Function(_ProgressModel) _then) = __$ProgressModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'book_slug') String slug,@JsonKey(name: 'text_anchor') String? textAnchor,@JsonKey(name: 'audio_timestamp') int? audioTimestamp
+@JsonKey(name: 'book_slug') String slug,@JsonKey(name: 'text_anchor') String? textAnchor,@JsonKey(name: 'audio_timestamp') int? audioTimestamp, int? timestamp
 });
 
 
@@ -139,11 +143,12 @@ class __$ProgressModelCopyWithImpl<$Res>
 
 /// Create a copy of ProgressModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? slug = null,Object? textAnchor = freezed,Object? audioTimestamp = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? slug = null,Object? textAnchor = freezed,Object? audioTimestamp = freezed,Object? timestamp = freezed,}) {
   return _then(_ProgressModel(
 slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,textAnchor: freezed == textAnchor ? _self.textAnchor : textAnchor // ignore: cast_nullable_to_non_nullable
 as String?,audioTimestamp: freezed == audioTimestamp ? _self.audioTimestamp : audioTimestamp // ignore: cast_nullable_to_non_nullable
+as int?,timestamp: freezed == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }

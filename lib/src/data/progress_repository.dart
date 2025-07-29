@@ -9,7 +9,6 @@ import 'package:wolnelektury/src/application/app_storage/services/app_storage_pr
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
 import 'package:wolnelektury/src/data/mixin/repository_helper_mixin.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
-import 'package:wolnelektury/src/domain/sync_model.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
@@ -78,14 +77,12 @@ class ProgressRepositoryImplementation extends ProgressRepository
         return const DataState.failure(Failure.notFound());
       }
 
-      final List<SyncModelProgress> progresses = [];
+      final List<ProgressModel> progresses = [];
 
       for (final e in response.data!) {
         try {
-          final syncModel = SyncModel.fromJson(e);
-          if (syncModel is SyncModelProgress) {
-            progresses.add(syncModel);
-          }
+          final syncModel = ProgressModel.fromJson(e);
+          progresses.add(syncModel);
         } catch (_) {
           // Wrong JSON, skip
         }
@@ -98,15 +95,14 @@ class ProgressRepositoryImplementation extends ProgressRepository
 
       await _progressStorage.upsertMultipleProgressData(
         progresses.mapIndexed((index, e) {
-          print(
-            'ProgressRepository: $index - ${e.object.slug} - ${e.object.textAnchor}',
-          );
+          print('ProgressRepository: $index - ${e.slug} - ${e.textAnchor}');
           final updatedAt = DateTime.fromMillisecondsSinceEpoch(
-            e.timestamp * 1000,
+            // Null timestamp shouldn't ever happen, but just in case
+            (e.timestamp ?? 0) * 1000,
           );
           return (
-            slug: e.object.slug,
-            progressJson: jsonEncode(e.object.toJson()),
+            slug: e.slug,
+            progressJson: jsonEncode(e.toJson()),
             timestamp: updatedAt,
           );
         }).toList(),
@@ -138,12 +134,9 @@ class ProgressRepositoryImplementation extends ProgressRepository
         sendSyncProgressEndpoint,
         progresses.map((e) {
           final progress = ProgressModel.fromJson(jsonDecode(e.progressJson));
-          return SyncModelProgress(
-            id: e.slug,
+          return progress.copyWith(
             timestamp: (e.updatedAt.millisecondsSinceEpoch) ~/ 1000,
-            type: SyncType.progress,
-            object: progress,
-          ).toJson();
+          );
         }).toList(),
         contentType: Headers.jsonContentType,
       );

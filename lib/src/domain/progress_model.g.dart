@@ -11,6 +11,7 @@ _ProgressModel _$ProgressModelFromJson(Map<String, dynamic> json) =>
       slug: json['book_slug'] as String,
       textAnchor: json['text_anchor'] as String?,
       audioTimestamp: (json['audio_timestamp'] as num?)?.toInt(),
+      timestamp: (json['timestamp'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ProgressModelToJson(_ProgressModel instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$ProgressModelToJson(_ProgressModel instance) =>
       'book_slug': instance.slug,
       'text_anchor': instance.textAnchor,
       'audio_timestamp': instance.audioTimestamp,
+      'timestamp': instance.timestamp,
     };

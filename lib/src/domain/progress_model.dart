@@ -9,6 +9,9 @@ sealed class ProgressModel with _$ProgressModel {
     @JsonKey(name: 'book_slug') required String slug,
     @JsonKey(name: 'text_anchor') String? textAnchor,
     @JsonKey(name: 'audio_timestamp') int? audioTimestamp,
+
+    // This field is optional and used for syncing purposes.
+    int? timestamp,
   }) = _ProgressModel;
 
   factory ProgressModel.fromJson(Map<String, dynamic> json) =>
