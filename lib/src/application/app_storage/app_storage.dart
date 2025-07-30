@@ -41,6 +41,7 @@ class Progresses extends Table {
 
 class Likes extends Table {
   TextColumn get slug => text()();
+  BoolColumn get isLiked => boolean().withDefault(const Constant(true))();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override

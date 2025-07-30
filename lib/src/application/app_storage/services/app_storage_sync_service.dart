@@ -19,6 +19,7 @@ class AppStorageSyncService {
               receivedLikesSyncAt: Value(null),
               sentLikesSyncAt: Value(null),
             ),
+            mode: InsertMode.insertOrIgnore,
           );
       return const SyncInfoData(
         id: AppStorageSettingsService.appSettingsId,

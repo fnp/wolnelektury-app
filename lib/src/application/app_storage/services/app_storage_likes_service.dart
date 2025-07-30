@@ -7,13 +7,14 @@ class AppStorageLikesService {
   AppStorageLikesService(this._storage);
 
   Future<void> upsertMultipleLikes(
-    List<({String slug, DateTime? timestamp})> likes,
+    List<({String slug, bool isLiked, DateTime? timestamp})> likes,
   ) async {
     if (likes.isEmpty) return;
 
     final companions = likes.map((p) {
       return LikesCompanion(
         slug: Value(p.slug),
+        isLiked: Value(p.isLiked),
         updatedAt: Value(p.timestamp ?? DateTime.now()),
       );
     }).toList();
@@ -24,18 +25,27 @@ class AppStorageLikesService {
   }
 
   Future<List<String>> getLikes() async {
-    final result = await (_storage.select(
-      _storage.likes,
-    )..orderBy([(t) => OrderingTerm.desc(t.updatedAt)])).get();
+    final result =
+        await (_storage.select(_storage.likes)
+              ..where((tbl) => tbl.isLiked.equals(true))
+              ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
+            .get();
 
     return result.map((e) => e.slug).toList();
   }
 
   Future<bool> removeLike(String slug) async {
-    final count = await (_storage.delete(
-      _storage.likes,
-    )..where((tbl) => tbl.slug.equals(slug))).go();
+    await upsertMultipleLikes([
+      (slug: slug, isLiked: false, timestamp: DateTime.now()),
+    ]);
 
-    return count > 0;
+    return true;
+  }
+
+  Future<void> clearUnliked() async {
+    final query = _storage.delete(_storage.likes)
+      ..where((tbl) => tbl.isLiked.equals(false));
+
+    await query.go();
   }
 }

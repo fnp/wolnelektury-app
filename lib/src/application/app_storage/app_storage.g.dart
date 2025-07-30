@@ -1750,6 +1750,21 @@ class $LikesTable extends Likes with TableInfo<$LikesTable, Like> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _isLikedMeta = const VerificationMeta(
+    'isLiked',
+  );
+  @override
+  late final GeneratedColumn<bool> isLiked = GeneratedColumn<bool>(
+    'is_liked',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_liked" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -1763,7 +1778,7 @@ class $LikesTable extends Likes with TableInfo<$LikesTable, Like> {
     defaultValue: currentDateAndTime,
   );
   @override
-  List<GeneratedColumn> get $columns => [slug, updatedAt];
+  List<GeneratedColumn> get $columns => [slug, isLiked, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1784,6 +1799,12 @@ class $LikesTable extends Likes with TableInfo<$LikesTable, Like> {
     } else if (isInserting) {
       context.missing(_slugMeta);
     }
+    if (data.containsKey('is_liked')) {
+      context.handle(
+        _isLikedMeta,
+        isLiked.isAcceptableOrUnknown(data['is_liked']!, _isLikedMeta),
+      );
+    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -1803,6 +1824,10 @@ class $LikesTable extends Likes with TableInfo<$LikesTable, Like> {
         DriftSqlType.string,
         data['${effectivePrefix}slug'],
       )!,
+      isLiked: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_liked'],
+      )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
@@ -1818,18 +1843,28 @@ class $LikesTable extends Likes with TableInfo<$LikesTable, Like> {
 
 class Like extends DataClass implements Insertable<Like> {
   final String slug;
+  final bool isLiked;
   final DateTime updatedAt;
-  const Like({required this.slug, required this.updatedAt});
+  const Like({
+    required this.slug,
+    required this.isLiked,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['slug'] = Variable<String>(slug);
+    map['is_liked'] = Variable<bool>(isLiked);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
 
   LikesCompanion toCompanion(bool nullToAbsent) {
-    return LikesCompanion(slug: Value(slug), updatedAt: Value(updatedAt));
+    return LikesCompanion(
+      slug: Value(slug),
+      isLiked: Value(isLiked),
+      updatedAt: Value(updatedAt),
+    );
   }
 
   factory Like.fromJson(
@@ -1839,6 +1874,7 @@ class Like extends DataClass implements Insertable<Like> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Like(
       slug: serializer.fromJson<String>(json['slug']),
+      isLiked: serializer.fromJson<bool>(json['isLiked']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
@@ -1847,15 +1883,20 @@ class Like extends DataClass implements Insertable<Like> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'slug': serializer.toJson<String>(slug),
+      'isLiked': serializer.toJson<bool>(isLiked),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
-  Like copyWith({String? slug, DateTime? updatedAt}) =>
-      Like(slug: slug ?? this.slug, updatedAt: updatedAt ?? this.updatedAt);
+  Like copyWith({String? slug, bool? isLiked, DateTime? updatedAt}) => Like(
+    slug: slug ?? this.slug,
+    isLiked: isLiked ?? this.isLiked,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   Like copyWithCompanion(LikesCompanion data) {
     return Like(
       slug: data.slug.present ? data.slug.value : this.slug,
+      isLiked: data.isLiked.present ? data.isLiked.value : this.isLiked,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
@@ -1864,42 +1905,49 @@ class Like extends DataClass implements Insertable<Like> {
   String toString() {
     return (StringBuffer('Like(')
           ..write('slug: $slug, ')
+          ..write('isLiked: $isLiked, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(slug, updatedAt);
+  int get hashCode => Object.hash(slug, isLiked, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Like &&
           other.slug == this.slug &&
+          other.isLiked == this.isLiked &&
           other.updatedAt == this.updatedAt);
 }
 
 class LikesCompanion extends UpdateCompanion<Like> {
   final Value<String> slug;
+  final Value<bool> isLiked;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
   const LikesCompanion({
     this.slug = const Value.absent(),
+    this.isLiked = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   LikesCompanion.insert({
     required String slug,
+    this.isLiked = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : slug = Value(slug);
   static Insertable<Like> custom({
     Expression<String>? slug,
+    Expression<bool>? isLiked,
     Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (slug != null) 'slug': slug,
+      if (isLiked != null) 'is_liked': isLiked,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1907,11 +1955,13 @@ class LikesCompanion extends UpdateCompanion<Like> {
 
   LikesCompanion copyWith({
     Value<String>? slug,
+    Value<bool>? isLiked,
     Value<DateTime>? updatedAt,
     Value<int>? rowid,
   }) {
     return LikesCompanion(
       slug: slug ?? this.slug,
+      isLiked: isLiked ?? this.isLiked,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
@@ -1922,6 +1972,9 @@ class LikesCompanion extends UpdateCompanion<Like> {
     final map = <String, Expression>{};
     if (slug.present) {
       map['slug'] = Variable<String>(slug.value);
+    }
+    if (isLiked.present) {
+      map['is_liked'] = Variable<bool>(isLiked.value);
     }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
@@ -1936,6 +1989,7 @@ class LikesCompanion extends UpdateCompanion<Like> {
   String toString() {
     return (StringBuffer('LikesCompanion(')
           ..write('slug: $slug, ')
+          ..write('isLiked: $isLiked, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -3279,12 +3333,14 @@ typedef $$SyncInfoTableProcessedTableManager =
 typedef $$LikesTableCreateCompanionBuilder =
     LikesCompanion Function({
       required String slug,
+      Value<bool> isLiked,
       Value<DateTime> updatedAt,
       Value<int> rowid,
     });
 typedef $$LikesTableUpdateCompanionBuilder =
     LikesCompanion Function({
       Value<String> slug,
+      Value<bool> isLiked,
       Value<DateTime> updatedAt,
       Value<int> rowid,
     });
@@ -3299,6 +3355,11 @@ class $$LikesTableFilterComposer extends Composer<_$AppStorage, $LikesTable> {
   });
   ColumnFilters<String> get slug => $composableBuilder(
     column: $table.slug,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isLiked => $composableBuilder(
+    column: $table.isLiked,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3321,6 +3382,11 @@ class $$LikesTableOrderingComposer extends Composer<_$AppStorage, $LikesTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get isLiked => $composableBuilder(
+    column: $table.isLiked,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -3338,6 +3404,9 @@ class $$LikesTableAnnotationComposer
   });
   GeneratedColumn<String> get slug =>
       $composableBuilder(column: $table.slug, builder: (column) => column);
+
+  GeneratedColumn<bool> get isLiked =>
+      $composableBuilder(column: $table.isLiked, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -3372,20 +3441,24 @@ class $$LikesTableTableManager
           updateCompanionCallback:
               ({
                 Value<String> slug = const Value.absent(),
+                Value<bool> isLiked = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LikesCompanion(
                 slug: slug,
+                isLiked: isLiked,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required String slug,
+                Value<bool> isLiked = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LikesCompanion.insert(
                 slug: slug,
+                isLiked: isLiked,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),

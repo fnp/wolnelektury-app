@@ -30,9 +30,14 @@ class DashboardListeners extends StatelessWidget {
           },
           listener: (context, state) {
             if (state.isLoginSuccess == true) {
+              final likesCubit = context.read<LikesCubit>();
               CustomSnackbar.success(context, LocaleKeys.login_success.tr());
-              context.read<LikesCubit>().init();
               context.read<SynchronizerCubit>().sentOutProgressSync();
+              context.read<SynchronizerCubit>().sendOutLikesSync(
+                onFinish: () {
+                  likesCubit.init();
+                },
+              );
             }
             if (state.isLoginSuccess == false) {
               CustomSnackbar.error(context, LocaleKeys.login_errors_login.tr());
@@ -134,8 +139,14 @@ class DashboardListeners extends StatelessWidget {
           },
           listener: (context, state) {
             final authCubit = context.read<AuthCubit>();
+            final likesCubit = context.read<LikesCubit>();
             if (authCubit.state.isAuthenticated) {
               context.read<SynchronizerCubit>().sentOutProgressSync();
+              context.read<SynchronizerCubit>().sendOutLikesSync(
+                onFinish: () {
+                  likesCubit.init();
+                },
+              );
             }
           },
         ),

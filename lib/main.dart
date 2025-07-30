@@ -58,7 +58,9 @@ class MyApp extends StatelessWidget {
           create: (context) => SettingsCubit(get.get()),
         ),
         BlocProvider(create: (context) => AppModeCubit()),
-        BlocProvider(create: (context) => SynchronizerCubit(get.get())),
+        BlocProvider(
+          create: (context) => SynchronizerCubit(get.get(), get.get()),
+        ),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (p, c) => p.theme != c.theme,
