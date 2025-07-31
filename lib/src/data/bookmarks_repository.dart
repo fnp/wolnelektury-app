@@ -269,9 +269,10 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
   Future<DataState<void>> sendOutBookmarksSync() async {
     try {
       final bookmarks = await _syncStorage.getBookmarksToSync();
+
       AppLogger.instance.d(
         'BookmarksRepository',
-        'Sending out number of bookmarks: ${bookmarks.length}',
+        'Sending number of sync bookmarks: ${bookmarks.length}',
       );
 
       // All is up to date
@@ -284,7 +285,9 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         _sendSyncBookmarksEndpoint,
         bookmarks.map((e) {
           final model = BookmarkModel.fromJson(jsonDecode(e.bookmarkJson));
-          return model.toJson();
+          return model
+              .copyWith(timestamp: (e.updatedAt.millisecondsSinceEpoch) ~/ 1000)
+              .toJson();
         }).toList(),
         contentType: Headers.jsonContentType,
       );
@@ -310,14 +313,14 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
               .round()
               .toString();
 
-      AppLogger.instance.d(
-        'BookmarksRepository',
-        'Asking for sync with last date $lastReceived',
-      );
-
       final response = await _apiService.getRequest(
         _receiveSyncBookmarksEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
+      );
+
+      AppLogger.instance.d(
+        'BookmarksRepository',
+        'Received number of sync bookmarks: ${response.data?.length}',
       );
 
       // Simply nothing to sync
@@ -332,8 +335,8 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
 
       for (final e in response.data!) {
         try {
-          final syncModel = BookmarkModel.fromJson(e);
-          bookmarks.add(syncModel);
+          final bookmarkModel = BookmarkModel.fromJson(e);
+          bookmarks.add(bookmarkModel);
         } catch (_) {
           // Wrong JSON, skip
         }

@@ -32,7 +32,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
         return ConnectivityWrapper(
           key: (ValueKey(authState.isAuthenticated)),
           builder: (context, hasConnection) {
-            List<MyLibraryEnum> myLibraryEnums = (hasConnection)
+            List<MyLibraryEnum> myLibraryEnums = hasConnection
                 ? (authState.isAuthenticated
                       ? availableOnlineAuthEnums
                       : availableOnlineNoAuthEnums)

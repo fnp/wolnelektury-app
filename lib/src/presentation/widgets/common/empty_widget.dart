@@ -7,12 +7,14 @@ class EmptyWidget extends StatelessWidget {
   final String message;
   final String? buttonText;
   final VoidCallback? onTap;
+  final bool hasConnection;
   const EmptyWidget({
     super.key,
     required this.image,
     required this.message,
     this.buttonText,
     this.onTap,
+    this.hasConnection = true,
   });
 
   @override
@@ -40,7 +42,7 @@ class EmptyWidget extends StatelessWidget {
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium,
             ),
-            if (buttonText != null && onTap != null) ...[
+            if (buttonText != null && onTap != null && hasConnection) ...[
               const SizedBox(height: Dimensions.largePadding),
               ElevatedButton(
                 onPressed: onTap,

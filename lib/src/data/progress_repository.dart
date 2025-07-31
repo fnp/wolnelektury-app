@@ -60,14 +60,14 @@ class ProgressRepositoryImplementation extends ProgressRepository
               .round()
               .toString();
 
-      AppLogger.instance.d(
-        'ProgressRepository',
-        'Asking for sync with last date $lastReceived',
-      );
-
       final response = await _apiService.getRequest(
         _receiveSyncProgressEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
+      );
+
+      AppLogger.instance.d(
+        'ProgressRepository',
+        'Received number of sync progresses: ${response.data?.length}',
       );
 
       // Simply nothing to sync
@@ -88,11 +88,6 @@ class ProgressRepositoryImplementation extends ProgressRepository
           // Wrong JSON, skip
         }
       }
-
-      AppLogger.instance.d(
-        'ProgressRepository',
-        'Received number of progresses: ${progresses.length}',
-      );
 
       await _progressStorage.upsertMultipleProgressData(
         progresses.mapIndexed((index, e) {
@@ -120,9 +115,10 @@ class ProgressRepositoryImplementation extends ProgressRepository
   Future<DataState<void>> sendOutProgressSync() async {
     try {
       final progresses = await _syncStorage.getProgressToSync();
+
       AppLogger.instance.d(
         'ProgressRepository',
-        'Sending out number of progresses: ${progresses.length}',
+        'Sending number of sync progresses: ${progresses.length}',
       );
 
       // All is up to date

@@ -33,6 +33,7 @@ class DashboardListeners extends StatelessWidget {
               final likesCubit = context.read<LikesCubit>();
               CustomSnackbar.success(context, LocaleKeys.login_success.tr());
               context.read<SynchronizerCubit>().sentOutProgressSync();
+              context.read<SynchronizerCubit>().sendOutBookmarksSync();
               context.read<SynchronizerCubit>().sendOutLikesSync(
                 onFinish: () {
                   likesCubit.init();
@@ -142,6 +143,7 @@ class DashboardListeners extends StatelessWidget {
             final likesCubit = context.read<LikesCubit>();
             if (authCubit.state.isAuthenticated) {
               context.read<SynchronizerCubit>().sentOutProgressSync();
+              context.read<SynchronizerCubit>().sendOutBookmarksSync();
               context.read<SynchronizerCubit>().sendOutLikesSync(
                 onFinish: () {
                   likesCubit.init();

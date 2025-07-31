@@ -119,7 +119,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
       final likes = await _syncStorage.getLikesToSync();
       AppLogger.instance.d(
         'LikesRepository',
-        'Sending out number of likes: ${likes.length}',
+        'Sending number of sync likes: ${likes.length}',
       );
 
       // All is up to date
@@ -158,14 +158,14 @@ class FavouritesRepositoryImplementation extends LikesRepository
               .round()
               .toString();
 
-      AppLogger.instance.d(
-        'LikesRepository',
-        'Asking for sync with last date $lastReceived',
-      );
-
       final response = await _apiService.getRequest(
         _receiveSyncLikesEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
+      );
+
+      AppLogger.instance.d(
+        'LikesRepository',
+        'Received number of sync likes: ${response.data?.length}',
       );
 
       // Simply nothing to sync

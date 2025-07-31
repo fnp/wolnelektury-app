@@ -6,6 +6,7 @@ import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/offline/offline_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/empty_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
@@ -52,12 +53,18 @@ class MyLibraryAudiobooksSection extends StatelessWidget {
                       builder: (context, state) {
                         if (!state.isLoading && state.audiobooks.isEmpty) {
                           //todo translations
-                          return EmptyWidget(
-                            image: Images.empty,
-                            message: 'Nie zapisano jeszcze żadnych audiobooków',
-                            buttonText: 'Przeglądaj katalog',
-                            onTap: () {
-                              router.goNamed(cataloguePageConfig.name);
+                          return ConnectivityWrapper(
+                            builder: (context, hasConnection) {
+                              return EmptyWidget(
+                                image: Images.empty,
+                                message:
+                                    'Nie zapisano jeszcze żadnych audiobooków',
+                                buttonText: 'Przeglądaj katalog',
+                                onTap: () {
+                                  router.goNamed(cataloguePageConfig.name);
+                                },
+                                hasConnection: hasConnection,
+                              );
                             },
                           );
                         }
