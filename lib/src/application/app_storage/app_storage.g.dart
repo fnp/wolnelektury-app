@@ -2021,16 +2021,31 @@ class $BookmarksTable extends Bookmarks
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _progressJsonMeta = const VerificationMeta(
-    'progressJson',
+  static const VerificationMeta _bookmarkJsonMeta = const VerificationMeta(
+    'bookmarkJson',
   );
   @override
-  late final GeneratedColumn<String> progressJson = GeneratedColumn<String>(
-    'progress_json',
+  late final GeneratedColumn<String> bookmarkJson = GeneratedColumn<String>(
+    'bookmark_json',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
   );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
@@ -2045,7 +2060,13 @@ class $BookmarksTable extends Bookmarks
     defaultValue: currentDateAndTime,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, slug, progressJson, updatedAt];
+  List<GeneratedColumn> get $columns => [
+    id,
+    slug,
+    bookmarkJson,
+    isDeleted,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2071,16 +2092,22 @@ class $BookmarksTable extends Bookmarks
     } else if (isInserting) {
       context.missing(_slugMeta);
     }
-    if (data.containsKey('progress_json')) {
+    if (data.containsKey('bookmark_json')) {
       context.handle(
-        _progressJsonMeta,
-        progressJson.isAcceptableOrUnknown(
-          data['progress_json']!,
-          _progressJsonMeta,
+        _bookmarkJsonMeta,
+        bookmarkJson.isAcceptableOrUnknown(
+          data['bookmark_json']!,
+          _bookmarkJsonMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_progressJsonMeta);
+      context.missing(_bookmarkJsonMeta);
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
     }
     if (data.containsKey('updated_at')) {
       context.handle(
@@ -2105,9 +2132,13 @@ class $BookmarksTable extends Bookmarks
         DriftSqlType.string,
         data['${effectivePrefix}slug'],
       )!,
-      progressJson: attachedDatabase.typeMapping.read(
+      bookmarkJson: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}progress_json'],
+        data['${effectivePrefix}bookmark_json'],
+      )!,
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
       )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -2125,12 +2156,14 @@ class $BookmarksTable extends Bookmarks
 class Bookmark extends DataClass implements Insertable<Bookmark> {
   final String id;
   final String slug;
-  final String progressJson;
+  final String bookmarkJson;
+  final bool isDeleted;
   final DateTime updatedAt;
   const Bookmark({
     required this.id,
     required this.slug,
-    required this.progressJson,
+    required this.bookmarkJson,
+    required this.isDeleted,
     required this.updatedAt,
   });
   @override
@@ -2138,7 +2171,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['slug'] = Variable<String>(slug);
-    map['progress_json'] = Variable<String>(progressJson);
+    map['bookmark_json'] = Variable<String>(bookmarkJson);
+    map['is_deleted'] = Variable<bool>(isDeleted);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
@@ -2147,7 +2181,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
     return BookmarksCompanion(
       id: Value(id),
       slug: Value(slug),
-      progressJson: Value(progressJson),
+      bookmarkJson: Value(bookmarkJson),
+      isDeleted: Value(isDeleted),
       updatedAt: Value(updatedAt),
     );
   }
@@ -2160,7 +2195,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
     return Bookmark(
       id: serializer.fromJson<String>(json['id']),
       slug: serializer.fromJson<String>(json['slug']),
-      progressJson: serializer.fromJson<String>(json['progressJson']),
+      bookmarkJson: serializer.fromJson<String>(json['bookmarkJson']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
@@ -2170,7 +2206,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'slug': serializer.toJson<String>(slug),
-      'progressJson': serializer.toJson<String>(progressJson),
+      'bookmarkJson': serializer.toJson<String>(bookmarkJson),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
@@ -2178,21 +2215,24 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
   Bookmark copyWith({
     String? id,
     String? slug,
-    String? progressJson,
+    String? bookmarkJson,
+    bool? isDeleted,
     DateTime? updatedAt,
   }) => Bookmark(
     id: id ?? this.id,
     slug: slug ?? this.slug,
-    progressJson: progressJson ?? this.progressJson,
+    bookmarkJson: bookmarkJson ?? this.bookmarkJson,
+    isDeleted: isDeleted ?? this.isDeleted,
     updatedAt: updatedAt ?? this.updatedAt,
   );
   Bookmark copyWithCompanion(BookmarksCompanion data) {
     return Bookmark(
       id: data.id.present ? data.id.value : this.id,
       slug: data.slug.present ? data.slug.value : this.slug,
-      progressJson: data.progressJson.present
-          ? data.progressJson.value
-          : this.progressJson,
+      bookmarkJson: data.bookmarkJson.present
+          ? data.bookmarkJson.value
+          : this.bookmarkJson,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
@@ -2202,57 +2242,64 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
     return (StringBuffer('Bookmark(')
           ..write('id: $id, ')
           ..write('slug: $slug, ')
-          ..write('progressJson: $progressJson, ')
+          ..write('bookmarkJson: $bookmarkJson, ')
+          ..write('isDeleted: $isDeleted, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, slug, progressJson, updatedAt);
+  int get hashCode => Object.hash(id, slug, bookmarkJson, isDeleted, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Bookmark &&
           other.id == this.id &&
           other.slug == this.slug &&
-          other.progressJson == this.progressJson &&
+          other.bookmarkJson == this.bookmarkJson &&
+          other.isDeleted == this.isDeleted &&
           other.updatedAt == this.updatedAt);
 }
 
 class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   final Value<String> id;
   final Value<String> slug;
-  final Value<String> progressJson;
+  final Value<String> bookmarkJson;
+  final Value<bool> isDeleted;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
   const BookmarksCompanion({
     this.id = const Value.absent(),
     this.slug = const Value.absent(),
-    this.progressJson = const Value.absent(),
+    this.bookmarkJson = const Value.absent(),
+    this.isDeleted = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   BookmarksCompanion.insert({
     required String id,
     required String slug,
-    required String progressJson,
+    required String bookmarkJson,
+    this.isDeleted = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        slug = Value(slug),
-       progressJson = Value(progressJson);
+       bookmarkJson = Value(bookmarkJson);
   static Insertable<Bookmark> custom({
     Expression<String>? id,
     Expression<String>? slug,
-    Expression<String>? progressJson,
+    Expression<String>? bookmarkJson,
+    Expression<bool>? isDeleted,
     Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (slug != null) 'slug': slug,
-      if (progressJson != null) 'progress_json': progressJson,
+      if (bookmarkJson != null) 'bookmark_json': bookmarkJson,
+      if (isDeleted != null) 'is_deleted': isDeleted,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -2261,14 +2308,16 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   BookmarksCompanion copyWith({
     Value<String>? id,
     Value<String>? slug,
-    Value<String>? progressJson,
+    Value<String>? bookmarkJson,
+    Value<bool>? isDeleted,
     Value<DateTime>? updatedAt,
     Value<int>? rowid,
   }) {
     return BookmarksCompanion(
       id: id ?? this.id,
       slug: slug ?? this.slug,
-      progressJson: progressJson ?? this.progressJson,
+      bookmarkJson: bookmarkJson ?? this.bookmarkJson,
+      isDeleted: isDeleted ?? this.isDeleted,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
@@ -2283,8 +2332,11 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
     if (slug.present) {
       map['slug'] = Variable<String>(slug.value);
     }
-    if (progressJson.present) {
-      map['progress_json'] = Variable<String>(progressJson.value);
+    if (bookmarkJson.present) {
+      map['bookmark_json'] = Variable<String>(bookmarkJson.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
     }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
@@ -2300,7 +2352,8 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
     return (StringBuffer('BookmarksCompanion(')
           ..write('id: $id, ')
           ..write('slug: $slug, ')
-          ..write('progressJson: $progressJson, ')
+          ..write('bookmarkJson: $bookmarkJson, ')
+          ..write('isDeleted: $isDeleted, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -3488,7 +3541,8 @@ typedef $$BookmarksTableCreateCompanionBuilder =
     BookmarksCompanion Function({
       required String id,
       required String slug,
-      required String progressJson,
+      required String bookmarkJson,
+      Value<bool> isDeleted,
       Value<DateTime> updatedAt,
       Value<int> rowid,
     });
@@ -3496,7 +3550,8 @@ typedef $$BookmarksTableUpdateCompanionBuilder =
     BookmarksCompanion Function({
       Value<String> id,
       Value<String> slug,
-      Value<String> progressJson,
+      Value<String> bookmarkJson,
+      Value<bool> isDeleted,
       Value<DateTime> updatedAt,
       Value<int> rowid,
     });
@@ -3520,8 +3575,13 @@ class $$BookmarksTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get progressJson => $composableBuilder(
-    column: $table.progressJson,
+  ColumnFilters<String> get bookmarkJson => $composableBuilder(
+    column: $table.bookmarkJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3550,8 +3610,13 @@ class $$BookmarksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get progressJson => $composableBuilder(
-    column: $table.progressJson,
+  ColumnOrderings<String> get bookmarkJson => $composableBuilder(
+    column: $table.bookmarkJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3576,10 +3641,13 @@ class $$BookmarksTableAnnotationComposer
   GeneratedColumn<String> get slug =>
       $composableBuilder(column: $table.slug, builder: (column) => column);
 
-  GeneratedColumn<String> get progressJson => $composableBuilder(
-    column: $table.progressJson,
+  GeneratedColumn<String> get bookmarkJson => $composableBuilder(
+    column: $table.bookmarkJson,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -3615,13 +3683,15 @@ class $$BookmarksTableTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<String> slug = const Value.absent(),
-                Value<String> progressJson = const Value.absent(),
+                Value<String> bookmarkJson = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => BookmarksCompanion(
                 id: id,
                 slug: slug,
-                progressJson: progressJson,
+                bookmarkJson: bookmarkJson,
+                isDeleted: isDeleted,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),
@@ -3629,13 +3699,15 @@ class $$BookmarksTableTableManager
               ({
                 required String id,
                 required String slug,
-                required String progressJson,
+                required String bookmarkJson,
+                Value<bool> isDeleted = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => BookmarksCompanion.insert(
                 id: id,
                 slug: slug,
-                progressJson: progressJson,
+                bookmarkJson: bookmarkJson,
+                isDeleted: isDeleted,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),

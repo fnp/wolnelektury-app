@@ -12,6 +12,10 @@ sealed class BookmarkModel with _$BookmarkModel {
     required String note,
     required String anchor,
     required String href,
+
+    // This field is optional and used for syncing purposes.
+    int? timestamp,
+    @Default(false) bool isDeleted,
   }) = _BookmarkModel;
 
   factory BookmarkModel.fromJson(Map<String, dynamic> json) =>

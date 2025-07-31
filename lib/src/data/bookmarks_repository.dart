@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
+import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_bookmarks_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
 import 'package:wolnelektury/src/data/mixin/repository_helper_mixin.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
+import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/string/string_extension.dart';
 
@@ -33,6 +37,9 @@ abstract class BookmarksRepository {
     required String id,
     required String href,
   });
+
+  Future<DataState<void>> sendOutBookmarksSync();
+  Future<DataState<void>> receiveInBookmarksSync();
 }
 
 class BookmarksRepositoryImplementation extends BookmarksRepository
@@ -47,6 +54,9 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
   );
 
   static const String _bookmarksEndpoint = '/bookmarks/';
+  static const String _sendSyncBookmarksEndpoint = '/sync/bookmarks/';
+  static String _receiveSyncBookmarksEndpoint(String ts) =>
+      '/sync/bookmarks?ts=$ts';
 
   @override
   Future<DataState<List<BookmarkModel>>> getBookmarks({
@@ -137,8 +147,9 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         (
           id: updatedBookmark.location,
           slug: updatedBookmark.slug,
-          progressJson: jsonEncode(updatedBookmark.toJson()),
+          bookmarkJson: jsonEncode(updatedBookmark.toJson()),
           timestamp: DateTime.now(),
+          isDeleted: false,
         ),
       ]);
 
@@ -176,8 +187,9 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         (
           id: bookmark.location,
           slug: slug,
-          progressJson: jsonEncode(bookmark.toJson()),
+          bookmarkJson: jsonEncode(bookmark.toJson()),
           timestamp: DateTime.now(),
+          isDeleted: false,
         ),
       ]);
 
@@ -247,6 +259,107 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
   Future<DataState<void>> _deleteBookmarkFromDb(String href) async {
     try {
       await _apiService.deleteRequest(href.removeApiUrl);
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<void>> sendOutBookmarksSync() async {
+    try {
+      final bookmarks = await _syncStorage.getBookmarksToSync();
+      AppLogger.instance.d(
+        'BookmarksRepository',
+        'Sending out number of bookmarks: ${bookmarks.length}',
+      );
+
+      // All is up to date
+      if (bookmarks.isEmpty) {
+        await _syncStorage.updateSyncData(sentBookmarksSyncAt: DateTime.now());
+        return const DataState.success(data: null);
+      }
+
+      final response = await _apiService.postRequest(
+        _sendSyncBookmarksEndpoint,
+        bookmarks.map((e) {
+          final model = BookmarkModel.fromJson(jsonDecode(e.bookmarkJson));
+          return model.toJson();
+        }).toList(),
+        contentType: Headers.jsonContentType,
+      );
+
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+      await Future.delayed(const Duration(milliseconds: 1));
+      await _syncStorage.updateSyncData(sentBookmarksSyncAt: DateTime.now());
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<void>> receiveInBookmarksSync() async {
+    try {
+      final syncData = await _syncStorage.getSyncData();
+      final lastReceived = syncData.receivedBookmarksSyncAt;
+      final lastReceivedTimestamp =
+          ((lastReceived?.millisecondsSinceEpoch ?? 0) / 1000)
+              .round()
+              .toString();
+
+      AppLogger.instance.d(
+        'BookmarksRepository',
+        'Asking for sync with last date $lastReceived',
+      );
+
+      final response = await _apiService.getRequest(
+        _receiveSyncBookmarksEndpoint(lastReceivedTimestamp),
+        useCache: CacheEnum.ignore,
+      );
+
+      // Simply nothing to sync
+      if (!response.hasData) {
+        await _syncStorage.updateSyncData(
+          receivedBookmarksSyncAt: DateTime.now(),
+        );
+        return const DataState.failure(Failure.notFound());
+      }
+
+      final List<BookmarkModel> bookmarks = [];
+
+      for (final e in response.data!) {
+        try {
+          final syncModel = BookmarkModel.fromJson(e);
+          bookmarks.add(syncModel);
+        } catch (_) {
+          // Wrong JSON, skip
+        }
+      }
+
+      await _bookmarksStorage.upsertMultipleBookmarks(
+        bookmarks.mapIndexed((index, e) {
+          final updatedAt = DateTime.fromMillisecondsSinceEpoch(
+            // Null timestamp shouldn't ever happen, but just in case
+            (e.timestamp ?? 0) * 1000,
+          );
+          return (
+            slug: e.slug,
+            id: e.location,
+            bookmarkJson: jsonEncode(e.toJson()),
+            isDeleted: e.isDeleted,
+            timestamp: updatedAt,
+          );
+        }).toList(),
+      );
+
+      await _syncStorage.updateSyncData(
+        receivedBookmarksSyncAt: DateTime.now(),
+      );
+      await _bookmarksStorage.clearDeleted();
+
       return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());

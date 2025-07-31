@@ -51,7 +51,8 @@ class Likes extends Table {
 class Bookmarks extends Table {
   TextColumn get id => text()();
   TextColumn get slug => text()();
-  TextColumn get progressJson => text()();
+  TextColumn get bookmarkJson => text()();
+  BoolColumn get isDeleted => boolean().withDefault(const Constant(false))();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override

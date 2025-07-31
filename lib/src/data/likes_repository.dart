@@ -34,9 +34,9 @@ class FavouritesRepositoryImplementation extends LikesRepository
     this._syncStorage,
   );
 
-  static const String likesEndpoint = '/like/';
-  static const String sendSyncLikesEndpoint = '/sync/userlistitem/';
-  static String receiveSyncLikesEndpoint(String ts) =>
+  static const String _likesEndpoint = '/like/';
+  static const String _sendSyncLikesEndpoint = '/sync/userlistitem/';
+  static String _receiveSyncLikesEndpoint(String ts) =>
       '/sync/userlistitem?favourites=true&ts=$ts';
 
   @override
@@ -89,7 +89,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
     try {
       if (targetValue) {
         final response = await _apiService.putRequest(
-          '$likesEndpoint/$slug/',
+          '$_likesEndpoint/$slug/',
           null,
         );
 
@@ -100,7 +100,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
         return const DataState.success(data: null);
       } else {
         final response = await _apiService.deleteRequest(
-          '$likesEndpoint/$slug/',
+          '$_likesEndpoint/$slug/',
         );
 
         if (response.error != null) {
@@ -129,7 +129,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
       }
 
       final response = await _apiService.postRequest(
-        sendSyncLikesEndpoint,
+        _sendSyncLikesEndpoint,
         likes.map((e) {
           final model = LikeSyncModel.fromLike(like: e);
           return model.toJson();
@@ -164,15 +164,13 @@ class FavouritesRepositoryImplementation extends LikesRepository
       );
 
       final response = await _apiService.getRequest(
-        receiveSyncLikesEndpoint(lastReceivedTimestamp),
+        _receiveSyncLikesEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
       );
 
       // Simply nothing to sync
       if (!response.hasData) {
-        await _syncStorage.updateSyncData(
-          receivedProgressSyncAt: DateTime.now(),
-        );
+        await _syncStorage.updateSyncData(receivedLikesSyncAt: DateTime.now());
         return const DataState.failure(Failure.notFound());
       }
 

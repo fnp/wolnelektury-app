@@ -34,10 +34,10 @@ abstract class ProgressRepository {
 
 class ProgressRepositoryImplementation extends ProgressRepository
     with RepositoryHelperMixin {
-  static String progressTextEndpoint(String slug) => '/progress/$slug/text/';
-  static String progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
-  static const String sendSyncProgressEndpoint = '/sync/progress/';
-  static String receiveSyncProgressEndpoint(String ts) =>
+  static String _progressTextEndpoint(String slug) => '/progress/$slug/text/';
+  static String _progressAudioEndpoint(String slug) => '/progress/$slug/audio/';
+  static const String _sendSyncProgressEndpoint = '/sync/progress/';
+  static String _receiveSyncProgressEndpoint(String ts) =>
       '/sync/progress?ts=$ts';
 
   final ApiService _apiService;
@@ -66,7 +66,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
       );
 
       final response = await _apiService.getRequest(
-        receiveSyncProgressEndpoint(lastReceivedTimestamp),
+        _receiveSyncProgressEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
       );
 
@@ -131,7 +131,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
         return const DataState.success(data: null);
       }
       final response = await _apiService.postRequest(
-        sendSyncProgressEndpoint,
+        _sendSyncProgressEndpoint,
         progresses.map((e) {
           final progress = ProgressModel.fromJson(jsonDecode(e.progressJson));
           return progress.copyWith(
@@ -248,7 +248,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
   }) async {
     try {
       final response = await _apiService.putRequest(
-        progressAudioEndpoint(slug),
+        _progressAudioEndpoint(slug),
         {'audio_timestamp': position},
       );
 
@@ -268,7 +268,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
   }) async {
     try {
       final response = await _apiService.putRequest(
-        progressTextEndpoint(slug),
+        _progressTextEndpoint(slug),
         {'text_anchor': textAnchor},
       );
 

@@ -7,7 +7,15 @@ class AppStorageBookmarksService {
   AppStorageBookmarksService(this._storage);
 
   Future<void> upsertMultipleBookmarks(
-    List<({String id, String slug, String progressJson, DateTime? timestamp})>
+    List<
+      ({
+        String id,
+        String? slug,
+        String? bookmarkJson,
+        DateTime? timestamp,
+        bool isDeleted,
+      })
+    >
     bookmarks,
   ) async {
     if (bookmarks.isEmpty) return;
@@ -15,8 +23,11 @@ class AppStorageBookmarksService {
     final companions = bookmarks.map((p) {
       return BookmarksCompanion(
         id: Value(p.id),
-        slug: Value(p.slug),
-        progressJson: Value(p.progressJson),
+        slug: p.slug != null ? Value(p.slug!) : const Value.absent(),
+        bookmarkJson: p.bookmarkJson != null
+            ? Value(p.bookmarkJson!)
+            : const Value.absent(),
+        isDeleted: Value(p.isDeleted),
         updatedAt: Value(p.timestamp ?? DateTime.now()),
       );
     }).toList();
@@ -27,11 +38,13 @@ class AppStorageBookmarksService {
   }
 
   Future<List<String>> getBookBookmarks(String slug) async {
-    final result = await (_storage.select(
-      _storage.bookmarks,
-    )..where((tbl) => tbl.slug.equals(slug))).get();
+    final result =
+        await (_storage.select(_storage.bookmarks)
+              ..where((tbl) => tbl.slug.equals(slug))
+              ..where((tbl) => tbl.isDeleted.equals(false)))
+            .get();
 
-    return result.map((e) => e.progressJson).toList();
+    return result.map((e) => e.bookmarkJson).toList();
   }
 
   Future<List<String>> getBookmarks({
@@ -41,17 +54,31 @@ class AppStorageBookmarksService {
     final result =
         await (_storage.select(_storage.bookmarks)
               ..limit(limit, offset: offset)
+              ..where((tbl) => tbl.isDeleted.equals(false))
               ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
             .get();
 
-    return result.map((e) => e.progressJson).toList();
+    return result.map((e) => e.bookmarkJson).toList();
   }
 
   Future<bool> deleteBookmark(String id) async {
-    final count = await (_storage.delete(
-      _storage.bookmarks,
-    )..where((tbl) => tbl.id.equals(id))).go();
+    upsertMultipleBookmarks([
+      (
+        id: id,
+        slug: null,
+        bookmarkJson: null,
+        timestamp: DateTime.now(),
+        isDeleted: true,
+      ),
+    ]);
 
-    return count > 0;
+    return true;
+  }
+
+  Future<void> clearDeleted() async {
+    final query = _storage.delete(_storage.bookmarks)
+      ..where((tbl) => tbl.isDeleted.equals(true));
+
+    await query.go();
   }
 }
