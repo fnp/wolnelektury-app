@@ -21,6 +21,14 @@ sealed class ApiResponse with _$ApiResponse {
   }) = _ApiResponse;
 
   factory ApiResponse.fromApiServiceResponse(Response<dynamic> response) {
+    if (response.data is List && response.data.isEmpty) {
+      return ApiResponse(
+        data: [],
+        totalItems: 0,
+        paginationData: const ApiResponsePagination(),
+        statusCode: response.statusCode,
+      );
+    }
     if (response.data is List && response.data.first is String) {
       return ApiResponse(
         simpleData: List<String>.from(response.data),

@@ -54,9 +54,9 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
   );
 
   static const String _bookmarksEndpoint = '/bookmarks/';
-  static const String _sendSyncBookmarksEndpoint = '/sync/bookmarks/';
+  static const String _sendSyncBookmarksEndpoint = '/sync/bookmark/';
   static String _receiveSyncBookmarksEndpoint(String ts) =>
-      '/sync/bookmarks?ts=$ts';
+      '/sync/bookmark?ts=$ts';
 
   @override
   Future<DataState<List<BookmarkModel>>> getBookmarks({
@@ -280,14 +280,13 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         await _syncStorage.updateSyncData(sentBookmarksSyncAt: DateTime.now());
         return const DataState.success(data: null);
       }
-
       final response = await _apiService.postRequest(
         _sendSyncBookmarksEndpoint,
         bookmarks.map((e) {
           final model = BookmarkModel.fromJson(jsonDecode(e.bookmarkJson));
-          return model
-              .copyWith(timestamp: (e.updatedAt.millisecondsSinceEpoch) ~/ 1000)
-              .toJson();
+          return model.copyWith(
+            timestamp: (e.updatedAt.millisecondsSinceEpoch) ~/ 1000,
+          );
         }).toList(),
         contentType: Headers.jsonContentType,
       );

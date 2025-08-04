@@ -2,14 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
-import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/create_bookmark_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
-import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPageParagraphSheet extends StatelessWidget {
@@ -82,14 +80,6 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                             .tr(),
                         nonActiveIcon: Icons.bookmark_add_rounded,
                         onPressed: () {
-                          final authCubit = BlocProvider.of<AuthCubit>(context);
-                          if (authCubit.state.user == null) {
-                            return CustomSnackbar.error(
-                              context,
-                              LocaleKeys.common_snackbar_not_logged.tr(),
-                            );
-                          }
-
                           readingPageCubit.toggleIsAddingBookmark();
                           final isBookmarked = bookmarkCubit.state
                               .isSelectedParagraphBookmarked(
