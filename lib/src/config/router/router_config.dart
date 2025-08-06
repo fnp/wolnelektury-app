@@ -42,4 +42,6 @@ const readingPageConfigWithAnchor = _RouteConfig(
   path: '/readingPage/:slug/:anchor',
 );
 
+const searchPageConfig = _RouteConfig(name: 'searchPage', path: '/searchPage');
+
 const notFoundPageConfig = _RouteConfig(name: 'notFound', path: '/notFound');

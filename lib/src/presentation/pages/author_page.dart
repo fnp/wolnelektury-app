@@ -5,7 +5,6 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/author/author_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_books.dart';
-import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_go_back.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_top_bar.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_translations.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/load_more_button.dart';
@@ -51,7 +50,6 @@ class _AuthorPageState extends State<AuthorPage> {
             SliverToBoxAdapter(child: _TranslationsHeader()),
             AuthorPageTranslations(),
             SliverToBoxAdapter(child: _TranslationsLoadMore()),
-            SliverToBoxAdapter(child: AuthorPageGoBack()),
           ],
         ),
       ),

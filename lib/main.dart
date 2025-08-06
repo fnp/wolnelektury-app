@@ -11,6 +11,7 @@ import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/filtering/filtering_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/synchronizer/synchronizer_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
@@ -56,6 +57,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           lazy: false,
           create: (context) => SettingsCubit(get.get()),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => FilteringCubit(get.get()),
         ),
         BlocProvider(create: (context) => AppModeCubit()),
         BlocProvider(

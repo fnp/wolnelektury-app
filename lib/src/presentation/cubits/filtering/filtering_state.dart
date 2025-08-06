@@ -14,7 +14,7 @@ sealed class FilteringState with _$FilteringState {
 
 extension FilteringStateX on FilteringState {
   bool isTagSelected(TagModel tag) {
-    return selectedTags.contains(tag);
+    return selectedTags.map((e) => e.id).contains(tag.id);
   }
 
   bool get isAnyTagSelected {

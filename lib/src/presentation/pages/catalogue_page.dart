@@ -48,11 +48,11 @@ class _Body extends StatelessWidget {
     final theme = Theme.of(context);
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => BooksCubit(get.get())..getBooks()),
         BlocProvider(
-          create: (_) => FilteringCubit(get.get())..getTags(),
-          lazy: false,
+          create: (_) => BooksCubit(get.get())
+            ..getBooks(tags: context.read<FilteringCubit>().state.selectedTags),
         ),
+        BlocProvider.value(value: context.read<FilteringCubit>()..getTags()),
       ],
       child: Builder(
         builder: (context) {

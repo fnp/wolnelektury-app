@@ -101,10 +101,13 @@ class DashboardAppBar extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const CustomButton(
+                        CustomButton(
                           icon: Icons.search,
                           iconColor: CustomColors.black,
                           backgroundColor: CustomColors.primaryYellowColor,
+                          onPressed: () {
+                            router.pushNamed(searchPageConfig.name);
+                          },
                         ),
                         AnimatedSize(
                           duration: const Duration(milliseconds: 300),

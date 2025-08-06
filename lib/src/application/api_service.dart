@@ -72,7 +72,6 @@ class ApiService {
   }) async {
     final accessToken = await AppSecureStorageService().readAccessToken();
     try {
-      print('POST request to $endpoint with data: $data');
       final response = await _dio.post(
         endpoint,
         data: data,
@@ -81,7 +80,6 @@ class ApiService {
           contentType: contentType,
         ),
       );
-      print('Response: ${response.data}');
       return ApiResponse.fromApiServiceResponse(response);
     } on DioException catch (e) {
       return _dioExceptionHandler(e);

@@ -33,7 +33,7 @@ class CatalogueFiltering extends StatelessWidget {
               return;
             }
             Navigator.push(
-              routerNavigationKey.currentContext!,
+              globalContext,
               MaterialPageRoute(
                 builder: (_) {
                   context.read<FilteringCubit>();
@@ -114,11 +114,19 @@ class _SearchWithX extends StatefulWidget {
 class _SearchWithXState extends State<_SearchWithX> {
   final TextEditingController controller = TextEditingController();
   late ThemeData theme;
+  bool isEmpty = true;
 
   @override
   void initState() {
+    isEmpty = widget.initialText == null || widget.initialText!.isEmpty;
     controller.text = widget.initialText ?? '';
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -143,12 +151,15 @@ class _SearchWithXState extends State<_SearchWithX> {
                 controller: controller,
                 onChanged: (value) {
                   cubit.changeQuery(value);
+                  setState(() {
+                    isEmpty = value.trim().isEmpty;
+                  });
                 },
                 style: theme.textTheme.bodyMedium,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: Dimensions.smallPadding,
-                    horizontal: Dimensions.mediumPadding,
+                    horizontal: Dimensions.veryLargePadding,
                   ),
                   suffixIconColor: CustomColors.black,
                   isDense: true,
@@ -171,12 +182,33 @@ class _SearchWithXState extends State<_SearchWithX> {
                     ),
                     borderSide: BorderSide.none,
                   ),
-                  suffixIcon: const SizedBox.square(
-                    dimension: 40,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Icon(Icons.search, size: 24),
-                    ),
+                  suffixIcon: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 100),
+                    switchInCurve: Curves.fastOutSlowIn,
+                    switchOutCurve: Curves.fastOutSlowIn,
+                    transitionBuilder: (child, animation) {
+                      return FadeTransition(opacity: animation, child: child);
+                    },
+                    child: isEmpty
+                        ? const SizedBox.square(
+                            dimension: 40,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Icon(Icons.search, size: 24),
+                            ),
+                          )
+                        : CustomButton(
+                            backgroundColor: CustomColors.grey,
+                            key: const ValueKey('clear_search'),
+                            icon: Icons.close,
+                            onPressed: () {
+                              controller.clear();
+                              cubit.changeQuery('');
+                              setState(() {
+                                isEmpty = true;
+                              });
+                            },
+                          ),
                   ),
                 ),
               ),

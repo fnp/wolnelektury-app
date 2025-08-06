@@ -11,6 +11,7 @@ import 'package:wolnelektury/src/presentation/pages/dashboard/dashboard_wrapper.
 import 'package:wolnelektury/src/presentation/pages/last_read_page.dart';
 import 'package:wolnelektury/src/presentation/pages/not_found_page.dart';
 import 'package:wolnelektury/src/presentation/pages/reading_page.dart';
+import 'package:wolnelektury/src/presentation/pages/search_page.dart';
 import 'package:wolnelektury/src/presentation/pages/settings_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/my_library_page.dart';
 
@@ -105,11 +106,24 @@ final GoRouter router = GoRouter(
           name: bookPageConfig.name,
           pageBuilder: (context, state) {
             final book = state.extra as BookModel?;
+            final slug = state.pathParameters['slug'];
             return _slideTransition(
               context: context,
               state: state,
               reversed: true,
-              child: BookPage(book: book),
+              child: BookPage(book: book, slug: slug),
+            );
+          },
+        ),
+        GoRoute(
+          path: searchPageConfig.path,
+          name: searchPageConfig.name,
+          pageBuilder: (context, state) {
+            return _slideTransition(
+              context: context,
+              state: state,
+              reversed: true,
+              child: const SearchPage(),
             );
           },
         ),

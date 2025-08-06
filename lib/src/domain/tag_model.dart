@@ -13,4 +13,8 @@ sealed class TagModel with _$TagModel {
 
   factory TagModel.fromJson(Map<String, dynamic> json) =>
       _$TagModelFromJson(json);
+
+  factory TagModel.fromId(int id, {String? category, String? name}) {
+    return TagModel(id: id, category: category ?? '', name: name ?? '');
+  }
 }
