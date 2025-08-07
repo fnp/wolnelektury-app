@@ -50,7 +50,9 @@ class SearchBarState extends State<SearchBar> {
                   isEmpty = value.trim().isEmpty;
                 });
               },
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
               cursorColor: CustomColors.black,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(

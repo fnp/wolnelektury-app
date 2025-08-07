@@ -114,7 +114,9 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
               });
         }
       },
-      failure: (_) {},
+      failure: (_) {
+        _readyToSetProgress = true;
+      },
     );
   }
 

@@ -157,6 +157,11 @@ final blueElevatedButton = yellowElevatedButton.copyWith(
   ),
 );
 
+final greenElevatedButton = yellowElevatedButton.copyWith(
+  backgroundColor: const WidgetStatePropertyAll(CustomColors.green),
+  foregroundColor: const WidgetStatePropertyAll(CustomColors.black),
+);
+
 final whiteElevatedButton = yellowElevatedButton.copyWith(
   backgroundColor: const WidgetStatePropertyAll(Colors.white),
   foregroundColor: const WidgetStatePropertyAll(CustomColors.black),

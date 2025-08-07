@@ -91,19 +91,19 @@ class _HintElement extends StatelessWidget {
         router.pushNamed(cataloguePageConfig.name);
         break;
       case HintTypeEnum.theme:
-        // Handle kind hint tap
+        // Handle hint tap
         break;
       case HintTypeEnum.collection:
-        // Handle kind hint tap
+        // Handle hint tap
         break;
       case HintTypeEnum.info:
-        // Handle kind hint tap
+        // Handle hint tap
         break;
       case HintTypeEnum.userlist:
-        // Handle kind hint tap
+        // Handle hint tap
         break;
       case HintTypeEnum.unknown:
-        // Handle kind hint tap
+        // Handle hint tap
         break;
     }
   }
