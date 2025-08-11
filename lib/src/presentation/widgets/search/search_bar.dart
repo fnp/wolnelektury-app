@@ -34,12 +34,12 @@ class SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final searchCubit = context.read<SearchCubit>();
-    return Row(
-      spacing: Dimensions.mediumPadding,
-      children: [
-        Expanded(
-          child: SizedBox(
-            height: Dimensions.elementHeight,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: Dimensions.elementHeight),
+      child: Row(
+        spacing: Dimensions.mediumPadding,
+        children: [
+          Expanded(
             child: TextField(
               autofocus: true,
               textInputAction: TextInputAction.done,
@@ -55,12 +55,13 @@ class SearchBarState extends State<SearchBar> {
               ),
               cursorColor: CustomColors.black,
               decoration: InputDecoration(
+                isCollapsed: true,
                 contentPadding: const EdgeInsets.symmetric(
-                  vertical: Dimensions.smallPadding,
+                  vertical: Dimensions.mediumPadding,
                   horizontal: Dimensions.veryLargePadding,
                 ),
                 suffixIconColor: CustomColors.black,
-                isDense: true,
+                // isDense: true,
                 fillColor: CustomColors.primaryYellowColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(
@@ -79,6 +80,10 @@ class SearchBarState extends State<SearchBar> {
                     Dimensions.borderRadiusOfCircle,
                   ),
                   borderSide: BorderSide.none,
+                ),
+                suffixIconConstraints: const BoxConstraints(
+                  minHeight: 40,
+                  minWidth: 40,
                 ),
                 suffixIcon: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 100),
@@ -110,16 +115,16 @@ class SearchBarState extends State<SearchBar> {
               ),
             ),
           ),
-        ),
-        CustomButton(
-          icon: CustomIcons.close,
-          iconColor: theme.colorScheme.onSurface,
-          backgroundColor: theme.colorScheme.tertiaryContainer,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
+          CustomButton(
+            icon: CustomIcons.close,
+            iconColor: theme.colorScheme.onSurface,
+            backgroundColor: theme.colorScheme.tertiaryContainer,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

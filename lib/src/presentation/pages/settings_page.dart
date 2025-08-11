@@ -67,7 +67,11 @@ class SettingsPage extends HookWidget {
                       BlocProvider.of<AuthCubit>(context).logout();
                       Navigator.of(context).pop();
                     },
-                    child: Text(LocaleKeys.settings_logout.tr()),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(LocaleKeys.settings_logout.tr()),
+                    ),
                   ),
                 ),
               ],
@@ -134,11 +138,15 @@ class _SettingsContainer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
-                  child: Text(
-                    text,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.black,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      text,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.black,
+                      ),
                     ),
                   ),
                 ),

@@ -8,6 +8,13 @@ class AppSettings extends Table {
   TextColumn get theme => text().withDefault(const Constant('adaptive'))();
 }
 
+class LastSearched extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get label => text().withDefault(const Constant(''))();
+  // Stringified JSON of HintModel
+  TextColumn get hintJson => text().withDefault(const Constant(''))();
+}
+
 class ReaderSettings extends Table {
   IntColumn get id => integer().autoIncrement()();
   RealColumn get readingFontSize => real().withDefault(const Constant(0.5))();
@@ -82,6 +89,7 @@ class SyncInfo extends Table {
     SyncInfo,
     Likes,
     Bookmarks,
+    LastSearched,
   ],
 )
 class AppStorage extends _$AppStorage {
@@ -94,7 +102,7 @@ class AppStorage extends _$AppStorage {
   }
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -131,6 +139,9 @@ class AppStorage extends _$AppStorage {
             'CREATE INDEX likes_updated_at_idx ON likes(updated_at)',
           ),
         );
+      }
+      if (from < 5) {
+        await m.createTable(lastSearched);
       }
     },
     onCreate: (m) async {

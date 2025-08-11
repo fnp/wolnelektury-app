@@ -2361,6 +2361,253 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   }
 }
 
+class $LastSearchedTable extends LastSearched
+    with TableInfo<$LastSearchedTable, LastSearchedData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LastSearchedTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _hintJsonMeta = const VerificationMeta(
+    'hintJson',
+  );
+  @override
+  late final GeneratedColumn<String> hintJson = GeneratedColumn<String>(
+    'hint_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, label, hintJson];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'last_searched';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<LastSearchedData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    }
+    if (data.containsKey('hint_json')) {
+      context.handle(
+        _hintJsonMeta,
+        hintJson.isAcceptableOrUnknown(data['hint_json']!, _hintJsonMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LastSearchedData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LastSearchedData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      )!,
+      hintJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}hint_json'],
+      )!,
+    );
+  }
+
+  @override
+  $LastSearchedTable createAlias(String alias) {
+    return $LastSearchedTable(attachedDatabase, alias);
+  }
+}
+
+class LastSearchedData extends DataClass
+    implements Insertable<LastSearchedData> {
+  final int id;
+  final String label;
+  final String hintJson;
+  const LastSearchedData({
+    required this.id,
+    required this.label,
+    required this.hintJson,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['label'] = Variable<String>(label);
+    map['hint_json'] = Variable<String>(hintJson);
+    return map;
+  }
+
+  LastSearchedCompanion toCompanion(bool nullToAbsent) {
+    return LastSearchedCompanion(
+      id: Value(id),
+      label: Value(label),
+      hintJson: Value(hintJson),
+    );
+  }
+
+  factory LastSearchedData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LastSearchedData(
+      id: serializer.fromJson<int>(json['id']),
+      label: serializer.fromJson<String>(json['label']),
+      hintJson: serializer.fromJson<String>(json['hintJson']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'label': serializer.toJson<String>(label),
+      'hintJson': serializer.toJson<String>(hintJson),
+    };
+  }
+
+  LastSearchedData copyWith({int? id, String? label, String? hintJson}) =>
+      LastSearchedData(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        hintJson: hintJson ?? this.hintJson,
+      );
+  LastSearchedData copyWithCompanion(LastSearchedCompanion data) {
+    return LastSearchedData(
+      id: data.id.present ? data.id.value : this.id,
+      label: data.label.present ? data.label.value : this.label,
+      hintJson: data.hintJson.present ? data.hintJson.value : this.hintJson,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LastSearchedData(')
+          ..write('id: $id, ')
+          ..write('label: $label, ')
+          ..write('hintJson: $hintJson')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, label, hintJson);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LastSearchedData &&
+          other.id == this.id &&
+          other.label == this.label &&
+          other.hintJson == this.hintJson);
+}
+
+class LastSearchedCompanion extends UpdateCompanion<LastSearchedData> {
+  final Value<int> id;
+  final Value<String> label;
+  final Value<String> hintJson;
+  const LastSearchedCompanion({
+    this.id = const Value.absent(),
+    this.label = const Value.absent(),
+    this.hintJson = const Value.absent(),
+  });
+  LastSearchedCompanion.insert({
+    this.id = const Value.absent(),
+    this.label = const Value.absent(),
+    this.hintJson = const Value.absent(),
+  });
+  static Insertable<LastSearchedData> custom({
+    Expression<int>? id,
+    Expression<String>? label,
+    Expression<String>? hintJson,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (label != null) 'label': label,
+      if (hintJson != null) 'hint_json': hintJson,
+    });
+  }
+
+  LastSearchedCompanion copyWith({
+    Value<int>? id,
+    Value<String>? label,
+    Value<String>? hintJson,
+  }) {
+    return LastSearchedCompanion(
+      id: id ?? this.id,
+      label: label ?? this.label,
+      hintJson: hintJson ?? this.hintJson,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (hintJson.present) {
+      map['hint_json'] = Variable<String>(hintJson.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LastSearchedCompanion(')
+          ..write('id: $id, ')
+          ..write('label: $label, ')
+          ..write('hintJson: $hintJson')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppStorage extends GeneratedDatabase {
   _$AppStorage(QueryExecutor e) : super(e);
   $AppStorageManager get managers => $AppStorageManager(this);
@@ -2372,6 +2619,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
   late final $SyncInfoTable syncInfo = $SyncInfoTable(this);
   late final $LikesTable likes = $LikesTable(this);
   late final $BookmarksTable bookmarks = $BookmarksTable(this);
+  late final $LastSearchedTable lastSearched = $LastSearchedTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2385,6 +2633,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
     syncInfo,
     likes,
     bookmarks,
+    lastSearched,
   ];
 }
 
@@ -3733,6 +3982,162 @@ typedef $$BookmarksTableProcessedTableManager =
       Bookmark,
       PrefetchHooks Function()
     >;
+typedef $$LastSearchedTableCreateCompanionBuilder =
+    LastSearchedCompanion Function({
+      Value<int> id,
+      Value<String> label,
+      Value<String> hintJson,
+    });
+typedef $$LastSearchedTableUpdateCompanionBuilder =
+    LastSearchedCompanion Function({
+      Value<int> id,
+      Value<String> label,
+      Value<String> hintJson,
+    });
+
+class $$LastSearchedTableFilterComposer
+    extends Composer<_$AppStorage, $LastSearchedTable> {
+  $$LastSearchedTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get hintJson => $composableBuilder(
+    column: $table.hintJson,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$LastSearchedTableOrderingComposer
+    extends Composer<_$AppStorage, $LastSearchedTable> {
+  $$LastSearchedTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get hintJson => $composableBuilder(
+    column: $table.hintJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$LastSearchedTableAnnotationComposer
+    extends Composer<_$AppStorage, $LastSearchedTable> {
+  $$LastSearchedTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<String> get hintJson =>
+      $composableBuilder(column: $table.hintJson, builder: (column) => column);
+}
+
+class $$LastSearchedTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $LastSearchedTable,
+          LastSearchedData,
+          $$LastSearchedTableFilterComposer,
+          $$LastSearchedTableOrderingComposer,
+          $$LastSearchedTableAnnotationComposer,
+          $$LastSearchedTableCreateCompanionBuilder,
+          $$LastSearchedTableUpdateCompanionBuilder,
+          (
+            LastSearchedData,
+            BaseReferences<_$AppStorage, $LastSearchedTable, LastSearchedData>,
+          ),
+          LastSearchedData,
+          PrefetchHooks Function()
+        > {
+  $$LastSearchedTableTableManager(_$AppStorage db, $LastSearchedTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LastSearchedTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LastSearchedTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LastSearchedTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> label = const Value.absent(),
+                Value<String> hintJson = const Value.absent(),
+              }) => LastSearchedCompanion(
+                id: id,
+                label: label,
+                hintJson: hintJson,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> label = const Value.absent(),
+                Value<String> hintJson = const Value.absent(),
+              }) => LastSearchedCompanion.insert(
+                id: id,
+                label: label,
+                hintJson: hintJson,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$LastSearchedTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $LastSearchedTable,
+      LastSearchedData,
+      $$LastSearchedTableFilterComposer,
+      $$LastSearchedTableOrderingComposer,
+      $$LastSearchedTableAnnotationComposer,
+      $$LastSearchedTableCreateCompanionBuilder,
+      $$LastSearchedTableUpdateCompanionBuilder,
+      (
+        LastSearchedData,
+        BaseReferences<_$AppStorage, $LastSearchedTable, LastSearchedData>,
+      ),
+      LastSearchedData,
+      PrefetchHooks Function()
+    >;
 
 class $AppStorageManager {
   final _$AppStorage _db;
@@ -3753,4 +4158,6 @@ class $AppStorageManager {
       $$LikesTableTableManager(_db, _db.likes);
   $$BookmarksTableTableManager get bookmarks =>
       $$BookmarksTableTableManager(_db, _db.bookmarks);
+  $$LastSearchedTableTableManager get lastSearched =>
+      $$LastSearchedTableTableManager(_db, _db.lastSearched);
 }

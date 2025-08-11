@@ -19,9 +19,7 @@ class ReadingPageSettingsTheme extends StatelessWidget {
       width: double.infinity,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            Dimensions.borderRadiusOfCircle,
-          ),
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
           color: CustomColors.white,
         ),
         child: Row(
@@ -29,10 +27,14 @@ class ReadingPageSettingsTheme extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: Dimensions.veryLargePadding),
-              child: Text(
-                LocaleKeys.reader_settings_dark_mode.tr(),
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.black,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Text(
+                  LocaleKeys.reader_settings_dark_mode.tr(),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),

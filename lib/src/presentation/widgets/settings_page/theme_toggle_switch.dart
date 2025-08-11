@@ -8,10 +8,7 @@ import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ThemeToggleSwitch extends StatefulWidget {
-  const ThemeToggleSwitch({
-    super.key,
-    required this.initialMode,
-  });
+  const ThemeToggleSwitch({super.key, required this.initialMode});
 
   final AppTheme initialMode;
 
@@ -42,12 +39,10 @@ class _ThemeToggleSwitchState extends State<ThemeToggleSwitch>
       duration: const Duration(milliseconds: 200),
     );
 
-    _offsetAnimation = Tween<double>(begin: -40, end: 40).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    _offsetAnimation = Tween<double>(
+      begin: -40,
+      end: 40,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   void _setCurrentState({AppTheme? mode}) {
@@ -73,15 +68,13 @@ class _ThemeToggleSwitchState extends State<ThemeToggleSwitch>
     final double end = _currentState == 0
         ? -40
         : _currentState == 1
-            ? 0
-            : 40;
+        ? 0
+        : 40;
 
-    _offsetAnimation = Tween<double>(begin: begin, end: end).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    _offsetAnimation = Tween<double>(
+      begin: begin,
+      end: end,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller
       ..reset()
@@ -100,22 +93,24 @@ class _ThemeToggleSwitchState extends State<ThemeToggleSwitch>
 
     return Row(
       children: [
-        Text(
-          _determineText,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            fontFeatures: [const FontFeature.enable('smcp')],
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.center,
+          child: Text(
+            _determineText,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              fontFeatures: [const FontFeature.enable('smcp')],
+            ),
           ),
         ),
-        const SizedBox(
-          width: Dimensions.veryLargePadding,
-        ),
+        const SizedBox(width: Dimensions.veryLargePadding),
         GestureDetector(
           onTap: () {
             _setCurrentState();
-            BlocProvider.of<SettingsCubit>(context).setTheme(
-              _modes[_currentState],
-            );
+            BlocProvider.of<SettingsCubit>(
+              context,
+            ).setTheme(_modes[_currentState]);
           },
           child: SizedBox(
             width: Dimensions.elementHeight * 3,
@@ -132,10 +127,7 @@ class _ThemeToggleSwitchState extends State<ThemeToggleSwitch>
                 builder: (context, child) {
                   return Transform.translate(
                     offset: Offset(_offsetAnimation.value, 0),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: child,
-                    ),
+                    child: Align(alignment: Alignment.center, child: child),
                   );
                 },
                 child: SizedBox.square(
@@ -150,10 +142,7 @@ class _ThemeToggleSwitchState extends State<ThemeToggleSwitch>
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
                       transitionBuilder: (child, animation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
+                        return FadeTransition(opacity: animation, child: child);
                       },
                       child: _determineChild,
                     ),

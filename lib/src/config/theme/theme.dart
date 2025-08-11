@@ -234,11 +234,11 @@ final alternativeInput = _lightModeInput.copyWith(
   filled: false,
   contentPadding: EdgeInsets.zero,
   focusedBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(Dimensions.elementHeight / 2),
+    borderRadius: BorderRadius.circular(100),
     borderSide: const BorderSide(color: CustomColors.black),
   ),
   enabledBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(Dimensions.elementHeight / 2),
+    borderRadius: BorderRadius.circular(100),
     borderSide: const BorderSide(color: CustomColors.black),
   ),
 );

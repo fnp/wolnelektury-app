@@ -160,30 +160,35 @@ class _TitleWithAuthors extends StatelessWidget {
         ),
         ...book.authors.map((author) {
           return Expanded(
-            child: Column(
-              children: [
-                InkWellWrapper(
-                  borderRadius: BorderRadius.circular(5),
-                  onTap: () {
-                    router.pushNamed(
-                      authorPageConfig.name,
-                      pathParameters: {'slug': author.slug},
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Text(
-                      author.name,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.topLeft,
+              child: Column(
+                children: [
+                  InkWellWrapper(
+                    borderRadius: BorderRadius.circular(5),
+                    onTap: () {
+                      router.pushNamed(
+                        authorPageConfig.name,
+                        pathParameters: {'slug': author.slug},
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        author.name,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }),
+        if (book.authors.isEmpty) const Spacer(),
       ],
     );
   }

@@ -7,7 +7,7 @@ part 'hint_model.g.dart';
 @freezed
 sealed class HintModel with _$HintModel {
   const factory HintModel({
-    @JsonKey(defaultValue: HintTypeEnum.unknown) required HintTypeEnum type,
+    @JsonKey(unknownEnumValue: HintTypeEnum.unknown) required HintTypeEnum type,
     required String label,
     String? url,
     String? img,

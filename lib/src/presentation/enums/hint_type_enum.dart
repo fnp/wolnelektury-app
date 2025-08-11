@@ -1,12 +1,12 @@
 enum HintTypeEnum {
   author,
-  theme,
+  // theme,
   genre,
   epoch,
   kind,
-  collection,
+  // collection,
   book,
-  info,
-  userlist,
+  // info,
+  // userlist,
   unknown,
 }

@@ -10,6 +10,13 @@
         "content": "Ups… nie masz połączenia z internetem. Niektóre funkcje aplikacji są niedostępne.",
         "button": "Rozumiem"
     },
+    "search": {
+        "authors": "Autorzy",
+        "books": "Książki i audiobooki",
+        "texts": "W treści",
+        "last_searched": "Ostatnio wyszukiwane",
+        "show_all": "Pokaż wszystkie wyniki"
+    },
     "reading": {
         "sheet": {
             "bookmark_add": "dodaj zakładkę",

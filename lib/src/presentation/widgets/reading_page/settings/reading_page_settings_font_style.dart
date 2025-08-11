@@ -42,9 +42,7 @@ class ReadingPageSettingsFontStyle extends StatelessWidget {
                     left: state.fontType == ReaderFontType.sans
                         ? 0
                         : elementWidth + Dimensions.smallPadding * 2,
-                    duration: const Duration(
-                      milliseconds: 200,
-                    ),
+                    duration: const Duration(milliseconds: 200),
                     child: Padding(
                       padding: const EdgeInsets.all(Dimensions.smallPadding),
                       child: SizedBox(
@@ -78,14 +76,18 @@ class ReadingPageSettingsFontStyle extends StatelessWidget {
                               padding: const EdgeInsets.all(
                                 Dimensions.smallPadding,
                               ),
-                              child: Text(
-                                LocaleKeys.reader_settings_sans.tr(),
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: state.fontType == ReaderFontType.sans
-                                      ? CustomColors.black
-                                      : CustomColors.grey,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  LocaleKeys.reader_settings_sans.tr(),
+                                  textAlign: TextAlign.center,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: state.fontType == ReaderFontType.sans
+                                        ? CustomColors.black
+                                        : CustomColors.grey,
+                                  ),
                                 ),
                               ),
                             ),
@@ -101,15 +103,20 @@ class ReadingPageSettingsFontStyle extends StatelessWidget {
                               padding: const EdgeInsets.all(
                                 Dimensions.smallPadding,
                               ),
-                              child: Text(
-                                LocaleKeys.reader_settings_serif.tr(),
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontFamily: sourceSerif4Family,
-                                  fontWeight: FontWeight.w600,
-                                  color: state.fontType == ReaderFontType.serif
-                                      ? CustomColors.black
-                                      : CustomColors.grey,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  LocaleKeys.reader_settings_serif.tr(),
+                                  textAlign: TextAlign.center,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontFamily: sourceSerif4Family,
+                                    fontWeight: FontWeight.w600,
+                                    color:
+                                        state.fontType == ReaderFontType.serif
+                                        ? CustomColors.black
+                                        : CustomColors.grey,
+                                  ),
                                 ),
                               ),
                             ),

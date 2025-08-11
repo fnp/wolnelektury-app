@@ -95,14 +95,18 @@ class _Header extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                   horizontal: Dimensions.veryLargePadding,
                 ),
-                child: Text(
-                  bookList.name,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: CustomColors.black,
-                    fontWeight: FontWeight.w600,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    bookList.name,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),

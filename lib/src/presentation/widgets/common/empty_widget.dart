@@ -47,7 +47,11 @@ class EmptyWidget extends StatelessWidget {
               ElevatedButton(
                 onPressed: onTap,
                 style: blueElevatedButton,
-                child: Text(buttonText!),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.center,
+                  child: Text(buttonText!),
+                ),
               ),
             ],
             const Spacer(flex: 2),

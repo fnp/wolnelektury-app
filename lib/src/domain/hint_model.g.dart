@@ -7,9 +7,11 @@ part of 'hint_model.dart';
 // **************************************************************************
 
 _HintModel _$HintModelFromJson(Map<String, dynamic> json) => _HintModel(
-  type:
-      $enumDecodeNullable(_$HintTypeEnumEnumMap, json['type']) ??
-      HintTypeEnum.unknown,
+  type: $enumDecode(
+    _$HintTypeEnumEnumMap,
+    json['type'],
+    unknownValue: HintTypeEnum.unknown,
+  ),
   label: json['label'] as String,
   url: json['url'] as String?,
   img: json['img'] as String?,
@@ -29,13 +31,9 @@ Map<String, dynamic> _$HintModelToJson(_HintModel instance) =>
 
 const _$HintTypeEnumEnumMap = {
   HintTypeEnum.author: 'author',
-  HintTypeEnum.theme: 'theme',
   HintTypeEnum.genre: 'genre',
   HintTypeEnum.epoch: 'epoch',
   HintTypeEnum.kind: 'kind',
-  HintTypeEnum.collection: 'collection',
   HintTypeEnum.book: 'book',
-  HintTypeEnum.info: 'info',
-  HintTypeEnum.userlist: 'userlist',
   HintTypeEnum.unknown: 'unknown',
 };

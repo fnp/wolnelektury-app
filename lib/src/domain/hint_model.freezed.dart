@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HintModel {
 
-@JsonKey(defaultValue: HintTypeEnum.unknown) HintTypeEnum get type; String get label; String? get url; String? get img; String? get slug; int? get id;
+@JsonKey(unknownEnumValue: HintTypeEnum.unknown) HintTypeEnum get type; String get label; String? get url; String? get img; String? get slug; int? get id;
 /// Create a copy of HintModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $HintModelCopyWith<$Res>  {
   factory $HintModelCopyWith(HintModel value, $Res Function(HintModel) _then) = _$HintModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(defaultValue: HintTypeEnum.unknown) HintTypeEnum type, String label, String? url, String? img, String? slug, int? id
+@JsonKey(unknownEnumValue: HintTypeEnum.unknown) HintTypeEnum type, String label, String? url, String? img, String? slug, int? id
 });
 
 
@@ -85,10 +85,10 @@ as int?,
 @JsonSerializable()
 
 class _HintModel implements HintModel {
-  const _HintModel({@JsonKey(defaultValue: HintTypeEnum.unknown) required this.type, required this.label, this.url, this.img, this.slug, this.id});
+  const _HintModel({@JsonKey(unknownEnumValue: HintTypeEnum.unknown) required this.type, required this.label, this.url, this.img, this.slug, this.id});
   factory _HintModel.fromJson(Map<String, dynamic> json) => _$HintModelFromJson(json);
 
-@override@JsonKey(defaultValue: HintTypeEnum.unknown) final  HintTypeEnum type;
+@override@JsonKey(unknownEnumValue: HintTypeEnum.unknown) final  HintTypeEnum type;
 @override final  String label;
 @override final  String? url;
 @override final  String? img;
@@ -128,7 +128,7 @@ abstract mixin class _$HintModelCopyWith<$Res> implements $HintModelCopyWith<$Re
   factory _$HintModelCopyWith(_HintModel value, $Res Function(_HintModel) _then) = __$HintModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(defaultValue: HintTypeEnum.unknown) HintTypeEnum type, String label, String? url, String? img, String? slug, int? id
+@JsonKey(unknownEnumValue: HintTypeEnum.unknown) HintTypeEnum type, String label, String? url, String? img, String? slug, int? id
 });
 
 

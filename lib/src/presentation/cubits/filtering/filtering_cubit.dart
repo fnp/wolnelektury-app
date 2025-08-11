@@ -25,7 +25,12 @@ class FilteringCubit extends SafeCubit<FilteringState> {
     });
   }
 
-  void toggleTag(TagModel tag) {
+  void toggleTag(TagModel tag, {bool resetRest = false}) {
+    if (resetRest) {
+      emit(state.copyWith(selectedTags: [tag]));
+      getTags();
+      return;
+    }
     final List<TagModel> selectedTags = List.from(state.selectedTags);
     if (selectedTags.contains(tag)) {
       selectedTags.remove(tag);

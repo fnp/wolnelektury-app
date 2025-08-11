@@ -141,59 +141,68 @@ class AddNewListElementState extends State<AddNewListElement> {
       ),
       child: SizedBox(
         width: double.infinity,
-        height: Dimensions.elementHeight,
-        child: Row(
-          children: [
-            const SizedBox(width: Dimensions.mediumPadding),
-            const Icon(
-              CustomIcons.playlist_add,
-              color: CustomColors.white,
-              size: 22,
-            ),
-            const SizedBox(width: Dimensions.smallPadding),
-            Expanded(
-              child: Theme(
-                data: theme.copyWith(inputDecorationTheme: alternativeInput),
-                child: TextField(
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                    hintText: LocaleKeys.book_lists_sheet_add.tr(),
-                    hintStyle: theme.textTheme.bodyMedium?.copyWith(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: Dimensions.elementHeight,
+          ),
+          child: Row(
+            children: [
+              const SizedBox(width: Dimensions.mediumPadding),
+              const Icon(
+                CustomIcons.playlist_add,
+                color: CustomColors.white,
+                size: 22,
+              ),
+              const SizedBox(width: Dimensions.smallPadding),
+              Expanded(
+                child: Theme(
+                  data: theme.copyWith(inputDecorationTheme: alternativeInput),
+                  child: TextField(
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      hintText: LocaleKeys.book_lists_sheet_add.tr(),
+                      hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.white,
+                      ),
+                      border: InputBorder.none,
+                      isCollapsed: true,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        isReadyToSave = value.isNotEmpty;
+                      });
+                    },
+                    controller: _controller,
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: CustomColors.white,
+                      decorationColor: CustomColors.red,
                     ),
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      isReadyToSave = value.isNotEmpty;
-                    });
-                  },
-                  controller: _controller,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: CustomColors.white,
-                    decorationColor: CustomColors.red,
                   ),
                 ),
               ),
-            ),
 
-            AnimatedBoxFade(
-              isChildVisible: isReadyToSave,
-              child: ElevatedButton(
-                style: blueElevatedButton,
-                onPressed: () {
-                  widget.onSave.call(_controller.text);
-                  _controller.clear();
-                  setState(() {
-                    isReadyToSave = false;
-                  });
-                },
-                child: Text(LocaleKeys.book_lists_sheet_save.tr()),
+              AnimatedBoxFade(
+                isChildVisible: isReadyToSave,
+                child: ElevatedButton(
+                  style: blueElevatedButton,
+                  onPressed: () {
+                    widget.onSave.call(_controller.text);
+                    _controller.clear();
+                    setState(() {
+                      isReadyToSave = false;
+                    });
+                  },
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.center,
+                    child: Text(LocaleKeys.book_lists_sheet_save.tr()),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

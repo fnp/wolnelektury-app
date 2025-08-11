@@ -12,6 +12,12 @@ abstract class  LocaleKeys {
   static const no_connection_content = 'no_connection.content';
   static const no_connection_button = 'no_connection.button';
   static const no_connection = 'no_connection';
+  static const search_authors = 'search.authors';
+  static const search_books = 'search.books';
+  static const search_texts = 'search.texts';
+  static const search_last_searched = 'search.last_searched';
+  static const search_show_all = 'search.show_all';
+  static const search = 'search';
   static const reading_sheet_bookmark_add = 'reading.sheet.bookmark_add';
   static const reading_sheet_bookmark_edit = 'reading.sheet.bookmark_edit';
   static const reading_sheet = 'reading.sheet';
