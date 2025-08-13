@@ -24,4 +24,27 @@ class SettingsCubit extends SafeCubit<SettingsState> {
     final settings = await _settingsStorage.setTheme(theme);
     emit(state.copyWith(settings: settings));
   }
+
+  Future<void> deleteAccount() async {
+    emit(
+      state.copyWith(isDeletingAccount: true, isDeletingAccountSuccess: null),
+    );
+    await Future.delayed(const Duration(seconds: 2));
+    emit(
+      state.copyWith(isDeletingAccount: false, isDeletingAccountSuccess: true),
+    );
+  }
+
+  Future<void> changePassword(String newPassword) async {
+    emit(
+      state.copyWith(isChangingPassword: true, isChangingPasswordSuccess: null),
+    );
+    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
+    emit(
+      state.copyWith(
+        isChangingPassword: false,
+        isChangingPasswordSuccess: true,
+      ),
+    );
+  }
 }

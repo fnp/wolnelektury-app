@@ -158,9 +158,28 @@
         }
     },
     "settings": {
+        "delete_account": {
+            "title": "Usuń konto",
+            "content": "Czy na pewno chcesz usunąć swoje konto? Ta operacja jest nieodwracalna.",
+            "button": "Usuń konto",
+            "cancel": "Anuluj",
+            "success": "Konto zostało usunięte",
+            "error": "Nie udało się usunąć konta, spróbuj ponownie"
+        },
+        "change_password": {
+            "title": "Zmień hasło",
+            "title_alt": "Wprowadź swoje nowe hasło",
+            "content": "Wprowadź nowe hasło",
+            "button": "Potwierdź",
+            "new": "Nowe hasło",
+            "new_validation": "Nowe hasło nie może być puste i musi mieć co najmniej 6 znaków",
+            "repeat": "Powtórz nowe hasło",
+            "repeat_validation": "Hasło jest nieprawidłowe",
+            "success": "Hasło zostało zmienione",
+            "error": "Nie udało się zmienić hasła, spróbuj ponownie"
+        },
         "title": "Ustawienia",
         "notifications": "Powiadomienia",
-        "change_password": "Zmień hasło",
         "theme": "Tryb ciemny",
         "set_theme": {
             "off": "off",

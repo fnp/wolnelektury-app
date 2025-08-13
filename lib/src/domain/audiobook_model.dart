@@ -15,6 +15,11 @@ sealed class AudiobookModel with _$AudiobookModel {
       AudiobookModel(parts: parts);
 }
 
+extension AudiobookModelX on AudiobookModel {
+  double get totalSizeInMB =>
+      parts.fold(0.0, (total, part) => total + part.size / 1024 / 1024);
+}
+
 @freezed
 sealed class AudioBookPart with _$AudioBookPart {
   const factory AudioBookPart({

@@ -7,9 +7,12 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_header.dart';
+import 'package:wolnelektury/src/presentation/widgets/settings_page/change_password_dialog.dart';
+import 'package:wolnelektury/src/presentation/widgets/settings_page/delete_account_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/settings_page/theme_toggle_switch.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class SettingsPage extends HookWidget {
   const SettingsPage({super.key});
@@ -52,10 +55,20 @@ class SettingsPage extends HookWidget {
             ),
           ),
           if (isAuthorized)
-            _SettingsContainer(text: LocaleKeys.settings_change_password.tr()),
+            _SettingsContainer(
+              text: LocaleKeys.settings_change_password_title.tr(),
+              onTap: () {
+                ChangePasswordDialog.show(context: context);
+              },
+            ),
           _SettingsContainer(text: LocaleKeys.settings_rate.tr()),
           if (isAuthorized)
-            _SettingsContainer(text: LocaleKeys.settings_delete.tr()),
+            _SettingsContainer(
+              text: LocaleKeys.settings_delete.tr(),
+              onTap: () {
+                DeleteAccountDialog.show(context: context);
+              },
+            ),
           if (isAuthorized) ...[
             const SizedBox(height: Dimensions.mediumPadding),
             Row(
@@ -113,11 +126,13 @@ class _SettingsContainer extends StatelessWidget {
       right: Dimensions.mediumPadding,
     ),
     this.child,
+    this.onTap,
   });
 
   final String text;
   final Widget? child;
   final EdgeInsets padding;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -130,33 +145,37 @@ class _SettingsContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
           border: Border.all(color: theme.colorScheme.surface),
         ),
-        child: Padding(
-          padding: padding,
-          child: SizedBox(
-            height: Dimensions.elementHeight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      text,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.black,
+        child: InkWellWrapper(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
+          child: Padding(
+            padding: padding,
+            child: SizedBox(
+              height: Dimensions.elementHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        text,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.black,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                child ??
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 18,
-                      color: CustomColors.black,
-                    ),
-              ],
+                  child ??
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 18,
+                        color: CustomColors.black,
+                      ),
+                ],
+              ),
             ),
           ),
         ),

@@ -47,6 +47,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth / 2;
@@ -56,7 +57,41 @@ class BookPageCoverWithButtons extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(child: _Image(coverUrl: book.coverUrl)),
+              Expanded(
+                child: Stack(
+                  children: [
+                    _Image(coverUrl: book.coverUrl),
+                    if (offlineAudiobook != null)
+                      Positioned(
+                        left: Dimensions.mediumPadding,
+                        bottom: Dimensions.mediumPadding,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: theme.scaffoldBackgroundColor,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(Dimensions.smallBorderRadius),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(
+                              Dimensions.smallPadding,
+                            ),
+                            child: Row(
+                              spacing: Dimensions.smallPadding,
+                              children: [
+                                const Icon(Icons.sd_storage_outlined, size: 16),
+                                Text(
+                                  '${offlineAudiobook!.totalSizeInMB.toStringAsFixed(2)} MB',
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
               const SizedBox(width: Dimensions.mediumPadding),
               Expanded(
                 child: BlocProvider(

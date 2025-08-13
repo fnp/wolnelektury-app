@@ -5,6 +5,11 @@ sealed class SettingsState with _$SettingsState {
   const factory SettingsState({
     AppSetting? settings,
     String? version,
+
+    @Default(false) bool isChangingPassword,
+    bool? isChangingPasswordSuccess,
+    @Default(false) bool isDeletingAccount,
+    bool? isDeletingAccountSuccess,
   }) = _SettingsState;
 }
 

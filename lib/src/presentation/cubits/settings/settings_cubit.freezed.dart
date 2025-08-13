@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SettingsState {
 
- AppSetting? get settings; String? get version;
+ AppSetting? get settings; String? get version; bool get isChangingPassword; bool? get isChangingPasswordSuccess; bool get isDeletingAccount; bool? get isDeletingAccountSuccess;
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $SettingsStateCopyWith<SettingsState> get copyWith => _$SettingsStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version)&&(identical(other.isChangingPassword, isChangingPassword) || other.isChangingPassword == isChangingPassword)&&(identical(other.isChangingPasswordSuccess, isChangingPasswordSuccess) || other.isChangingPasswordSuccess == isChangingPasswordSuccess)&&(identical(other.isDeletingAccount, isDeletingAccount) || other.isDeletingAccount == isDeletingAccount)&&(identical(other.isDeletingAccountSuccess, isDeletingAccountSuccess) || other.isDeletingAccountSuccess == isDeletingAccountSuccess));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version,isChangingPassword,isChangingPasswordSuccess,isDeletingAccount,isDeletingAccountSuccess);
 
 @override
 String toString() {
-  return 'SettingsState(settings: $settings, version: $version)';
+  return 'SettingsState(settings: $settings, version: $version, isChangingPassword: $isChangingPassword, isChangingPasswordSuccess: $isChangingPasswordSuccess, isDeletingAccount: $isDeletingAccount, isDeletingAccountSuccess: $isDeletingAccountSuccess)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $SettingsStateCopyWith<$Res>  {
   factory $SettingsStateCopyWith(SettingsState value, $Res Function(SettingsState) _then) = _$SettingsStateCopyWithImpl;
 @useResult
 $Res call({
- AppSetting? settings, String? version
+ AppSetting? settings, String? version, bool isChangingPassword, bool? isChangingPasswordSuccess, bool isDeletingAccount, bool? isDeletingAccountSuccess
 });
 
 
@@ -63,11 +63,15 @@ class _$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? settings = freezed,Object? version = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? settings = freezed,Object? version = freezed,Object? isChangingPassword = null,Object? isChangingPasswordSuccess = freezed,Object? isDeletingAccount = null,Object? isDeletingAccountSuccess = freezed,}) {
   return _then(_self.copyWith(
 settings: freezed == settings ? _self.settings : settings // ignore: cast_nullable_to_non_nullable
 as AppSetting?,version: freezed == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,isChangingPassword: null == isChangingPassword ? _self.isChangingPassword : isChangingPassword // ignore: cast_nullable_to_non_nullable
+as bool,isChangingPasswordSuccess: freezed == isChangingPasswordSuccess ? _self.isChangingPasswordSuccess : isChangingPasswordSuccess // ignore: cast_nullable_to_non_nullable
+as bool?,isDeletingAccount: null == isDeletingAccount ? _self.isDeletingAccount : isDeletingAccount // ignore: cast_nullable_to_non_nullable
+as bool,isDeletingAccountSuccess: freezed == isDeletingAccountSuccess ? _self.isDeletingAccountSuccess : isDeletingAccountSuccess // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
@@ -78,11 +82,15 @@ as String?,
 
 
 class _SettingsState implements SettingsState {
-  const _SettingsState({this.settings, this.version});
+  const _SettingsState({this.settings, this.version, this.isChangingPassword = false, this.isChangingPasswordSuccess, this.isDeletingAccount = false, this.isDeletingAccountSuccess});
   
 
 @override final  AppSetting? settings;
 @override final  String? version;
+@override@JsonKey() final  bool isChangingPassword;
+@override final  bool? isChangingPasswordSuccess;
+@override@JsonKey() final  bool isDeletingAccount;
+@override final  bool? isDeletingAccountSuccess;
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
@@ -94,16 +102,16 @@ _$SettingsStateCopyWith<_SettingsState> get copyWith => __$SettingsStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version)&&(identical(other.isChangingPassword, isChangingPassword) || other.isChangingPassword == isChangingPassword)&&(identical(other.isChangingPasswordSuccess, isChangingPasswordSuccess) || other.isChangingPasswordSuccess == isChangingPasswordSuccess)&&(identical(other.isDeletingAccount, isDeletingAccount) || other.isDeletingAccount == isDeletingAccount)&&(identical(other.isDeletingAccountSuccess, isDeletingAccountSuccess) || other.isDeletingAccountSuccess == isDeletingAccountSuccess));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version,isChangingPassword,isChangingPasswordSuccess,isDeletingAccount,isDeletingAccountSuccess);
 
 @override
 String toString() {
-  return 'SettingsState(settings: $settings, version: $version)';
+  return 'SettingsState(settings: $settings, version: $version, isChangingPassword: $isChangingPassword, isChangingPasswordSuccess: $isChangingPasswordSuccess, isDeletingAccount: $isDeletingAccount, isDeletingAccountSuccess: $isDeletingAccountSuccess)';
 }
 
 
@@ -114,7 +122,7 @@ abstract mixin class _$SettingsStateCopyWith<$Res> implements $SettingsStateCopy
   factory _$SettingsStateCopyWith(_SettingsState value, $Res Function(_SettingsState) _then) = __$SettingsStateCopyWithImpl;
 @override @useResult
 $Res call({
- AppSetting? settings, String? version
+ AppSetting? settings, String? version, bool isChangingPassword, bool? isChangingPasswordSuccess, bool isDeletingAccount, bool? isDeletingAccountSuccess
 });
 
 
@@ -131,11 +139,15 @@ class __$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? settings = freezed,Object? version = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? settings = freezed,Object? version = freezed,Object? isChangingPassword = null,Object? isChangingPasswordSuccess = freezed,Object? isDeletingAccount = null,Object? isDeletingAccountSuccess = freezed,}) {
   return _then(_SettingsState(
 settings: freezed == settings ? _self.settings : settings // ignore: cast_nullable_to_non_nullable
 as AppSetting?,version: freezed == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,isChangingPassword: null == isChangingPassword ? _self.isChangingPassword : isChangingPassword // ignore: cast_nullable_to_non_nullable
+as bool,isChangingPasswordSuccess: freezed == isChangingPasswordSuccess ? _self.isChangingPasswordSuccess : isChangingPasswordSuccess // ignore: cast_nullable_to_non_nullable
+as bool?,isDeletingAccount: null == isDeletingAccount ? _self.isDeletingAccount : isDeletingAccount // ignore: cast_nullable_to_non_nullable
+as bool,isDeletingAccountSuccess: freezed == isDeletingAccountSuccess ? _self.isDeletingAccountSuccess : isDeletingAccountSuccess // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
