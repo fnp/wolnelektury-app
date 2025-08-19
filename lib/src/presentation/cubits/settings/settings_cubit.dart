@@ -2,15 +2,21 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
+import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/data/auth_repository.dart';
+import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
+import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 part 'settings_cubit.freezed.dart';
 part 'settings_state.dart';
 
 class SettingsCubit extends SafeCubit<SettingsState> {
   final AppStorageSettingsService _settingsStorage;
-  SettingsCubit(this._settingsStorage) : super(const SettingsState()) {
+  final AuthRepository _authRepository;
+  SettingsCubit(this._settingsStorage, this._authRepository)
+    : super(const SettingsState()) {
     _init();
   }
 
@@ -25,26 +31,64 @@ class SettingsCubit extends SafeCubit<SettingsState> {
     emit(state.copyWith(settings: settings));
   }
 
-  Future<void> deleteAccount() async {
+  Future<void> deleteAccount(String password) async {
     emit(
       state.copyWith(isDeletingAccount: true, isDeletingAccountSuccess: null),
     );
-    await Future.delayed(const Duration(seconds: 2));
+    final result = await _authRepository.deleteAccount(password);
+    print(result);
+    result.handle(
+      success: (_, _) {
+        get.get<AuthCubit>().logout();
+        emit(
+          state.copyWith(
+            isDeletingAccount: false,
+            isDeletingAccountSuccess: true,
+          ),
+        );
+      },
+      failure: (f) {
+        emit(
+          state.copyWith(
+            isDeletingAccount: false,
+            isDeletingAccountSuccess: false,
+          ),
+        );
+      },
+    );
     emit(
-      state.copyWith(isDeletingAccount: false, isDeletingAccountSuccess: true),
+      state.copyWith(isDeletingAccount: false, isDeletingAccountSuccess: false),
     );
   }
 
-  Future<void> changePassword(String newPassword) async {
+  Future<void> changePassword({
+    required String newPassword,
+    required String oldPassword,
+  }) async {
     emit(
       state.copyWith(isChangingPassword: true, isChangingPasswordSuccess: null),
     );
-    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
-    emit(
-      state.copyWith(
-        isChangingPassword: false,
-        isChangingPasswordSuccess: true,
-      ),
+    final result = await _authRepository.changePassword(
+      newPassword: newPassword,
+      oldPassword: oldPassword,
+    );
+    result.handle(
+      success: (_, _) {
+        emit(
+          state.copyWith(
+            isChangingPassword: false,
+            isChangingPasswordSuccess: true,
+          ),
+        );
+      },
+      failure: (f) {
+        emit(
+          state.copyWith(
+            isChangingPassword: false,
+            isChangingPasswordSuccess: false,
+          ),
+        );
+      },
     );
   }
 }

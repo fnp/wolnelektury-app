@@ -13,32 +13,57 @@ import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ChangePasswordDialog extends StatefulWidget {
+  static final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
   const ChangePasswordDialog({super.key});
 
   static void show({required BuildContext context}) {
     showDialog(
       context: context,
-      builder: (builderContext) => BlocProvider.value(
+      builder: (_) => BlocProvider.value(
         value: context.read<SettingsCubit>(),
-        child: BlocListener<SettingsCubit, SettingsState>(
-          listenWhen: (p, c) {
-            return p.isChangingPasswordSuccess != c.isChangingPasswordSuccess;
-          },
-          listener: (context, state) {
-            if (state.isChangingPasswordSuccess == true) {
-              Navigator.of(builderContext).pop();
-              CustomSnackbar.success(
-                context,
-                LocaleKeys.settings_change_password_success.tr(),
-              );
-            } else if (state.isChangingPasswordSuccess == false) {
-              CustomSnackbar.error(
-                context,
-                LocaleKeys.settings_change_password_error.tr(),
-              );
-            }
-          },
-          child: const ChangePasswordDialog(),
+        child: ScaffoldMessenger(
+          key: messengerKey,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: BlocListener<SettingsCubit, SettingsState>(
+              listenWhen: (p, c) {
+                return p.isChangingPasswordSuccess !=
+                    c.isChangingPasswordSuccess;
+              },
+              listener: (context, state) {
+                if (state.isChangingPasswordSuccess == true) {
+                  Navigator.of(context).pop();
+                  CustomSnackbar.success(
+                    context,
+                    LocaleKeys.settings_change_password_success.tr(),
+                  );
+                } else if (state.isChangingPasswordSuccess == false) {
+                  CustomSnackbar.error(
+                    context,
+                    messengerKey: messengerKey,
+                    LocaleKeys.settings_change_password_error.tr(),
+                  );
+                }
+              },
+              child: Builder(
+                builder: (context) {
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                      const ChangePasswordDialog(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -50,14 +75,17 @@ class ChangePasswordDialog extends StatefulWidget {
 
 class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   late ThemeData theme;
+  final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
 
+  bool showCurrentPasswordError = false;
   bool showNewPasswordError = false;
   bool showRepeatPasswordError = false;
 
   @override
   void dispose() {
+    _currentPasswordController.dispose();
     _newPasswordController.dispose();
     _repeatPasswordController.dispose();
     super.dispose();
@@ -65,9 +93,11 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
 
   void validate() {
     setState(() {
+      final currentPassword = _currentPasswordController.text.trim();
       final newPassword = _newPasswordController.text.trim();
       final repeatPassword = _repeatPasswordController.text.trim();
 
+      showCurrentPasswordError = currentPassword.isEmpty;
       showNewPasswordError = newPassword.isEmpty || newPassword.length < 5;
       showRepeatPasswordError =
           repeatPassword.isEmpty || repeatPassword != newPassword;
@@ -102,6 +132,34 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             ],
           ),
           const SizedBox(height: Dimensions.spacer, width: double.infinity),
+
+          // Current password
+          SizedBox(
+            height: Dimensions.elementHeight,
+            child: TextField(
+              textInputAction: TextInputAction.next,
+              obscureText: true,
+              style: theme.textTheme.bodyMedium,
+              controller: _currentPasswordController,
+              decoration: InputDecoration(
+                hintText: LocaleKeys.settings_change_password_current.tr(),
+                fillColor: theme.colorScheme.surface,
+              ),
+              onChanged: (value) {
+                if (showCurrentPasswordError) validate();
+              },
+            ),
+          ),
+          AnimatedBoxSize(
+            isChildVisible: showCurrentPasswordError,
+            child: TextFieldValidationError(
+              message: LocaleKeys.settings_change_password_current_validation
+                  .tr(),
+            ),
+          ),
+          const SizedBox(height: Dimensions.smallPadding),
+
+          // New password
           SizedBox(
             height: Dimensions.elementHeight,
             child: TextField(
@@ -164,9 +222,12 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                       style: yellowElevatedButton,
                       onPressed: () {
                         validate();
-                        if (!showNewPasswordError && !showRepeatPasswordError) {
+                        if (!showCurrentPasswordError &&
+                            !showNewPasswordError &&
+                            !showRepeatPasswordError) {
                           context.read<SettingsCubit>().changePassword(
-                            _newPasswordController.text.trim(),
+                            newPassword: _newPasswordController.text.trim(),
+                            oldPassword: _currentPasswordController.text.trim(),
                           );
                         }
                       },

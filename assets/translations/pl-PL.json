@@ -164,19 +164,21 @@
             "button": "Usuń konto",
             "cancel": "Anuluj",
             "success": "Konto zostało usunięte",
-            "error": "Nie udało się usunąć konta, spróbuj ponownie"
+            "error": "Podano nieprawidłowe hasło"
         },
         "change_password": {
             "title": "Zmień hasło",
             "title_alt": "Wprowadź swoje nowe hasło",
             "content": "Wprowadź nowe hasło",
             "button": "Potwierdź",
+            "current": "Aktualne hasło",
+            "current_validation": "Aktualne hasło nie może być puste",
             "new": "Nowe hasło",
-            "new_validation": "Nowe hasło nie może być puste i musi mieć co najmniej 6 znaków",
+            "new_validation": "Nowe hasło musi mieć co najmniej 6 znaków",
             "repeat": "Powtórz nowe hasło",
-            "repeat_validation": "Hasło jest nieprawidłowe",
+            "repeat_validation": "Hasło nie jest identyczne",
             "success": "Hasło zostało zmienione",
-            "error": "Nie udało się zmienić hasła, spróbuj ponownie"
+            "error": "Podano nieprawidłowe hasło"
         },
         "title": "Ustawienia",
         "notifications": "Powiadomienia",

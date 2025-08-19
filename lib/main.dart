@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           lazy: false,
-          create: (context) => SettingsCubit(get.get()),
+          create: (context) => SettingsCubit(get.get(), get.get()),
         ),
         BlocProvider(
           lazy: false,

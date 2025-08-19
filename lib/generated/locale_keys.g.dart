@@ -142,6 +142,8 @@ abstract class  LocaleKeys {
   static const settings_change_password_title_alt = 'settings.change_password.title_alt';
   static const settings_change_password_content = 'settings.change_password.content';
   static const settings_change_password_button = 'settings.change_password.button';
+  static const settings_change_password_current = 'settings.change_password.current';
+  static const settings_change_password_current_validation = 'settings.change_password.current_validation';
   static const settings_change_password_new = 'settings.change_password.new';
   static const settings_change_password_new_validation = 'settings.change_password.new_validation';
   static const settings_change_password_repeat = 'settings.change_password.repeat';

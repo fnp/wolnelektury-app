@@ -20,11 +20,58 @@ abstract class AuthRepository {
   Future<DataState<UserModel>> getUser();
 
   Future<DataState<RegisterAgreementModel>> getRegisterAgreements();
+
+  Future<DataState<void>> changePassword({
+    required String newPassword,
+    required String oldPassword,
+  });
+
+  Future<DataState<void>> deleteAccount(String password);
 }
 
 class AuthRepositoryImplementation extends AuthRepository {
   final ApiService _apiService;
   AuthRepositoryImplementation(this._apiService);
+
+  @override
+  Future<DataState<void>> deleteAccount(String password) async {
+    try {
+      final response = await _apiService.postRequest('/deleteAccount/', {
+        'password': password,
+      });
+
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<void>> changePassword({
+    required String newPassword,
+    required String oldPassword,
+  }) async {
+    try {
+      final response = await _apiService.postRequest('/password/', {
+        'new_password': newPassword,
+        'old_password': oldPassword,
+      });
+
+      print(response);
+
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
 
   @override
   Future<DataState<void>> login({
@@ -49,9 +96,7 @@ class AuthRepositoryImplementation extends AuthRepository {
 
       return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failure(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -74,9 +119,7 @@ class AuthRepositoryImplementation extends AuthRepository {
 
       return const DataState.success(data: null);
     } catch (e) {
-      return const DataState.failure(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -101,9 +144,7 @@ class AuthRepositoryImplementation extends AuthRepository {
 
   @override
   Future<DataState<RegisterAgreementModel>> getRegisterAgreements() async {
-    final response = await _apiService.getRequest(
-      '/register/',
-    );
+    final response = await _apiService.getRequest('/register/');
 
     if (response.error != null) {
       return const DataState.failure(Failure.badResponse());

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
-import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/dialog_wrapper.dart';
@@ -11,45 +10,91 @@ import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class DeleteAccountDialog extends StatelessWidget {
+class DeleteAccountDialog extends StatefulWidget {
+  static final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
   const DeleteAccountDialog({super.key});
 
   static void show({required BuildContext context}) {
     showDialog(
       context: context,
-      builder: (builderContext) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: context.read<SettingsCubit>()),
-          BlocProvider.value(value: context.read<AuthCubit>()),
-        ],
-        child: BlocListener<SettingsCubit, SettingsState>(
-          listenWhen: (p, c) {
-            return p.isDeletingAccountSuccess != c.isDeletingAccountSuccess;
-          },
-          listener: (context, state) {
-            if (state.isDeletingAccountSuccess == true) {
-              Navigator.of(builderContext).pop();
-              CustomSnackbar.success(
-                context,
-                LocaleKeys.settings_delete_account_success.tr(),
-              );
-            } else if (state.isDeletingAccountSuccess == false) {
-              CustomSnackbar.error(
-                context,
-                LocaleKeys.settings_delete_account_error.tr(),
-              );
-            }
-          },
-          child: const DeleteAccountDialog(),
+      builder: (_) => MultiBlocProvider(
+        providers: [BlocProvider.value(value: context.read<SettingsCubit>())],
+        child: ScaffoldMessenger(
+          key: messengerKey,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: BlocListener<SettingsCubit, SettingsState>(
+              listenWhen: (p, c) {
+                return p.isDeletingAccountSuccess != c.isDeletingAccountSuccess;
+              },
+              listener: (context, state) {
+                if (state.isDeletingAccountSuccess == true) {
+                  Navigator.of(context).pop();
+                  CustomSnackbar.success(
+                    context,
+                    LocaleKeys.settings_delete_account_success.tr(),
+                  );
+                } else if (state.isDeletingAccountSuccess == false) {
+                  CustomSnackbar.error(
+                    context,
+                    messengerKey: messengerKey,
+                    LocaleKeys.settings_delete_account_error.tr(),
+                  );
+                }
+              },
+              child: Builder(
+                builder: (context) {
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                      const DeleteAccountDialog(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+  State<DeleteAccountDialog> createState() => _DeleteAccountDialogState();
+}
 
+class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
+  late ThemeData theme;
+  final _currentPasswordController = TextEditingController();
+  bool showCurrentPasswordError = false;
+
+  @override
+  void dispose() {
+    _currentPasswordController.dispose();
+    super.dispose();
+  }
+
+  void validate() {
+    setState(() {
+      showCurrentPasswordError = _currentPasswordController.text.trim().isEmpty;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    theme = Theme.of(context);
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return DialogWrapper(
       title: LocaleKeys.settings_delete_account_title.tr().toUpperCase(),
       icon: Icons.delete_forever,
@@ -64,6 +109,35 @@ class DeleteAccountDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Dimensions.spacer),
+
+          // Current password field
+          SizedBox(
+            height: Dimensions.elementHeight,
+            child: TextField(
+              obscureText: true,
+              controller: _currentPasswordController,
+              style: theme.textTheme.bodyMedium,
+              decoration: InputDecoration(
+                hintText: LocaleKeys.settings_change_password_current.tr(),
+                fillColor: theme.colorScheme.surface,
+              ),
+              onChanged: (value) {
+                if (showCurrentPasswordError) validate();
+              },
+            ),
+          ),
+          AnimatedBoxFade(
+            isChildVisible: showCurrentPasswordError,
+            duration: const Duration(milliseconds: 200),
+            child: Text(
+              LocaleKeys.settings_change_password_current_validation.tr(),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.error,
+              ),
+            ),
+          ),
+          const SizedBox(height: Dimensions.spacer),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             spacing: Dimensions.mediumPadding,
@@ -88,7 +162,12 @@ class DeleteAccountDialog extends StatelessWidget {
                   builder: (context, state) {
                     return ElevatedButton(
                       onPressed: () {
-                        context.read<SettingsCubit>().deleteAccount();
+                        validate();
+                        if (!showCurrentPasswordError) {
+                          context.read<SettingsCubit>().deleteAccount(
+                            _currentPasswordController.text.trim(),
+                          );
+                        }
                       },
                       child: AnimatedBoxFade(
                         isChildVisible: !state.isDeletingAccount,

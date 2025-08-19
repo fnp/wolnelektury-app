@@ -20,100 +20,112 @@ class SettingsPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final switchValue = useState(true);
-    final authCubit = BlocProvider.of<AuthCubit>(context);
-    final isAuthorized = authCubit.state.isAuthenticated;
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(Dimensions.mediumPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PageHeader(title: LocaleKeys.settings_title.tr()),
-          const SizedBox(height: Dimensions.spacer),
-          if (isAuthorized)
-            _SettingsContainer(
-              text: LocaleKeys.settings_notifications.tr(),
-              padding: const EdgeInsets.only(left: Dimensions.veryLargePadding),
-              child: FlutterSwitch(
-                activeColor: CustomColors.green,
-                inactiveColor: CustomColors.red,
-                height: 38,
-                toggleSize: 30,
-                width: 80,
-                padding: 5,
-                value: switchValue.value,
-                onToggle: (v) {
-                  switchValue.value = v;
-                },
-              ),
-            ),
-          _SettingsContainer(
-            text: LocaleKeys.settings_theme.tr(),
-            padding: const EdgeInsets.only(left: Dimensions.veryLargePadding),
-            child: ThemeToggleSwitch(
-              initialMode: BlocProvider.of<SettingsCubit>(context).state.theme,
-            ),
-          ),
-          if (isAuthorized)
-            _SettingsContainer(
-              text: LocaleKeys.settings_change_password_title.tr(),
-              onTap: () {
-                ChangePasswordDialog.show(context: context);
-              },
-            ),
-          _SettingsContainer(text: LocaleKeys.settings_rate.tr()),
-          if (isAuthorized)
-            _SettingsContainer(
-              text: LocaleKeys.settings_delete.tr(),
-              onTap: () {
-                DeleteAccountDialog.show(context: context);
-              },
-            ),
-          if (isAuthorized) ...[
-            const SizedBox(height: Dimensions.mediumPadding),
-            Row(
-              children: [
-                const Spacer(),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<AuthCubit>(context).logout();
-                      Navigator.of(context).pop();
-                    },
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Text(LocaleKeys.settings_logout.tr()),
-                    ),
+    return BlocBuilder<AuthCubit, AuthState>(
+      buildWhen: (p, c) {
+        return p.isAuthenticated != c.isAuthenticated;
+      },
+      builder: (context, state) {
+        final isAuthorized = state.isAuthenticated;
+        return Padding(
+          padding: const EdgeInsets.all(Dimensions.mediumPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PageHeader(title: LocaleKeys.settings_title.tr()),
+              const SizedBox(height: Dimensions.spacer),
+              if (isAuthorized)
+                _SettingsContainer(
+                  text: LocaleKeys.settings_notifications.tr(),
+                  padding: const EdgeInsets.only(
+                    left: Dimensions.veryLargePadding,
                   ),
+                  child: FlutterSwitch(
+                    activeColor: CustomColors.green,
+                    inactiveColor: CustomColors.red,
+                    height: 38,
+                    toggleSize: 30,
+                    width: 80,
+                    padding: 5,
+                    value: switchValue.value,
+                    onToggle: (v) {
+                      switchValue.value = v;
+                    },
+                  ),
+                ),
+              _SettingsContainer(
+                text: LocaleKeys.settings_theme.tr(),
+                padding: const EdgeInsets.only(
+                  left: Dimensions.veryLargePadding,
+                ),
+                child: ThemeToggleSwitch(
+                  initialMode: BlocProvider.of<SettingsCubit>(
+                    context,
+                  ).state.theme,
+                ),
+              ),
+              if (isAuthorized)
+                _SettingsContainer(
+                  text: LocaleKeys.settings_change_password_title.tr(),
+                  onTap: () {
+                    ChangePasswordDialog.show(context: context);
+                  },
+                ),
+              _SettingsContainer(text: LocaleKeys.settings_rate.tr()),
+              if (isAuthorized)
+                _SettingsContainer(
+                  text: LocaleKeys.settings_delete.tr(),
+                  onTap: () {
+                    DeleteAccountDialog.show(context: context);
+                  },
+                ),
+              if (isAuthorized) ...[
+                const SizedBox(height: Dimensions.mediumPadding),
+                Row(
+                  children: [
+                    const Spacer(),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<AuthCubit>(context).logout();
+                          Navigator.of(context).pop();
+                        },
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(LocaleKeys.settings_logout.tr()),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
-          const SizedBox(height: Dimensions.largePadding),
-          const Spacer(),
-          BlocBuilder<SettingsCubit, SettingsState>(
-            buildWhen: (p, c) {
-              return p.version != c.version;
-            },
-            builder: (context, state) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: Dimensions.veryLargePadding,
-                  ),
-                  child: Text(
-                    'v${(state.version ?? '')}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: CustomColors.secondaryBlueColor,
+              const SizedBox(height: Dimensions.largePadding),
+              const Spacer(),
+              BlocBuilder<SettingsCubit, SettingsState>(
+                buildWhen: (p, c) {
+                  return p.version != c.version;
+                },
+                builder: (context, state) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: Dimensions.veryLargePadding,
+                      ),
+                      child: Text(
+                        'v${(state.version ?? '')}',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: CustomColors.secondaryBlueColor,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
