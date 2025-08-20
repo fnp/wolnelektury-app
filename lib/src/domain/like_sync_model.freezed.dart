@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LikeSyncModel {
 
-@JsonKey(name: 'book_slug') String get slug; bool get deleted; bool get favourite; int? get timestamp;
+@JsonKey(name: 'book_slug') String get slug; bool get deleted; bool get favorites; int? get timestamp;
 /// Create a copy of LikeSyncModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $LikeSyncModelCopyWith<LikeSyncModel> get copyWith => _$LikeSyncModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikeSyncModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.deleted, deleted) || other.deleted == deleted)&&(identical(other.favourite, favourite) || other.favourite == favourite)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikeSyncModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.deleted, deleted) || other.deleted == deleted)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,slug,deleted,favourite,timestamp);
+int get hashCode => Object.hash(runtimeType,slug,deleted,favorites,timestamp);
 
 @override
 String toString() {
-  return 'LikeSyncModel(slug: $slug, deleted: $deleted, favourite: $favourite, timestamp: $timestamp)';
+  return 'LikeSyncModel(slug: $slug, deleted: $deleted, favorites: $favorites, timestamp: $timestamp)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $LikeSyncModelCopyWith<$Res>  {
   factory $LikeSyncModelCopyWith(LikeSyncModel value, $Res Function(LikeSyncModel) _then) = _$LikeSyncModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'book_slug') String slug, bool deleted, bool favourite, int? timestamp
+@JsonKey(name: 'book_slug') String slug, bool deleted, bool favorites, int? timestamp
 });
 
 
@@ -66,11 +66,11 @@ class _$LikeSyncModelCopyWithImpl<$Res>
 
 /// Create a copy of LikeSyncModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? slug = null,Object? deleted = null,Object? favourite = null,Object? timestamp = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? slug = null,Object? deleted = null,Object? favorites = null,Object? timestamp = freezed,}) {
   return _then(_self.copyWith(
 slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
-as bool,favourite: null == favourite ? _self.favourite : favourite // ignore: cast_nullable_to_non_nullable
+as bool,favorites: null == favorites ? _self.favorites : favorites // ignore: cast_nullable_to_non_nullable
 as bool,timestamp: freezed == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
@@ -83,12 +83,12 @@ as int?,
 @JsonSerializable()
 
 class _LikeSyncModel implements LikeSyncModel {
-  const _LikeSyncModel({@JsonKey(name: 'book_slug') required this.slug, this.deleted = false, this.favourite = true, this.timestamp});
+  const _LikeSyncModel({@JsonKey(name: 'book_slug') required this.slug, this.deleted = false, this.favorites = true, this.timestamp});
   factory _LikeSyncModel.fromJson(Map<String, dynamic> json) => _$LikeSyncModelFromJson(json);
 
 @override@JsonKey(name: 'book_slug') final  String slug;
 @override@JsonKey() final  bool deleted;
-@override@JsonKey() final  bool favourite;
+@override@JsonKey() final  bool favorites;
 @override final  int? timestamp;
 
 /// Create a copy of LikeSyncModel
@@ -104,16 +104,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LikeSyncModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.deleted, deleted) || other.deleted == deleted)&&(identical(other.favourite, favourite) || other.favourite == favourite)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LikeSyncModel&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.deleted, deleted) || other.deleted == deleted)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,slug,deleted,favourite,timestamp);
+int get hashCode => Object.hash(runtimeType,slug,deleted,favorites,timestamp);
 
 @override
 String toString() {
-  return 'LikeSyncModel(slug: $slug, deleted: $deleted, favourite: $favourite, timestamp: $timestamp)';
+  return 'LikeSyncModel(slug: $slug, deleted: $deleted, favorites: $favorites, timestamp: $timestamp)';
 }
 
 
@@ -124,7 +124,7 @@ abstract mixin class _$LikeSyncModelCopyWith<$Res> implements $LikeSyncModelCopy
   factory _$LikeSyncModelCopyWith(_LikeSyncModel value, $Res Function(_LikeSyncModel) _then) = __$LikeSyncModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'book_slug') String slug, bool deleted, bool favourite, int? timestamp
+@JsonKey(name: 'book_slug') String slug, bool deleted, bool favorites, int? timestamp
 });
 
 
@@ -141,11 +141,11 @@ class __$LikeSyncModelCopyWithImpl<$Res>
 
 /// Create a copy of LikeSyncModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? slug = null,Object? deleted = null,Object? favourite = null,Object? timestamp = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? slug = null,Object? deleted = null,Object? favorites = null,Object? timestamp = freezed,}) {
   return _then(_LikeSyncModel(
 slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
-as bool,favourite: null == favourite ? _self.favourite : favourite // ignore: cast_nullable_to_non_nullable
+as bool,favorites: null == favorites ? _self.favorites : favorites // ignore: cast_nullable_to_non_nullable
 as bool,timestamp: freezed == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as int?,
   ));

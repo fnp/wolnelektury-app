@@ -20,7 +20,11 @@ extension MyLibraryEnumExtension on MyLibraryEnum {
 }
 
 List<MyLibraryEnum> get availableOfflineEnums {
-  return [MyLibraryEnum.audiobooks, MyLibraryEnum.readers];
+  return [
+    MyLibraryEnum.audiobooks,
+    MyLibraryEnum.readers,
+    MyLibraryEnum.bookmarks,
+  ];
 }
 
 List<MyLibraryEnum> get availableOnlineAuthEnums {

@@ -36,9 +36,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
                 ? (authState.isAuthenticated
                       ? availableOnlineAuthEnums
                       : availableOnlineNoAuthEnums)
-                : (authState.isAuthenticated
-                      ? availableOfflineEnums
-                      : availableOnlineNoAuthEnums);
+                : availableOfflineEnums;
 
             return _Body(
               myLibraryEnums: myLibraryEnums,

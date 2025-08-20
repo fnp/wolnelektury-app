@@ -78,6 +78,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
       _delete(
         location: state.bookmarkToDelete!.location,
         href: state.bookmarkToDelete!.href,
+        slug: state.bookmarkToDelete!.slug,
       );
     }
     emit(state.copyWith(bookmarkToDelete: bookmark));
@@ -87,6 +88,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
       _delete(
         location: bookmark.location,
         href: bookmark.href,
+        slug: bookmark.slug,
         shouldHandle: true,
       );
     }
@@ -95,9 +97,10 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   Future<void> _delete({
     required String location,
     required String href,
+    required String slug,
     bool shouldHandle = false,
   }) async {
-    _bookmarksRepository.deleteBookmark(id: location, href: href);
+    _bookmarksRepository.deleteBookmark(id: location, href: href, slug: slug);
     final bookmarks = List<BookmarkModel>.from(state.bookmarks);
     bookmarks.removeWhere((e) => e.location == location);
     emit(state.copyWith(bookmarks: bookmarks));
@@ -141,6 +144,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     final response = await _bookmarksRepository.deleteBookmark(
       id: state.editingBookmark!.location,
       href: state.editingBookmark!.href,
+      slug: state.editingBookmark!.slug,
     );
 
     response.handle(

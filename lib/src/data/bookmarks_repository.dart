@@ -36,6 +36,7 @@ abstract class BookmarksRepository {
   Future<DataState<void>> deleteBookmark({
     required String id,
     required String href,
+    required String slug,
   });
 
   Future<DataState<void>> sendOutBookmarksSync();
@@ -120,9 +121,10 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
   Future<DataState<void>> deleteBookmark({
     required String id,
     required String href,
+    required String slug,
   }) async {
     try {
-      await _bookmarksStorage.deleteBookmark(id);
+      await _bookmarksStorage.deleteBookmark(id, slug);
       if (tryOnline) {
         final dbResult = await _deleteBookmarkFromDb(href);
         if (dbResult.isSuccess) {

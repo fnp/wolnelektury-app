@@ -89,7 +89,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
     try {
       if (targetValue) {
         final response = await _apiService.putRequest(
-          '$_likesEndpoint/$slug/',
+          '$_likesEndpoint$slug/',
           null,
         );
 
@@ -132,7 +132,9 @@ class FavouritesRepositoryImplementation extends LikesRepository
         _sendSyncLikesEndpoint,
         likes.map((e) {
           final model = LikeSyncModel.fromLike(like: e);
-          return model.toJson();
+          return model.copyWith(
+            timestamp: (e.updatedAt.millisecondsSinceEpoch) ~/ 1000,
+          );
         }).toList(),
         contentType: Headers.jsonContentType,
       );

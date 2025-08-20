@@ -6,6 +6,7 @@ import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/empty_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
@@ -39,12 +40,17 @@ class MyLibraryBookmarksSection extends StatelessWidget {
                 builder: (context, state) {
                   if (!state.isLoading && state.bookmarks.isEmpty) {
                     //todo translations
-                    return EmptyWidget(
-                      image: Images.empty,
-                      message: 'Nie dodano jeszcze żadnych zakładek',
-                      buttonText: 'Przeglądaj katalog',
-                      onTap: () {
-                        router.goNamed(cataloguePageConfig.name);
+                    return ConnectivityWrapper(
+                      builder: (context, hasConnection) {
+                        return EmptyWidget(
+                          image: Images.empty,
+                          hasConnection: hasConnection,
+                          message: 'Nie dodano jeszcze żadnych zakładek',
+                          buttonText: 'Przeglądaj katalog',
+                          onTap: () {
+                            router.goNamed(cataloguePageConfig.name);
+                          },
+                        );
                       },
                     );
                   }
@@ -54,6 +60,7 @@ class MyLibraryBookmarksSection extends StatelessWidget {
                           (_) => BookmarkModel.skeletonized(),
                         ).toList()
                       : state.bookmarks;
+
                   return CustomScrollPage(
                     onLoadMore: () {
                       context

@@ -25,7 +25,14 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
         emit(state.copyWith(book: book, isLoading: false));
         onFinished?.call(book);
       },
-      failure: (failure) {
+      failure: (failure) async {
+        //Try to get it from offline storage
+        final offlineBook = await _offlineStorage.readOfflineBook(slug);
+        if (offlineBook != null) {
+          emit(state.copyWith(book: offlineBook.book, isLoading: false));
+          onFinished?.call(offlineBook.book);
+          return;
+        }
         emit(state.copyWith(isLoading: false));
       },
     );

@@ -10,7 +10,7 @@ class AppStorageBookmarksService {
     List<
       ({
         String id,
-        String? slug,
+        String slug,
         String? bookmarkJson,
         DateTime? timestamp,
         bool isDeleted,
@@ -23,10 +23,10 @@ class AppStorageBookmarksService {
     final companions = bookmarks.map((p) {
       return BookmarksCompanion(
         id: Value(p.id),
-        slug: p.slug != null ? Value(p.slug!) : const Value.absent(),
+        slug: Value(p.slug),
         bookmarkJson: p.bookmarkJson != null
             ? Value(p.bookmarkJson!)
-            : const Value.absent(),
+            : const Value(''),
         isDeleted: Value(p.isDeleted),
         updatedAt: Value(p.timestamp ?? DateTime.now()),
       );
@@ -61,11 +61,11 @@ class AppStorageBookmarksService {
     return result.map((e) => e.bookmarkJson).toList();
   }
 
-  Future<bool> deleteBookmark(String id) async {
+  Future<bool> deleteBookmark(String id, String slug) async {
     upsertMultipleBookmarks([
       (
         id: id,
-        slug: null,
+        slug: slug,
         bookmarkJson: null,
         timestamp: DateTime.now(),
         isDeleted: true,

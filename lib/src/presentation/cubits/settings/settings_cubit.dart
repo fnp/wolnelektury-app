@@ -36,7 +36,6 @@ class SettingsCubit extends SafeCubit<SettingsState> {
       state.copyWith(isDeletingAccount: true, isDeletingAccountSuccess: null),
     );
     final result = await _authRepository.deleteAccount(password);
-    print(result);
     result.handle(
       success: (_, _) {
         get.get<AuthCubit>().logout();

@@ -156,6 +156,15 @@ class DashboardListeners extends StatelessWidget {
             }
           },
         ),
+        BlocListener<ConnectivityCubit, ConnectivityState>(
+          listenWhen: (p, c) {
+            return p.isConnected && !c.isConnected;
+          },
+          listener: (context, state) {
+            final authCubit = context.read<AuthCubit>();
+            authCubit.clearOnLostConnection();
+          },
+        ),
       ],
       child: child,
     );

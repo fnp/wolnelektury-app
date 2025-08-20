@@ -16,6 +16,10 @@ class AuthCubit extends SafeCubit<AuthState> {
     _getRegisterAgreements();
   }
 
+  void clearOnLostConnection() {
+    emit(const AuthState());
+  }
+
   Future<void> tryAutoLogin() async {
     final token = await AppSecureStorageService().readAccessToken();
     if (token == null) return;

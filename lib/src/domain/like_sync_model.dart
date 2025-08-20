@@ -9,7 +9,7 @@ sealed class LikeSyncModel with _$LikeSyncModel {
   const factory LikeSyncModel({
     @JsonKey(name: 'book_slug') required String slug,
     @Default(false) bool deleted,
-    @Default(true) bool favourite,
+    @Default(true) bool favorites,
     int? timestamp,
   }) = _LikeSyncModel;
 
@@ -21,7 +21,7 @@ sealed class LikeSyncModel with _$LikeSyncModel {
       slug: like.slug,
       deleted: !like.isLiked,
       timestamp: like.updatedAt.millisecondsSinceEpoch,
-      favourite: true,
+      favorites: true,
     );
   }
 }
