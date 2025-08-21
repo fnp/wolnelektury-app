@@ -158,6 +158,12 @@
         }
     },
     "settings": {
+        "social": {
+            "title": "Społeczność",
+            "ig": "Instagram",
+            "fb": "Facebook",
+            "yt": "YouTube"
+        },
         "delete_account": {
             "title": "Usuń konto",
             "content": "Czy na pewno chcesz usunąć swoje konto? Ta operacja jest nieodwracalna.",

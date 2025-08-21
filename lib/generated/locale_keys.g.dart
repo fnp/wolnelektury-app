@@ -131,6 +131,11 @@ abstract class  LocaleKeys {
   static const book_lists_sheet_delete = 'book_lists.sheet.delete';
   static const book_lists_sheet = 'book_lists.sheet';
   static const book_lists = 'book_lists';
+  static const settings_social_title = 'settings.social.title';
+  static const settings_social_ig = 'settings.social.ig';
+  static const settings_social_fb = 'settings.social.fb';
+  static const settings_social_yt = 'settings.social.yt';
+  static const settings_social = 'settings.social';
   static const settings_delete_account_title = 'settings.delete_account.title';
   static const settings_delete_account_content = 'settings.delete_account.content';
   static const settings_delete_account_button = 'settings.delete_account.button';
