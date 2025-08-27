@@ -23,9 +23,15 @@ abstract class BookmarksRepository {
     required String slug,
   });
 
-  Future<DataState<BookmarkModel>> createBookmark({
+  Future<DataState<BookmarkModel>> createTextBookmark({
     required String slug,
     required String anchor,
+    String? note,
+  });
+
+  Future<DataState<BookmarkModel>> createAudioBookmark({
+    required String slug,
+    required int timestamp,
     String? note,
   });
 
@@ -174,7 +180,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
   }
 
   @override
-  Future<DataState<BookmarkModel>> createBookmark({
+  Future<DataState<BookmarkModel>> createTextBookmark({
     required String slug,
     required String anchor,
     String? note,
@@ -196,7 +202,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
       ]);
 
       if (tryOnline) {
-        final dbResult = await _createBookmarkInDb(
+        final dbResult = await _createTextBookmarkInDb(
           slug: slug,
           anchor: anchor,
           note: note,
@@ -215,7 +221,49 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
     }
   }
 
-  Future<DataState<BookmarkModel>> _createBookmarkInDb({
+  @override
+  Future<DataState<BookmarkModel>> createAudioBookmark({
+    required String slug,
+    required int timestamp,
+    String? note,
+  }) async {
+    try {
+      final bookmark = BookmarkModel.withLocation(
+        slug: slug,
+        audioTimestamp: timestamp,
+        note: note ?? '',
+      );
+      await _bookmarksStorage.upsertMultipleBookmarks([
+        (
+          id: bookmark.location,
+          slug: slug,
+          bookmarkJson: jsonEncode(bookmark.toJson()),
+          timestamp: DateTime.now(),
+          isDeleted: false,
+        ),
+      ]);
+
+      if (tryOnline) {
+        final dbResult = await _createAudioBookmarkInDb(
+          slug: slug,
+          timestamp: timestamp,
+          note: note,
+        );
+        if (dbResult.isSuccess) {
+          await _syncStorage.updateSyncData(
+            sentBookmarksSyncAt: DateTime.now(),
+          );
+        }
+        return dbResult;
+      }
+
+      return DataState.success(data: bookmark);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  Future<DataState<BookmarkModel>> _createTextBookmarkInDb({
     required String slug,
     required String anchor,
     String? note,
@@ -223,6 +271,29 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
     try {
       final response = await _apiService.postRequest(_bookmarksEndpoint, {
         'anchor': anchor,
+        'book': slug,
+        'note': note,
+      });
+
+      if ((response.data ?? []).isNotEmpty) {
+        return DataState.success(
+          data: BookmarkModel.fromJson(response.data!.first),
+        );
+      }
+      return const DataState.failure(Failure.notFound());
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  Future<DataState<BookmarkModel>> _createAudioBookmarkInDb({
+    required String slug,
+    required int timestamp,
+    String? note,
+  }) async {
+    try {
+      final response = await _apiService.postRequest(_bookmarksEndpoint, {
+        'audio_timestamp': timestamp,
         'book': slug,
         'note': note,
       });
@@ -247,6 +318,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
             'note': updatedBookmark.note,
             'book': updatedBookmark.slug,
             'anchor': updatedBookmark.anchor,
+            'audio_timestamp': updatedBookmark.audioTimestamp,
           });
 
       if (response.hasData) {

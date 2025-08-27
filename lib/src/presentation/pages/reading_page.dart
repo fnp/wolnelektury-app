@@ -93,7 +93,7 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<ReadingPageCubit>(context);
-    return ReaderBookmarkListener(
+    return BookmarkListener(
       child: Stack(
         children: [
           Positioned.fill(

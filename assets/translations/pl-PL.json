@@ -188,6 +188,7 @@
         },
         "title": "Ustawienia",
         "notifications": "Powiadomienia",
+        "notifications_error": "Nie udało się zmienić ustawień powiadomień",
         "theme": "Tryb ciemny",
         "set_theme": {
             "off": "off",

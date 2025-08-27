@@ -72,6 +72,7 @@ class BookOverviewWidget extends StatelessWidget {
                         return _ImageWithFilter(
                           book: book,
                           constraints: constraints,
+                          shouldFilter: state.isListCreation,
                         );
                       },
                     ),
@@ -267,7 +268,12 @@ class _AddToListButton extends StatelessWidget {
 class _ImageWithFilter extends StatelessWidget {
   final BookModel book;
   final BoxConstraints constraints;
-  const _ImageWithFilter({required this.book, required this.constraints});
+  final bool shouldFilter;
+  const _ImageWithFilter({
+    required this.book,
+    required this.constraints,
+    required this.shouldFilter,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -295,10 +301,13 @@ class _ImageWithFilter extends StatelessWidget {
     ];
 
     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
-      buildWhen: (p, c) =>
-          p.isBookInEditedList(book.slug) != c.isBookInEditedList(book.slug),
+      buildWhen: (p, c) {
+        return p.isBookInEditedList(book.slug) !=
+            c.isBookInEditedList(book.slug);
+      },
       builder: (context, state) {
-        final shouldFilter = state.isBookInEditedList(book.slug);
+        final effShouldFilter =
+            state.isBookInEditedList(book.slug) && shouldFilter;
 
         final child = CachedNetworkImage(
           imageUrl: book.coverUrl!,
@@ -314,7 +323,7 @@ class _ImageWithFilter extends StatelessWidget {
           ),
         );
 
-        if (shouldFilter) {
+        if (effShouldFilter) {
           // Apply color filter only if the book is in the edited list
           return ColorFiltered(
             colorFilter: ColorFilter.matrix(colorFilterMatrix),

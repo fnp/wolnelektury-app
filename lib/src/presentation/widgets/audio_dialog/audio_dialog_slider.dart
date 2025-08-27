@@ -83,17 +83,10 @@ class AudioDialogSlider extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    formatTime(
-                      state.localPosition ?? state.statePosition,
-                    ),
+                    formatTime(state.localPosition ?? state.statePosition),
                     style: smallTextStyle,
                   ),
-                  Text(
-                    formatTime(
-                      state.wholeDuration,
-                    ),
-                    style: smallTextStyle,
-                  ),
+                  Text(formatTime(state.wholeDuration), style: smallTextStyle),
                 ],
               );
             },
@@ -128,104 +121,104 @@ class _Slider extends StatelessWidget {
         return BlocBuilder<AudioCubit, AudioState>(
           buildWhen: (p, c) =>
               p.statePosition != c.statePosition ||
-              p.localPosition != c.localPosition,
+              p.localPosition != c.localPosition ||
+              p.isPreparingSession != c.isPreparingSession,
           builder: (context, state) {
             return SizedBox(
               height: Dimensions.elementHeight,
-              child: Listener(
-                // -20 because of padding
-                // Padding is required to fit thumb into the stack, which is wider than the slider
-                onPointerMove: (event) {
-                  if ((event.localPosition.dx - 20) < 0) {
-                    audioCubit.updateLocalPosition(0);
-                    return;
-                  }
-                  if ((event.localPosition.dx - 20) > availableWidth) {
-                    audioCubit.updateLocalPosition(state.wholeDuration);
-                    return;
-                  }
-                  audioCubit.updateLocalPosition(
-                    (((event.localPosition.dx - 20) / availableWidth) *
-                            state.wholeDuration)
-                        .floor(),
-                  );
-                },
-                // -20 because of padding
-                // Padding is required to fit thumb into the stack, which is wider than the slider
-                onPointerUp: (event) {
-                  int? optionalSeconds;
+              child: AbsorbPointer(
+                absorbing: state.isPreparingSession,
+                child: Listener(
+                  // -20 because of padding
+                  // Padding is required to fit thumb into the stack, which is wider than the slider
+                  onPointerMove: (event) {
+                    if ((event.localPosition.dx - 20) < 0) {
+                      audioCubit.updateLocalPosition(0);
+                      return;
+                    }
+                    if ((event.localPosition.dx - 20) > availableWidth) {
+                      audioCubit.updateLocalPosition(state.wholeDuration);
+                      return;
+                    }
+                    audioCubit.updateLocalPosition(
+                      (((event.localPosition.dx - 20) / availableWidth) *
+                              state.wholeDuration)
+                          .floor(),
+                    );
+                  },
+                  // -20 because of padding
+                  // Padding is required to fit thumb into the stack, which is wider than the slider
+                  onPointerUp: (event) {
+                    int? optionalSeconds;
 
-                  if (state.localPosition == null) {
-                    optionalSeconds =
-                        (((event.localPosition.dx - 20) / availableWidth) *
-                                state.wholeDuration)
-                            .floor();
-                  }
+                    if (state.localPosition == null) {
+                      optionalSeconds =
+                          (((event.localPosition.dx - 20) / availableWidth) *
+                                  state.wholeDuration)
+                              .floor();
+                    }
 
-                  audioCubit.seekToLocallySelectedPosition(
-                    optionalSeconds: optionalSeconds,
-                  );
-                },
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: Dimensions.veryLargePadding,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          Dimensions.borderRadiusOfCircle,
+                    audioCubit.seekToLocallySelectedPosition(
+                      optionalSeconds: optionalSeconds,
+                    );
+                  },
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: Dimensions.veryLargePadding,
                         ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: Dimensions.elementHeight / 2,
-                              width: availableWidth,
-                              decoration: const BoxDecoration(
-                                color: CustomColors.white,
-                              ),
-                            ),
-                            AnimatedContainer(
-                              duration: const Duration(
-                                milliseconds: 200,
-                              ),
-                              width: determineSliderBarWidth(
-                                context: context,
-                                availableWidth: availableWidth,
-                              ),
-                              child: Container(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.borderRadiusOfCircle,
+                          ),
+                          child: Stack(
+                            children: [
+                              Container(
                                 height: Dimensions.elementHeight / 2,
+                                width: availableWidth,
                                 decoration: const BoxDecoration(
-                                  color: CustomColors.black,
+                                  color: CustomColors.white,
                                 ),
                               ),
-                            ),
-                          ],
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                width: determineSliderBarWidth(
+                                  context: context,
+                                  availableWidth: availableWidth,
+                                ),
+                                child: Container(
+                                  height: Dimensions.elementHeight / 2,
+                                  decoration: const BoxDecoration(
+                                    color: CustomColors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    AnimatedPositioned(
-                      left: min(
-                        determineSliderBarWidth(
-                          context: context,
-                          availableWidth: availableWidth,
+                      AnimatedPositioned(
+                        left: min(
+                          determineSliderBarWidth(
+                            context: context,
+                            availableWidth: availableWidth,
+                          ),
+                          availableWidth + 20,
                         ),
-                        availableWidth + 20,
-                      ),
-                      duration: const Duration(
-                        milliseconds: 200,
-                      ),
-                      child: Container(
-                        height: Dimensions.elementHeight,
-                        width: Dimensions.elementHeight,
-                        decoration: const BoxDecoration(
-                          color: CustomColors.black,
-                          shape: BoxShape.circle,
+                        duration: const Duration(milliseconds: 200),
+                        child: Container(
+                          height: Dimensions.elementHeight,
+                          width: Dimensions.elementHeight,
+                          decoration: const BoxDecoration(
+                            color: CustomColors.black,
+                            shape: BoxShape.circle,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );

@@ -6,6 +6,11 @@ sealed class SettingsState with _$SettingsState {
     AppSetting? settings,
     String? version,
 
+    // Notifications, null means that the value is not fetched yet
+    @Default(false) bool isLoadingNotifications,
+    @Default(false) bool isSettingNotificationError,
+    bool? notificationsEnabled,
+
     @Default(false) bool isChangingPassword,
     bool? isChangingPasswordSuccess,
     @Default(false) bool isDeletingAccount,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
@@ -19,77 +18,75 @@ class MyLibraryReadersSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return OfflineCubit(get.get())..loadOfflineBooks();
-      },
-      child: Builder(
-        builder: (context) {
-          final offlineCubit = BlocProvider.of<OfflineCubit>(context);
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.mediumPadding,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                PageSubtitle(subtitle: MyLibraryEnum.readers.title),
-                Expanded(
-                  // This is needed to refresh offline books data after finishing download
-                  child: BlocListener<DownloadCubit, DownloadState>(
-                    listenWhen: (p, c) {
-                      return p.downloadingBookReaderSlug != null &&
-                          c.downloadingBookReaderSlug == null;
+    return Builder(
+      builder: (context) {
+        final offlineCubit = BlocProvider.of<OfflineCubit>(context);
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.mediumPadding,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              PageSubtitle(subtitle: MyLibraryEnum.readers.title),
+              Expanded(
+                // This is needed to refresh offline books data after finishing download
+                child: BlocListener<DownloadCubit, DownloadState>(
+                  listenWhen: (p, c) {
+                    return p.downloadingBookReaderSlug != null &&
+                        c.downloadingBookReaderSlug == null;
+                  },
+                  listener: (context, state) {
+                    offlineCubit.loadOfflineBooks();
+                  },
+                  child: BlocBuilder<OfflineCubit, OfflineState>(
+                    buildWhen: (p, c) {
+                      return p.isLoading != c.isLoading ||
+                          p.readers.isNotEmpty && c.readers.isEmpty;
                     },
-                    listener: (context, state) {
-                      offlineCubit.loadOfflineBooks();
-                    },
-                    child: BlocBuilder<OfflineCubit, OfflineState>(
-                      buildWhen: (p, c) {
-                        return p.isLoading != c.isLoading ||
-                            p.readers.isNotEmpty && c.readers.isEmpty;
-                      },
-                      builder: (context, state) {
-                        if (!state.isLoading && state.readers.isEmpty) {
-                          //todo translations
-                          return ConnectivityWrapper(
-                            builder: (context, hasConnection) {
-                              return EmptyWidget(
-                                image: Images.empty,
-                                message: 'Nie zapisano jeszcze żadnych książek',
-                                buttonText: 'Przeglądaj katalog',
-                                onTap: () {
-                                  router.goNamed(cataloguePageConfig.name);
-                                },
-                                hasConnection: hasConnection,
-                              );
-                            },
-                          );
-                        }
-                        return CustomScrollPage(
-                          builder: (scrollController) {
-                            return ListView.builder(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              controller: scrollController,
-                              itemBuilder: (context, index) {
-                                return MyLibraryReader(
-                                  offlineBook: state.readers[index],
-                                );
+                    builder: (context, state) {
+                      if (!state.isLoading && state.readers.isEmpty) {
+                        //todo translations
+                        return ConnectivityWrapper(
+                          builder: (context, hasConnection) {
+                            return EmptyWidget(
+                              image: Images.empty,
+                              message: 'Nie zapisano jeszcze żadnych książek',
+                              buttonText: 'Przeglądaj katalog',
+                              onTap: () {
+                                router.goNamed(cataloguePageConfig.name);
                               },
-                              itemCount: state.readers.length,
+                              hasConnection: hasConnection,
                             );
                           },
                         );
-                      },
-                    ),
+                      }
+                      return CustomScrollPage(
+                        onRefresh: () {
+                          return offlineCubit.loadOfflineBooks();
+                        },
+                        builder: (scrollController) {
+                          return ListView.builder(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            controller: scrollController,
+                            itemBuilder: (context, index) {
+                              return MyLibraryReader(
+                                offlineBook: state.readers[index],
+                              );
+                            },
+                            itemCount: state.readers.length,
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

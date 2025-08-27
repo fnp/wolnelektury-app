@@ -19,15 +19,15 @@ class MyLibraryReader extends StatelessWidget {
       buildWhen: (p, c) {
         return p.readers.contains(offlineBook) !=
                 c.readers.contains(offlineBook) ||
-            (p.readerToDelete != offlineBook &&
-                c.readerToDelete == offlineBook) ||
-            (p.readerToDelete == offlineBook &&
-                c.readerToDelete != offlineBook);
+            (p.readerToDelete?.book.slug != offlineBook.book.slug &&
+                c.readerToDelete?.book.slug == offlineBook.book.slug) ||
+            (p.readerToDelete?.book.slug == offlineBook.book.slug &&
+                c.readerToDelete?.book.slug != offlineBook.book.slug);
       },
       builder: (context, state) {
         final exists =
             state.readers.contains(offlineBook) &&
-            state.readerToDelete != offlineBook;
+            state.readerToDelete?.book.slug != offlineBook.book.slug;
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,

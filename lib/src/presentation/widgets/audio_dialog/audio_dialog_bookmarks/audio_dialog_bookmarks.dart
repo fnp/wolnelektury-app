@@ -8,6 +8,7 @@ import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/bookmark_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/create_bookmark_widget.dart';
+import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_bookmark_listener.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
@@ -29,61 +30,79 @@ class _AudioDialogBookmarksState extends State<AudioDialogBookmarks> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<AudioCubit>(context);
+    final audioCubit = BlocProvider.of<AudioCubit>(context);
+    final bookmarksCubit = BlocProvider.of<BookmarksCubit>(context);
     final size = MediaQuery.of(context).size;
-    return BlocBuilder<AudioCubit, AudioState>(
-      buildWhen: (p, c) => p.isBookmarksOpened != c.isBookmarksOpened,
-      builder: (context, state) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: CustomColors.primaryYellowColor,
-            borderRadius: BorderRadius.circular(Dimensions.modalsBorderRadius),
-          ),
-          child: AnimatedBoxFade(
-            duration: const Duration(milliseconds: 500),
-            collapsedChild: const SizedBox.shrink(),
-            isChildVisible: state.isBookmarksOpened,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
-                height: size.height * 0.66,
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    CreateBookmarkWidget(
-                      onTap: () {
-                        setSize(250);
-                      },
-                      onDelete: () {},
-                      onUpdate: (value) {},
-                      onGoBack: () {
-                        cubit.toggleBookmarks(false);
-                      },
-                      autofocus: true,
-                      maxHeight: maxSize,
-                    ),
-                    const SizedBox(height: Dimensions.mediumPadding),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.mediumPadding,
-                        ),
-                        child: Listener(
-                          onPointerDown: (_) {
-                            FocusScope.of(context).unfocus();
-                            setSize(150);
-                          },
-                          child: const _ListOfExistingBookmarks(),
+    return BookmarkListener(
+      scaffoldMessengerKey: AudioDialog.messengerKey,
+      child: BlocBuilder<AudioCubit, AudioState>(
+        buildWhen: (p, c) => p.isBookmarksOpened != c.isBookmarksOpened,
+        builder: (context, state) {
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              color: CustomColors.primaryYellowColor,
+              borderRadius: BorderRadius.circular(
+                Dimensions.modalsBorderRadius,
+              ),
+            ),
+            child: AnimatedBoxFade(
+              duration: const Duration(milliseconds: 500),
+              collapsedChild: const SizedBox.shrink(),
+              isChildVisible: state.isBookmarksOpened,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  height: size.height * 0.66,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      CreateBookmarkWidget(
+                        onTap: () {
+                          setSize(250);
+                        },
+                        onCreate: (note) {
+                          if (state.book == null) return;
+                          final cubit = context.read<AudioCubit>();
+                          final currentPosition = cubit.state.statePosition;
+                          bookmarksCubit.createAudioBookmark(
+                            slug: cubit.state.book!.slug,
+                            timestamp: currentPosition,
+                            note: note,
+                          );
+                        },
+                        onDelete: () {},
+                        onUpdate: (value) {
+                          // bookmarksCubit.updateBookmark(note: value);
+                        },
+                        onGoBack: () {
+                          audioCubit.toggleBookmarks(false);
+                        },
+                        autofocus: true,
+                        maxHeight: maxSize,
+                      ),
+                      const SizedBox(height: Dimensions.mediumPadding),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.mediumPadding,
+                          ),
+                          child: Listener(
+                            onPointerDown: (_) {
+                              FocusScope.of(context).unfocus();
+                              setSize(150);
+                            },
+                            child: const _ListOfExistingBookmarks(),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -99,12 +118,14 @@ class _ListOfExistingBookmarks extends StatelessWidget {
     }
     return BlocBuilder<BookmarksCubit, BookmarksState>(
       buildWhen: (p, c) {
-        return p.isLoading != c.isLoading;
+        return p.isLoading != c.isLoading ||
+            p.isBookmarkSuccess != c.isBookmarkSuccess;
       },
       builder: (context, state) {
         final effectiveBookmarks = state.isLoading
             ? [BookmarkModel.skeletonized()]
             : state.bookmarks;
+
         return Skeletonizer(
           enableSwitchAnimation: true,
           containersColor: CustomColors.grey,
@@ -124,6 +145,18 @@ class _ListOfExistingBookmarks extends StatelessWidget {
                   isLoading: state.isLoading,
                   backgroundColor: CustomColors.grey,
                   messengerKey: AudioDialog.messengerKey,
+                  onListen: (int? timestamp, bool isPlaying) {
+                    final audioCubit = context.read<AudioCubit>();
+                    if (isPlaying) {
+                      audioCubit.seekToLocallySelectedPosition(
+                        optionalSeconds: timestamp,
+                      );
+                    } else {
+                      audioCubit.stop();
+                      audioCubit.play(overridenPosition: timestamp);
+                    }
+                    audioCubit.toggleBookmarks(false);
+                  },
                 ),
               );
             },

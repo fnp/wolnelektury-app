@@ -9,8 +9,9 @@ sealed class BookmarkModel with _$BookmarkModel {
   const factory BookmarkModel({
     required String location,
     @JsonKey(name: 'book') required String slug,
+    @JsonKey(name: 'audio_timestamp') int? audioTimestamp,
+    String? anchor,
     required String note,
-    required String anchor,
     required String href,
 
     // This field is optional and used for syncing purposes.
@@ -33,11 +34,21 @@ sealed class BookmarkModel with _$BookmarkModel {
 
   factory BookmarkModel.withLocation({
     required String slug,
-    required String anchor,
+    String? anchor,
+    int? audioTimestamp,
     String? note,
   }) {
+    assert(
+      (anchor != null) ^ (audioTimestamp != null),
+      'Either anchor or audioTimestamp must be provided, but not both',
+    );
+    final location = anchor != null
+        ? '$slug/$anchor'
+        : '$slug/audio/$audioTimestamp';
+
     return BookmarkModel(
-      location: '$slug/$anchor',
+      location: location,
+      audioTimestamp: audioTimestamp,
       slug: slug,
       note: note ?? '',
       anchor: anchor,

@@ -22,7 +22,11 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     final bookmarks = await _bookmarksRepository.getBookmarks();
     bookmarks.handle(
       success: (data, p) {
-        emit(state.copyWith(bookmarks: data, isLoading: false));
+        final deduplicated = _deduplicateByAudioTimestamp(
+          data,
+          (b) => b.audioTimestamp,
+        );
+        emit(state.copyWith(bookmarks: deduplicated, isLoading: false));
       },
       failure: (error) {
         emit(state.copyWith(isLoading: false));
@@ -61,7 +65,11 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     final bookmarks = await _bookmarksRepository.getBookBookmarks(slug: slug);
     bookmarks.handle(
       success: (data, _) {
-        emit(state.copyWith(isLoading: false, bookmarks: data));
+        final deduplicated = _deduplicateByAudioTimestamp(
+          data,
+          (b) => b.audioTimestamp,
+        );
+        emit(state.copyWith(isLoading: false, bookmarks: deduplicated));
       },
       failure: (error) {
         emit(state.copyWith(isLoading: false));
@@ -171,13 +179,13 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     emit(state.copyWith(editingBookmark: bookmark));
   }
 
-  Future<void> createBookmark({
+  Future<void> createTextBookmark({
     required String slug,
     required String anchor,
     String? note,
   }) async {
     emit(state.copyWith(isBookmarkSuccess: null));
-    final response = await _bookmarksRepository.createBookmark(
+    final response = await _bookmarksRepository.createTextBookmark(
       slug: slug,
       anchor: anchor,
       note: note,
@@ -196,5 +204,48 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
         emit(state.copyWith(isBookmarkSuccess: (Success.create, false)));
       },
     );
+  }
+
+  Future<void> createAudioBookmark({
+    required String slug,
+    required int timestamp,
+    String? note,
+  }) async {
+    emit(state.copyWith(isBookmarkSuccess: null));
+    final response = await _bookmarksRepository.createAudioBookmark(
+      slug: slug,
+      timestamp: timestamp,
+      note: note,
+    );
+    response.handle(
+      success: (data, _) {
+        emit(
+          state.copyWith(
+            isBookmarkSuccess: (Success.create, true),
+            bookmarks: [...state.bookmarks, data],
+          ),
+        );
+      },
+      failure: (_) {
+        emit(state.copyWith(isBookmarkSuccess: (Success.create, false)));
+      },
+    );
+  }
+
+  List<T> _deduplicateByAudioTimestamp<T>(
+    List<T> items,
+    int? Function(T) getTimestamp,
+  ) {
+    final seen = <int>{};
+    final result = <T>[];
+
+    for (final item in items) {
+      final ts = getTimestamp(item);
+      if (ts != null && seen.add(ts)) {
+        result.add(item);
+      }
+    }
+
+    return result;
   }
 }

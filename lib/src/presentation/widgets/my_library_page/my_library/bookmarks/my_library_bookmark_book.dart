@@ -4,7 +4,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
+import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/bookmark_widget.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
@@ -42,11 +44,43 @@ class MyLibraryBookmarkBook extends StatelessWidget {
             enableSwitchAnimation: true,
             enabled: effectiveLoading,
             containersColor: CustomColors.lightGrey,
-            child: BookmarkWidget(
-              bookmark: bookmark,
-              book: effectiveLoading ? skeletonizedBook : state.book!,
-              isLoading: effectiveLoading,
-              backgroundColor: CustomColors.primaryYellowColor,
+            child: BlocProvider(
+              create: (context) => SingleBookCubit(get.get(), get.get()),
+              child: BookmarkWidget(
+                bookmark: bookmark,
+                book: effectiveLoading ? skeletonizedBook : state.book!,
+                isLoading: effectiveLoading,
+                backgroundColor: CustomColors.primaryYellowColor,
+                onListen: (int? timestamp, bool isPlaying) {
+                  final audioCubit = context.read<AudioCubit>();
+                  AudioDialog.show(
+                    context: context,
+                    onClosed: () => audioCubit.dialogShown(false),
+                    slug: bookmark.slug,
+                  );
+                  if (isPlaying &&
+                      audioCubit.state.book?.slug == bookmark.slug) {
+                    audioCubit.seekToLocallySelectedPosition(
+                      optionalSeconds: timestamp,
+                    );
+                  } else {
+                    final singleBookCubit = context.read<SingleBookCubit>();
+                    singleBookCubit.loadBookData(
+                      slug: bookmark.slug,
+                      onFinished: (book) {
+                        audioCubit
+                            .pickBook(
+                              book,
+                              overrideProgressTimestamp: timestamp,
+                            )
+                            .then((_) {
+                              audioCubit.play(overridenPosition: timestamp);
+                            });
+                      },
+                    );
+                  }
+                },
+              ),
             ),
           );
         },

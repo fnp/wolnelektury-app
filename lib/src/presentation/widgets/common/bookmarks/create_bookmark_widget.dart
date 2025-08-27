@@ -147,6 +147,7 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                           }
 
                           widget.onCreate?.call(_controller.text.trim());
+                          _controller.clear();
                         },
                       ),
                     ),

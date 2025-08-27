@@ -27,16 +27,62 @@ abstract class AuthRepository {
   });
 
   Future<DataState<void>> deleteAccount(String password);
+
+  Future<DataState<bool>> getNotificationsSettings();
+  Future<DataState<void>> setNotificationsSettings(bool enabled);
 }
 
 class AuthRepositoryImplementation extends AuthRepository {
   final ApiService _apiService;
+  static const String _settingsEndpoint = '/settings/';
+  static const String _deleteAccountEndpoint = '/deleteAccount/';
+  static const String _changePasswordEndpoint = '/password/';
+  static const String _loginEndpoint = '/login/';
+  static const String _registerEndpoint = '/register/';
+
   AuthRepositoryImplementation(this._apiService);
+
+  @override
+  Future<DataState<void>> setNotificationsSettings(bool enabled) async {
+    try {
+      final response = await _apiService.putRequest(_settingsEndpoint, {
+        'notifications': enabled,
+      });
+
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<bool>> getNotificationsSettings() async {
+    try {
+      final response = await _apiService.getRequest(
+        _settingsEndpoint,
+        useCache: CacheEnum.ignore,
+      );
+
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+
+      return DataState.success(
+        data: response.data?.firstOrNull?['notifications'] ?? false,
+      );
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
 
   @override
   Future<DataState<void>> deleteAccount(String password) async {
     try {
-      final response = await _apiService.postRequest('/deleteAccount/', {
+      final response = await _apiService.postRequest(_deleteAccountEndpoint, {
         'password': password,
       });
 
@@ -56,12 +102,10 @@ class AuthRepositoryImplementation extends AuthRepository {
     required String oldPassword,
   }) async {
     try {
-      final response = await _apiService.postRequest('/password/', {
+      final response = await _apiService.postRequest(_changePasswordEndpoint, {
         'new_password': newPassword,
         'old_password': oldPassword,
       });
-
-      print(response);
 
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
@@ -79,7 +123,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     required String password,
   }) async {
     try {
-      final response = await _apiService.postRequest('/login/', {
+      final response = await _apiService.postRequest(_loginEndpoint, {
         'username': username,
         'password': password,
       });
@@ -107,7 +151,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     List<int> options = const [],
   }) async {
     try {
-      final response = await _apiService.postRequest('/register/', {
+      final response = await _apiService.postRequest(_registerEndpoint, {
         'email': username,
         'password': password,
         'options': options,
@@ -144,7 +188,7 @@ class AuthRepositoryImplementation extends AuthRepository {
 
   @override
   Future<DataState<RegisterAgreementModel>> getRegisterAgreements() async {
-    final response = await _apiService.getRequest('/register/');
+    final response = await _apiService.getRequest(_registerEndpoint);
 
     if (response.error != null) {
       return const DataState.failure(Failure.badResponse());

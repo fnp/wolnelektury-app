@@ -27,10 +27,11 @@ class MyLibraryLikedSection extends StatelessWidget {
             child: BlocBuilder<LikesCubit, LikesState>(
               buildWhen: (p, c) {
                 return p.itemsPerPage != c.itemsPerPage ||
-                    p.favourites.isNotEmpty && c.favourites.isEmpty;
+                    p.favourites.isNotEmpty && c.favourites.isEmpty ||
+                    p.isLoading != c.isLoading;
               },
               builder: (context, state) {
-                if (state.favourites.isEmpty) {
+                if (state.favourites.isEmpty && !state.isLoading) {
                   //todo translations
                   return EmptyWidget(
                     image: Images.empty,
@@ -42,6 +43,9 @@ class MyLibraryLikedSection extends StatelessWidget {
                   );
                 }
                 return CustomScrollPage(
+                  onRefresh: () {
+                    return context.read<LikesCubit>().init();
+                  },
                   onLoadMore: () {
                     context.read<LikesCubit>().increaseItemsPerPage();
                   },

@@ -22,15 +22,15 @@ class MyLibraryAudiobook extends StatelessWidget {
       buildWhen: (p, c) {
         return p.audiobooks.contains(offlineBook) !=
                 c.audiobooks.contains(offlineBook) ||
-            (p.audiobookToDelete != offlineBook &&
-                c.audiobookToDelete == offlineBook) ||
-            (p.audiobookToDelete == offlineBook &&
-                c.audiobookToDelete != offlineBook);
+            (p.audiobookToDelete?.book.slug != offlineBook.book.slug &&
+                c.audiobookToDelete?.book.slug == offlineBook.book.slug) ||
+            (p.audiobookToDelete?.book.slug == offlineBook.book.slug &&
+                c.audiobookToDelete?.book.slug != offlineBook.book.slug);
       },
       builder: (context, state) {
         final exists =
             state.audiobooks.contains(offlineBook) &&
-            state.audiobookToDelete != offlineBook;
+            state.audiobookToDelete?.book.slug != offlineBook.book.slug;
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,

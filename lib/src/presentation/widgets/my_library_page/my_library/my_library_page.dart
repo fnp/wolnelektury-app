@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/offline/offline_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
@@ -156,21 +160,40 @@ class _BodyState extends State<_Body> {
             duration: const Duration(milliseconds: 200),
             curve: Curves.fastOutSlowIn,
             opacity: _opacity,
-            child: PageView(
-              onPageChanged: (value) {
-                setState(() {
-                  currentPageIndex = value;
-                  routerCubit.changeMyLibraryEnum(widget.myLibraryEnums[value]);
-                  _scrollController.scrollToIndex(
-                    value,
-                    preferPosition: AutoScrollPosition.middle,
-                  );
-                });
-              },
-              controller: _pageController,
-              children: widget.myLibraryEnums
-                  .map((myLibraryEnum) => getChildByEnum(myLibraryEnum))
-                  .toList(),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) {
+                    return OfflineCubit(get.get())..loadOfflineBooks();
+                  },
+                ),
+                BlocProvider(
+                  create: (context) {
+                    return BookmarksCubit(get.get())..getMyLibraryBookmarks();
+                  },
+                ),
+                BlocProvider.value(
+                  value: context.read<ListCreatorCubit>()..init(),
+                ),
+              ],
+              child: PageView(
+                onPageChanged: (value) {
+                  setState(() {
+                    currentPageIndex = value;
+                    routerCubit.changeMyLibraryEnum(
+                      widget.myLibraryEnums[value],
+                    );
+                    _scrollController.scrollToIndex(
+                      value,
+                      preferPosition: AutoScrollPosition.middle,
+                    );
+                  });
+                },
+                controller: _pageController,
+                children: widget.myLibraryEnums
+                    .map((myLibraryEnum) => getChildByEnum(myLibraryEnum))
+                    .toList(),
+              ),
             ),
           ),
         ),

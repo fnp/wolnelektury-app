@@ -9,6 +9,7 @@ import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 class CustomScrollPage extends HookWidget {
   final Widget Function(ScrollController scrollController) builder;
   final void Function()? onLoadMore;
+  final Future<void> Function()? onRefresh;
   final ScrollController? controller;
 
   final double loadPoint;
@@ -19,6 +20,7 @@ class CustomScrollPage extends HookWidget {
 
   const CustomScrollPage({
     required this.builder,
+    this.onRefresh,
     this.controller,
     this.onLoadMore,
     this.loadPoint = .1,
@@ -57,7 +59,13 @@ class CustomScrollPage extends HookWidget {
       }
     });
 
-    return builder(controller ?? scrollController);
+    final content = builder(controller ?? scrollController);
+
+    if (onRefresh != null) {
+      return RefreshIndicator.adaptive(onRefresh: onRefresh!, child: content);
+    }
+
+    return content;
   }
 
   void _scrollListener(

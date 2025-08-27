@@ -24,9 +24,9 @@ extension BookmarksStateX on BookmarksState {
     );
   }
 
-  bool bookmarkExists(String slug, String paragraphIndex) {
+  bool bookmarkExists(String slug, String location) {
     return bookmarks.any(
-      (element) => element.anchor == paragraphIndex && element.slug == slug,
+      (element) => element.location == location && element.slug == slug,
     );
   }
 }

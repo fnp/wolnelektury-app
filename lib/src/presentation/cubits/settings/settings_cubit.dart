@@ -20,10 +20,52 @@ class SettingsCubit extends SafeCubit<SettingsState> {
     _init();
   }
 
+  Future<void> _loadNotificationSettings() async {
+    emit(state.copyWith(isLoadingNotifications: true));
+    final enabled = await _authRepository.getNotificationsSettings();
+    enabled.handle(
+      success: (d, __) {
+        emit(
+          state.copyWith(
+            notificationsEnabled: d,
+            isLoadingNotifications: false,
+          ),
+        );
+      },
+      failure: (f) {
+        emit(
+          state.copyWith(
+            notificationsEnabled: false,
+            isLoadingNotifications: false,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> setNotificationsSettings(bool enabled) async {
+    emit(state.copyWith(isSettingNotificationError: false));
+    final bool previousValue = state.notificationsEnabled ?? false;
+    emit(state.copyWith(notificationsEnabled: enabled));
+    final result = await _authRepository.setNotificationsSettings(enabled);
+    result.handle(
+      success: (_, __) {},
+      failure: (f) {
+        emit(
+          state.copyWith(
+            notificationsEnabled: previousValue,
+            isSettingNotificationError: true,
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _init() async {
     final settings = await _settingsStorage.readAppSettings();
     final packageInfo = await PackageInfo.fromPlatform();
     emit(state.copyWith(settings: settings, version: packageInfo.version));
+    _loadNotificationSettings();
   }
 
   Future<void> setTheme(AppTheme theme) async {

@@ -69,14 +69,20 @@ class AudioCubit extends SafeCubit<AudioState> {
   }
 
   // Select book for AudioPlayer
-  Future<void> pickBook(BookModel book, {bool tryOffline = false}) async {
+  Future<void> pickBook(
+    BookModel book, {
+    bool tryOffline = false,
+    int? overrideProgressTimestamp,
+  }) async {
     final isSameAudiobookInitialized = state.book?.slug == book.slug;
     final wasInitializedOnline = state.parts.any((e) => !e.isOffline);
     final wasInitializedOffline = state.parts.any((e) => e.isOffline);
 
     if (isSameAudiobookInitialized) {
       // Book already selected, check if we need to set progress
-      await _getAndSetProgress();
+      await _getAndSetProgress(
+        overrideProgressTimestamp: overrideProgressTimestamp,
+      );
 
       final modeChanged =
           (wasInitializedOffline && !tryOffline) ||
@@ -106,7 +112,7 @@ class AudioCubit extends SafeCubit<AudioState> {
 
         // Prepare playlist if player is not already playing
         if (!_player.playing) {
-          _preparePlaylist();
+          _preparePlaylist(overridenPosition: overrideProgressTimestamp);
         }
       },
       failure: (failure) {
@@ -189,7 +195,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(playToPart: currentlySetToPart));
   }
 
-  Future<void> play() async {
+  Future<void> play({int? overridenPosition}) async {
     // Require audio session to play
     emit(state.copyWith(isPreparingSession: true, isError: false));
     final canPlay = await _audioSession.setActive(true);
@@ -197,7 +203,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     // Couldn't get audio session, return
     if (!canPlay) return;
     // Check if it needs a playlist
-    await _preparePlaylist();
+    await _preparePlaylist(overridenPosition: overridenPosition);
 
     // Audio session granted, playlist ready, play audio
     emit(state.copyWith(isPlaying: true));
@@ -311,7 +317,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     _player.seek(Duration.zero, index: part);
   }
 
-  Future<void> _preparePlaylist() async {
+  Future<void> _preparePlaylist({int? overridenPosition}) async {
     if (state.audiobook == null) {
       return;
     }
@@ -356,23 +362,23 @@ class AudioCubit extends SafeCubit<AudioState> {
 
     // This gets the progress of the audiobook from the repository
     // and sets the position in UI as well as in the player
-    (int, int) foundPosition = await _getAndSetProgress();
+    (int, int) foundPosition = await _getAndSetProgress(
+      overrideProgressTimestamp: overridenPosition,
+    );
     AppLogger.instance.d(
       'AudioCubit',
       'Prepared playling for book ${state.book?.title}',
     );
 
     try {
-      await Future.wait([
-        _audioSession.initializationFuture,
-        _player.setAudioSources(
-          playlist,
-          initialIndex: foundPosition.$2,
-          initialPosition: Duration(seconds: foundPosition.$1),
-        ),
-        _player.setLoopMode(LoopMode.off),
-        _player.setSpeed(AudioPlayerSpeedEnum.x1.value),
-      ]);
+      await _audioSession.initializationFuture;
+      await _player.setAudioSources(
+        playlist,
+        initialIndex: foundPosition.$2,
+        initialPosition: Duration(seconds: foundPosition.$1),
+      );
+      await _player.setLoopMode(LoopMode.off);
+      await _player.setSpeed(AudioPlayerSpeedEnum.x1.value);
     } catch (e) {
       emit(state.copyWith(isError: true));
     }
@@ -493,7 +499,21 @@ class AudioCubit extends SafeCubit<AudioState> {
 
   // This function gets the progress of the audiobook from the repository
   // and sets the position in UI, used in setting player position as well
-  Future<(int, int)> _getAndSetProgress() async {
+  Future<(int, int)> _getAndSetProgress({
+    int? overrideProgressTimestamp,
+  }) async {
+    if (overrideProgressTimestamp != null) {
+      final overridenPosition = _findPositionAndIndex(
+        overrideProgressTimestamp,
+      );
+      emit(
+        state.copyWith(
+          statePosition: overrideProgressTimestamp,
+          currentlyPlayingPart: overridenPosition.$2,
+        ),
+      );
+      return overridenPosition;
+    }
     final existingProgress = await _progressRepository.getProgressByBook(
       slug: state.book!.slug,
     );

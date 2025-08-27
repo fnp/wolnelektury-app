@@ -6,6 +6,7 @@ import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
@@ -20,12 +21,14 @@ class BookmarkWidget extends StatelessWidget {
   final bool isLoading;
   final Color backgroundColor;
   final GlobalKey<ScaffoldMessengerState>? messengerKey;
+  final Function(int? timestamp, bool isPlaying)? onListen;
   const BookmarkWidget({
     super.key,
     required this.bookmark,
     required this.book,
     required this.isLoading,
     required this.backgroundColor,
+    this.onListen,
     this.messengerKey,
   });
 
@@ -35,14 +38,14 @@ class BookmarkWidget extends StatelessWidget {
     final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
     return BlocBuilder<BookmarksCubit, BookmarksState>(
       buildWhen: (p, c) {
-        return p.bookmarkToDelete != c.bookmarkToDelete ||
-            p.bookmarkExists(bookmark.slug, bookmark.anchor) !=
-                c.bookmarkExists(bookmark.slug, bookmark.anchor);
+        return p.bookmarkToDelete?.location != c.bookmarkToDelete?.location ||
+            p.bookmarkExists(bookmark.slug, bookmark.location) !=
+                c.bookmarkExists(bookmark.slug, bookmark.location);
       },
       builder: (context, state) {
         final shouldHide =
-            (state.bookmarkToDelete == bookmark ||
-                !state.bookmarkExists(bookmark.slug, bookmark.anchor)) &&
+            (state.bookmarkToDelete?.location == bookmark.location ||
+                !state.bookmarkExists(bookmark.slug, bookmark.location)) &&
             !isLoading;
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
@@ -189,7 +192,8 @@ class BookmarkWidget extends StatelessWidget {
                                       extra: book,
                                       pathParameters: {
                                         'slug': book.slug,
-                                        'anchor': bookmark.anchor,
+                                        if (bookmark.anchor != null)
+                                          'anchor': bookmark.anchor!,
                                       },
                                     );
                                   },
@@ -200,14 +204,26 @@ class BookmarkWidget extends StatelessWidget {
                                 ),
                               ),
                               Flexible(
-                                child: TextButtonWithIcon(
-                                  onPressed: () {
-                                    //TODO: Implement bookmark listen from functionality
+                                child: BlocBuilder<AudioCubit, AudioState>(
+                                  buildWhen: (p, c) =>
+                                      p.isPlaying != c.isPlaying,
+                                  builder: (context, state) {
+                                    return TextButtonWithIcon(
+                                      onPressed: () {
+                                        print(
+                                          'Calling onListen with ${bookmark.audioTimestamp} and isPlaying=${state.isPlaying}',
+                                        );
+                                        onListen?.call(
+                                          bookmark.audioTimestamp,
+                                          state.isPlaying,
+                                        );
+                                      },
+                                      nonActiveText: LocaleKeys
+                                          .common_icon_button_listen
+                                          .tr(),
+                                      nonActiveIcon: CustomIcons.headphones,
+                                    );
                                   },
-                                  nonActiveText: LocaleKeys
-                                      .common_icon_button_listen
-                                      .tr(),
-                                  nonActiveIcon: CustomIcons.headphones,
                                 ),
                               ),
                               CustomButton(

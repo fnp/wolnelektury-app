@@ -158,6 +158,7 @@ abstract class  LocaleKeys {
   static const settings_change_password = 'settings.change_password';
   static const settings_title = 'settings.title';
   static const settings_notifications = 'settings.notifications';
+  static const settings_notifications_error = 'settings.notifications_error';
   static const settings_theme = 'settings.theme';
   static const settings_set_theme_off = 'settings.set_theme.off';
   static const settings_set_theme_on = 'settings.set_theme.on';

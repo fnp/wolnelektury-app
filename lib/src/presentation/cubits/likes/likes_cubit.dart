@@ -15,13 +15,14 @@ class LikesCubit extends SafeCubit<LikesState> {
   }
 
   Future<void> init() async {
+    emit(state.copyWith(itemsPerPage: 10, isLoading: true));
     final response = await _favouritesRepository.getFavourites();
     response.handle(
       success: (favourites, _) {
-        emit(state.copyWith(favourites: favourites));
+        emit(state.copyWith(favourites: favourites, isLoading: false));
       },
       failure: (failure) {
-        emit(state.copyWith(favourites: []));
+        emit(state.copyWith(favourites: [], isLoading: false));
       },
     );
   }
