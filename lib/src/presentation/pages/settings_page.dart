@@ -166,7 +166,7 @@ class SettingsPage extends StatelessWidget {
                           bottom: Dimensions.veryLargePadding,
                         ),
                         child: Text(
-                          'v//${(state.version ?? '')}',
+                          'v${(state.version ?? '')}',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: CustomColors.secondaryBlueColor,
                           ),
