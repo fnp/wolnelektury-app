@@ -11,6 +11,8 @@ sealed class SettingsState with _$SettingsState {
     @Default(false) bool isSettingNotificationError,
     bool? notificationsEnabled,
 
+    @Default(false) bool notificationsPermissionDenied,
+
     @Default(false) bool isChangingPassword,
     bool? isChangingPasswordSuccess,
     @Default(false) bool isDeletingAccount,

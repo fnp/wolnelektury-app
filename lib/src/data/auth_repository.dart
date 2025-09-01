@@ -67,6 +67,8 @@ class AuthRepositoryImplementation extends AuthRepository {
         useCache: CacheEnum.ignore,
       );
 
+      print(response);
+
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
       }

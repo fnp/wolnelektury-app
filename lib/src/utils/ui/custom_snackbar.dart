@@ -14,6 +14,8 @@ class CustomSnackbar {
     required bool isSuccess,
     required BuildContext context,
     VoidCallback? onRevert,
+    Widget? icon,
+    VoidCallback? onIconTap,
   }) {
     final theme = Theme.of(context);
     return SnackBar(
@@ -32,23 +34,34 @@ class CustomSnackbar {
         ),
         1,
       ),
-      content: SizedBox(
-        height: Dimensions.elementHeight,
+      content: Padding(
+        padding: const EdgeInsets.symmetric(vertical: Dimensions.mediumPadding),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  message,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              child: Text(
+                message,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
+            if (icon != null)
+              Padding(
+                padding: const EdgeInsets.only(left: Dimensions.mediumPadding),
+                child: InkWellWrapper(
+                  borderRadius: BorderRadius.circular(5),
+                  onTap: () {
+                    onIconTap?.call();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.smallPadding),
+                    child: icon,
+                  ),
+                ),
+              ),
             if (onRevert != null)
               InkWellWrapper(
                 borderRadius: BorderRadius.circular(5),
@@ -93,12 +106,19 @@ class CustomSnackbar {
   static void error(
     BuildContext context,
     String message, {
-
+    Widget? icon,
+    VoidCallback? onIconTap,
     GlobalKey<ScaffoldMessengerState>? messengerKey,
   }) {
     (messengerKey ?? scaffoldMessengerKey).currentState!.hideCurrentSnackBar();
     (messengerKey ?? scaffoldMessengerKey).currentState!.showSnackBar(
-      _getDefault(message: message, isSuccess: false, context: context),
+      _getDefault(
+        message: message,
+        isSuccess: false,
+        context: context,
+        icon: icon,
+        onIconTap: onIconTap,
+      ),
     );
   }
 }

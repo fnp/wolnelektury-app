@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
 import 'package:wolnelektury/src/config/getter.dart';
@@ -20,17 +21,35 @@ class SettingsCubit extends SafeCubit<SettingsState> {
     _init();
   }
 
+  Future<bool> requestNotificationPermissions() async {
+    emit(state.copyWith(notificationsPermissionDenied: false));
+    final result = await Permission.notification.request();
+    if (result.isPermanentlyDenied) {
+      emit(state.copyWith(notificationsPermissionDenied: true));
+      await _authRepository.setNotificationsSettings(false);
+      return false;
+    }
+    return result.isGranted;
+  }
+
+  Future<void> openSettings() async {
+    await openAppSettings();
+  }
+
   Future<void> _loadNotificationSettings() async {
     emit(state.copyWith(isLoadingNotifications: true));
     final enabled = await _authRepository.getNotificationsSettings();
     enabled.handle(
-      success: (d, __) {
-        emit(
-          state.copyWith(
-            notificationsEnabled: d,
-            isLoadingNotifications: false,
-          ),
-        );
+      success: (d, __) async {
+        if (d) {
+          final isGranted = await requestNotificationPermissions();
+          emit(
+            state.copyWith(
+              notificationsEnabled: isGranted,
+              isLoadingNotifications: false,
+            ),
+          );
+        }
       },
       failure: (f) {
         emit(
@@ -44,6 +63,13 @@ class SettingsCubit extends SafeCubit<SettingsState> {
   }
 
   Future<void> setNotificationsSettings(bool enabled) async {
+    if (enabled) {
+      final isGranted = await requestNotificationPermissions();
+      if (!isGranted) {
+        await _authRepository.setNotificationsSettings(false);
+        return;
+      }
+    }
     emit(state.copyWith(isSettingNotificationError: false));
     final bool previousValue = state.notificationsEnabled ?? false;
     emit(state.copyWith(notificationsEnabled: enabled));

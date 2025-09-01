@@ -21,18 +21,45 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocListener<SettingsCubit, SettingsState>(
-      listenWhen: (p, c) {
-        return !p.isSettingNotificationError && c.isSettingNotificationError;
-      },
-      listener: (context, state) {
-        if (state.isSettingNotificationError) {
-          CustomSnackbar.error(
-            context,
-            LocaleKeys.settings_notifications_error.tr(),
-          );
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SettingsCubit, SettingsState>(
+          listenWhen: (p, c) {
+            return !p.isSettingNotificationError &&
+                c.isSettingNotificationError;
+          },
+          listener: (context, state) {
+            if (state.isSettingNotificationError) {
+              CustomSnackbar.error(
+                context,
+                LocaleKeys.settings_notifications_error.tr(),
+              );
+            }
+          },
+        ),
+        BlocListener<SettingsCubit, SettingsState>(
+          listenWhen: (p, c) {
+            return !p.notificationsPermissionDenied &&
+                c.notificationsPermissionDenied;
+          },
+          listener: (context, state) {
+            if (state.notificationsPermissionDenied) {
+              CustomSnackbar.error(
+                context,
+                'Permisje do powiadomień zostały zablokowane. Możesz je zmienić w ustawieniach aplikacji.',
+                icon: const Icon(
+                  Icons.settings,
+                  color: CustomColors.white,
+                  size: 18,
+                ),
+                onIconTap: () {
+                  BlocProvider.of<SettingsCubit>(context).openSettings();
+                },
+              );
+            }
+          },
+        ),
+      ],
       child: BlocBuilder<AuthCubit, AuthState>(
         buildWhen: (p, c) {
           return p.isAuthenticated != c.isAuthenticated;
@@ -139,7 +166,7 @@ class SettingsPage extends StatelessWidget {
                           bottom: Dimensions.veryLargePadding,
                         ),
                         child: Text(
-                          'v${(state.version ?? '')}',
+                          'v//${(state.version ?? '')}',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: CustomColors.secondaryBlueColor,
                           ),

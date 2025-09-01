@@ -23,6 +23,11 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await initializeServices(getIt: get);
   await initializeRepositories(getIt: get);
+
+  // Notifications
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // get<NotificationService>().initialize();
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -50,6 +55,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // BlocProvider(
+        //   lazy: false,
+        //   create: (context) {
+        //     return NotificationCubit(get.get<NotificationService>());
+        //   },
+        // ),
         BlocProvider(
           lazy: false,
           create: (context) => get.get<ConnectivityCubit>(),

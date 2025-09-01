@@ -9,11 +9,15 @@ import 'package:wolnelektury/src/application/app_storage/services/app_storage_pr
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_search_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
+import 'package:wolnelektury/src/application/notification_service/notifications_service.dart';
 import 'package:wolnelektury/src/config/dio.dart';
 
 Future<void> initializeServices({required GetIt getIt}) async {
   // Preparation for the initialization of the services
   getIt.registerSingleton<AppStorage>(AppStorage());
+
+  // Notification service
+  getIt.registerLazySingleton<NotificationService>(NotificationService.new);
 
   final AppStorage appStorage = getIt.get<AppStorage>();
   getIt.registerSingleton<AppStorageSyncService>(

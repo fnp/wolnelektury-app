@@ -90,12 +90,14 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> logout() async {
+    //todo DELETE MESSAGING TOKEN
     await AppSecureStorageService().clearTokens();
     emit(state.copyWith(user: null));
   }
 
   Future<void> getAndSetUser() async {
     final userResult = await _authRepository.getUser();
+    // SET MESSAGING TOKEN
 
     userResult.handle(
       success: (data, _) {

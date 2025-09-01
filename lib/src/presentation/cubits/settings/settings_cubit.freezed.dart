@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$SettingsState {
 
  AppSetting? get settings; String? get version;// Notifications, null means that the value is not fetched yet
- bool get isLoadingNotifications; bool get isSettingNotificationError; bool? get notificationsEnabled; bool get isChangingPassword; bool? get isChangingPasswordSuccess; bool get isDeletingAccount; bool? get isDeletingAccountSuccess;
+ bool get isLoadingNotifications; bool get isSettingNotificationError; bool? get notificationsEnabled; bool get notificationsPermissionDenied; bool get isChangingPassword; bool? get isChangingPasswordSuccess; bool get isDeletingAccount; bool? get isDeletingAccountSuccess;
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,16 +27,16 @@ $SettingsStateCopyWith<SettingsState> get copyWith => _$SettingsStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version)&&(identical(other.isLoadingNotifications, isLoadingNotifications) || other.isLoadingNotifications == isLoadingNotifications)&&(identical(other.isSettingNotificationError, isSettingNotificationError) || other.isSettingNotificationError == isSettingNotificationError)&&(identical(other.notificationsEnabled, notificationsEnabled) || other.notificationsEnabled == notificationsEnabled)&&(identical(other.isChangingPassword, isChangingPassword) || other.isChangingPassword == isChangingPassword)&&(identical(other.isChangingPasswordSuccess, isChangingPasswordSuccess) || other.isChangingPasswordSuccess == isChangingPasswordSuccess)&&(identical(other.isDeletingAccount, isDeletingAccount) || other.isDeletingAccount == isDeletingAccount)&&(identical(other.isDeletingAccountSuccess, isDeletingAccountSuccess) || other.isDeletingAccountSuccess == isDeletingAccountSuccess));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version)&&(identical(other.isLoadingNotifications, isLoadingNotifications) || other.isLoadingNotifications == isLoadingNotifications)&&(identical(other.isSettingNotificationError, isSettingNotificationError) || other.isSettingNotificationError == isSettingNotificationError)&&(identical(other.notificationsEnabled, notificationsEnabled) || other.notificationsEnabled == notificationsEnabled)&&(identical(other.notificationsPermissionDenied, notificationsPermissionDenied) || other.notificationsPermissionDenied == notificationsPermissionDenied)&&(identical(other.isChangingPassword, isChangingPassword) || other.isChangingPassword == isChangingPassword)&&(identical(other.isChangingPasswordSuccess, isChangingPasswordSuccess) || other.isChangingPasswordSuccess == isChangingPasswordSuccess)&&(identical(other.isDeletingAccount, isDeletingAccount) || other.isDeletingAccount == isDeletingAccount)&&(identical(other.isDeletingAccountSuccess, isDeletingAccountSuccess) || other.isDeletingAccountSuccess == isDeletingAccountSuccess));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version,isLoadingNotifications,isSettingNotificationError,notificationsEnabled,isChangingPassword,isChangingPasswordSuccess,isDeletingAccount,isDeletingAccountSuccess);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version,isLoadingNotifications,isSettingNotificationError,notificationsEnabled,notificationsPermissionDenied,isChangingPassword,isChangingPasswordSuccess,isDeletingAccount,isDeletingAccountSuccess);
 
 @override
 String toString() {
-  return 'SettingsState(settings: $settings, version: $version, isLoadingNotifications: $isLoadingNotifications, isSettingNotificationError: $isSettingNotificationError, notificationsEnabled: $notificationsEnabled, isChangingPassword: $isChangingPassword, isChangingPasswordSuccess: $isChangingPasswordSuccess, isDeletingAccount: $isDeletingAccount, isDeletingAccountSuccess: $isDeletingAccountSuccess)';
+  return 'SettingsState(settings: $settings, version: $version, isLoadingNotifications: $isLoadingNotifications, isSettingNotificationError: $isSettingNotificationError, notificationsEnabled: $notificationsEnabled, notificationsPermissionDenied: $notificationsPermissionDenied, isChangingPassword: $isChangingPassword, isChangingPasswordSuccess: $isChangingPasswordSuccess, isDeletingAccount: $isDeletingAccount, isDeletingAccountSuccess: $isDeletingAccountSuccess)';
 }
 
 
@@ -47,7 +47,7 @@ abstract mixin class $SettingsStateCopyWith<$Res>  {
   factory $SettingsStateCopyWith(SettingsState value, $Res Function(SettingsState) _then) = _$SettingsStateCopyWithImpl;
 @useResult
 $Res call({
- AppSetting? settings, String? version, bool isLoadingNotifications, bool isSettingNotificationError, bool? notificationsEnabled, bool isChangingPassword, bool? isChangingPasswordSuccess, bool isDeletingAccount, bool? isDeletingAccountSuccess
+ AppSetting? settings, String? version, bool isLoadingNotifications, bool isSettingNotificationError, bool? notificationsEnabled, bool notificationsPermissionDenied, bool isChangingPassword, bool? isChangingPasswordSuccess, bool isDeletingAccount, bool? isDeletingAccountSuccess
 });
 
 
@@ -64,14 +64,15 @@ class _$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? settings = freezed,Object? version = freezed,Object? isLoadingNotifications = null,Object? isSettingNotificationError = null,Object? notificationsEnabled = freezed,Object? isChangingPassword = null,Object? isChangingPasswordSuccess = freezed,Object? isDeletingAccount = null,Object? isDeletingAccountSuccess = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? settings = freezed,Object? version = freezed,Object? isLoadingNotifications = null,Object? isSettingNotificationError = null,Object? notificationsEnabled = freezed,Object? notificationsPermissionDenied = null,Object? isChangingPassword = null,Object? isChangingPasswordSuccess = freezed,Object? isDeletingAccount = null,Object? isDeletingAccountSuccess = freezed,}) {
   return _then(_self.copyWith(
 settings: freezed == settings ? _self.settings : settings // ignore: cast_nullable_to_non_nullable
 as AppSetting?,version: freezed == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
 as String?,isLoadingNotifications: null == isLoadingNotifications ? _self.isLoadingNotifications : isLoadingNotifications // ignore: cast_nullable_to_non_nullable
 as bool,isSettingNotificationError: null == isSettingNotificationError ? _self.isSettingNotificationError : isSettingNotificationError // ignore: cast_nullable_to_non_nullable
 as bool,notificationsEnabled: freezed == notificationsEnabled ? _self.notificationsEnabled : notificationsEnabled // ignore: cast_nullable_to_non_nullable
-as bool?,isChangingPassword: null == isChangingPassword ? _self.isChangingPassword : isChangingPassword // ignore: cast_nullable_to_non_nullable
+as bool?,notificationsPermissionDenied: null == notificationsPermissionDenied ? _self.notificationsPermissionDenied : notificationsPermissionDenied // ignore: cast_nullable_to_non_nullable
+as bool,isChangingPassword: null == isChangingPassword ? _self.isChangingPassword : isChangingPassword // ignore: cast_nullable_to_non_nullable
 as bool,isChangingPasswordSuccess: freezed == isChangingPasswordSuccess ? _self.isChangingPasswordSuccess : isChangingPasswordSuccess // ignore: cast_nullable_to_non_nullable
 as bool?,isDeletingAccount: null == isDeletingAccount ? _self.isDeletingAccount : isDeletingAccount // ignore: cast_nullable_to_non_nullable
 as bool,isDeletingAccountSuccess: freezed == isDeletingAccountSuccess ? _self.isDeletingAccountSuccess : isDeletingAccountSuccess // ignore: cast_nullable_to_non_nullable
@@ -86,7 +87,7 @@ as bool?,
 
 
 class _SettingsState implements SettingsState {
-  const _SettingsState({this.settings, this.version, this.isLoadingNotifications = false, this.isSettingNotificationError = false, this.notificationsEnabled, this.isChangingPassword = false, this.isChangingPasswordSuccess, this.isDeletingAccount = false, this.isDeletingAccountSuccess});
+  const _SettingsState({this.settings, this.version, this.isLoadingNotifications = false, this.isSettingNotificationError = false, this.notificationsEnabled, this.notificationsPermissionDenied = false, this.isChangingPassword = false, this.isChangingPasswordSuccess, this.isDeletingAccount = false, this.isDeletingAccountSuccess});
   
 
 @override final  AppSetting? settings;
@@ -95,6 +96,7 @@ class _SettingsState implements SettingsState {
 @override@JsonKey() final  bool isLoadingNotifications;
 @override@JsonKey() final  bool isSettingNotificationError;
 @override final  bool? notificationsEnabled;
+@override@JsonKey() final  bool notificationsPermissionDenied;
 @override@JsonKey() final  bool isChangingPassword;
 @override final  bool? isChangingPasswordSuccess;
 @override@JsonKey() final  bool isDeletingAccount;
@@ -110,16 +112,16 @@ _$SettingsStateCopyWith<_SettingsState> get copyWith => __$SettingsStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version)&&(identical(other.isLoadingNotifications, isLoadingNotifications) || other.isLoadingNotifications == isLoadingNotifications)&&(identical(other.isSettingNotificationError, isSettingNotificationError) || other.isSettingNotificationError == isSettingNotificationError)&&(identical(other.notificationsEnabled, notificationsEnabled) || other.notificationsEnabled == notificationsEnabled)&&(identical(other.isChangingPassword, isChangingPassword) || other.isChangingPassword == isChangingPassword)&&(identical(other.isChangingPasswordSuccess, isChangingPasswordSuccess) || other.isChangingPasswordSuccess == isChangingPasswordSuccess)&&(identical(other.isDeletingAccount, isDeletingAccount) || other.isDeletingAccount == isDeletingAccount)&&(identical(other.isDeletingAccountSuccess, isDeletingAccountSuccess) || other.isDeletingAccountSuccess == isDeletingAccountSuccess));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&const DeepCollectionEquality().equals(other.settings, settings)&&(identical(other.version, version) || other.version == version)&&(identical(other.isLoadingNotifications, isLoadingNotifications) || other.isLoadingNotifications == isLoadingNotifications)&&(identical(other.isSettingNotificationError, isSettingNotificationError) || other.isSettingNotificationError == isSettingNotificationError)&&(identical(other.notificationsEnabled, notificationsEnabled) || other.notificationsEnabled == notificationsEnabled)&&(identical(other.notificationsPermissionDenied, notificationsPermissionDenied) || other.notificationsPermissionDenied == notificationsPermissionDenied)&&(identical(other.isChangingPassword, isChangingPassword) || other.isChangingPassword == isChangingPassword)&&(identical(other.isChangingPasswordSuccess, isChangingPasswordSuccess) || other.isChangingPasswordSuccess == isChangingPasswordSuccess)&&(identical(other.isDeletingAccount, isDeletingAccount) || other.isDeletingAccount == isDeletingAccount)&&(identical(other.isDeletingAccountSuccess, isDeletingAccountSuccess) || other.isDeletingAccountSuccess == isDeletingAccountSuccess));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version,isLoadingNotifications,isSettingNotificationError,notificationsEnabled,isChangingPassword,isChangingPasswordSuccess,isDeletingAccount,isDeletingAccountSuccess);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(settings),version,isLoadingNotifications,isSettingNotificationError,notificationsEnabled,notificationsPermissionDenied,isChangingPassword,isChangingPasswordSuccess,isDeletingAccount,isDeletingAccountSuccess);
 
 @override
 String toString() {
-  return 'SettingsState(settings: $settings, version: $version, isLoadingNotifications: $isLoadingNotifications, isSettingNotificationError: $isSettingNotificationError, notificationsEnabled: $notificationsEnabled, isChangingPassword: $isChangingPassword, isChangingPasswordSuccess: $isChangingPasswordSuccess, isDeletingAccount: $isDeletingAccount, isDeletingAccountSuccess: $isDeletingAccountSuccess)';
+  return 'SettingsState(settings: $settings, version: $version, isLoadingNotifications: $isLoadingNotifications, isSettingNotificationError: $isSettingNotificationError, notificationsEnabled: $notificationsEnabled, notificationsPermissionDenied: $notificationsPermissionDenied, isChangingPassword: $isChangingPassword, isChangingPasswordSuccess: $isChangingPasswordSuccess, isDeletingAccount: $isDeletingAccount, isDeletingAccountSuccess: $isDeletingAccountSuccess)';
 }
 
 
@@ -130,7 +132,7 @@ abstract mixin class _$SettingsStateCopyWith<$Res> implements $SettingsStateCopy
   factory _$SettingsStateCopyWith(_SettingsState value, $Res Function(_SettingsState) _then) = __$SettingsStateCopyWithImpl;
 @override @useResult
 $Res call({
- AppSetting? settings, String? version, bool isLoadingNotifications, bool isSettingNotificationError, bool? notificationsEnabled, bool isChangingPassword, bool? isChangingPasswordSuccess, bool isDeletingAccount, bool? isDeletingAccountSuccess
+ AppSetting? settings, String? version, bool isLoadingNotifications, bool isSettingNotificationError, bool? notificationsEnabled, bool notificationsPermissionDenied, bool isChangingPassword, bool? isChangingPasswordSuccess, bool isDeletingAccount, bool? isDeletingAccountSuccess
 });
 
 
@@ -147,14 +149,15 @@ class __$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? settings = freezed,Object? version = freezed,Object? isLoadingNotifications = null,Object? isSettingNotificationError = null,Object? notificationsEnabled = freezed,Object? isChangingPassword = null,Object? isChangingPasswordSuccess = freezed,Object? isDeletingAccount = null,Object? isDeletingAccountSuccess = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? settings = freezed,Object? version = freezed,Object? isLoadingNotifications = null,Object? isSettingNotificationError = null,Object? notificationsEnabled = freezed,Object? notificationsPermissionDenied = null,Object? isChangingPassword = null,Object? isChangingPasswordSuccess = freezed,Object? isDeletingAccount = null,Object? isDeletingAccountSuccess = freezed,}) {
   return _then(_SettingsState(
 settings: freezed == settings ? _self.settings : settings // ignore: cast_nullable_to_non_nullable
 as AppSetting?,version: freezed == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
 as String?,isLoadingNotifications: null == isLoadingNotifications ? _self.isLoadingNotifications : isLoadingNotifications // ignore: cast_nullable_to_non_nullable
 as bool,isSettingNotificationError: null == isSettingNotificationError ? _self.isSettingNotificationError : isSettingNotificationError // ignore: cast_nullable_to_non_nullable
 as bool,notificationsEnabled: freezed == notificationsEnabled ? _self.notificationsEnabled : notificationsEnabled // ignore: cast_nullable_to_non_nullable
-as bool?,isChangingPassword: null == isChangingPassword ? _self.isChangingPassword : isChangingPassword // ignore: cast_nullable_to_non_nullable
+as bool?,notificationsPermissionDenied: null == notificationsPermissionDenied ? _self.notificationsPermissionDenied : notificationsPermissionDenied // ignore: cast_nullable_to_non_nullable
+as bool,isChangingPassword: null == isChangingPassword ? _self.isChangingPassword : isChangingPassword // ignore: cast_nullable_to_non_nullable
 as bool,isChangingPasswordSuccess: freezed == isChangingPasswordSuccess ? _self.isChangingPasswordSuccess : isChangingPasswordSuccess // ignore: cast_nullable_to_non_nullable
 as bool?,isDeletingAccount: null == isDeletingAccount ? _self.isDeletingAccount : isDeletingAccount // ignore: cast_nullable_to_non_nullable
 as bool,isDeletingAccountSuccess: freezed == isDeletingAccountSuccess ? _self.isDeletingAccountSuccess : isDeletingAccountSuccess // ignore: cast_nullable_to_non_nullable
