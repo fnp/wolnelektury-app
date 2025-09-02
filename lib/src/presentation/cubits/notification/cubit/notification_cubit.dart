@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/application/notification_service/notification_payload/notification_payload.dart';
 import 'package:wolnelektury/src/application/notification_service/notifications_service.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 
 part 'notification_cubit.freezed.dart';
@@ -35,7 +37,19 @@ class NotificationCubit extends SafeCubit<NotificationState> {
     if (notificationPayload == null) {
       return;
     }
-    //todo tutaj handlować powiadomienia i przekierowywać przy uzyciu routera
+    switch (notificationPayload.type) {
+      case NotificationType.book:
+        if (notificationPayload.itemId != null) {
+          router.goNamed(
+            bookPageConfig.name,
+            pathParameters: {'slug': notificationPayload.itemId!},
+          );
+        }
+        break;
+      case NotificationType.app:
+        // Handle app-level notifications if needed
+        break;
+    }
   }
 
   @override

@@ -1,9 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:wolnelektury/src/application/notification_service/notifications_service.dart';
+import 'package:wolnelektury/src/config/firebase/firebase_options.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/initializers/repository_initializer.dart';
 import 'package:wolnelektury/src/config/initializers/service_initializer.dart';
@@ -12,6 +16,7 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/filtering/filtering_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/notification/cubit/notification_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/synchronizer/synchronizer_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
@@ -24,9 +29,18 @@ void main() async {
   await initializeServices(getIt: get);
   await initializeRepositories(getIt: get);
 
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >()
+      ?.createNotificationChannel(channel);
+
   // Notifications
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // get<NotificationService>().initialize();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  get<NotificationService>().initialize();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -55,12 +69,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // BlocProvider(
-        //   lazy: false,
-        //   create: (context) {
-        //     return NotificationCubit(get.get<NotificationService>());
-        //   },
-        // ),
+        BlocProvider(
+          lazy: false,
+          create: (context) {
+            return NotificationCubit(get.get<NotificationService>());
+          },
+        ),
         BlocProvider(
           lazy: false,
           create: (context) => get.get<ConnectivityCubit>(),

@@ -1,0 +1,21 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "notification-test-b8079",
+                    "appId": "1:581740727073:android:ae78103a8285b219e40c60",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "notification-test-b8079",
+                    "configurations": {
+                        "android": "1:581740727073:android:ae78103a8285b219e40c60"
+                    }
+                }
+            }
+        }
+    }
+}

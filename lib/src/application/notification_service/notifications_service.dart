@@ -3,8 +3,16 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:wolnelektury/src/application/notification_service/notification_payload/notification_payload.dart';
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'wolne_lektury_high_importance_channel',
+  'Wolne Lektury',
+  description: 'Ten kanał pozwala na wyświetlanie powiadomień.',
+  importance: Importance.max,
+);
 
 class NotificationService {
   NotificationService();
@@ -14,8 +22,9 @@ class NotificationService {
   StreamSubscription? _notificationOpenedSubscription;
 
   void initialize() {
+    print('initialize notification service');
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
+    getNotificationToken();
     _notificationOpenedSubscription = FirebaseMessaging.onMessageOpenedApp
         .listen((event) {
           try {
@@ -31,6 +40,7 @@ class NotificationService {
 
   static Future<String?> getNotificationToken() async {
     final id = await FirebaseMessaging.instance.getToken();
+    print(id);
     return id;
   }
 

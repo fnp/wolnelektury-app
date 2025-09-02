@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
@@ -38,7 +39,10 @@ class BookPage extends StatelessWidget {
                 ? BookModel.empty()
                 : state.book;
 
-            return _Content(book: effectiveBook!);
+            return Skeletonizer(
+              enabled: state.isLoading,
+              child: _Content(book: effectiveBook!),
+            );
           },
         ),
       );

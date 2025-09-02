@@ -56,7 +56,11 @@ class DashboardAppBar extends StatelessWidget {
                                     ),
                                     onTap: () {
                                       if (state.isMainPage) return;
-                                      router.pop();
+                                      router.canPop()
+                                          ? router.pop()
+                                          : router.goNamed(
+                                              cataloguePageConfig.name,
+                                            );
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 6),
