@@ -1,5 +1,6 @@
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
+import 'package:wolnelektury/src/application/notification_service/notifications_service.dart';
 import 'package:wolnelektury/src/domain/register_agreement_model.dart';
 import 'package:wolnelektury/src/domain/user_model.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
@@ -30,15 +31,20 @@ abstract class AuthRepository {
 
   Future<DataState<bool>> getNotificationsSettings();
   Future<DataState<void>> setNotificationsSettings(bool enabled);
+
+  Future<DataState<void>> sendDeviceToken();
+  Future<DataState<void>> deleteDeviceToken();
 }
 
 class AuthRepositoryImplementation extends AuthRepository {
   final ApiService _apiService;
+
   static const String _settingsEndpoint = '/settings/';
   static const String _deleteAccountEndpoint = '/deleteAccount/';
   static const String _changePasswordEndpoint = '/password/';
   static const String _loginEndpoint = '/login/';
   static const String _registerEndpoint = '/register/';
+  static const String _tokenEndpoint = '/deviceTokens/';
 
   AuthRepositoryImplementation(this._apiService);
 
@@ -199,6 +205,39 @@ class AuthRepositoryImplementation extends AuthRepository {
     try {
       final agreements = RegisterAgreementModel.fromJson(response.data!.first);
       return DataState.success(data: agreements);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<void>> sendDeviceToken() async {
+    try {
+      final token = await NotificationService.getNotificationToken();
+      final response = await _apiService.postRequest(_tokenEndpoint, {
+        'token': token,
+      });
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<void>> deleteDeviceToken() async {
+    try {
+      final token = await NotificationService.getNotificationToken();
+      final response = await _apiService.postRequest(_tokenEndpoint, {
+        'token': token,
+        'deleted': true,
+      });
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+      return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
     }

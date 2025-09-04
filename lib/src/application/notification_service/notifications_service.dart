@@ -24,7 +24,6 @@ class NotificationService {
   void initialize() {
     print('initialize notification service');
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    getNotificationToken();
     _notificationOpenedSubscription = FirebaseMessaging.onMessageOpenedApp
         .listen((event) {
           try {
