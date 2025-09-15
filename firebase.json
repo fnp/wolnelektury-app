@@ -3,16 +3,25 @@
         "platforms": {
             "android": {
                 "default": {
-                    "projectId": "notification-test-b8079",
-                    "appId": "1:581740727073:android:ae78103a8285b219e40c60",
+                    "projectId": "wolne-lektury-ae928",
+                    "appId": "1:858391861699:android:7ab6c226673184191b0576",
                     "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "ios": {
+                "default": {
+                    "projectId": "wolne-lektury-ae928",
+                    "appId": "1:858391861699:ios:441659e5ca3c1c751b0576",
+                    "uploadDebugSymbols": false,
+                    "fileOutput": "ios/Runner/GoogleService-Info.plist"
                 }
             },
             "dart": {
                 "lib/firebase_options.dart": {
-                    "projectId": "notification-test-b8079",
+                    "projectId": "wolne-lektury-ae928",
                     "configurations": {
-                        "android": "1:581740727073:android:ae78103a8285b219e40c60"
+                        "android": "1:858391861699:android:7ab6c226673184191b0576",
+                        "ios": "1:858391861699:ios:441659e5ca3c1c751b0576"
                     }
                 }
             }

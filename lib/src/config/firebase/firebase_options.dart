@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -53,10 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBV6aP5z2h1-zNqGg9gkhmalXw1sbjTCKQ',
-    appId: '1:581740727073:android:ae78103a8285b219e40c60',
-    messagingSenderId: '581740727073',
-    projectId: 'notification-test-b8079',
-    storageBucket: 'notification-test-b8079.firebasestorage.app',
+    apiKey: 'AIzaSyBu0oyNtGBzJJ_eMfOjhusEZm9fO5kSY1g',
+    appId: '1:858391861699:android:7ab6c226673184191b0576',
+    messagingSenderId: '858391861699',
+    projectId: 'wolne-lektury-ae928',
+    databaseURL: 'https://wolne-lektury-ae928.firebaseio.com',
+    storageBucket: 'wolne-lektury-ae928.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCxkteg4r7dzab-95f4pasgpMM6x42tV_Q',
+    appId: '1:858391861699:ios:441659e5ca3c1c751b0576',
+    messagingSenderId: '858391861699',
+    projectId: 'wolne-lektury-ae928',
+    databaseURL: 'https://wolne-lektury-ae928.firebaseio.com',
+    storageBucket: 'wolne-lektury-ae928.firebasestorage.app',
+    iosBundleId: 'pl.app.wolnelektury',
   );
 }
