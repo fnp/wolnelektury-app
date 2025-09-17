@@ -5,7 +5,9 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/dialog_wrapper.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_validation_error.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -126,16 +128,15 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
               },
             ),
           ),
-          AnimatedBoxFade(
+          AnimatedBoxSize(
             isChildVisible: showCurrentPasswordError,
             duration: const Duration(milliseconds: 200),
-            child: Text(
-              LocaleKeys.settings_change_password_current_validation.tr(),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.error,
-              ),
+            child: TextFieldValidationError(
+              message: LocaleKeys.settings_change_password_current_validation
+                  .tr(),
             ),
           ),
+
           const SizedBox(height: Dimensions.spacer),
 
           Row(

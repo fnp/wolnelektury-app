@@ -10,6 +10,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_lists/book_lists_sheet.dart';
 import 'package:wolnelektury/src/presentation/widgets/catalogue_page/book_overview_widget_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
@@ -171,6 +172,13 @@ class _CreateListButton extends StatelessWidget {
           CustomSnackbar.success(
             context,
             LocaleKeys.common_snackbar_not_logged.tr(),
+            icon: const Icon(Icons.login, size: 20),
+            onIconTap: () {
+              router.pushNamed(
+                myLibraryPageConfig.name,
+                extra: MyLibraryEnum.login,
+              );
+            },
           );
         },
         isActive: false,
@@ -215,6 +223,13 @@ class _HeartButton extends StatelessWidget {
               CustomSnackbar.success(
                 context,
                 LocaleKeys.common_snackbar_not_logged.tr(),
+                icon: const Icon(Icons.login, size: 20),
+                onIconTap: () {
+                  router.pushNamed(
+                    myLibraryPageConfig.name,
+                    extra: MyLibraryEnum.login,
+                  );
+                },
               );
             },
             isActive: false,

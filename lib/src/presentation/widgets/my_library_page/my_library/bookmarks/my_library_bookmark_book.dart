@@ -19,6 +19,33 @@ class MyLibraryBookmarkBook extends StatelessWidget {
     required this.isLoading,
   });
 
+  void onListen(int? timestamp, bool isPlaying, BuildContext context) {
+    if (timestamp == null) {
+      return;
+    }
+    final audioCubit = context.read<AudioCubit>();
+    AudioDialog.show(
+      context: context,
+      onClosed: () => audioCubit.dialogShown(false),
+      slug: bookmark.slug,
+    );
+    if (isPlaying && audioCubit.state.book?.slug == bookmark.slug) {
+      audioCubit.seekToLocallySelectedPosition(optionalSeconds: timestamp);
+    } else {
+      final singleBookCubit = context.read<SingleBookCubit>();
+      singleBookCubit.loadBookData(
+        slug: bookmark.slug,
+        onFinished: (book) {
+          audioCubit.pickBook(book, overrideProgressTimestamp: timestamp).then((
+            _,
+          ) {
+            audioCubit.play(overridenPosition: timestamp);
+          });
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -44,43 +71,14 @@ class MyLibraryBookmarkBook extends StatelessWidget {
             enableSwitchAnimation: true,
             enabled: effectiveLoading,
             containersColor: CustomColors.lightGrey,
-            child: BlocProvider(
-              create: (context) => SingleBookCubit(get.get(), get.get()),
-              child: BookmarkWidget(
-                bookmark: bookmark,
-                book: effectiveLoading ? skeletonizedBook : state.book!,
-                isLoading: effectiveLoading,
-                backgroundColor: CustomColors.primaryYellowColor,
-                onListen: (int? timestamp, bool isPlaying) {
-                  final audioCubit = context.read<AudioCubit>();
-                  AudioDialog.show(
-                    context: context,
-                    onClosed: () => audioCubit.dialogShown(false),
-                    slug: bookmark.slug,
-                  );
-                  if (isPlaying &&
-                      audioCubit.state.book?.slug == bookmark.slug) {
-                    audioCubit.seekToLocallySelectedPosition(
-                      optionalSeconds: timestamp,
-                    );
-                  } else {
-                    final singleBookCubit = context.read<SingleBookCubit>();
-                    singleBookCubit.loadBookData(
-                      slug: bookmark.slug,
-                      onFinished: (book) {
-                        audioCubit
-                            .pickBook(
-                              book,
-                              overrideProgressTimestamp: timestamp,
-                            )
-                            .then((_) {
-                              audioCubit.play(overridenPosition: timestamp);
-                            });
-                      },
-                    );
-                  }
-                },
-              ),
+            child: BookmarkWidget(
+              bookmark: bookmark,
+              book: effectiveLoading ? skeletonizedBook : state.book!,
+              isLoading: effectiveLoading,
+              backgroundColor: CustomColors.primaryYellowColor,
+              onListen: (int? timestamp, bool isPlaying) {
+                onListen(timestamp, isPlaying, context);
+              },
             ),
           );
         },

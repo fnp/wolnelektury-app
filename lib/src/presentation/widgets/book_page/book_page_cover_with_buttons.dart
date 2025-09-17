@@ -13,6 +13,7 @@ import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
+import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_listen_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_read_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
@@ -293,6 +294,13 @@ class _HeartButton extends StatelessWidget {
               CustomSnackbar.success(
                 context,
                 LocaleKeys.common_snackbar_not_logged.tr(),
+                icon: const Icon(Icons.login, size: 20),
+                onIconTap: () {
+                  router.pushNamed(
+                    myLibraryPageConfig.name,
+                    extra: MyLibraryEnum.login,
+                  );
+                },
               );
             },
           ),

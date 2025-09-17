@@ -35,49 +35,81 @@ class ListCreationModeControls extends StatelessWidget {
       },
       buildWhen: (p, c) => p.anyChangesInEditesList != c.anyChangesInEditesList,
       builder: (context, state) {
-        return Row(
-          children: [
-            _Button(
-              color: CustomColors.white,
-              onTap: () => router.pop(),
-              showBackIcon: true,
-              child: Text(
-                LocaleKeys.catalogue_list_creator_back.tr(),
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: CustomColors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            if (state.anyChangesInEditesList)
-              BlocBuilder<ListCreatorCubit, ListCreatorState>(
-                buildWhen: (p, c) =>
-                    p.isSavingEditedList != c.isSavingEditedList,
-                builder: (context, state) {
-                  return _Button(
-                    color: CustomColors.green,
-                    onTap: () {
-                      creatorCubit.saveEditedList();
-                    },
-                    showBackIcon: false,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      switchInCurve: Curves.fastOutSlowIn,
-                      switchOutCurve: Curves.fastOutSlowIn,
-                      child: state.isSavingEditedList
-                          ? const CustomLoader()
-                          : Text(
-                              LocaleKeys.catalogue_list_creator_save.tr(),
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: CustomColors.black,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
+              children: [
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.fastOutSlowIn,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: state.anyChangesInEditesList
+                          ? constraints.maxWidth / 2
+                          : constraints.maxWidth,
                     ),
-                  );
-                },
-              ),
-          ],
+                    child: _Button(
+                      color: CustomColors.white,
+                      onTap: () => router.pop(),
+                      child: Text(
+                        LocaleKeys.catalogue_list_creator_back.tr(),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: CustomColors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.fastOutSlowIn,
+                  child: state.anyChangesInEditesList
+                      ? ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: state.anyChangesInEditesList
+                                ? constraints.maxWidth / 2
+                                : constraints.maxWidth,
+                          ),
+                          child:
+                              BlocBuilder<ListCreatorCubit, ListCreatorState>(
+                                buildWhen: (p, c) =>
+                                    p.isSavingEditedList !=
+                                    c.isSavingEditedList,
+                                builder: (context, state) {
+                                  return _Button(
+                                    color: CustomColors.green,
+                                    onTap: () {
+                                      creatorCubit.saveEditedList();
+                                    },
+                                    child: AnimatedSwitcher(
+                                      duration: const Duration(
+                                        milliseconds: 200,
+                                      ),
+                                      switchInCurve: Curves.fastOutSlowIn,
+                                      switchOutCurve: Curves.fastOutSlowIn,
+                                      child: state.isSavingEditedList
+                                          ? const CustomLoader()
+                                          : Text(
+                                              LocaleKeys
+                                                  .catalogue_list_creator_save
+                                                  .tr(),
+                                              style: theme.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                    color: CustomColors.black,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                            ),
+                                    ),
+                                  );
+                                },
+                              ),
+                        )
+                      : const SizedBox(height: Dimensions.elementHeight),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -88,51 +120,27 @@ class _Button extends StatelessWidget {
   final Color color;
   final Widget child;
   final VoidCallback onTap;
-  final bool showBackIcon;
   const _Button({
     required this.color,
     required this.child,
     required this.onTap,
-    required this.showBackIcon,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
-        ),
-        child: InkWellWrapper(
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
-          onTap: onTap,
-          child: SizedBox(
-            height: Dimensions.elementHeight,
-            child: Stack(
-              children: [
-                if (showBackIcon)
-                  const Positioned(
-                    top: 0,
-                    bottom: 0,
-                    left: Dimensions.largePadding,
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: CustomColors.black,
-                    ),
-                  ),
-                Positioned.fill(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: child,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
+      ),
+      child: InkWellWrapper(
+        borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
+        onTap: onTap,
+        child: SizedBox(
+          height: Dimensions.elementHeight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [FittedBox(fit: BoxFit.scaleDown, child: child)],
           ),
         ),
       ),

@@ -34,8 +34,6 @@ class BookmarkWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
     return BlocBuilder<BookmarksCubit, BookmarksState>(
       buildWhen: (p, c) {
         return p.bookmarkToDelete?.location != c.bookmarkToDelete?.location ||
@@ -52,196 +50,221 @@ class BookmarkWidget extends StatelessWidget {
           curve: Curves.fastOutSlowIn,
           child: shouldHide
               ? const SizedBox(width: double.infinity)
-              : Padding(
-                  padding: const EdgeInsets.only(bottom: Dimensions.spacer),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
-                      ),
-                      color: backgroundColor,
+              : _Body(
+                  book: book,
+                  bookmark: bookmark,
+                  backgroundColor: backgroundColor,
+                  messengerKey: messengerKey,
+                  onListen: onListen,
+                ),
+        );
+      },
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  final BookModel book;
+  final BookmarkModel bookmark;
+  final Color backgroundColor;
+  final GlobalKey<ScaffoldMessengerState>? messengerKey;
+  final Function(int? timestamp, bool isPlaying)? onListen;
+  const _Body({
+    required this.book,
+    required this.bookmark,
+    required this.backgroundColor,
+    this.messengerKey,
+    this.onListen,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Dimensions.spacer),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(30),
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          ),
+          color: backgroundColor,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(Dimensions.mediumPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            book.title,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Flexible(
+                          child: Text(
+                            book.authors.map((e) => e.name).join(', '),
+                            style: theme.textTheme.bodySmall,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(Dimensions.mediumPadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        book.title,
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: Text(
-                                        book.authors
-                                            .map((e) => e.name)
-                                            .join(', '),
-                                        style: theme.textTheme.bodySmall,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                spacing: Dimensions.smallPadding,
-                                children: [
-                                  const Icon(CustomIcons.bookmark),
-                                  CustomButton(
-                                    onPressed: () {
-                                      bookmarkCubit.deleteBookmark(
-                                        bookmark: bookmark,
-                                      );
-                                      CustomSnackbar.success(
-                                        context,
-                                        LocaleKeys.audio_dialog_delete_paragraph
-                                            .tr(),
-                                        onRevert: () {
-                                          bookmarkCubit.undoDeletion();
-                                        },
-                                        messengerKey: messengerKey,
-                                      );
-                                    },
-                                    icon: CustomIcons.delete_forever,
-                                    backgroundColor: CustomColors.red,
-                                    iconColor: CustomColors.white,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: Dimensions.mediumPadding),
-                          SizedBox(
-                            width: double.infinity,
-                            child: DecoratedBox(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  left: BorderSide(color: CustomColors.black),
-                                  right: BorderSide(color: CustomColors.black),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: Dimensions.mediumPadding,
-                                  horizontal: Dimensions.veryLargePadding,
-                                ),
-                                child: Text(
-                                  LocaleKeys.audio_dialog_paragraph.tr(
-                                    namedArgs: {
-                                      'paragraph': (bookmark.anchor).toString(),
-                                    },
-                                  ),
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: DecoratedBox(
-                              decoration: const BoxDecoration(
-                                color: CustomColors.lightGrey,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: Dimensions.mediumPadding,
-                                  bottom: Dimensions.mediumPadding,
-                                  right: Dimensions.mediumPadding,
-                                  left: Dimensions.veryLargePadding,
-                                ),
-                                child: _Note(note: bookmark.note),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: Dimensions.mediumPadding),
-                          Row(
-                            spacing: Dimensions.mediumPadding,
-                            children: [
-                              Flexible(
-                                child: TextButtonWithIcon(
-                                  onPressed: () {
-                                    if (messengerKey != null) {
-                                      Navigator.of(context).pop();
-                                    }
-                                    router.pushNamed(
-                                      readingPageConfigWithAnchor.name,
-                                      extra: book,
-                                      pathParameters: {
-                                        'slug': book.slug,
-                                        if (bookmark.anchor != null)
-                                          'anchor': bookmark.anchor!,
-                                      },
-                                    );
-                                  },
-                                  nonActiveText: LocaleKeys
-                                      .common_icon_button_read
-                                      .tr(),
-                                  nonActiveIcon: CustomIcons.book_5,
-                                ),
-                              ),
-                              Flexible(
-                                child: BlocBuilder<AudioCubit, AudioState>(
-                                  buildWhen: (p, c) =>
-                                      p.isPlaying != c.isPlaying,
-                                  builder: (context, state) {
-                                    return TextButtonWithIcon(
-                                      onPressed: () {
-                                        print(
-                                          'Calling onListen with ${bookmark.audioTimestamp} and isPlaying=${state.isPlaying}',
-                                        );
-                                        onListen?.call(
-                                          bookmark.audioTimestamp,
-                                          state.isPlaying,
-                                        );
-                                      },
-                                      nonActiveText: LocaleKeys
-                                          .common_icon_button_listen
-                                          .tr(),
-                                      nonActiveIcon: CustomIcons.headphones,
-                                    );
-                                  },
-                                ),
-                              ),
-                              CustomButton(
-                                onPressed: () {
-                                  //TODO: Implement bookmark share functionality
-                                },
-                                icon: CustomIcons.ios_share,
-                                iconColor: CustomColors.white,
-                              ),
-                            ],
-                          ),
-                        ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: Dimensions.smallPadding,
+                    children: [
+                      const Icon(CustomIcons.bookmark),
+                      CustomButton(
+                        onPressed: () {
+                          bookmarkCubit.deleteBookmark(bookmark: bookmark);
+                          CustomSnackbar.success(
+                            context,
+                            LocaleKeys.audio_dialog_delete_paragraph.tr(),
+                            onRevert: () {
+                              bookmarkCubit.undoDeletion();
+                            },
+                            messengerKey: messengerKey,
+                          );
+                        },
+                        icon: CustomIcons.delete_forever,
+                        backgroundColor: CustomColors.red,
+                        iconColor: CustomColors.white,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: Dimensions.mediumPadding),
+              SizedBox(
+                width: double.infinity,
+                child: DecoratedBox(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      left: BorderSide(color: CustomColors.black),
+                      right: BorderSide(color: CustomColors.black),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Dimensions.mediumPadding,
+                      horizontal: Dimensions.veryLargePadding,
+                    ),
+                    child: Text(
+                      LocaleKeys.audio_dialog_paragraph.tr(
+                        namedArgs: {'paragraph': (bookmark.anchor).toString()},
+                      ),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-        );
-      },
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: DecoratedBox(
+                  decoration: const BoxDecoration(
+                    color: CustomColors.lightGrey,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: Dimensions.mediumPadding,
+                      bottom: Dimensions.mediumPadding,
+                      right: Dimensions.mediumPadding,
+                      left: Dimensions.veryLargePadding,
+                    ),
+                    child: _Note(note: bookmark.note),
+                  ),
+                ),
+              ),
+              const SizedBox(height: Dimensions.mediumPadding),
+              Row(
+                spacing: Dimensions.mediumPadding,
+                children: [
+                  Flexible(
+                    child: Opacity(
+                      opacity: bookmark.anchor != null ? 1.0 : 0.5,
+                      child: IgnorePointer(
+                        ignoring: bookmark.anchor == null,
+                        child: TextButtonWithIcon(
+                          onPressed: () {
+                            if (messengerKey != null) {
+                              Navigator.of(context).pop();
+                            }
+                            router.pushNamed(
+                              readingPageConfigWithAnchor.name,
+                              extra: book,
+                              pathParameters: {
+                                'slug': book.slug,
+                                if (bookmark.anchor != null)
+                                  'anchor': bookmark.anchor!,
+                              },
+                            );
+                          },
+                          nonActiveText: LocaleKeys.common_icon_button_read
+                              .tr(),
+                          nonActiveIcon: CustomIcons.book_5,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Opacity(
+                      opacity: bookmark.audioTimestamp != null ? 1.0 : 0.5,
+                      child: IgnorePointer(
+                        ignoring: bookmark.audioTimestamp == null,
+                        child: BlocBuilder<AudioCubit, AudioState>(
+                          buildWhen: (p, c) => p.isPlaying != c.isPlaying,
+                          builder: (context, state) {
+                            return TextButtonWithIcon(
+                              onPressed: () {
+                                onListen?.call(
+                                  bookmark.audioTimestamp,
+                                  state.isPlaying,
+                                );
+                              },
+                              nonActiveText: LocaleKeys
+                                  .common_icon_button_listen
+                                  .tr(),
+                              nonActiveIcon: CustomIcons.headphones,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  CustomButton(
+                    onPressed: () {
+                      //TODO: Implement bookmark share functionality
+                    },
+                    icon: CustomIcons.ios_share,
+                    iconColor: CustomColors.white,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

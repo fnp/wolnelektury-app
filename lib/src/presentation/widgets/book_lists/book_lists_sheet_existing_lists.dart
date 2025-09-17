@@ -9,6 +9,7 @@ import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class BookListsSheetExistingLists extends StatelessWidget {
   final String currentlyWorkingOnBookSlug;
@@ -108,37 +109,49 @@ class _Element extends StatelessWidget {
               ),
               color: isBookInList ? CustomColors.grey : CustomColors.white,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: Dimensions.veryLargePadding,
-                  ),
-                  child: Text(
-                    listName,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.black,
+            child: InkWellWrapper(
+              borderRadius: BorderRadius.circular(
+                Dimensions.borderRadiusOfCircle,
+              ),
+              onTap: () {
+                if (isBookInList) {
+                  onRemove();
+                } else {
+                  onAdd();
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: Dimensions.veryLargePadding,
+                    ),
+                    child: Text(
+                      listName,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.black,
+                      ),
                     ),
                   ),
-                ),
-                CustomButton(
-                  backgroundColor: isBookInList
-                      ? CustomColors.grey
-                      : CustomColors.white,
-                  icon: isBookInList
-                      ? CustomIcons.delete_forever
-                      : CustomIcons.add,
-                  onPressed: () {
-                    if (isBookInList) {
-                      onRemove();
-                    } else {
-                      onAdd();
-                    }
-                  },
-                ),
-              ],
+                  CustomButton(
+                    backgroundColor: isBookInList
+                        ? CustomColors.grey
+                        : CustomColors.white,
+                    icon: isBookInList
+                        ? CustomIcons.delete_forever
+                        : CustomIcons.add,
+                    onPressed: () {
+                      if (isBookInList) {
+                        onRemove();
+                      } else {
+                        onAdd();
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

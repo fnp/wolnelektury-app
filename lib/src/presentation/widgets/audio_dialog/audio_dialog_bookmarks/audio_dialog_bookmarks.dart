@@ -12,21 +12,8 @@ import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class AudioDialogBookmarks extends StatefulWidget {
+class AudioDialogBookmarks extends StatelessWidget {
   const AudioDialogBookmarks({super.key});
-
-  @override
-  State<AudioDialogBookmarks> createState() => _AudioDialogBookmarksState();
-}
-
-class _AudioDialogBookmarksState extends State<AudioDialogBookmarks> {
-  double maxSize = 250;
-
-  void setSize(double newSize) {
-    setState(() {
-      maxSize = newSize;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +44,6 @@ class _AudioDialogBookmarksState extends State<AudioDialogBookmarks> {
                   child: Column(
                     children: [
                       CreateBookmarkWidget(
-                        onTap: () {
-                          setSize(250);
-                        },
                         onCreate: (note) {
                           if (state.book == null) return;
                           final cubit = context.read<AudioCubit>();
@@ -71,28 +55,20 @@ class _AudioDialogBookmarksState extends State<AudioDialogBookmarks> {
                           );
                         },
                         onDelete: () {},
-                        onUpdate: (value) {
-                          // bookmarksCubit.updateBookmark(note: value);
-                        },
+                        onUpdate: (_) {},
                         onGoBack: () {
                           audioCubit.toggleBookmarks(false);
                         },
                         autofocus: true,
-                        maxHeight: maxSize,
+                        maxHeight: 180,
                       ),
                       const SizedBox(height: Dimensions.mediumPadding),
-                      Expanded(
+                      const Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: Dimensions.mediumPadding,
                           ),
-                          child: Listener(
-                            onPointerDown: (_) {
-                              FocusScope.of(context).unfocus();
-                              setSize(150);
-                            },
-                            child: const _ListOfExistingBookmarks(),
-                          ),
+                          child: _ListOfExistingBookmarks(),
                         ),
                       ),
                     ],

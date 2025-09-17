@@ -89,6 +89,8 @@ class CustomSnackbar {
   static void success(
     BuildContext context,
     String message, {
+    Widget? icon,
+    VoidCallback? onIconTap,
     VoidCallback? onRevert,
     GlobalKey<ScaffoldMessengerState>? messengerKey,
   }) {
@@ -99,6 +101,8 @@ class CustomSnackbar {
         isSuccess: true,
         context: context,
         onRevert: onRevert,
+        icon: icon,
+        onIconTap: onIconTap,
       ),
     );
   }

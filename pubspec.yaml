@@ -28,6 +28,7 @@ dependencies:
 
   # External libs
   audio_session: 0.2.2
+  app_links: 6.4.0
   bloc: ^9.0.0
   cached_network_image: 3.4.1
   collection: ^1.19.1

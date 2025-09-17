@@ -11,7 +11,6 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 class CreateBookmarkWidget extends StatefulWidget {
   final BookmarkModel? bookmark;
   final VoidCallback onDelete;
-  final VoidCallback? onTap;
   final Function(String) onUpdate;
   final Function(String note)? onCreate;
   final VoidCallback onGoBack;
@@ -22,7 +21,6 @@ class CreateBookmarkWidget extends StatefulWidget {
     required this.onDelete,
     required this.onUpdate,
     required this.onGoBack,
-    this.onTap,
     this.autofocus = false,
     this.onCreate,
     this.bookmark,
@@ -108,7 +106,6 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                     AnimatedSize(
                       duration: const Duration(milliseconds: 300),
                       child: TextField(
-                        onTap: () => widget.onTap?.call(),
                         textInputAction: TextInputAction.done,
                         autofocus: widget.autofocus,
                         controller: _controller,
@@ -118,8 +115,8 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                             right:
                                 Dimensions.elementHeight +
                                 ((inputPadding?.horizontal ?? 0) / 2),
-                            top: (inputPadding?.vertical ?? 0) / 2,
-                            bottom: (inputPadding?.vertical ?? 0) / 2,
+                            top: Dimensions.mediumPadding,
+                            bottom: Dimensions.mediumPadding,
                           ),
                         ),
                         maxLines: widget.lines,

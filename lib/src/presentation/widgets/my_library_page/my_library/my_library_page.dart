@@ -19,7 +19,8 @@ import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class MyLibraryPage extends StatefulWidget {
-  const MyLibraryPage({super.key});
+  final MyLibraryEnum? openOnEnum;
+  const MyLibraryPage({super.key, this.openOnEnum});
 
   @override
   State<MyLibraryPage> createState() => _MyLibraryPageState();
@@ -44,6 +45,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
 
             return _Body(
               myLibraryEnums: myLibraryEnums,
+              openOnEnum: widget.openOnEnum,
               hasConnection: hasConnection,
               isAuth: authState.isAuthenticated,
             );
@@ -56,12 +58,14 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
 
 class _Body extends StatefulWidget {
   final List<MyLibraryEnum> myLibraryEnums;
+  final MyLibraryEnum? openOnEnum;
   final bool hasConnection;
   final bool isAuth;
   const _Body({
     required this.myLibraryEnums,
     required this.hasConnection,
     required this.isAuth,
+    this.openOnEnum,
   });
 
   @override
@@ -84,7 +88,9 @@ class _BodyState extends State<_Body> {
   void initState() {
     final routerCubit = context.read<RouterCubit>();
     final lastEnteredMyLibraryEnum = routerCubit.state.lastEnteredMyLibraryEnum;
-    currentPageIndex = widget.myLibraryEnums.indexOf(lastEnteredMyLibraryEnum);
+    currentPageIndex = widget.myLibraryEnums.indexOf(
+      widget.openOnEnum ?? lastEnteredMyLibraryEnum,
+    );
     if (currentPageIndex < 0) {
       currentPageIndex = 0;
     }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
+import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/pages/author_page.dart';
 import 'package:wolnelektury/src/presentation/pages/book_page.dart';
 import 'package:wolnelektury/src/presentation/pages/catalogue_page.dart';
@@ -81,11 +82,11 @@ final GoRouter router = GoRouter(
           pageBuilder: (context, state) {
             final RouterCubit routerCubit = context.read<RouterCubit>();
             final reversed = _isReversedTransition(routerCubit);
-
+            final extra = state.extra as MyLibraryEnum?;
             return _slideTransition(
               context: context,
               state: state,
-              child: const MyLibraryPage(),
+              child: MyLibraryPage(openOnEnum: extra),
               reversed: reversed,
             );
           },

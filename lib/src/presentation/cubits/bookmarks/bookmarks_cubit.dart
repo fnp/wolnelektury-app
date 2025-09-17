@@ -25,6 +25,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
         final deduplicated = _deduplicateByAudioTimestamp(
           data,
           (b) => b.audioTimestamp,
+          (b) => b.slug,
         );
         emit(state.copyWith(bookmarks: deduplicated, isLoading: false));
       },
@@ -68,6 +69,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
         final deduplicated = _deduplicateByAudioTimestamp(
           data,
           (b) => b.audioTimestamp,
+          (b) => b.slug,
         );
         emit(state.copyWith(isLoading: false, bookmarks: deduplicated));
       },
@@ -232,16 +234,22 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     );
   }
 
-  List<T> _deduplicateByAudioTimestamp<T>(
-    List<T> items,
-    int? Function(T) getTimestamp,
+  List<BookmarkModel> _deduplicateByAudioTimestamp(
+    List<BookmarkModel> items,
+    int? Function(BookmarkModel) getTimestamp,
+    String Function(BookmarkModel) getSlug,
   ) {
-    final seen = <int>{};
-    final result = <T>[];
+    final seen = <String, Set<int>>{};
+    final result = <BookmarkModel>[];
 
     for (final item in items) {
+      final slug = getSlug(item);
       final ts = getTimestamp(item);
-      if (ts != null && seen.add(ts)) {
+
+      // jeżeli nie ma wpisu dla sluga, to go dodaj
+      seen.putIfAbsent(slug, () => <int>{});
+
+      if (ts == null || seen[slug]!.add(ts)) {
         result.add(item);
       }
     }

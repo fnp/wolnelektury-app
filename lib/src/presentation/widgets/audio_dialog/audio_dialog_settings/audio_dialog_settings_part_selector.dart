@@ -93,6 +93,10 @@ class AudioDialogSettingsPartSelector extends StatelessWidget {
                           if (state.playToPart == 0) {
                             return;
                           }
+                          if (state.playToPart == 1) {
+                            audioCubit.resetPlayToPart();
+                            return;
+                          }
                           audioCubit.decreasePlayToPart();
                         },
                         child: const DecoratedBox(

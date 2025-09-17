@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:wolnelektury/src/application/notification_service/notifications_service.dart';
+import 'package:wolnelektury/src/config/app_links/app_links_handler.dart';
 import 'package:wolnelektury/src/config/firebase/firebase_options.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/initializers/repository_initializer.dart';
@@ -96,17 +97,20 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (p, c) => p.theme != c.theme,
         builder: (context, state) {
-          return MaterialApp.router(
-            scaffoldMessengerKey: CustomSnackbar.scaffoldMessengerKey,
-            debugShowCheckedModeBanner: false,
-            title: 'Wolne Lektury',
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            theme: _determineLightTheme(state.theme),
-            darkTheme: _determineDarkTheme(state.theme),
-            // Router configuration object
-            routerConfig: router,
+          return AppLinksHandler(
+            key: const ValueKey('wolnelektury_app_links_handler'),
+            child: MaterialApp.router(
+              scaffoldMessengerKey: CustomSnackbar.scaffoldMessengerKey,
+              debugShowCheckedModeBanner: false,
+              title: 'Wolne Lektury',
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              theme: _determineLightTheme(state.theme),
+              darkTheme: _determineDarkTheme(state.theme),
+              // Router configuration object
+              routerConfig: router,
+            ),
           );
         },
       ),
