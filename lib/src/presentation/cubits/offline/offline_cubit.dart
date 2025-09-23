@@ -30,7 +30,7 @@ class OfflineCubit extends SafeCubit<OfflineState> {
     }
     emit(state.copyWith(readerToDelete: book));
 
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
     if (state.readerToDelete?.book.slug == book.book.slug) {
       _removeOfflineReader(book, shouldHandle: true);
     }
@@ -42,7 +42,7 @@ class OfflineCubit extends SafeCubit<OfflineState> {
     }
     emit(state.copyWith(audiobookToDelete: book));
 
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
     if (state.audiobookToDelete?.book.slug == book.book.slug) {
       _removeOfflineAudiobook(book, shouldHandle: true);
     }

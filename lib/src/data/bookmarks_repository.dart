@@ -186,36 +186,50 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
     String? note,
   }) async {
     try {
-      final bookmark = BookmarkModel.withLocation(
+      final createdBookmark = BookmarkModel.withLocation(
         slug: slug,
         anchor: anchor,
         note: note ?? '',
       );
-      await _bookmarksStorage.upsertMultipleBookmarks([
-        (
-          id: bookmark.location,
-          slug: slug,
-          bookmarkJson: jsonEncode(bookmark.toJson()),
-          timestamp: DateTime.now(),
-          isDeleted: false,
-        ),
-      ]);
 
+      Future<void> insertionFunction(BookmarkModel bookmark) async {
+        await _bookmarksStorage.upsertMultipleBookmarks([
+          (
+            id: bookmark.location,
+            slug: slug,
+            bookmarkJson: jsonEncode(bookmark.toJson()),
+            timestamp: DateTime.now(),
+            isDeleted: false,
+          ),
+        ]);
+      }
+
+      // Is offline, just insert locally
+      if (!tryOnline) {
+        await insertionFunction(createdBookmark);
+      }
+
+      // Is online, insert locally remotely created bookmark, cuz it returns with info about progress.
+      // Created text bookmark will have audio timestamp and vice versa.
       if (tryOnline) {
         final dbResult = await _createTextBookmarkInDb(
           slug: slug,
           anchor: anchor,
           note: note,
         );
-        if (dbResult.isSuccess) {
-          await _syncStorage.updateSyncData(
-            sentBookmarksSyncAt: DateTime.now(),
-          );
-        }
+        dbResult.handle(
+          success: (data, _) async {
+            await insertionFunction(data);
+            await _syncStorage.updateSyncData(
+              sentBookmarksSyncAt: DateTime.now(),
+            );
+          },
+          failure: (_) {},
+        );
         return dbResult;
       }
 
-      return DataState.success(data: bookmark);
+      return DataState.success(data: createdBookmark);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
     }

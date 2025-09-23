@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,11 +6,13 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_download_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
+import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/audiobooks/my_library_audiobook_no_wifi_dialog.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -148,12 +151,29 @@ class _DownloadButton extends StatelessWidget {
           book: book,
           areFilesCorruptedCallback: areFilesCorruptedCallback,
           onDownloadStart: () {
-            downloaderCubit.downloadAudiobook(
-              book: book,
-              onFinish: () {
-                singleBookCubit.markAudiobookAsDownloaded();
-              },
-            );
+            final networkCubit = context.read<ConnectivityCubit>();
+            final connectionType = networkCubit.state.result;
+
+            void functionToExecute() {
+              downloaderCubit.downloadAudiobook(
+                book: book,
+                onFinish: () {
+                  singleBookCubit.markAudiobookAsDownloaded();
+                },
+              );
+            }
+
+            if (connectionType != ConnectivityResult.wifi) {
+              MyLibraryAudiobookNoWifiDialog.show(
+                context: context,
+                onDownloadAnyway: () {
+                  functionToExecute.call();
+                },
+              );
+              return;
+            }
+
+            functionToExecute.call();
           },
           onDownloadCancel: () {
             downloaderCubit.cancelDownload();

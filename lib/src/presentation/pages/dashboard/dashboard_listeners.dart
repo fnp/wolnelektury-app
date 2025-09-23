@@ -145,15 +145,20 @@ class DashboardListeners extends StatelessWidget {
           listener: (context, state) {
             final authCubit = context.read<AuthCubit>();
             final likesCubit = context.read<LikesCubit>();
-            if (authCubit.state.isAuthenticated) {
-              context.read<SynchronizerCubit>().sentOutProgressSync();
-              context.read<SynchronizerCubit>().sendOutBookmarksSync();
-              context.read<SynchronizerCubit>().sendOutLikesSync(
-                onFinish: () {
-                  likesCubit.init();
-                },
-              );
-            }
+            final syncCubit = context.read<SynchronizerCubit>();
+            authCubit.tryAutoLogin().then((_) {
+              if (context.mounted) {
+                if (context.read<AuthCubit>().state.isAuthenticated) {
+                  syncCubit.sentOutProgressSync();
+                  syncCubit.sendOutBookmarksSync();
+                  syncCubit.sendOutLikesSync(
+                    onFinish: () {
+                      likesCubit.init();
+                    },
+                  );
+                }
+              }
+            });
           },
         ),
         BlocListener<ConnectivityCubit, ConnectivityState>(

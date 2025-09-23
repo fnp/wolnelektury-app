@@ -32,6 +32,11 @@
         }
     },
     "my_library": {
+        "wifi_dialog": {
+            "title": "Brak połączenia Wi-Fi",
+            "content": "Czy chcesz pobrać audiobook przy użyciu danych komórkowych?",
+            "button": "Pobierz"
+        },
         "lists": {
             "creation_failure": "Nie udało się utworzyć listy, spróbuj ponownie",
             "deletion_failure": "Nie udało się usunąć listy, spróbuj ponownie",

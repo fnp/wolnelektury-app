@@ -21,6 +21,7 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> tryAutoLogin() async {
+    print('tried autologin');
     final token = await AppSecureStorageService().readAccessToken();
     if (token == null) return;
     await getAndSetUser();
@@ -90,7 +91,6 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> logout() async {
-    //todo DELETE MESSAGING TOKEN
     await _authRepository.deleteDeviceToken();
     await AppSecureStorageService().clearTokens();
     emit(state.copyWith(user: null));

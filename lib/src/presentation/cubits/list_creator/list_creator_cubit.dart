@@ -284,7 +284,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
       );
     }
     emit(state.copyWith(bookToRemoveFromList: (listSlug, bookSlug)));
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
     if (state.bookToRemoveFromList?.$1 != listSlug ||
         state.bookToRemoveFromList?.$2 != bookSlug) {
       return; // Book was reverted from the deletion, do nothing

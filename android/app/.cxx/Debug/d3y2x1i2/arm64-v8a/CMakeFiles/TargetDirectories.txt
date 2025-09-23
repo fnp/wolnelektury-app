@@ -1,2 +1,0 @@
-/Users/maciejjanuszek/Documents/Praca - Wolne Lektury/wolnelektury/android/app/.cxx/Debug/d3y2x1i2/arm64-v8a/CMakeFiles/edit_cache.dir
-/Users/maciejjanuszek/Documents/Praca - Wolne Lektury/wolnelektury/android/app/.cxx/Debug/d3y2x1i2/arm64-v8a/CMakeFiles/rebuild_cache.dir

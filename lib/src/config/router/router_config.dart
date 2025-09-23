@@ -11,8 +11,13 @@ const cataloguePageConfig = _RouteConfig(
 );
 
 const lastReadPageConfig = _RouteConfig(
+  name: 'lastReadPage',
+  path: '/lastReadPage',
+);
+
+const bookmarkPageConfig = _RouteConfig(
   name: 'bookmarkPage',
-  path: '/bookmarkPage',
+  path: '/bookmarkPage/:uuid',
 );
 
 const myLibraryPageConfig = _RouteConfig(

@@ -8,6 +8,7 @@ part of 'bookmark_model.dart';
 
 _BookmarkModel _$BookmarkModelFromJson(Map<String, dynamic> json) =>
     _BookmarkModel(
+      uuid: json['uuid'] as String?,
       location: json['location'] as String,
       slug: json['book'] as String,
       audioTimestamp: (json['audio_timestamp'] as num?)?.toInt(),
@@ -20,6 +21,7 @@ _BookmarkModel _$BookmarkModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$BookmarkModelToJson(_BookmarkModel instance) =>
     <String, dynamic>{
+      'uuid': instance.uuid,
       'location': instance.location,
       'book': instance.slug,
       'audio_timestamp': instance.audioTimestamp,

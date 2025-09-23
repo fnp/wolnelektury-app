@@ -43,6 +43,10 @@
                     android:scheme="https"
                     android:host="wolnelektury.pl"
                     android:pathPattern="/katalog/lektura/.*" />
+                <data
+                    android:scheme="https"
+                    android:host="wolnelektury.pl"
+                    android:pathPattern="/katalog/zakladka/.*" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />

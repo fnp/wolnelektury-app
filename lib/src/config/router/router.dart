@@ -7,6 +7,7 @@ import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/pages/author_page.dart';
 import 'package:wolnelektury/src/presentation/pages/book_page.dart';
+import 'package:wolnelektury/src/presentation/pages/bookmark_page.dart';
 import 'package:wolnelektury/src/presentation/pages/catalogue_page.dart';
 import 'package:wolnelektury/src/presentation/pages/dashboard/dashboard_wrapper.dart';
 import 'package:wolnelektury/src/presentation/pages/last_read_page.dart';
@@ -125,6 +126,19 @@ final GoRouter router = GoRouter(
               state: state,
               reversed: true,
               child: const SearchPage(),
+            );
+          },
+        ),
+        GoRoute(
+          path: bookmarkPageConfig.path,
+          name: bookmarkPageConfig.name,
+          pageBuilder: (context, state) {
+            final uuid = state.pathParameters['uuid'];
+            return _slideTransition(
+              context: context,
+              state: state,
+              reversed: true,
+              child: BookmarkPage(uuid: uuid),
             );
           },
         ),

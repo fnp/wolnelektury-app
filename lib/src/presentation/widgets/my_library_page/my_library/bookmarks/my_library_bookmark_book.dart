@@ -33,16 +33,18 @@ class MyLibraryBookmarkBook extends StatelessWidget {
       audioCubit.seekToLocallySelectedPosition(optionalSeconds: timestamp);
     } else {
       final singleBookCubit = context.read<SingleBookCubit>();
-      singleBookCubit.loadBookData(
-        slug: bookmark.slug,
-        onFinished: (book) {
-          audioCubit.pickBook(book, overrideProgressTimestamp: timestamp).then((
-            _,
-          ) {
-            audioCubit.play(overridenPosition: timestamp);
-          });
-        },
-      );
+      singleBookCubit
+        ..loadBookData(
+          slug: bookmark.slug,
+          onFinished: (book) {
+            audioCubit
+                .pickBook(book, overrideProgressTimestamp: timestamp)
+                .then((_) {
+                  audioCubit.play(overridenPosition: timestamp);
+                });
+          },
+        )
+        ..checkIfMediaAreDownloaded(bookmark.slug);
     }
   }
 
@@ -55,7 +57,9 @@ class MyLibraryBookmarkBook extends StatelessWidget {
         if (isLoading) {
           return singleBookCubit;
         }
-        return singleBookCubit..loadBookData(slug: bookmark.slug);
+        return singleBookCubit
+          ..loadBookData(slug: bookmark.slug)
+          ..checkIfMediaAreDownloaded(bookmark.slug);
       },
       child: BlocBuilder<SingleBookCubit, SingleBookState>(
         buildWhen: (p, c) {
@@ -79,6 +83,8 @@ class MyLibraryBookmarkBook extends StatelessWidget {
               onListen: (int? timestamp, bool isPlaying) {
                 onListen(timestamp, isPlaying, context);
               },
+              isAudioAvailableOffline: state.isAudiobookDownloaded,
+              isReaderAvailableOffline: state.isReaderDownloaded,
             ),
           );
         },

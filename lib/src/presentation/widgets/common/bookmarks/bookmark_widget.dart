@@ -10,6 +10,8 @@ import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
+import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -22,12 +24,16 @@ class BookmarkWidget extends StatelessWidget {
   final Color backgroundColor;
   final GlobalKey<ScaffoldMessengerState>? messengerKey;
   final Function(int? timestamp, bool isPlaying)? onListen;
+  final bool isReaderAvailableOffline;
+  final bool isAudioAvailableOffline;
   const BookmarkWidget({
     super.key,
     required this.bookmark,
     required this.book,
     required this.isLoading,
     required this.backgroundColor,
+    this.isReaderAvailableOffline = false,
+    this.isAudioAvailableOffline = false,
     this.onListen,
     this.messengerKey,
   });
@@ -56,6 +62,8 @@ class BookmarkWidget extends StatelessWidget {
                   backgroundColor: backgroundColor,
                   messengerKey: messengerKey,
                   onListen: onListen,
+                  isAudioAvailableOffline: isAudioAvailableOffline,
+                  isReaderAvailableOffline: isReaderAvailableOffline,
                 ),
         );
       },
@@ -69,10 +77,14 @@ class _Body extends StatelessWidget {
   final Color backgroundColor;
   final GlobalKey<ScaffoldMessengerState>? messengerKey;
   final Function(int? timestamp, bool isPlaying)? onListen;
+  final bool isReaderAvailableOffline;
+  final bool isAudioAvailableOffline;
   const _Body({
     required this.book,
     required this.bookmark,
     required this.backgroundColor,
+    this.isReaderAvailableOffline = false,
+    this.isAudioAvailableOffline = false,
     this.messengerKey,
     this.onListen,
   });
@@ -197,69 +209,80 @@ class _Body extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: Dimensions.mediumPadding),
-              Row(
-                spacing: Dimensions.mediumPadding,
-                children: [
-                  Flexible(
-                    child: Opacity(
-                      opacity: bookmark.anchor != null ? 1.0 : 0.5,
-                      child: IgnorePointer(
-                        ignoring: bookmark.anchor == null,
-                        child: TextButtonWithIcon(
-                          onPressed: () {
-                            if (messengerKey != null) {
-                              Navigator.of(context).pop();
-                            }
-                            router.pushNamed(
-                              readingPageConfigWithAnchor.name,
-                              extra: book,
-                              pathParameters: {
-                                'slug': book.slug,
-                                if (bookmark.anchor != null)
-                                  'anchor': bookmark.anchor!,
-                              },
-                            );
-                          },
-                          nonActiveText: LocaleKeys.common_icon_button_read
-                              .tr(),
-                          nonActiveIcon: CustomIcons.book_5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    child: Opacity(
-                      opacity: bookmark.audioTimestamp != null ? 1.0 : 0.5,
-                      child: IgnorePointer(
-                        ignoring: bookmark.audioTimestamp == null,
-                        child: BlocBuilder<AudioCubit, AudioState>(
-                          buildWhen: (p, c) => p.isPlaying != c.isPlaying,
-                          builder: (context, state) {
-                            return TextButtonWithIcon(
+              ConnectivityWrapper(
+                builder: (context, hasConnection) {
+                  final isReadingAvailable =
+                      bookmark.anchor != null &&
+                      (hasConnection || isReaderAvailableOffline);
+
+                  final isListeningAvailable =
+                      bookmark.audioTimestamp != null &&
+                      (hasConnection || isAudioAvailableOffline);
+                  return Row(
+                    spacing: Dimensions.mediumPadding,
+                    children: [
+                      Flexible(
+                        child: Opacity(
+                          opacity: isReadingAvailable ? 1.0 : 0.5,
+                          child: IgnorePointer(
+                            ignoring: !isReadingAvailable,
+                            child: TextButtonWithIcon(
                               onPressed: () {
-                                onListen?.call(
-                                  bookmark.audioTimestamp,
-                                  state.isPlaying,
+                                if (messengerKey != null) {
+                                  Navigator.of(context).pop();
+                                }
+                                router.pushNamed(
+                                  readingPageConfigWithAnchor.name,
+                                  extra: book,
+                                  pathParameters: {
+                                    'slug': book.slug,
+                                    if (bookmark.anchor != null)
+                                      'anchor': bookmark.anchor!,
+                                  },
                                 );
                               },
-                              nonActiveText: LocaleKeys
-                                  .common_icon_button_listen
+                              nonActiveText: LocaleKeys.common_icon_button_read
                                   .tr(),
-                              nonActiveIcon: CustomIcons.headphones,
-                            );
-                          },
+                              nonActiveIcon: CustomIcons.book_5,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  CustomButton(
-                    onPressed: () {
-                      //TODO: Implement bookmark share functionality
-                    },
-                    icon: CustomIcons.ios_share,
-                    iconColor: CustomColors.white,
-                  ),
-                ],
+                      Flexible(
+                        child: Opacity(
+                          opacity: isListeningAvailable ? 1.0 : 0.5,
+                          child: IgnorePointer(
+                            ignoring: !isListeningAvailable,
+                            child: BlocBuilder<AudioCubit, AudioState>(
+                              buildWhen: (p, c) => p.isPlaying != c.isPlaying,
+                              builder: (context, state) {
+                                return TextButtonWithIcon(
+                                  onPressed: () {
+                                    onListen?.call(
+                                      bookmark.audioTimestamp,
+                                      state.isPlaying,
+                                    );
+                                  },
+                                  nonActiveText: LocaleKeys
+                                      .common_icon_button_listen
+                                      .tr(),
+                                  nonActiveIcon: CustomIcons.headphones,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      CustomButton(
+                        onPressed: () {
+                          ShareUtils.shareBookmark(bookmark);
+                        },
+                        icon: CustomIcons.ios_share,
+                        iconColor: CustomColors.white,
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

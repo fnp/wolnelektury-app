@@ -69,6 +69,12 @@ class _AppLinksHandlerState extends State<AppLinksHandler>
       } else if (stringUri.contains('lektura')) {
         // Navigate to book
         router.pushNamed(bookPageConfig.name, pathParameters: {'slug': slug});
+      } else if (stringUri.contains('zakladka')) {
+        // Navigate to book
+        router.pushNamed(
+          bookmarkPageConfig.name,
+          pathParameters: {'uuid': slug},
+        );
       }
     } catch (e, s) {
       print('Error parsing app link: $e, $s');

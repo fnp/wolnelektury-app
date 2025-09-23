@@ -93,7 +93,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     }
     emit(state.copyWith(bookmarkToDelete: bookmark));
 
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
     if (state.bookmarkToDelete?.location == bookmark.location) {
       _delete(
         location: bookmark.location,
