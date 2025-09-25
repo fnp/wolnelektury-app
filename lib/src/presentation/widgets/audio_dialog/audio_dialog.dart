@@ -23,11 +23,7 @@ class AudioDialog extends StatelessWidget {
       GlobalKey<ScaffoldMessengerState>();
   const AudioDialog({super.key});
 
-  static void show({
-    required BuildContext context,
-    required VoidCallback onClosed,
-    required String slug,
-  }) {
+  static void show({required BuildContext context, required String slug}) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -36,9 +32,7 @@ class AudioDialog extends StatelessWidget {
           providers: [
             BlocProvider.value(value: context.read<ScrollCubit>()),
             BlocProvider.value(
-              value: context.read<AudioCubit>()
-                ..dialogShown(true)
-                ..toggleBookmarks(false),
+              value: context.read<AudioCubit>()..toggleBookmarks(false),
             ),
             BlocProvider(
               create: (context) {
@@ -101,9 +95,7 @@ class AudioDialog extends StatelessWidget {
           ),
         );
       },
-    ).then((_) {
-      onClosed();
-    });
+    );
   }
 
   @override

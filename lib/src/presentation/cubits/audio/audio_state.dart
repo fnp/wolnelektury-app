@@ -5,7 +5,6 @@ sealed class AudioState with _$AudioState {
   const factory AudioState({
     BookModel? book,
     AudiobookModel? audiobook,
-    @Default(false) isDialogShown,
     @Default(false) isLoadingAudiobook,
 
     // Player
@@ -40,7 +39,6 @@ extension AudioStateEx on AudioState {
       .floor();
 
   List<AudioBookPart> get parts => audiobook?.parts ?? [];
-  bool get isPlayingMinimized => isPlaying && !isDialogShown;
   int get maxSleepTimer => (wholeDuration / 60).ceil();
   int get currentMaxSleepTimer => maxSleepTimer - statePosition ~/ 60;
 }

@@ -24,11 +24,7 @@ class MyLibraryBookmarkBook extends StatelessWidget {
       return;
     }
     final audioCubit = context.read<AudioCubit>();
-    AudioDialog.show(
-      context: context,
-      onClosed: () => audioCubit.dialogShown(false),
-      slug: bookmark.slug,
-    );
+    AudioDialog.show(context: context, slug: bookmark.slug);
     if (isPlaying && audioCubit.state.book?.slug == bookmark.slug) {
       audioCubit.seekToLocallySelectedPosition(optionalSeconds: timestamp);
     } else {

@@ -16,6 +16,7 @@ class AuthorCubit extends Cubit<AuthorState> {
 
   Future<void> getAuthor(String slug) async {
     emit(state.copyWith(isLoading: true));
+    await Future.delayed(const Duration(seconds: 3));
 
     final result = await _authorRepository.getAuthor(slug: slug);
 

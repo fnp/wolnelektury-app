@@ -3,13 +3,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/detailed_author_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/author/author_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/author_page/author_page_details_dialog.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
+import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
-import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
@@ -27,12 +29,15 @@ class AuthorPageTopBar extends StatelessWidget {
           //todo error handling
           return const Text('Nie znaleziono autora');
         }
-        return AnimatedBoxFade(
-          isChildVisible: !state.isLoading,
-          duration: const Duration(milliseconds: 300),
-          child: state.isLoading
-              ? const CustomLoader()
-              : _Body(author: state.author!),
+
+        final effectiveAuthor = state.isLoading
+            ? DetailedAuthorModel.skeletonized()
+            : state.author!;
+
+        return Skeletonizer(
+          enableSwitchAnimation: true,
+          enabled: state.isLoading,
+          child: _Body(author: effectiveAuthor),
         );
       },
     );
@@ -56,26 +61,44 @@ class _Body extends StatelessWidget {
             builder: (context, constraints) {
               return SizedBox.square(
                 dimension: constraints.maxWidth,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: CustomColors.darkModeGrey.withValues(alpha: 0.15),
-                  ),
-                  child: author.photo != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.borderRadiusOfCircle,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: CustomColors.darkModeGrey.withValues(
+                            alpha: 0.15,
                           ),
-                          child: CachedNetworkImage(
-                            imageUrl: author.photo!,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : const Icon(
-                          Icons.person,
-                          size: 55,
-                          color: CustomColors.darkModeGrey,
                         ),
+                        child: author.photo != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                  Dimensions.borderRadiusOfCircle,
+                                ),
+                                child: CachedNetworkImage(
+                                  imageUrl: author.photo!,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.person,
+                                size: 55,
+                                color: CustomColors.darkModeGrey,
+                              ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: CustomButton(
+                        icon: CustomIcons.ios_share,
+                        onPressed: () {
+                          ShareUtils.shareAuthor(author.slug);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

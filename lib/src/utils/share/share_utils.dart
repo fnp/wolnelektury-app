@@ -10,4 +10,16 @@ class ShareUtils {
       ShareParams(text: '$_shareBaseUrl/katalog/zakladka/${bookmark.uuid}'),
     );
   }
+
+  static Future<void> shareAuthor(String authorSlug) async {
+    SharePlus.instance.share(
+      ShareParams(text: '$_shareBaseUrl/katalog/autor/$authorSlug'),
+    );
+  }
+
+  static Future<void> shareBook(String bookSlug) async {
+    SharePlus.instance.share(
+      ShareParams(text: '$_shareBaseUrl/katalog/lektura/$bookSlug'),
+    );
+  }
 }

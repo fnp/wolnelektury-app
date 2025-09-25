@@ -22,13 +22,19 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 
 class BookOverviewWidget extends StatelessWidget {
-  const BookOverviewWidget({super.key, required this.book});
+  const BookOverviewWidget({
+    super.key,
+    required this.book,
+    required this.gridNumber,
+  });
 
   final BookModel book;
+  final double gridNumber;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final effectiveScale = 3 - gridNumber * 2 / 3;
 
     return BlocBuilder<AppModeCubit, AppModeState>(
       buildWhen: (p, c) => p.mode != c.mode,
@@ -82,19 +88,28 @@ class BookOverviewWidget extends StatelessWidget {
                     Positioned(
                       right: 0,
                       bottom: 0,
-                      child: _AddToListButton(book.slug),
+                      child: Transform.scale(
+                        scale: effectiveScale,
+                        child: _AddToListButton(book.slug),
+                      ),
                     ),
                   if (state.isDefault)
                     Positioned(
-                      right: 10,
-                      bottom: 40,
-                      child: _HeartButton(book: book),
+                      right: 10 * effectiveScale,
+                      bottom: 40 * effectiveScale,
+                      child: Transform.scale(
+                        scale: effectiveScale,
+                        child: _HeartButton(book: book),
+                      ),
                     ),
                   if (state.isDefault)
                     Positioned(
-                      right: 10,
-                      bottom: 10,
-                      child: _CreateListButton(book: book),
+                      right: 10 * effectiveScale,
+                      bottom: 10 * effectiveScale,
+                      child: Transform.scale(
+                        scale: effectiveScale,
+                        child: _CreateListButton(book: book),
+                      ),
                     ),
                 ],
               ),

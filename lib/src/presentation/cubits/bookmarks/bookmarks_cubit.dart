@@ -85,7 +85,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
 
   Future<void> deleteBookmark({required BookmarkModel bookmark}) async {
     if (state.bookmarkToDelete != null) {
-      _delete(
+      await _delete(
         location: state.bookmarkToDelete!.location,
         href: state.bookmarkToDelete!.href,
         slug: state.bookmarkToDelete!.slug,
@@ -95,7 +95,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
 
     await Future.delayed(const Duration(seconds: 3));
     if (state.bookmarkToDelete?.location == bookmark.location) {
-      _delete(
+      await _delete(
         location: bookmark.location,
         href: bookmark.href,
         slug: bookmark.slug,

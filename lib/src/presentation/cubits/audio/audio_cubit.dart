@@ -308,10 +308,6 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(localPosition: seconds));
   }
 
-  void dialogShown(bool value) {
-    emit(state.copyWith(isDialogShown: value));
-  }
-
   void selectPart(int? part) {
     if (part == null || part < 0 || part >= state.parts.length) return;
     _player.seek(Duration.zero, index: part);

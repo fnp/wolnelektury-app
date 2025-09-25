@@ -20,6 +20,7 @@ import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_b
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
+import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -90,6 +91,16 @@ class BookPageCoverWithButtons extends StatelessWidget {
                           ),
                         ),
                       ),
+                    Positioned(
+                      right: Dimensions.mediumPadding,
+                      bottom: Dimensions.mediumPadding,
+                      child: CustomButton(
+                        icon: CustomIcons.ios_share,
+                        onPressed: () {
+                          ShareUtils.shareBook(book.slug);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -94,11 +94,7 @@ class BookPageCoverListenButton extends StatelessWidget {
                         tryOffline: offlineAudiobook != null,
                       );
                       // Show audio dialog
-                      AudioDialog.show(
-                        context: context,
-                        onClosed: () => audioCubit.dialogShown(false),
-                        slug: book.slug,
-                      );
+                      AudioDialog.show(context: context, slug: book.slug);
                     },
                     trailing: _DownloadButton(
                       isError: state.isGenericAudiobookError,

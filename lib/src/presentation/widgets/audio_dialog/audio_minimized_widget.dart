@@ -53,7 +53,7 @@ class _AudioMinimizedWidgetState extends State<AudioMinimizedWidget>
             ? topElmntsHeight + Dimensions.appBarHeight
             : topElmntsHeight;
         return BlocBuilder<AudioCubit, AudioState>(
-          buildWhen: (p, c) => p.isPlayingMinimized != c.isPlayingMinimized,
+          buildWhen: (p, c) => p.isPlaying != c.isPlaying,
           builder: (context, outerState) {
             return BlocBuilder<MinimizedPlayerCubit, MinimizedPlayerState>(
               buildWhen: (p, c) => p.position != c.position,
@@ -75,7 +75,7 @@ class _AudioMinimizedWidgetState extends State<AudioMinimizedWidget>
                     },
                     onPointerUp: (_) => isPressedDown = false,
                     child: AnimatedBoxFade(
-                      isChildVisible: outerState.isPlayingMinimized,
+                      isChildVisible: outerState.isPlaying,
                       child: InkWell(
                         onLongPress: () {
                           isPressedDown = true;
@@ -84,7 +84,6 @@ class _AudioMinimizedWidgetState extends State<AudioMinimizedWidget>
                         onTap: () {
                           AudioDialog.show(
                             context: context,
-                            onClosed: () => audioCubit.dialogShown(false),
                             slug: audioCubit.state.book?.slug ?? '',
                           );
                         },
