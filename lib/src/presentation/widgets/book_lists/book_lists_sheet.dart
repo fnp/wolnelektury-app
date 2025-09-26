@@ -166,7 +166,6 @@ class AddNewListElementState extends State<AddNewListElement> {
                         color: CustomColors.white,
                       ),
                       border: InputBorder.none,
-                      isCollapsed: true,
                     ),
                     onChanged: (value) {
                       setState(() {

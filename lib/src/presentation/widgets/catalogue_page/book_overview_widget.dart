@@ -29,7 +29,7 @@ class BookOverviewWidget extends StatelessWidget {
   });
 
   final BookModel book;
-  final double gridNumber;
+  final int gridNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -114,27 +114,24 @@ class BookOverviewWidget extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: Dimensions.smallPadding),
-              Flexible(
-                child: Text(
-                  book.title,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                book.title,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: Dimensions.smallPadding),
-              Expanded(
-                child: Text(
-                  book.authors.map((author) => author.name).join(', '),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                book.authors.map((author) => author.name).join(', '),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.w500,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
+              const SizedBox(height: Dimensions.smallPadding),
             ],
           ),
         );

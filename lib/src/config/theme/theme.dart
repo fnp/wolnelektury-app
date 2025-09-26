@@ -79,7 +79,7 @@ ThemeData get darkTheme => _baseTheme.copyWith(
 
 final _baseTheme = ThemeData(
   useMaterial3: true,
-  fontFamily: 'SourceSans3',
+  fontFamily: sourceSans3Family,
   bottomSheetTheme: BottomSheetThemeData(
     modalBarrierColor: CustomColors.secondaryBlueColor.withValues(alpha: 0.5),
     shape: const RoundedRectangleBorder(
@@ -94,7 +94,7 @@ final _baseTheme = ThemeData(
       color: CustomColors.red,
       fontSize: 14,
       fontWeight: FontWeight.w500,
-      fontFamily: 'SourceSans3',
+      fontFamily: sourceSans3Family,
     ),
     menuStyle: MenuStyle(
       backgroundColor: const WidgetStatePropertyAll(CustomColors.white),
@@ -123,7 +123,7 @@ final _baseTheme = ThemeData(
           fontSize: 14,
           fontWeight: FontWeight.bold,
           color: CustomColors.white,
-          fontFamily: 'SourceSans3',
+          fontFamily: sourceSans3Family,
         ),
       ),
       shape: WidgetStateProperty.all<RoundedRectangleBorder>(
@@ -141,12 +141,11 @@ final _baseTheme = ThemeData(
 final yellowElevatedButton = ElevatedButton.styleFrom(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
   padding: const EdgeInsets.symmetric(horizontal: Dimensions.veryLargePadding),
-  fixedSize: const Size.fromHeight(Dimensions.elementHeight),
   textStyle: const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: CustomColors.black,
-    fontFamily: 'SourceSans3',
+    fontFamily: sourceSans3Family,
   ),
   backgroundColor: CustomColors.primaryYellowColor,
 );
@@ -195,7 +194,7 @@ final _lightModeInput = InputDecorationTheme(
     color: CustomColors.black,
     fontSize: 14,
     fontWeight: FontWeight.w500,
-    fontFamily: 'SourceSans3',
+    fontFamily: sourceSans3Family,
   ),
   fillColor: Colors.white,
   filled: true,
@@ -222,7 +221,7 @@ final _darkModeInput = _lightModeInput.copyWith(
     color: CustomColors.white,
     fontSize: 14,
     fontWeight: FontWeight.w500,
-    fontFamily: 'SourceSans3',
+    fontFamily: sourceSans3Family,
   ),
   focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(Dimensions.elementHeight / 2),

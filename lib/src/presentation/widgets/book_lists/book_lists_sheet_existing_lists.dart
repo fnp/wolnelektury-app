@@ -127,11 +127,13 @@ class _Element extends StatelessWidget {
                     padding: const EdgeInsets.only(
                       left: Dimensions.veryLargePadding,
                     ),
-                    child: Text(
-                      listName,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.black,
+                    child: FittedBox(
+                      child: Text(
+                        listName,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.black,
+                        ),
                       ),
                     ),
                   ),

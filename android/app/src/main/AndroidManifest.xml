@@ -31,28 +31,30 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-              <intent-filter android:autoVerify="true">
+           <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />      
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:scheme="https"
                     android:host="wolnelektury.pl"
-                      android:pathPattern="/katalog/autor/.*" />
+                    android:pathPrefix="/katalog/autor/" />
                 <data
                     android:scheme="https"
                     android:host="wolnelektury.pl"
-                    android:pathPattern="/katalog/lektura/.*" />
+                    android:pathPrefix="/katalog/lektura/" />
                 <data
                     android:scheme="https"
                     android:host="wolnelektury.pl"
-                    android:pathPattern="/katalog/zakladka/.*" />
+                    android:pathPrefix="/katalog/zakladka/" />
             </intent-filter>
-            <intent-filter android:autoVerify="true">
+
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />                
-                <data android:scheme="wolnelektury" />              
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wolnelektury"/>
             </intent-filter>
         </activity>
 

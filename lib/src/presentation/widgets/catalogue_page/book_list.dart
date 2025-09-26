@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/widgets/catalogue_page/book_overview_widget.dart';
@@ -6,6 +7,7 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookList extends StatelessWidget {
   static const double _textScaleThreshold = 1.4;
+  static const double _minWidthFor3Grid = 360;
   final bool isLoading;
   final List<BookModel> books;
 
@@ -14,59 +16,30 @@ class BookList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textScaler = MediaQuery.textScalerOf(context);
-    final gridNumber = crossAxisCount(textScaler.scale(1.0));
-
+    final gridNumber = crossAxisCount(
+      textScaler.scale(1.0),
+      MediaQuery.sizeOf(context).width,
+    );
     return Skeletonizer.sliver(
       enabled: isLoading,
-      child: SliverGrid.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: gridNumber,
-          crossAxisSpacing: Dimensions.mediumPadding,
-          mainAxisSpacing: Dimensions.largePadding,
-          childAspectRatio: calculateAspectRatio(textScaler.scale(1.0)),
-        ),
+      child: SliverAlignedGrid.count(
+        crossAxisCount: gridNumber,
+        mainAxisSpacing: Dimensions.largePadding,
+        crossAxisSpacing: Dimensions.mediumPadding,
         itemBuilder: (context, index) {
           final book = books[index];
-          return BookOverviewWidget(
-            book: book,
-            gridNumber: gridNumber.toDouble(),
-          );
+          return BookOverviewWidget(book: book, gridNumber: gridNumber);
         },
         itemCount: books.length,
       ),
     );
   }
 
-  int crossAxisCount(double textScale) {
-    if (textScale < _textScaleThreshold) {
-      return 3;
-    } else {
+  int crossAxisCount(double textScale, double widthOfScreen) {
+    if (textScale > _textScaleThreshold || widthOfScreen < _minWidthFor3Grid) {
       return 2;
+    } else {
+      return 3;
     }
-  }
-
-  double calculateAspectRatio(double textScale) {
-    const minScale = 0.8;
-    const maxScale = 3.11;
-    const minRatio = 0.35;
-    const maxRatio = 0.50;
-
-    final normalized = ((textScale - minScale) / (maxScale - minScale)).clamp(
-      0,
-      1,
-    );
-
-    final inverseNormalized = 1.0 - normalized;
-    final ratio = (minRatio + (maxRatio - minRatio) * inverseNormalized).clamp(
-      minRatio,
-      maxRatio,
-    );
-    if (textScale > _textScaleThreshold) {
-      return ratio;
-    }
-    if (textScale > 1) {
-      return ratio - 0.05;
-    }
-    return ratio;
   }
 }

@@ -446,6 +446,9 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(
       state.copyWith(statePosition: newPosition, currentlyPlayingPart: index),
     );
+    if (!state.isPlaying && _player.playing) {
+      emit(state.copyWith(isPlaying: true));
+    }
   }
 
   // This function finds the position in the index of the audiobook from
