@@ -177,14 +177,14 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                       children: [
                         Text(
                           LocaleKeys.login_no_account,
-                          style: theme.textTheme.bodySmall?.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
                         ).tr(),
                         const SizedBox(width: Dimensions.smallPadding),
                         Text(
                           LocaleKeys.login_register,
-                          style: theme.textTheme.bodySmall?.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             decoration: TextDecoration.underline,
                             color: CustomColors.secondaryBlueColor,
                             fontWeight: FontWeight.w500,

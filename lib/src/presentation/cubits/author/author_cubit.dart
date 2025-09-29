@@ -1,16 +1,16 @@
-import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/data/author_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/detailed_author_model.dart';
+import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/string/string_extension.dart';
 
 part 'author_cubit.freezed.dart';
 part 'author_state.dart';
 
-class AuthorCubit extends Cubit<AuthorState> {
+class AuthorCubit extends SafeCubit<AuthorState> {
   final AuthorRepository _authorRepository;
   AuthorCubit(this._authorRepository) : super(const AuthorState());
 

@@ -25,6 +25,7 @@ class SearchPage extends StatelessWidget {
       ),
       child: Builder(
         builder: (context) {
+          final searchCubit = context.read<SearchCubit>();
           final theme = Theme.of(context);
           return Padding(
             padding: const EdgeInsets.symmetric(
@@ -37,7 +38,14 @@ class SearchPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SearchBar(),
+                      SearchBar(
+                        onChanged: (value) {
+                          searchCubit.changeQuery(value);
+                        },
+                        onClear: () {
+                          searchCubit.changeQuery('');
+                        },
+                      ),
                       const SizedBox(height: Dimensions.mediumPadding),
                       const SingleChildScrollView(child: SearchHints()),
                       Expanded(

@@ -56,7 +56,8 @@ class DashboardListeners extends StatelessWidget {
         BlocListener<RouterCubit, RouterState>(
           listenWhen: (p, c) => p.location != c.location,
           listener: (context, state) {
-            if (state.location == searchPageConfig.path) {
+            if (state.location == searchPageConfig.path ||
+                state.location == filtersPageConfig.path) {
               context.read<ScrollCubit>().hideAppBar();
             } else {
               context.read<ScrollCubit>().showAppBar();

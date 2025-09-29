@@ -184,8 +184,12 @@ class _CreateListButton extends StatelessWidget {
           CustomSnackbar.success(
             context,
             LocaleKeys.common_snackbar_not_logged.tr(),
-            icon: const Icon(Icons.login, size: 20),
-            onIconTap: () {
+            icon: const Icon(
+              CustomIcons.for_you,
+              size: 20,
+              color: CustomColors.white,
+            ),
+            onTap: () {
               router.pushNamed(
                 myLibraryPageConfig.name,
                 extra: MyLibraryEnum.login,
@@ -235,8 +239,12 @@ class _HeartButton extends StatelessWidget {
               CustomSnackbar.success(
                 context,
                 LocaleKeys.common_snackbar_not_logged.tr(),
-                icon: const Icon(Icons.login, size: 20),
-                onIconTap: () {
+                icon: const Icon(
+                  CustomIcons.for_you,
+                  size: 20,
+                  color: CustomColors.white,
+                ),
+                onTap: () {
                   router.pushNamed(
                     myLibraryPageConfig.name,
                     extra: MyLibraryEnum.login,

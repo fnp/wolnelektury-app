@@ -39,8 +39,8 @@ class MyLibraryMyLibraryLoginForms extends StatelessWidget {
                       physics: const AlwaysScrollableScrollPhysics(),
                       controller: scrollController,
                       child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        reverseDuration: const Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 200),
+                        reverseDuration: const Duration(milliseconds: 200),
                         switchInCurve: Curves.fastOutSlowIn,
                         switchOutCurve: Curves.fastOutSlowIn,
                         layoutBuilder: (currentChild, previousChildren) {

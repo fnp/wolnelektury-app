@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
@@ -26,7 +27,7 @@ class MyLibraryPill extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
           color: isSelected
-              ? theme.colorScheme.onTertiaryContainer
+              ? CustomColors.green
               : theme.colorScheme.tertiaryContainer,
         ),
         child: SizedBox(
@@ -54,8 +55,8 @@ class MyLibraryPill extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: isSelected
-                              ? theme.colorScheme.onTertiary
-                              : theme.colorScheme.onTertiaryContainer,
+                              ? CustomColors.black
+                              : theme.colorScheme.onPrimary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

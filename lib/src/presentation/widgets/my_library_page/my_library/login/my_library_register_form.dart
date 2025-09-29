@@ -46,19 +46,26 @@ class _Form extends StatefulWidget {
 class _FormState extends State<_Form> {
   late ThemeData theme;
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
   bool showPasswordError = false;
   bool showEmailError = false;
   bool showAgreementError = false;
+  bool showConfirmPasswordError = false;
 
   bool get isAnyError =>
-      showPasswordError || showEmailError || showAgreementError;
+      showPasswordError ||
+      showEmailError ||
+      showAgreementError ||
+      showConfirmPasswordError;
 
   @override
   void dispose() {
     _passwordController.dispose();
     _emailController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -76,6 +83,9 @@ class _FormState extends State<_Form> {
       showEmailError =
           _emailController.text.isEmpty ||
           !Regexes.emailRegex.hasMatch(_emailController.text);
+      showConfirmPasswordError =
+          _confirmPasswordController.text.isEmpty ||
+          _confirmPasswordController.text != _passwordController.text;
     });
   }
 
@@ -176,6 +186,46 @@ class _FormState extends State<_Form> {
               ),
             ),
             const SizedBox(height: Dimensions.mediumPadding),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: TextFieldLabel(
+                    label: LocaleKeys.login_repeat_password.tr(),
+                  ),
+                ),
+                Expanded(
+                  child: AnimatedBoxFade(
+                    isChildVisible: showConfirmPasswordError,
+                    child: TextFieldValidationError(
+                      message: LocaleKeys.login_repeat_password_validation.tr(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: Dimensions.elementHeight,
+              child: TextField(
+                textInputAction: TextInputAction.go,
+                decoration: InputDecoration(
+                  fillColor: showConfirmPasswordError
+                      ? CustomColors.red.withValues(alpha: 0.3)
+                      : null,
+                ),
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                style: theme.textTheme.bodyMedium,
+                controller: _confirmPasswordController,
+                onChanged: (_) {
+                  if (showConfirmPasswordError) {
+                    _validate(context);
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: Dimensions.mediumPadding),
             BlocBuilder<AuthCubit, AuthState>(
               buildWhen: (p, c) => p.agreements != c.agreements,
               builder: (context, state) {
@@ -209,14 +259,14 @@ class _FormState extends State<_Form> {
                         children: [
                           Text(
                             LocaleKeys.login_has_account,
-                            style: theme.textTheme.bodySmall?.copyWith(
+                            style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
                           ).tr(),
                           const SizedBox(width: Dimensions.smallPadding),
                           Text(
                             LocaleKeys.login_login,
-                            style: theme.textTheme.bodySmall?.copyWith(
+                            style: theme.textTheme.bodyMedium?.copyWith(
                               decoration: TextDecoration.underline,
                               color: CustomColors.secondaryBlueColor,
                               fontWeight: FontWeight.w500,

@@ -16,7 +16,7 @@ ThemeData get lightTheme => _baseTheme.copyWith(
   chipTheme: ChipThemeData(
     color: WidgetStateColor.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return CustomColors.grey;
+        return CustomColors.green;
       }
       return CustomColors.white;
     }),
@@ -52,7 +52,7 @@ ThemeData get darkTheme => _baseTheme.copyWith(
   chipTheme: ChipThemeData(
     color: WidgetStateColor.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return CustomColors.darkModeGrey;
+        return CustomColors.green;
       }
       return CustomColors.black;
     }),

@@ -70,6 +70,7 @@
         "title_alternative": "Zarejestruj się",
         "user_name": "nazwa użytkownika lub email",
         "password": "hasło",
+        "repeat_password": "powtórz hasło",
         "email": "adres email",
         "login": "Zaloguj się",
         "register": "Zarejestruj się",
@@ -78,6 +79,7 @@
         "logout": "Wylogowano pomyślnie",
         "user_name_validation": "pole nie może być puste",
         "password_validation_empty": "hasło nie może być puste",
+        "repeat_password_validation": "hasła nie są identyczne",
         "email_validation": "nieprawidłowy adres email",
         "no_account": "Nie masz jeszcze konta?",
         "has_account": "Masz już konto?",
@@ -220,7 +222,7 @@
             "filter": "Filtruj"
         },
         "snackbar": {
-            "not_logged": "Musisz być zalogowany aby to zrobić",
+            "not_logged": "Zaloguj się, aby skorzystać z tej funkcji",
             "revert": "Cofnij"
         }
     }

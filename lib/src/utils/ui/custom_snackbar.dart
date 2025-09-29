@@ -15,13 +15,13 @@ class CustomSnackbar {
     required BuildContext context,
     VoidCallback? onRevert,
     Widget? icon,
-    VoidCallback? onIconTap,
+    VoidCallback? onTap,
   }) {
     final theme = Theme.of(context);
     return SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: isSuccess ? CustomColors.green : CustomColors.red,
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.largePadding),
+      padding: EdgeInsets.zero,
       margin: const EdgeInsets.all(Dimensions.mediumPadding),
       elevation: 0,
       duration: const Duration(seconds: 3),
@@ -34,53 +34,65 @@ class CustomSnackbar {
         ),
         1,
       ),
-      content: Padding(
-        padding: const EdgeInsets.symmetric(vertical: Dimensions.mediumPadding),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Text(
-                message,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+      content: InkWellWrapper(
+        borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
+        onTap: () {
+          if (onTap != null) {
+            onTap();
+          }
+        },
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: Dimensions.elementHeight,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: Dimensions.smallPadding,
+              horizontal: Dimensions.largePadding,
             ),
-            if (icon != null)
-              Padding(
-                padding: const EdgeInsets.only(left: Dimensions.mediumPadding),
-                child: InkWellWrapper(
-                  borderRadius: BorderRadius.circular(5),
-                  onTap: () {
-                    onIconTap?.call();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(Dimensions.smallPadding),
-                    child: icon,
-                  ),
-                ),
-              ),
-            if (onRevert != null)
-              InkWellWrapper(
-                borderRadius: BorderRadius.circular(5),
-                onTap: () {
-                  onRevert();
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(Dimensions.smallPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
                   child: Text(
-                    LocaleKeys.common_snackbar_revert.tr().toUpperCase(),
+                    message,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ),
-          ],
+                if (icon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: Dimensions.mediumPadding,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(Dimensions.smallPadding),
+                      child: icon,
+                    ),
+                  ),
+                if (onRevert != null)
+                  InkWellWrapper(
+                    borderRadius: BorderRadius.circular(5),
+                    onTap: () {
+                      onRevert();
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(Dimensions.smallPadding),
+                      child: Text(
+                        LocaleKeys.common_snackbar_revert.tr().toUpperCase(),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -90,7 +102,7 @@ class CustomSnackbar {
     BuildContext context,
     String message, {
     Widget? icon,
-    VoidCallback? onIconTap,
+    VoidCallback? onTap,
     VoidCallback? onRevert,
     GlobalKey<ScaffoldMessengerState>? messengerKey,
   }) {
@@ -102,7 +114,7 @@ class CustomSnackbar {
         context: context,
         onRevert: onRevert,
         icon: icon,
-        onIconTap: onIconTap,
+        onTap: onTap,
       ),
     );
   }
@@ -111,7 +123,7 @@ class CustomSnackbar {
     BuildContext context,
     String message, {
     Widget? icon,
-    VoidCallback? onIconTap,
+    VoidCallback? onTap,
     GlobalKey<ScaffoldMessengerState>? messengerKey,
   }) {
     (messengerKey ?? scaffoldMessengerKey).currentState!.hideCurrentSnackBar();
@@ -121,7 +133,7 @@ class CustomSnackbar {
         isSuccess: false,
         context: context,
         icon: icon,
-        onIconTap: onIconTap,
+        onTap: onTap,
       ),
     );
   }

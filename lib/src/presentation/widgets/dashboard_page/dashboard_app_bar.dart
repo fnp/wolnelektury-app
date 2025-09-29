@@ -48,32 +48,22 @@ class DashboardAppBar extends StatelessWidget {
                             buildWhen: (p, c) => p.isMainPage != c.isMainPage,
                             builder: (context, state) {
                               if (!state.isMainPage) {
-                                return SizedBox.square(
-                                  dimension: Dimensions.elementHeight,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(
-                                      Dimensions.borderRadiusOfCircle,
-                                    ),
-                                    onTap: () {
-                                      if (state.isMainPage) return;
-                                      router.canPop()
-                                          ? router.pop()
-                                          : router.goNamed(
-                                              cataloguePageConfig.name,
-                                            );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 6),
-                                      child: Icon(
-                                        Icons.arrow_back_ios,
-                                        color: theme.colorScheme.onSurface,
-                                        size: 22,
-                                      ),
-                                    ),
-                                  ),
+                                return CustomButton(
+                                  backgroundColor: CustomColors.white,
+                                  icon: Icons.arrow_back,
+                                  onPressed: () {
+                                    if (state.isMainPage) return;
+                                    router.canPop()
+                                        ? router.pop()
+                                        : router.goNamed(
+                                            cataloguePageConfig.name,
+                                          );
+                                  },
                                 );
                               }
-                              return const SizedBox();
+                              return const SizedBox(
+                                height: Dimensions.elementHeight,
+                              );
                             },
                           ),
                         ),
@@ -92,7 +82,9 @@ class DashboardAppBar extends StatelessWidget {
                                       backgroundColor: Colors.transparent,
                                     );
                                   }
-                                  return const SizedBox();
+                                  return const SizedBox(
+                                    height: Dimensions.elementHeight,
+                                  );
                                 },
                               ),
                         ),
@@ -130,7 +122,9 @@ class DashboardAppBar extends StatelessWidget {
                                   },
                                 );
                               }
-                              return const SizedBox();
+                              return const SizedBox(
+                                height: Dimensions.elementHeight,
+                              );
                             },
                           ),
                         ),

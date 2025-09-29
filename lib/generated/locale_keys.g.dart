@@ -60,6 +60,7 @@ abstract class  LocaleKeys {
   static const login_title_alternative = 'login.title_alternative';
   static const login_user_name = 'login.user_name';
   static const login_password = 'login.password';
+  static const login_repeat_password = 'login.repeat_password';
   static const login_email = 'login.email';
   static const login_login = 'login.login';
   static const login_register = 'login.register';
@@ -68,6 +69,7 @@ abstract class  LocaleKeys {
   static const login_logout = 'login.logout';
   static const login_user_name_validation = 'login.user_name_validation';
   static const login_password_validation_empty = 'login.password_validation_empty';
+  static const login_repeat_password_validation = 'login.repeat_password_validation';
   static const login_email_validation = 'login.email_validation';
   static const login_no_account = 'login.no_account';
   static const login_has_account = 'login.has_account';

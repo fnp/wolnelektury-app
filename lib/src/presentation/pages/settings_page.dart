@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_header.dart';
@@ -53,7 +54,7 @@ class SettingsPage extends StatelessWidget {
                   color: CustomColors.white,
                   size: 18,
                 ),
-                onIconTap: () {
+                onTap: () {
                   BlocProvider.of<SettingsCubit>(context).openSettings();
                 },
               );
@@ -140,6 +141,7 @@ class SettingsPage extends StatelessWidget {
                       const Spacer(),
                       Expanded(
                         child: ElevatedButton(
+                          style: blueElevatedButton,
                           onPressed: () {
                             BlocProvider.of<AuthCubit>(context).logout();
                             Navigator.of(context).pop();

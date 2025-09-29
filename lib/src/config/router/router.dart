@@ -10,6 +10,7 @@ import 'package:wolnelektury/src/presentation/pages/book_page.dart';
 import 'package:wolnelektury/src/presentation/pages/bookmark_page.dart';
 import 'package:wolnelektury/src/presentation/pages/catalogue_page.dart';
 import 'package:wolnelektury/src/presentation/pages/dashboard/dashboard_wrapper.dart';
+import 'package:wolnelektury/src/presentation/pages/filters_page.dart';
 import 'package:wolnelektury/src/presentation/pages/last_read_page.dart';
 import 'package:wolnelektury/src/presentation/pages/not_found_page.dart';
 import 'package:wolnelektury/src/presentation/pages/reading_page.dart';
@@ -54,7 +55,7 @@ final GoRouter router = GoRouter(
             final RouterCubit routerCubit = context.read<RouterCubit>();
             final reversed = _isReversedTransition(routerCubit);
 
-            return _slideTransition(
+            return _mainPagesSlideTransition(
               context: context,
               state: state,
               child: const CataloguePage(),
@@ -69,7 +70,7 @@ final GoRouter router = GoRouter(
             final RouterCubit routerCubit = context.read<RouterCubit>();
             final reversed = _isReversedTransition(routerCubit);
 
-            return _slideTransition(
+            return _mainPagesSlideTransition(
               context: context,
               state: state,
               child: const LastReadPage(),
@@ -84,7 +85,7 @@ final GoRouter router = GoRouter(
             final RouterCubit routerCubit = context.read<RouterCubit>();
             final reversed = _isReversedTransition(routerCubit);
             final extra = state.extra as MyLibraryEnum?;
-            return _slideTransition(
+            return _mainPagesSlideTransition(
               context: context,
               state: state,
               child: MyLibraryPage(openOnEnum: extra),
@@ -96,10 +97,8 @@ final GoRouter router = GoRouter(
           path: settingsPageConfig.path,
           name: settingsPageConfig.name,
           pageBuilder: (context, state) {
-            return _slideTransition(
-              context: context,
-              state: state,
-              child: const SettingsPage(),
+            return const MaterialPage(
+              child: _ColoredBackground(child: SettingsPage()),
             );
           },
         ),
@@ -109,11 +108,19 @@ final GoRouter router = GoRouter(
           pageBuilder: (context, state) {
             final book = state.extra as BookModel?;
             final slug = state.pathParameters['slug'];
-            return _slideTransition(
-              context: context,
-              state: state,
-              reversed: true,
-              child: BookPage(book: book, slug: slug),
+            return MaterialPage(
+              child: _ColoredBackground(
+                child: BookPage(book: book, slug: slug),
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: filtersPageConfig.path,
+          name: filtersPageConfig.name,
+          pageBuilder: (context, state) {
+            return const MaterialPage(
+              child: _ColoredBackground(child: FiltersPage()),
             );
           },
         ),
@@ -121,11 +128,8 @@ final GoRouter router = GoRouter(
           path: searchPageConfig.path,
           name: searchPageConfig.name,
           pageBuilder: (context, state) {
-            return _slideTransition(
-              context: context,
-              state: state,
-              reversed: true,
-              child: const SearchPage(),
+            return const MaterialPage(
+              child: _ColoredBackground(child: SearchPage()),
             );
           },
         ),
@@ -134,11 +138,8 @@ final GoRouter router = GoRouter(
           name: bookmarkPageConfig.name,
           pageBuilder: (context, state) {
             final uuid = state.pathParameters['uuid'];
-            return _slideTransition(
-              context: context,
-              state: state,
-              reversed: true,
-              child: BookmarkPage(uuid: uuid),
+            return MaterialPage(
+              child: _ColoredBackground(child: BookmarkPage(uuid: uuid)),
             );
           },
         ),
@@ -147,11 +148,10 @@ final GoRouter router = GoRouter(
           name: authorPageConfig.name,
           pageBuilder: (context, state) {
             final authorSlug = state.pathParameters['slug'];
-            return _slideTransition(
-              context: context,
-              state: state,
-              reversed: true,
-              child: AuthorPage(authorSlug: authorSlug),
+            return MaterialPage(
+              child: _ColoredBackground(
+                child: AuthorPage(authorSlug: authorSlug),
+              ),
             );
           },
         ),
@@ -162,14 +162,13 @@ final GoRouter router = GoRouter(
             final book = state.extra as BookModel?;
             final anchor = int.tryParse(state.pathParameters['anchor'] ?? '');
             final slug = state.pathParameters['slug'];
-            return _slideTransition(
-              context: context,
-              state: state,
-              reversed: true,
-              child: ReadingPage(
-                book: book,
-                overrideProgressAnchor: anchor,
-                slug: slug,
+            return MaterialPage(
+              child: _ColoredBackground(
+                child: ReadingPage(
+                  book: book,
+                  overrideProgressAnchor: anchor,
+                  slug: slug,
+                ),
               ),
             );
           },
@@ -180,11 +179,10 @@ final GoRouter router = GoRouter(
           pageBuilder: (context, state) {
             final book = state.extra as BookModel?;
             final slug = state.pathParameters['slug'];
-            return _slideTransition(
-              context: context,
-              state: state,
-              reversed: true,
-              child: ReadingPage(book: book, slug: slug),
+            return MaterialPage(
+              child: _ColoredBackground(
+                child: ReadingPage(book: book, slug: slug),
+              ),
             );
           },
         ),
@@ -192,10 +190,8 @@ final GoRouter router = GoRouter(
           path: notFoundPageConfig.path,
           name: notFoundPageConfig.name,
           pageBuilder: (context, state) {
-            return _slideTransition(
-              context: context,
-              state: state,
-              child: const NotFoundPage(),
+            return const MaterialPage(
+              child: _ColoredBackground(child: NotFoundPage()),
             );
           },
         ),
@@ -214,7 +210,7 @@ bool _isReversedTransition(RouterCubit routerCubit) {
 }
 
 /// Creates animation between two pages
-CustomTransitionPage _slideTransition({
+CustomTransitionPage _mainPagesSlideTransition({
   required BuildContext context,
   required GoRouterState state,
   required Widget child,
@@ -242,4 +238,17 @@ CustomTransitionPage _slideTransition({
     },
     child: child,
   );
+}
+
+class _ColoredBackground extends StatelessWidget {
+  final Widget child;
+  const _ColoredBackground({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: child,
+    );
+  }
 }

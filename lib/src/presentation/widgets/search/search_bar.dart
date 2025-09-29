@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wolnelektury/src/presentation/cubits/search/search_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
-import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class SearchBar extends StatefulWidget {
-  const SearchBar({super.key});
+  final VoidCallback onClear;
+  final Function(String) onChanged;
+  final String? initialValue;
+  const SearchBar({
+    super.key,
+    required this.onChanged,
+    required this.onClear,
+    this.initialValue,
+  });
 
   @override
   State<SearchBar> createState() => SearchBarState();
@@ -17,6 +22,13 @@ class SearchBarState extends State<SearchBar> {
   final TextEditingController controller = TextEditingController();
   late ThemeData theme;
   bool isEmpty = true;
+
+  @override
+  void initState() {
+    isEmpty = widget.initialValue == null || widget.initialValue!.isEmpty;
+    controller.text = widget.initialValue ?? '';
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -33,19 +45,26 @@ class SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final searchCubit = context.read<SearchCubit>();
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: Dimensions.elementHeight),
       child: Row(
         spacing: Dimensions.mediumPadding,
         children: [
+          CustomButton(
+            icon: Icons.arrow_back,
+            iconColor: theme.colorScheme.onSurface,
+            backgroundColor: theme.colorScheme.tertiaryContainer,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           Expanded(
             child: TextField(
               autofocus: true,
               textInputAction: TextInputAction.done,
               controller: controller,
               onChanged: (value) {
-                searchCubit.changeQuery(value);
+                widget.onChanged(value);
                 setState(() {
                   isEmpty = value.trim().isEmpty;
                 });
@@ -105,7 +124,7 @@ class SearchBarState extends State<SearchBar> {
                           icon: Icons.close,
                           onPressed: () {
                             controller.clear();
-                            searchCubit.changeQuery('');
+                            widget.onClear();
                             setState(() {
                               isEmpty = true;
                             });
@@ -114,14 +133,6 @@ class SearchBarState extends State<SearchBar> {
                 ),
               ),
             ),
-          ),
-          CustomButton(
-            icon: CustomIcons.close,
-            iconColor: theme.colorScheme.onSurface,
-            backgroundColor: theme.colorScheme.tertiaryContainer,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
           ),
         ],
       ),

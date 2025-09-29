@@ -23,15 +23,19 @@ class DashboardBottomBar extends StatelessWidget {
       buildWhen: (p, c) => p.shouldShowBottomBar != c.shouldShowBottomBar,
       builder: (context, outerState) {
         return BlocBuilder<RouterCubit, RouterState>(
-          buildWhen: (p, c) => p.isMainPage != c.isMainPage,
+          buildWhen: (p, c) =>
+              p.isMainPage != c.isMainPage ||
+              p.isSettingsPage != c.isSettingsPage,
           builder: (context, state) {
+            final shouldShow =
+                (state.isMainPage || state.isSettingsPage) &&
+                outerState.shouldShowBottomBar;
             return MediaQuery(
               data: MediaQuery.of(
                 context,
               ).copyWith(textScaler: const TextScaler.linear(1)),
               child: AnimatedBoxSize(
-                isChildVisible:
-                    state.isMainPage && outerState.shouldShowBottomBar,
+                isChildVisible: shouldShow,
                 child: Material(
                   child: Ink(
                     decoration: BoxDecoration(

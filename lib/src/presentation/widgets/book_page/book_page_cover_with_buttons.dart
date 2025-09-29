@@ -12,6 +12,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_listen_button.dart';
@@ -62,7 +63,26 @@ class BookPageCoverWithButtons extends StatelessWidget {
               Expanded(
                 child: Stack(
                   children: [
-                    _Image(coverUrl: book.coverUrl),
+                    BlocBuilder<RouterCubit, RouterState>(
+                      buildWhen: (p, c) {
+                        return p.location != c.location;
+                      },
+                      builder: (context, state) {
+                        return GestureDetector(
+                          onTap: () {
+                            if (state.location.contains(book.slug)) {
+                              return;
+                            }
+                            router.pushNamed(
+                              bookPageConfig.name,
+                              pathParameters: {'slug': book.slug},
+                              extra: book,
+                            );
+                          },
+                          child: _Image(coverUrl: book.coverUrl),
+                        );
+                      },
+                    ),
                     if (offlineAudiobook != null)
                       Positioned(
                         left: Dimensions.mediumPadding,
@@ -305,8 +325,12 @@ class _HeartButton extends StatelessWidget {
               CustomSnackbar.success(
                 context,
                 LocaleKeys.common_snackbar_not_logged.tr(),
-                icon: const Icon(Icons.login, size: 20),
-                onIconTap: () {
+                icon: const Icon(
+                  CustomIcons.for_you,
+                  size: 20,
+                  color: CustomColors.white,
+                ),
+                onTap: () {
                   router.pushNamed(
                     myLibraryPageConfig.name,
                     extra: MyLibraryEnum.login,
