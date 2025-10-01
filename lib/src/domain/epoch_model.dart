@@ -6,6 +6,7 @@ part 'epoch_model.g.dart';
 @freezed
 sealed class EpochModel with _$EpochModel {
   const factory EpochModel({
+    int? id,
     String? url,
     String? name,
     String? href,

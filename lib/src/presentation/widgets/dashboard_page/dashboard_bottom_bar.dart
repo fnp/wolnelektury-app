@@ -25,10 +25,10 @@ class DashboardBottomBar extends StatelessWidget {
         return BlocBuilder<RouterCubit, RouterState>(
           buildWhen: (p, c) =>
               p.isMainPage != c.isMainPage ||
-              p.isSettingsPage != c.isSettingsPage,
+              p.isOtherPageWithBottomBar != c.isOtherPageWithBottomBar,
           builder: (context, state) {
             final shouldShow =
-                (state.isMainPage || state.isSettingsPage) &&
+                (state.isMainPage || state.isOtherPageWithBottomBar) &&
                 outerState.shouldShowBottomBar;
             return MediaQuery(
               data: MediaQuery.of(
@@ -164,12 +164,18 @@ class _NavigationItem extends StatelessWidget {
                             padding: shouldCorrectPadding
                                 ? const EdgeInsets.only(right: 1)
                                 : EdgeInsets.zero,
-                            child: Icon(
-                              icon,
-                              size: 24,
-                              color: state.location == path
-                                  ? CustomColors.secondaryBlueColor
-                                  : theme.colorScheme.onTertiaryContainer,
+                            child: TweenAnimationBuilder<Color?>(
+                              curve: Curves.fastOutSlowIn,
+                              tween: ColorTween(
+                                begin: theme.colorScheme.onTertiaryContainer,
+                                end: state.location == path
+                                    ? CustomColors.secondaryBlueColor
+                                    : theme.colorScheme.onTertiaryContainer,
+                              ),
+                              duration: const Duration(milliseconds: 300),
+                              builder: (context, color, _) {
+                                return Icon(icon, size: 24, color: color);
+                              },
                             ),
                           ),
                           const SizedBox(height: Dimensions.smallPadding),

@@ -279,7 +279,7 @@ class _Image extends StatelessWidget {
             )
           : CachedNetworkImage(
               imageUrl: coverUrl ?? '',
-              fit: BoxFit.cover,
+              fit: BoxFit.fitHeight,
               placeholder: (context, url) =>
                   Center(child: SvgPicture.asset(Images.logo)),
             ),

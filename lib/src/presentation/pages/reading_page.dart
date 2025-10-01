@@ -42,6 +42,7 @@ class _ReadingPageState extends State<ReadingPage> {
     final slug = widget.slug ?? widget.book?.slug;
     final child = _Body(itemScrollController: itemScrollController);
     final hasConnection = context.read<ConnectivityCubit>().state.isConnected;
+    final scaleFactor = MediaQuery.textScalerOf(context).scale(1);
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -53,6 +54,7 @@ class _ReadingPageState extends State<ReadingPage> {
                 itemScrollController: itemScrollController,
                 overrideProgressAnchor: widget.overrideProgressAnchor,
                 tryOffline: !hasConnection,
+                scaleFactor: scaleFactor,
               );
             }
             return cubit;
@@ -76,6 +78,7 @@ class _ReadingPageState extends State<ReadingPage> {
                       itemScrollController: itemScrollController,
                       overrideProgressAnchor: widget.overrideProgressAnchor,
                       tryOffline: !hasConnection,
+                      scaleFactor: scaleFactor,
                     );
                   },
                 ),

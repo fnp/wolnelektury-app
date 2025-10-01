@@ -7,6 +7,7 @@ part of 'kind_model.dart';
 // **************************************************************************
 
 _KindModel _$KindModelFromJson(Map<String, dynamic> json) => _KindModel(
+  id: (json['id'] as num?)?.toInt(),
   url: json['url'] as String?,
   name: json['name'] as String?,
   href: json['href'] as String?,
@@ -15,6 +16,7 @@ _KindModel _$KindModelFromJson(Map<String, dynamic> json) => _KindModel(
 
 Map<String, dynamic> _$KindModelToJson(_KindModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'url': instance.url,
       'name': instance.name,
       'href': instance.href,

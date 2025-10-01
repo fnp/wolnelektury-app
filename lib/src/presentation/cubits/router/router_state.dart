@@ -11,6 +11,10 @@ sealed class RouterState with _$RouterState {
 
 extension RouterStateX on RouterState {
   bool get isMainPage => mainPathsOrder.contains(location);
-  bool get isSettingsPage => location == settingsPageConfig.path;
+  bool get isOtherPageWithBottomBar {
+    return location == settingsPageConfig.path ||
+        location.contains(bookPageConfig.name);
+  }
+
   bool get isMyLibraryPage => location == myLibraryPageConfig.path;
 }

@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
 import 'package:wolnelektury/src/config/getter.dart';
@@ -34,6 +38,25 @@ class SettingsCubit extends SafeCubit<SettingsState> {
 
   Future<void> openSettings() async {
     await openAppSettings();
+  }
+
+  Future<void> reviewApp() async {
+    final InAppReview inAppReview = InAppReview.instance;
+    if (Platform.isAndroid) {
+      const appId = 'pl.app.wolnelektury';
+      final url = Uri.parse('market://details?id=$appId');
+      launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      if (await inAppReview.isAvailable()) {
+        await inAppReview.requestReview();
+      } else {
+        const appId = '6753013225';
+        final url = Uri.parse(
+          'https://apps.apple.com/app/id$appId?action=write-review',
+        );
+        launchUrl(url, mode: LaunchMode.externalApplication);
+      }
+    }
   }
 
   Future<void> _loadNotificationSettings() async {

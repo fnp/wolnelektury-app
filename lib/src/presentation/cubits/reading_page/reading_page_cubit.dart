@@ -20,7 +20,7 @@ part 'reading_page_state.dart';
 class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   DateTime? _lastProgressSent;
   bool _readyToSetProgress = false;
-  static const double _fontSizeMultiplier = 9;
+  static double _fontSizeMultiplier = 9;
   final AppStorageSettingsService _settingsStorage;
   final BooksRepository _booksRepository;
   final ProgressRepository _progressRepository;
@@ -35,7 +35,9 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     required ItemScrollController itemScrollController,
     int? overrideProgressAnchor,
     bool tryOffline = false,
+    double scaleFactor = 1,
   }) async {
+    _fontSizeMultiplier = 9 * scaleFactor;
     final settings = await _settingsStorage.readReadingSettings();
     emit(state.copyWith(isJsonLoading: true));
     final bookJson = await _booksRepository.getBookJson(

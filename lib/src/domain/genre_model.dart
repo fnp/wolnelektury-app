@@ -6,6 +6,7 @@ part 'genre_model.g.dart';
 @freezed
 sealed class GenreModel with _$GenreModel {
   const factory GenreModel({
+    int? id,
     String? url,
     String? name,
     String? href,

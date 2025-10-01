@@ -126,7 +126,12 @@ class SettingsPage extends StatelessWidget {
                       ChangePasswordDialog.show(context: context);
                     },
                   ),
-                _SettingsContainer(text: LocaleKeys.settings_rate.tr()),
+                _SettingsContainer(
+                  text: LocaleKeys.settings_rate.tr(),
+                  onTap: () {
+                    settingsCubit.reviewApp();
+                  },
+                ),
                 if (isAuthorized)
                   _SettingsContainer(
                     text: LocaleKeys.settings_delete.tr(),

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EpochModel {
 
- String? get url; String? get name; String? get href; String? get slug;
+ int? get id; String? get url; String? get name; String? get href; String? get slug;
 /// Create a copy of EpochModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $EpochModelCopyWith<EpochModel> get copyWith => _$EpochModelCopyWithImpl<EpochMo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EpochModel&&(identical(other.url, url) || other.url == url)&&(identical(other.name, name) || other.name == name)&&(identical(other.href, href) || other.href == href)&&(identical(other.slug, slug) || other.slug == slug));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EpochModel&&(identical(other.id, id) || other.id == id)&&(identical(other.url, url) || other.url == url)&&(identical(other.name, name) || other.name == name)&&(identical(other.href, href) || other.href == href)&&(identical(other.slug, slug) || other.slug == slug));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,url,name,href,slug);
+int get hashCode => Object.hash(runtimeType,id,url,name,href,slug);
 
 @override
 String toString() {
-  return 'EpochModel(url: $url, name: $name, href: $href, slug: $slug)';
+  return 'EpochModel(id: $id, url: $url, name: $name, href: $href, slug: $slug)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $EpochModelCopyWith<$Res>  {
   factory $EpochModelCopyWith(EpochModel value, $Res Function(EpochModel) _then) = _$EpochModelCopyWithImpl;
 @useResult
 $Res call({
- String? url, String? name, String? href, String? slug
+ int? id, String? url, String? name, String? href, String? slug
 });
 
 
@@ -66,9 +66,10 @@ class _$EpochModelCopyWithImpl<$Res>
 
 /// Create a copy of EpochModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? url = freezed,Object? name = freezed,Object? href = freezed,Object? slug = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? url = freezed,Object? name = freezed,Object? href = freezed,Object? slug = freezed,}) {
   return _then(_self.copyWith(
-url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,href: freezed == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
 as String?,slug: freezed == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
@@ -83,9 +84,10 @@ as String?,
 @JsonSerializable()
 
 class _EpochModel implements EpochModel {
-  const _EpochModel({this.url, this.name, this.href, this.slug});
+  const _EpochModel({this.id, this.url, this.name, this.href, this.slug});
   factory _EpochModel.fromJson(Map<String, dynamic> json) => _$EpochModelFromJson(json);
 
+@override final  int? id;
 @override final  String? url;
 @override final  String? name;
 @override final  String? href;
@@ -104,16 +106,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EpochModel&&(identical(other.url, url) || other.url == url)&&(identical(other.name, name) || other.name == name)&&(identical(other.href, href) || other.href == href)&&(identical(other.slug, slug) || other.slug == slug));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EpochModel&&(identical(other.id, id) || other.id == id)&&(identical(other.url, url) || other.url == url)&&(identical(other.name, name) || other.name == name)&&(identical(other.href, href) || other.href == href)&&(identical(other.slug, slug) || other.slug == slug));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,url,name,href,slug);
+int get hashCode => Object.hash(runtimeType,id,url,name,href,slug);
 
 @override
 String toString() {
-  return 'EpochModel(url: $url, name: $name, href: $href, slug: $slug)';
+  return 'EpochModel(id: $id, url: $url, name: $name, href: $href, slug: $slug)';
 }
 
 
@@ -124,7 +126,7 @@ abstract mixin class _$EpochModelCopyWith<$Res> implements $EpochModelCopyWith<$
   factory _$EpochModelCopyWith(_EpochModel value, $Res Function(_EpochModel) _then) = __$EpochModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? url, String? name, String? href, String? slug
+ int? id, String? url, String? name, String? href, String? slug
 });
 
 
@@ -141,9 +143,10 @@ class __$EpochModelCopyWithImpl<$Res>
 
 /// Create a copy of EpochModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? url = freezed,Object? name = freezed,Object? href = freezed,Object? slug = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? url = freezed,Object? name = freezed,Object? href = freezed,Object? slug = freezed,}) {
   return _then(_EpochModel(
-url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,href: freezed == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
 as String?,slug: freezed == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable

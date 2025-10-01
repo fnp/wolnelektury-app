@@ -1,9 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:wolnelektury/src/presentation/cubits/filtering/filtering_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/search/search_bar.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class FiltersPage extends StatelessWidget {
@@ -74,6 +76,7 @@ class _SelectedTags extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<FilteringCubit>();
+    final theme = Theme.of(context);
 
     return BlocBuilder<FilteringCubit, FilteringState>(
       buildWhen: (p, c) => p.selectedTags != c.selectedTags,
@@ -85,16 +88,28 @@ class _SelectedTags extends StatelessWidget {
             key: ValueKey(state.selectedTags.length),
             spacing: Dimensions.mediumPadding,
             runSpacing: 0,
-            children: state.selectedTags
-                .map(
-                  (tag) => ChoiceChip(
-                    label: Text(tag.name),
-                    selected: true,
-                    visualDensity: VisualDensity.compact,
-                    onSelected: (_) => cubit.toggleTag(tag),
+            children: [
+              ...state.selectedTags.mapIndexed((index, tag) {
+                return ChoiceChip(
+                  label: Text(tag.name),
+                  selected: true,
+                  visualDensity: VisualDensity.compact,
+                  onSelected: (_) => cubit.toggleTag(tag),
+                );
+              }),
+              if (state.selectedTags.isNotEmpty)
+                ActionChip(
+                  label: const Text('Wyczyść'),
+                  avatar: Icon(
+                    CustomIcons.delete_forever,
+                    color: theme.colorScheme.onPrimary,
                   ),
-                )
-                .toList(),
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () {
+                    cubit.clearAll();
+                  },
+                ),
+            ],
           ),
         );
       },

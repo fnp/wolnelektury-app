@@ -6,6 +6,7 @@ part 'kind_model.g.dart';
 @freezed
 sealed class KindModel with _$KindModel {
   const factory KindModel({
+    int? id,
     String? url,
     String? name,
     String? href,

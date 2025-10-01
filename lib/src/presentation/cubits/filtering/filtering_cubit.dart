@@ -113,4 +113,9 @@ class FilteringCubit extends SafeCubit<FilteringState> {
       },
     );
   }
+
+  Future<void> clearAll() async {
+    emit(state.copyWith(selectedTags: []));
+    getTags();
+  }
 }

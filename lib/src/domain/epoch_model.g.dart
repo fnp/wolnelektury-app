@@ -7,6 +7,7 @@ part of 'epoch_model.dart';
 // **************************************************************************
 
 _EpochModel _$EpochModelFromJson(Map<String, dynamic> json) => _EpochModel(
+  id: (json['id'] as num?)?.toInt(),
   url: json['url'] as String?,
   name: json['name'] as String?,
   href: json['href'] as String?,
@@ -15,6 +16,7 @@ _EpochModel _$EpochModelFromJson(Map<String, dynamic> json) => _EpochModel(
 
 Map<String, dynamic> _$EpochModelToJson(_EpochModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'url': instance.url,
       'name': instance.name,
       'href': instance.href,
