@@ -96,9 +96,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                 _closeDropdown();
               },
               behavior: HitTestBehavior.translucent,
-              child: Container(
-                color: Colors.transparent,
-              ),
+              child: Container(color: Colors.transparent),
             ),
             Positioned(
               width: widget.width,
@@ -107,7 +105,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                 offset: const Offset(0, Dimensions.elementHeight),
                 showWhenUnlinked: false,
                 child: Material(
-                  color: theme.colorScheme.surface,
+                  color: theme.colorScheme.surfaceContainer,
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
@@ -117,7 +115,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                     axisAlignment: -1.0,
                     child: Ink(
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.secondaryContainer,
+                        color: theme.colorScheme.surfaceContainer,
                         borderRadius: borderRadius,
                       ),
                       child: SizedBox(
@@ -128,48 +126,46 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
-                          children: widget.items.map(
-                            (item) {
-                              return SizedBox(
-                                height: Dimensions.elementHeight,
-                                child: Ink(
-                                  color: item.isSelected
-                                      ? CustomColors.primaryYellowColor
-                                      : Colors.transparent,
-                                  child: InkWell(
-                                    borderRadius: item == widget.items.last
-                                        ? borderRadius
-                                        : BorderRadius.zero,
-                                    onTap: () {
-                                      widget.onSelected(item.element);
-                                      _closeDropdown();
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: Dimensions.veryLargePadding,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              item.title,
-                                              style: theme.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: CustomColors.black,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                          children: widget.items.map((item) {
+                            return SizedBox(
+                              height: Dimensions.elementHeight,
+                              child: Ink(
+                                color: item.isSelected
+                                    ? CustomColors.primaryYellowColor
+                                    : Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: item == widget.items.last
+                                      ? borderRadius
+                                      : BorderRadius.zero,
+                                  onTap: () {
+                                    widget.onSelected(item.element);
+                                    _closeDropdown();
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: Dimensions.veryLargePadding,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            item.title,
+                                            style: theme.textTheme.bodyMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: CustomColors.black,
+                                                ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                          ).toList(),
+                              ),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),
@@ -222,7 +218,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
           decoration: BoxDecoration(
             color: widget.highlightButton
                 ? CustomColors.primaryYellowColor
-                : theme.colorScheme.secondaryContainer,
+                : theme.colorScheme.surfaceContainer,
             borderRadius: borderRadius,
           ),
           padding: const EdgeInsets.only(

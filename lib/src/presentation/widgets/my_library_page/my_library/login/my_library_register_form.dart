@@ -132,13 +132,10 @@ class _FormState extends State<_Form> {
               height: Dimensions.elementHeight,
               child: TextField(
                 textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  fillColor: showEmailError
-                      ? CustomColors.red.withValues(alpha: 0.3)
-                      : null,
-                ),
                 keyboardType: TextInputType.emailAddress,
-                style: theme.textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.black,
+                ),
                 controller: _emailController,
                 onChanged: (_) {
                   if (showEmailError) {
@@ -168,15 +165,12 @@ class _FormState extends State<_Form> {
               height: Dimensions.elementHeight,
               child: TextField(
                 textInputAction: TextInputAction.go,
-                decoration: InputDecoration(
-                  fillColor: showPasswordError
-                      ? CustomColors.red.withValues(alpha: 0.3)
-                      : null,
-                ),
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                style: theme.textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.black,
+                ),
                 controller: _passwordController,
                 onChanged: (_) {
                   if (showPasswordError) {
@@ -208,15 +202,12 @@ class _FormState extends State<_Form> {
               height: Dimensions.elementHeight,
               child: TextField(
                 textInputAction: TextInputAction.go,
-                decoration: InputDecoration(
-                  fillColor: showConfirmPasswordError
-                      ? CustomColors.red.withValues(alpha: 0.3)
-                      : null,
-                ),
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                style: theme.textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.black,
+                ),
                 controller: _confirmPasswordController,
                 onChanged: (_) {
                   if (showConfirmPasswordError) {
@@ -269,6 +260,7 @@ class _FormState extends State<_Form> {
                             style: theme.textTheme.bodyMedium?.copyWith(
                               decoration: TextDecoration.underline,
                               color: CustomColors.secondaryBlueColor,
+                              decorationColor: CustomColors.secondaryBlueColor,
                               fontWeight: FontWeight.w500,
                             ),
                           ).tr(),

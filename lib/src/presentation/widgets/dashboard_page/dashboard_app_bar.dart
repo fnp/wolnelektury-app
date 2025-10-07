@@ -49,7 +49,8 @@ class DashboardAppBar extends StatelessWidget {
                             builder: (context, state) {
                               if (!state.isMainPage) {
                                 return CustomButton(
-                                  backgroundColor: CustomColors.white,
+                                  backgroundColor:
+                                      theme.colorScheme.surfaceContainer,
                                   icon: Icons.arrow_back,
                                   onPressed: () {
                                     if (state.isMainPage) return;
@@ -116,7 +117,8 @@ class DashboardAppBar extends StatelessWidget {
                                 return CustomButton(
                                   icon: CustomIcons.settings,
                                   iconColor: CustomColors.black,
-                                  backgroundColor: CustomColors.white,
+                                  backgroundColor:
+                                      theme.colorScheme.surfaceContainer,
                                   onPressed: () {
                                     router.pushNamed(settingsPageConfig.name);
                                   },

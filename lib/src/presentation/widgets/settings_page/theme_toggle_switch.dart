@@ -101,6 +101,7 @@ class _ThemeToggleSwitchState extends State<ThemeToggleSwitch>
             style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
               fontFeatures: [const FontFeature.enable('smcp')],
+              color: Colors.black,
             ),
           ),
         ),
@@ -114,7 +115,7 @@ class _ThemeToggleSwitchState extends State<ThemeToggleSwitch>
           },
           child: SizedBox(
             width: Dimensions.elementHeight * 3,
-            height: Dimensions.elementHeight,
+            height: Dimensions.elementHeight - 2,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(

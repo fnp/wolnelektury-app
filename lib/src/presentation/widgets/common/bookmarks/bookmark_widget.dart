@@ -123,6 +123,7 @@ class _Body extends StatelessWidget {
                             book.title,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: CustomColors.black,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -131,7 +132,9 @@ class _Body extends StatelessWidget {
                         Flexible(
                           child: Text(
                             book.authors.map((e) => e.name).join(', '),
-                            style: theme.textTheme.bodySmall,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: CustomColors.black,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -143,7 +146,6 @@ class _Body extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     spacing: Dimensions.smallPadding,
                     children: [
-                      const Icon(CustomIcons.bookmark),
                       CustomButton(
                         onPressed: () {
                           bookmarkCubit.deleteBookmark(bookmark: bookmark);
@@ -185,6 +187,7 @@ class _Body extends StatelessWidget {
                       ),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold,
+                        color: CustomColors.black,
                       ),
                     ),
                   ),
@@ -193,9 +196,9 @@ class _Body extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: CustomColors.lightGrey,
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainer,
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -278,7 +281,7 @@ class _Body extends StatelessWidget {
                           ShareUtils.shareBookmark(bookmark);
                         },
                         icon: CustomIcons.ios_share,
-                        iconColor: CustomColors.white,
+                        iconColor: CustomColors.black,
                       ),
                     ],
                   );

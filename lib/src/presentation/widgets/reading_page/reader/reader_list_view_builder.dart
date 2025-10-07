@@ -14,7 +14,7 @@ import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
-class ReaderListViewBuilder extends StatelessWidget {
+class ReaderListViewBuilder extends StatefulWidget {
   final ReadingPageState state;
   final ItemScrollController itemScrollController;
   const ReaderListViewBuilder({
@@ -22,6 +22,35 @@ class ReaderListViewBuilder extends StatelessWidget {
     required this.state,
     required this.itemScrollController,
   });
+
+  @override
+  State<ReaderListViewBuilder> createState() => _ReaderListViewBuilderState();
+}
+
+class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
+
+  late ReadingPageCubit cubit;
+
+  void listener(ReadingPageCubit cubit) {
+    cubit.setVisualProgress(
+      itemPositionsListener.itemPositions.value.lastOrNull?.index ?? 0,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cubit = context.read<ReadingPageCubit>();
+    itemPositionsListener.itemPositions.addListener(() => listener(cubit));
+  }
+
+  @override
+  void dispose() {
+    itemPositionsListener.itemPositions.removeListener(() => listener(cubit));
+    super.dispose();
+  }
 
   void onLongPress({
     required ReadingPageCubit cubit,
@@ -46,18 +75,20 @@ class ReaderListViewBuilder extends StatelessWidget {
     final cubit = BlocProvider.of<ReadingPageCubit>(context);
     final bookmarksCubit = BlocProvider.of<BookmarksCubit>(context);
     final theme = Theme.of(context);
+
     return MediaQuery(
       data: MediaQuery.of(
         context,
       ).copyWith(textScaler: const TextScaler.linear(1)),
       child: ScrollablePositionedList.builder(
-        itemScrollController: itemScrollController,
-        itemCount: state.book!.contents.length + 1,
+        itemScrollController: widget.itemScrollController,
+        itemCount: widget.state.book!.contents.length + 1,
+        itemPositionsListener: itemPositionsListener,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return _Header(state: state);
+            return _Header(state: widget.state);
           }
-          final element = state.book!.contents[index - 1];
+          final element = widget.state.book!.contents[index - 1];
           return InkWellWrapper(
             onLongPress: () => onLongPress(
               cubit: cubit,
@@ -78,8 +109,8 @@ class ReaderListViewBuilder extends StatelessWidget {
                   ReaderYellowBackground(index: index),
                   ReaderSpansWrapper(
                     element: element,
-                    fontFamily: state.fontType.familyName,
-                    fontSize: state.getFontSize(theme),
+                    fontFamily: widget.state.fontType.familyName,
+                    fontSize: widget.state.getFontSize(theme),
                     debugPrint: true,
                   ),
                 ],

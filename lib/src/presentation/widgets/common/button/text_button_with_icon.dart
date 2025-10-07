@@ -50,7 +50,7 @@ class TextButtonWithIcon extends StatelessWidget {
           decoration: BoxDecoration(
             color: isActive
                 ? activeColor
-                : nonActiveColor ?? theme.colorScheme.secondaryContainer,
+                : nonActiveColor ?? theme.colorScheme.surfaceContainer,
             borderRadius: BorderRadius.circular(
               Dimensions.borderRadiusOfCircle,
             ),

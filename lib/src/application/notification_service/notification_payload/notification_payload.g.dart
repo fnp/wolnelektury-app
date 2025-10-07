@@ -8,7 +8,11 @@ part of 'notification_payload.dart';
 
 _NotificationPayload _$NotificationPayloadFromJson(Map<String, dynamic> json) =>
     _NotificationPayload(
-      type: $enumDecode(_$NotificationTypeEnumMap, json['type']),
+      type: $enumDecode(
+        _$NotificationTypeEnumMap,
+        json['type'],
+        unknownValue: NotificationType.app,
+      ),
       itemId: json['itemId'] as String?,
     );
 
@@ -22,4 +26,6 @@ Map<String, dynamic> _$NotificationPayloadToJson(
 const _$NotificationTypeEnumMap = {
   NotificationType.book: 'book',
   NotificationType.app: 'app',
+  NotificationType.author: 'author',
+  NotificationType.settings: 'settings',
 };

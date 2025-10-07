@@ -159,7 +159,7 @@ class _DetailsTableRow extends StatelessWidget {
                 .map(
                   (e) => DecoratedBox(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: theme.colorScheme.tertiaryContainer,
                       borderRadius: BorderRadius.circular(
                         Dimensions.borderRadiusOfCircle,
                       ),
@@ -187,6 +187,8 @@ class _DetailsTableRow extends StatelessWidget {
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),

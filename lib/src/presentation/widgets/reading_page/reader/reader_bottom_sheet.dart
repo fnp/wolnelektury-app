@@ -33,7 +33,6 @@ class ReaderBottomSheet extends StatelessWidget {
     showModalBottomSheet(
       context: dashboardNavigationKey.currentContext!,
       useRootNavigator: true,
-      backgroundColor: CustomColors.primaryYellowColor,
       builder: (context) {
         return ReaderBottomSheet(
           element: element,
@@ -73,10 +72,7 @@ class ReaderBottomSheet extends StatelessWidget {
               ),
             ),
             if (isTheme)
-              const Icon(
-                Icons.theater_comedy,
-                color: CustomColors.white,
-              ),
+              const Icon(Icons.theater_comedy, color: CustomColors.white),
           ],
         ),
       ),

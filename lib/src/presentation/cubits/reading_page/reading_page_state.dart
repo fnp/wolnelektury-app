@@ -16,6 +16,9 @@ sealed class ReadingPageState with _$ReadingPageState {
 
     // Progress
     ProgressModel? progress,
+
+    // Visual progress in %
+    @Default(0) int visualProgress,
   }) = _ReadingPageState;
 }
 

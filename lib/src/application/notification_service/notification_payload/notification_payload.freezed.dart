@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NotificationPayload {
 
- NotificationType get type; String? get itemId;
+@JsonKey(unknownEnumValue: NotificationType.app) NotificationType get type; String? get itemId;
 /// Create a copy of NotificationPayload
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $NotificationPayloadCopyWith<$Res>  {
   factory $NotificationPayloadCopyWith(NotificationPayload value, $Res Function(NotificationPayload) _then) = _$NotificationPayloadCopyWithImpl;
 @useResult
 $Res call({
- NotificationType type, String? itemId
+@JsonKey(unknownEnumValue: NotificationType.app) NotificationType type, String? itemId
 });
 
 
@@ -81,10 +81,10 @@ as String?,
 @JsonSerializable()
 
 class _NotificationPayload implements NotificationPayload {
-  const _NotificationPayload({required this.type, this.itemId});
+  const _NotificationPayload({@JsonKey(unknownEnumValue: NotificationType.app) required this.type, this.itemId});
   factory _NotificationPayload.fromJson(Map<String, dynamic> json) => _$NotificationPayloadFromJson(json);
 
-@override final  NotificationType type;
+@override@JsonKey(unknownEnumValue: NotificationType.app) final  NotificationType type;
 @override final  String? itemId;
 
 /// Create a copy of NotificationPayload
@@ -120,7 +120,7 @@ abstract mixin class _$NotificationPayloadCopyWith<$Res> implements $Notificatio
   factory _$NotificationPayloadCopyWith(_NotificationPayload value, $Res Function(_NotificationPayload) _then) = __$NotificationPayloadCopyWithImpl;
 @override @useResult
 $Res call({
- NotificationType type, String? itemId
+@JsonKey(unknownEnumValue: NotificationType.app) NotificationType type, String? itemId
 });
 
 

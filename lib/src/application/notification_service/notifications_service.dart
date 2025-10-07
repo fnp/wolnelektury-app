@@ -22,7 +22,6 @@ class NotificationService {
   StreamSubscription? _notificationOpenedSubscription;
 
   void initialize() {
-    print('initialize notification service');
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     _notificationOpenedSubscription = FirebaseMessaging.onMessageOpenedApp
         .listen((event) {

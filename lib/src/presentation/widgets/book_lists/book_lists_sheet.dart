@@ -23,7 +23,6 @@ class BookListsSheet extends StatelessWidget {
   }) {
     showModalBottomSheet(
       enableDrag: false,
-      backgroundColor: CustomColors.primaryYellowColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Dimensions.modalsBorderRadius),
@@ -185,7 +184,7 @@ class AddNewListElementState extends State<AddNewListElement> {
               AnimatedBoxFade(
                 isChildVisible: isReadyToSave,
                 child: ElevatedButton(
-                  style: blueElevatedButton,
+                  style: greenElevatedButton,
                   onPressed: () {
                     widget.onSave.call(_controller.text);
                     _controller.clear();

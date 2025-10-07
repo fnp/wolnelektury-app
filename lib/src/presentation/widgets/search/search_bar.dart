@@ -71,6 +71,7 @@ class SearchBarState extends State<SearchBar> {
               },
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w600,
+                color: Colors.black,
               ),
               cursorColor: CustomColors.black,
               decoration: InputDecoration(

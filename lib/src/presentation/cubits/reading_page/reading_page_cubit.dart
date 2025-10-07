@@ -38,8 +38,8 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     double scaleFactor = 1,
   }) async {
     _fontSizeMultiplier = 9 * scaleFactor;
-    final settings = await _settingsStorage.readReadingSettings();
     emit(state.copyWith(isJsonLoading: true));
+    final settings = await _settingsStorage.readReadingSettings();
     final bookJson = await _booksRepository.getBookJson(
       slug: book.slug,
       tryOffline: tryOffline,
@@ -184,6 +184,13 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       emit(state.copyWith(isAddingBookmark: false));
     }
     emit(state.copyWith(selectedIndex: index, selectedParagraph: element));
+  }
+
+  void setVisualProgress(int index) {
+    final maxLength = state.book?.contents.length ?? 1;
+    final progress = (index / maxLength * 100).clamp(0, 100).floor();
+    if (progress == state.visualProgress) return;
+    emit(state.copyWith(visualProgress: progress));
   }
 
   // ------------------------------------------

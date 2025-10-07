@@ -74,7 +74,6 @@ class _MyLibraryForgotPasswordDialogState
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: LocaleKeys.account_email.tr(),
-                fillColor: theme.colorScheme.surface,
               ),
               onChanged: (value) {
                 if (showEmailError) {
@@ -105,7 +104,7 @@ class _MyLibraryForgotPasswordDialogState
                   child: Text(
                     LocaleKeys.login_reset_dialog_button.tr(),
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onPrimary,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ).tr(),

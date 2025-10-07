@@ -107,7 +107,7 @@ class _Element extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 Dimensions.borderRadiusOfCircle,
               ),
-              color: isBookInList ? CustomColors.grey : CustomColors.white,
+              color: isBookInList ? CustomColors.green : CustomColors.white,
             ),
             child: InkWellWrapper(
               borderRadius: BorderRadius.circular(
@@ -137,20 +137,23 @@ class _Element extends StatelessWidget {
                       ),
                     ),
                   ),
-                  CustomButton(
-                    backgroundColor: isBookInList
-                        ? CustomColors.grey
-                        : CustomColors.white,
-                    icon: isBookInList
-                        ? CustomIcons.delete_forever
-                        : CustomIcons.add,
-                    onPressed: () {
-                      if (isBookInList) {
-                        onRemove();
-                      } else {
-                        onAdd();
-                      }
-                    },
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    switchInCurve: Curves.fastOutSlowIn,
+                    switchOutCurve: Curves.fastOutSlowIn,
+                    child: isBookInList
+                        ? CustomButton(
+                            key: ValueKey('remove_$listName'),
+                            backgroundColor: CustomColors.white,
+                            icon: CustomIcons.delete_forever,
+                            onPressed: onRemove,
+                          )
+                        : CustomButton(
+                            key: ValueKey('add_$listName'),
+                            backgroundColor: CustomColors.white,
+                            icon: CustomIcons.add,
+                            onPressed: onAdd,
+                          ),
                   ),
                 ],
               ),

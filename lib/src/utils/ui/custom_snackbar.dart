@@ -57,7 +57,9 @@ class CustomSnackbar {
                   child: Text(
                     message,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
+                      color: isSuccess
+                          ? CustomColors.black
+                          : CustomColors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -4,7 +4,6 @@ import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_c
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_font_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_font_style.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_theme.dart';
-import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPageSettings extends StatelessWidget {
@@ -18,7 +17,7 @@ class ReadingPageSettings extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       useRootNavigator: true,
-      backgroundColor: CustomColors.primaryYellowColor,
+      // backgroundColor: CustomColors.primaryYellowColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Dimensions.modalsBorderRadius),

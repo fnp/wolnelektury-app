@@ -16,9 +16,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
   static void show({required BuildContext context, VoidCallback? onClosed}) {
     showModalBottomSheet(
       context: context,
-      useRootNavigator: false,
-      backgroundColor: CustomColors.primaryYellowColor,
-      barrierColor: Colors.transparent,
+      useRootNavigator: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Dimensions.modalsBorderRadius),

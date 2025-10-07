@@ -38,6 +38,7 @@ ThemeData get lightTheme => _baseTheme.copyWith(
     onSecondaryContainer: CustomColors.black,
     tertiaryContainer: CustomColors.white,
     onTertiaryContainer: CustomColors.black,
+    surfaceContainer: CustomColors.white,
   ),
 );
 
@@ -66,7 +67,7 @@ ThemeData get darkTheme => _baseTheme.copyWith(
     onPrimary: CustomColors.white,
     secondary: CustomColors.secondaryBlueColor,
     onSecondary: CustomColors.white,
-    error: CustomColors.red,
+    error: CustomColors.darkModeRed,
     onError: CustomColors.white,
     surface: CustomColors.darkGrey,
     onSurface: CustomColors.white,
@@ -74,6 +75,7 @@ ThemeData get darkTheme => _baseTheme.copyWith(
     onSecondaryContainer: CustomColors.white,
     tertiaryContainer: CustomColors.black,
     onTertiaryContainer: CustomColors.darkModeGrey,
+    surfaceContainer: CustomColors.lightGrey,
   ),
 );
 
@@ -213,19 +215,15 @@ final _lightModeInput = InputDecorationTheme(
 );
 
 final _darkModeInput = _lightModeInput.copyWith(
-  fillColor: CustomColors.darkModeGrey,
+  fillColor: CustomColors.lightGrey,
   contentPadding: const EdgeInsets.symmetric(
     horizontal: Dimensions.veryLargePadding,
   ),
   hintStyle: const TextStyle(
-    color: CustomColors.white,
+    color: CustomColors.black,
     fontSize: 14,
     fontWeight: FontWeight.w500,
     fontFamily: sourceSans3Family,
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(Dimensions.elementHeight / 2),
-    borderSide: const BorderSide(color: CustomColors.darkGrey),
   ),
 );
 

@@ -89,7 +89,7 @@ class SettingsPage extends StatelessWidget {
                       builder: (context, state) {
                         return FlutterSwitch(
                           activeColor: CustomColors.green,
-                          inactiveColor: CustomColors.red,
+                          inactiveColor: CustomColors.darkModeGrey,
                           height: 38,
                           toggleSize: 30,
                           width: 80,
@@ -215,7 +215,7 @@ class _SettingsContainer extends StatelessWidget {
       padding: const EdgeInsets.only(top: Dimensions.mediumPadding),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: theme.colorScheme.secondaryContainer,
+          color: theme.colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
           border: Border.all(color: theme.colorScheme.surface),
         ),

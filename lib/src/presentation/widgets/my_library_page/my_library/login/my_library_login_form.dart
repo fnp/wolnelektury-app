@@ -74,13 +74,8 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
             height: Dimensions.elementHeight,
             child: TextField(
               textInputAction: TextInputAction.next,
-              decoration: InputDecoration(
-                fillColor: showUsernameError
-                    ? Colors.red.withValues(alpha: 0.3)
-                    : null,
-              ),
               keyboardType: TextInputType.text,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
               controller: _usernameController,
               onChanged: (_) {
                 if (showUsernameError) {
@@ -113,7 +108,7 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
               obscureText: true,
               enableSuggestions: false,
               autocorrect: false,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
               controller: _passwordController,
               onSubmitted: (value) {
                 _validate();
@@ -130,9 +125,6 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                 }
               },
               decoration: InputDecoration(
-                fillColor: showPasswordError
-                    ? Colors.red.withValues(alpha: 0.3)
-                    : null,
                 suffixIcon: GestureDetector(
                   onTap: () {
                     MyLibraryForgotPasswordDialog.show(context: context);
@@ -151,7 +143,7 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                           textAlign: TextAlign.center,
                           style: theme.textTheme.bodySmall?.copyWith(
                             decoration: TextDecoration.underline,
-                            color: CustomColors.secondaryBlueColor,
+                            color: CustomColors.black,
                             fontWeight: FontWeight.w500,
                           ),
                         ).tr(),
@@ -188,6 +180,7 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                             decoration: TextDecoration.underline,
                             color: CustomColors.secondaryBlueColor,
                             fontWeight: FontWeight.w500,
+                            decorationColor: CustomColors.secondaryBlueColor,
                           ),
                         ).tr(),
                       ],

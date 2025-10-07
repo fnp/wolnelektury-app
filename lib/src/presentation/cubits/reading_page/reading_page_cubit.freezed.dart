@@ -17,7 +17,8 @@ mixin _$ReadingPageState {
 
  String? get currentSlug; double get textSizeFactor; ReaderFontType get fontType; bool get isJsonLoading; ReaderBookModel? get book;// ParagraphSheet
  int? get selectedIndex; ReaderBookModelContent? get selectedParagraph; bool get isAddingBookmark;// Progress
- ProgressModel? get progress;
+ ProgressModel? get progress;// Visual progress in %
+ int get visualProgress;
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $ReadingPageStateCopyWith<ReadingPageState> get copyWith => _$ReadingPageStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.book, book) || other.book == book)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.book, book) || other.book == book)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.visualProgress, visualProgress) || other.visualProgress == visualProgress));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,book,selectedIndex,selectedParagraph,isAddingBookmark,progress);
+int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,book,selectedIndex,selectedParagraph,isAddingBookmark,progress,visualProgress);
 
 @override
 String toString() {
-  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress)';
+  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress, visualProgress: $visualProgress)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $ReadingPageStateCopyWith<$Res>  {
   factory $ReadingPageStateCopyWith(ReadingPageState value, $Res Function(ReadingPageState) _then) = _$ReadingPageStateCopyWithImpl;
 @useResult
 $Res call({
- String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress
+ String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress, int visualProgress
 });
 
 
@@ -65,7 +66,7 @@ class _$ReadingPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? book = freezed,Object? selectedIndex = freezed,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? book = freezed,Object? selectedIndex = freezed,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,Object? visualProgress = null,}) {
   return _then(_self.copyWith(
 currentSlug: freezed == currentSlug ? _self.currentSlug : currentSlug // ignore: cast_nullable_to_non_nullable
 as String?,textSizeFactor: null == textSizeFactor ? _self.textSizeFactor : textSizeFactor // ignore: cast_nullable_to_non_nullable
@@ -76,7 +77,8 @@ as ReaderBookModel?,selectedIndex: freezed == selectedIndex ? _self.selectedInde
 as int?,selectedParagraph: freezed == selectedParagraph ? _self.selectedParagraph : selectedParagraph // ignore: cast_nullable_to_non_nullable
 as ReaderBookModelContent?,isAddingBookmark: null == isAddingBookmark ? _self.isAddingBookmark : isAddingBookmark // ignore: cast_nullable_to_non_nullable
 as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as ProgressModel?,
+as ProgressModel?,visualProgress: null == visualProgress ? _self.visualProgress : visualProgress // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 /// Create a copy of ReadingPageState
@@ -99,7 +101,7 @@ $ProgressModelCopyWith<$Res>? get progress {
 
 
 class _ReadingPageState implements ReadingPageState {
-  const _ReadingPageState({this.currentSlug, this.textSizeFactor = 0.5, this.fontType = ReaderFontType.sans, this.isJsonLoading = false, this.book, this.selectedIndex, this.selectedParagraph, this.isAddingBookmark = false, this.progress});
+  const _ReadingPageState({this.currentSlug, this.textSizeFactor = 0.5, this.fontType = ReaderFontType.sans, this.isJsonLoading = false, this.book, this.selectedIndex, this.selectedParagraph, this.isAddingBookmark = false, this.progress, this.visualProgress = 0});
   
 
 @override final  String? currentSlug;
@@ -113,6 +115,8 @@ class _ReadingPageState implements ReadingPageState {
 @override@JsonKey() final  bool isAddingBookmark;
 // Progress
 @override final  ProgressModel? progress;
+// Visual progress in %
+@override@JsonKey() final  int visualProgress;
 
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
@@ -124,16 +128,16 @@ _$ReadingPageStateCopyWith<_ReadingPageState> get copyWith => __$ReadingPageStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.book, book) || other.book == book)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.book, book) || other.book == book)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.visualProgress, visualProgress) || other.visualProgress == visualProgress));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,book,selectedIndex,selectedParagraph,isAddingBookmark,progress);
+int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,book,selectedIndex,selectedParagraph,isAddingBookmark,progress,visualProgress);
 
 @override
 String toString() {
-  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress)';
+  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, book: $book, selectedIndex: $selectedIndex, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress, visualProgress: $visualProgress)';
 }
 
 
@@ -144,7 +148,7 @@ abstract mixin class _$ReadingPageStateCopyWith<$Res> implements $ReadingPageSta
   factory _$ReadingPageStateCopyWith(_ReadingPageState value, $Res Function(_ReadingPageState) _then) = __$ReadingPageStateCopyWithImpl;
 @override @useResult
 $Res call({
- String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress
+ String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, ReaderBookModel? book, int? selectedIndex, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress, int visualProgress
 });
 
 
@@ -161,7 +165,7 @@ class __$ReadingPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? book = freezed,Object? selectedIndex = freezed,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? book = freezed,Object? selectedIndex = freezed,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,Object? visualProgress = null,}) {
   return _then(_ReadingPageState(
 currentSlug: freezed == currentSlug ? _self.currentSlug : currentSlug // ignore: cast_nullable_to_non_nullable
 as String?,textSizeFactor: null == textSizeFactor ? _self.textSizeFactor : textSizeFactor // ignore: cast_nullable_to_non_nullable
@@ -172,7 +176,8 @@ as ReaderBookModel?,selectedIndex: freezed == selectedIndex ? _self.selectedInde
 as int?,selectedParagraph: freezed == selectedParagraph ? _self.selectedParagraph : selectedParagraph // ignore: cast_nullable_to_non_nullable
 as ReaderBookModelContent?,isAddingBookmark: null == isAddingBookmark ? _self.isAddingBookmark : isAddingBookmark // ignore: cast_nullable_to_non_nullable
 as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as ProgressModel?,
+as ProgressModel?,visualProgress: null == visualProgress ? _self.visualProgress : visualProgress // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

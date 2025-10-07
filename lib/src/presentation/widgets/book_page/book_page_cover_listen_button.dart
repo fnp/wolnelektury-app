@@ -43,7 +43,7 @@ class BookPageCoverListenButton extends StatelessWidget {
               Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.secondaryContainer,
+                    color: theme.colorScheme.surfaceContainer,
                   ),
                 ),
               ),

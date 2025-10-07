@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
@@ -11,9 +12,9 @@ import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_b
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_bookmark_listener.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_list_view_builder.dart';
+import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_page_progress_indicator.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
-import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPage extends StatefulWidget {
@@ -106,9 +107,7 @@ class _Body extends StatelessWidget {
                 return AnimatedBoxFade(
                   duration: const Duration(milliseconds: 400),
                   isChildVisible: !state.isJsonLoading,
-                  collapsedChild: const Center(
-                    child: CustomLoader(color: CustomColors.secondaryBlueColor),
-                  ),
+                  collapsedChild: const _SkeletonPlaceholder(),
                   child: state.book == null
                       ? const SizedBox.shrink()
                       : ReaderListViewBuilder(
@@ -118,6 +117,12 @@ class _Body extends StatelessWidget {
                 );
               },
             ),
+          ),
+          const Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: ReadingPageProgressIndicator(),
           ),
           Positioned(
             bottom: Dimensions.modalsPadding,
@@ -137,6 +142,33 @@ class _Body extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SkeletonPlaceholder extends StatelessWidget {
+  const _SkeletonPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      child: Padding(
+        padding: const EdgeInsets.all(Dimensions.largePadding * 2),
+        child: SingleChildScrollView(
+          child: Column(
+            spacing: Dimensions.largePadding,
+            children: [
+              Text(BoneMock.longParagraph),
+              Text(BoneMock.paragraph),
+              Text(BoneMock.longParagraph),
+              Text(BoneMock.longParagraph),
+              Text(BoneMock.paragraph),
+              Text(BoneMock.paragraph),
+              Text(BoneMock.longParagraph),
+            ],
+          ),
+        ),
       ),
     );
   }
