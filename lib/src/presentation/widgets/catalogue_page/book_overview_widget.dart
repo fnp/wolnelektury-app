@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
@@ -274,8 +275,8 @@ class _AddToListButton extends StatelessWidget {
         final isBookInEditedList = state.isBookInEditedList(slug);
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
-          switchOutCurve: Curves.fastOutSlowIn,
-          switchInCurve: Curves.fastOutSlowIn,
+          switchOutCurve: defaultCurve,
+          switchInCurve: defaultCurve,
           transitionBuilder: (child, animation) =>
               ScaleTransition(scale: animation, child: child),
           child: CustomButton(

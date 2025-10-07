@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
@@ -60,7 +61,7 @@ class BookPageCoverListenButton extends StatelessWidget {
                       availableWidth * (state.progress.clamp(0.0, 1.0));
                   return AnimatedPositioned(
                     duration: const Duration(seconds: 1),
-                    curve: Curves.fastOutSlowIn,
+                    curve: defaultCurve,
                     left: 0,
                     top: 0,
                     bottom: 0,

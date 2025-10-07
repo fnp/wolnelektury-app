@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
@@ -28,7 +29,7 @@ class MyLibraryList extends StatelessWidget {
         final isExisting = state.doesLocalListExistsAlready(bookList.name);
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
-          curve: Curves.fastOutSlowIn,
+          curve: defaultCurve,
           alignment: Alignment.topCenter,
           child: isExisting
               ? Padding(
@@ -155,8 +156,8 @@ class _DeleteButton extends StatelessWidget {
       builder: (context, state) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
-          switchInCurve: Curves.fastOutSlowIn,
-          switchOutCurve: Curves.fastOutSlowIn,
+          switchInCurve: defaultCurve,
+          switchOutCurve: defaultCurve,
           transitionBuilder: (child, animation) {
             return FadeTransition(opacity: animation, child: child);
           },

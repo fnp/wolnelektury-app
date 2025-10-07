@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
@@ -139,8 +140,8 @@ class _Element extends StatelessWidget {
                   ),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
-                    switchInCurve: Curves.fastOutSlowIn,
-                    switchOutCurve: Curves.fastOutSlowIn,
+                    switchInCurve: defaultCurve,
+                    switchOutCurve: defaultCurve,
                     child: isBookInList
                         ? CustomButton(
                             key: ValueKey('remove_$listName'),

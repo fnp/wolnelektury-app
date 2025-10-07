@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
@@ -51,7 +52,7 @@ class MyLibraryListBook extends StatelessWidget {
                       innerState.bookToRemoveFromList?.$2 == bookSlug);
               return AnimatedSize(
                 duration: const Duration(milliseconds: 300),
-                curve: Curves.fastOutSlowIn,
+                curve: defaultCurve,
                 child: shouldHide
                     ? const SizedBox(width: double.infinity)
                     : Padding(

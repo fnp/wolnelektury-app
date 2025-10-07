@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/hint_model.dart';
 import 'package:wolnelektury/src/domain/tag_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/filtering/filtering_cubit.dart';
@@ -25,7 +26,7 @@ class SearchHints extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
-      curve: Curves.fastOutSlowIn,
+      curve: defaultCurve,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

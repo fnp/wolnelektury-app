@@ -5,6 +5,8 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 const String sourceSans3Family = 'SourceSans3';
 const String sourceSerif4Family = 'SourceSerif4';
 
+const Curve defaultCurve = Curves.fastOutSlowIn;
+
 ThemeData get lightTheme => _baseTheme.copyWith(
   textTheme: _baseTheme.textTheme.apply(
     bodyColor: CustomColors.black,

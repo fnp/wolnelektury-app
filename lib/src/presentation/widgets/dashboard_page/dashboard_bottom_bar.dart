@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
@@ -165,7 +166,7 @@ class _NavigationItem extends StatelessWidget {
                                 ? const EdgeInsets.only(right: 1)
                                 : EdgeInsets.zero,
                             child: TweenAnimationBuilder<Color?>(
-                              curve: Curves.fastOutSlowIn,
+                              curve: defaultCurve,
                               tween: ColorTween(
                                 begin: theme.colorScheme.onTertiaryContainer,
                                 end: state.location == path

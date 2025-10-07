@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 
 class AnimatedBoxSize extends StatelessWidget {
   const AnimatedBoxSize({
@@ -18,7 +19,7 @@ class AnimatedBoxSize extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSize(
       duration: duration,
-      curve: Curves.fastOutSlowIn,
+      curve: defaultCurve,
       child: isChildVisible ? child : collapsedChild,
     );
   }

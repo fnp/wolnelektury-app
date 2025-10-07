@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
@@ -41,8 +42,8 @@ class MyLibraryMyLibraryLoginForms extends StatelessWidget {
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 200),
                         reverseDuration: const Duration(milliseconds: 200),
-                        switchInCurve: Curves.fastOutSlowIn,
-                        switchOutCurve: Curves.fastOutSlowIn,
+                        switchInCurve: defaultCurve,
+                        switchOutCurve: defaultCurve,
                         layoutBuilder: (currentChild, previousChildren) {
                           return Stack(
                             alignment: Alignment.topCenter,

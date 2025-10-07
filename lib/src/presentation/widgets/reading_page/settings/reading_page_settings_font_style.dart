@@ -38,7 +38,7 @@ class ReadingPageSettingsFontStyle extends StatelessWidget {
                 buildWhen: (p, c) => p.fontType != c.fontType,
                 builder: (context, state) {
                   return AnimatedPositioned(
-                    curve: Curves.fastOutSlowIn,
+                    curve: defaultCurve,
                     left: state.fontType == ReaderFontType.sans
                         ? 0
                         : elementWidth + Dimensions.smallPadding * 2,

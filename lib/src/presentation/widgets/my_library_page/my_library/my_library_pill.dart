@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -23,7 +24,7 @@ class MyLibraryPill extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 200),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        curve: Curves.fastOutSlowIn,
+        curve: defaultCurve,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
           color: isSelected

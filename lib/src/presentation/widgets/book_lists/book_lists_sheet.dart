@@ -89,7 +89,7 @@ class BookListsSheet extends StatelessWidget {
                   Flexible(
                     child: AnimatedSize(
                       duration: const Duration(milliseconds: 300),
-                      curve: Curves.fastOutSlowIn,
+                      curve: defaultCurve,
                       child: BookListsSheetExistingLists(
                         currentlyWorkingOnBookSlug: bookSlug,
                         effectiveList: state.allLists,

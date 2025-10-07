@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 
 class AnimatedBoxFade extends StatelessWidget {
   const AnimatedBoxFade({
@@ -18,8 +19,8 @@ class AnimatedBoxFade extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: duration,
-      switchInCurve: Curves.fastOutSlowIn,
-      switchOutCurve: Curves.fastOutSlowIn,
+      switchInCurve: defaultCurve,
+      switchOutCurve: defaultCurve,
       child: isChildVisible
           ? child
           : SizedBox(

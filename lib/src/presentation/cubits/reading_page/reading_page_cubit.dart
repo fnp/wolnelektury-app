@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
@@ -82,7 +83,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
           .scrollTo(
             index: overrideProgressAnchor,
             duration: const Duration(milliseconds: 500),
-            curve: Curves.fastOutSlowIn,
+            curve: defaultCurve,
           )
           .then((_) {
             _readyToSetProgress = true;
@@ -109,7 +110,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
               .scrollTo(
                 index: foundIndex + 1,
                 duration: const Duration(milliseconds: 500),
-                curve: Curves.fastOutSlowIn,
+                curve: defaultCurve,
               )
               .then((_) {
                 _readyToSetProgress = true;

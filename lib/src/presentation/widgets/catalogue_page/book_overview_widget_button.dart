@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
 class BookOverviewWidgetButton extends StatelessWidget {
@@ -30,7 +31,7 @@ class BookOverviewWidgetButton extends StatelessWidget {
         dimension: 25,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          curve: Curves.fastOutSlowIn,
+          curve: defaultCurve,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: isActive ? activeBackgroundColor : nonActiveBackgroundColor,

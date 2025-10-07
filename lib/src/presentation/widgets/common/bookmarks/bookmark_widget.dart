@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
@@ -53,7 +54,7 @@ class BookmarkWidget extends StatelessWidget {
             !isLoading;
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
-          curve: Curves.fastOutSlowIn,
+          curve: defaultCurve,
           child: shouldHide
               ? const SizedBox(width: double.infinity)
               : _Body(

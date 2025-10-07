@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
@@ -156,7 +157,7 @@ class AudioDialog extends StatelessWidget {
                               Flexible(
                                 child: AnimatedSize(
                                   duration: const Duration(milliseconds: 200),
-                                  curve: Curves.fastOutSlowIn,
+                                  curve: defaultCurve,
                                   child: Column(
                                     spacing: Dimensions.spacer,
                                     mainAxisSize: MainAxisSize.min,
@@ -220,7 +221,7 @@ class _Settings extends StatelessWidget {
       builder: (context, state) {
         return AnimatedPositioned(
           duration: const Duration(milliseconds: 250),
-          curve: Curves.fastOutSlowIn,
+          curve: defaultCurve,
           left: 0,
           right: 0,
           top: state.isSettingsOpened
@@ -243,7 +244,7 @@ class _Bookmarks extends StatelessWidget {
       builder: (context, state) {
         return AnimatedPositioned(
           duration: const Duration(milliseconds: 250),
-          curve: Curves.fastOutSlowIn,
+          curve: defaultCurve,
           left: 0,
           right: 0,
           top: state.isBookmarksOpened

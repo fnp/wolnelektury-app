@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_lists/book_lists_sheet.dart';
@@ -101,7 +102,7 @@ class MyLibraryListsSection extends StatelessWidget {
                           if (index == 0 && state.isAdding) {
                             return AnimatedSize(
                               duration: const Duration(milliseconds: 300),
-                              curve: Curves.fastOutSlowIn,
+                              curve: defaultCurve,
                               child: isPending
                                   ? MyLibraryList(bookList: state.pendingList!)
                                   : const SizedBox(),

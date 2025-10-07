@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -107,8 +108,8 @@ class SearchBarState extends State<SearchBar> {
                 ),
                 suffixIcon: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 100),
-                  switchInCurve: Curves.fastOutSlowIn,
-                  switchOutCurve: Curves.fastOutSlowIn,
+                  switchInCurve: defaultCurve,
+                  switchOutCurve: defaultCurve,
                   transitionBuilder: (child, animation) {
                     return FadeTransition(opacity: animation, child: child);
                   },

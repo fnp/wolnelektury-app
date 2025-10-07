@@ -204,8 +204,8 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                         }
                       },
                       child: AnimatedSwitcher(
-                        switchInCurve: Curves.fastOutSlowIn,
-                        switchOutCurve: Curves.fastOutSlowIn,
+                        switchInCurve: defaultCurve,
+                        switchOutCurve: defaultCurve,
                         duration: const Duration(milliseconds: 200),
                         child: state.isLoading
                             ? const CustomLoader(

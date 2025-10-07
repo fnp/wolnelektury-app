@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
@@ -164,7 +165,7 @@ class _BodyState extends State<_Body> {
         Expanded(
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 200),
-            curve: Curves.fastOutSlowIn,
+            curve: defaultCurve,
             opacity: _opacity,
             child: MultiBlocProvider(
               providers: [

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
@@ -43,7 +44,7 @@ class DashboardAppBar extends StatelessWidget {
                       children: [
                         AnimatedSize(
                           duration: const Duration(milliseconds: 300),
-                          curve: Curves.fastOutSlowIn,
+                          curve: defaultCurve,
                           child: BlocBuilder<RouterCubit, RouterState>(
                             buildWhen: (p, c) => p.isMainPage != c.isMainPage,
                             builder: (context, state) {
@@ -70,7 +71,7 @@ class DashboardAppBar extends StatelessWidget {
                         ),
                         AnimatedSize(
                           duration: const Duration(milliseconds: 300),
-                          curve: Curves.fastOutSlowIn,
+                          curve: defaultCurve,
                           child:
                               BlocBuilder<ConnectivityCubit, ConnectivityState>(
                                 buildWhen: (p, c) =>
@@ -108,7 +109,7 @@ class DashboardAppBar extends StatelessWidget {
                         ),
                         AnimatedSize(
                           duration: const Duration(milliseconds: 300),
-                          curve: Curves.fastOutSlowIn,
+                          curve: defaultCurve,
                           child: BlocBuilder<RouterCubit, RouterState>(
                             buildWhen: (p, c) =>
                                 p.isMyLibraryPage != c.isMyLibraryPage,

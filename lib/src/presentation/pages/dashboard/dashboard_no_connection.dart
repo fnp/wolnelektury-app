@@ -84,7 +84,7 @@ class _DashboardConnectionWrapperState
 
             return AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
-              curve: Curves.fastOutSlowIn,
+              curve: defaultCurve,
               top: !isDisposed
                   ? (availableHeight / 2) - (targetSize / 2)
                   : availableHeight - 100,

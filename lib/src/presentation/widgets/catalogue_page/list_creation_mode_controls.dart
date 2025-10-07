@@ -41,7 +41,7 @@ class ListCreationModeControls extends StatelessWidget {
               children: [
                 AnimatedSize(
                   duration: const Duration(milliseconds: 200),
-                  curve: Curves.fastOutSlowIn,
+                  curve: defaultCurve,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                       maxWidth: state.anyChangesInEditesList
@@ -63,7 +63,7 @@ class ListCreationModeControls extends StatelessWidget {
                 ),
                 AnimatedSize(
                   duration: const Duration(milliseconds: 200),
-                  curve: Curves.fastOutSlowIn,
+                  curve: defaultCurve,
                   child: state.anyChangesInEditesList
                       ? ConstrainedBox(
                           constraints: BoxConstraints(
@@ -86,8 +86,8 @@ class ListCreationModeControls extends StatelessWidget {
                                       duration: const Duration(
                                         milliseconds: 200,
                                       ),
-                                      switchInCurve: Curves.fastOutSlowIn,
-                                      switchOutCurve: Curves.fastOutSlowIn,
+                                      switchInCurve: defaultCurve,
+                                      switchOutCurve: defaultCurve,
                                       child: state.isSavingEditedList
                                           ? const CustomLoader()
                                           : Text(

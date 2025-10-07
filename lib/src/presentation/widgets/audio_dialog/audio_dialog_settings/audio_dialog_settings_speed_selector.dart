@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/audio_player_speed_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
@@ -99,7 +100,7 @@ class _Element extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         child: AnimatedContainer(
-          curve: Curves.fastOutSlowIn,
+          curve: defaultCurve,
           duration: const Duration(milliseconds: 150),
           width: isSelected ? 30 : 20,
           height: isSelected ? 30 : 20,

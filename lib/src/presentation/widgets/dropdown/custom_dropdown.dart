@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
@@ -213,7 +214,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
         onTap: _toggleDropdown,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 100),
-          curve: Curves.fastOutSlowIn,
+          curve: defaultCurve,
           height: Dimensions.elementHeight,
           decoration: BoxDecoration(
             color: widget.highlightButton

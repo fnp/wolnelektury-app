@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
@@ -57,7 +58,7 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
     final inputPadding = theme.inputDecorationTheme.contentPadding;
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
-      curve: Curves.fastOutSlowIn,
+      curve: defaultCurve,
       child: SizedBox(
         height: widget.maxHeight,
         width: double.infinity,
