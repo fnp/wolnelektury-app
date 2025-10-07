@@ -76,7 +76,7 @@ class AudioCubit extends SafeCubit<AudioState> {
   }) async {
     final isSameAudiobookInitialized = state.book?.slug == book.slug;
     final wasInitializedOnline = state.parts.any((e) => !e.isOffline);
-    final wasInitializedOffline = state.parts.any((e) => e.isOffline);
+    final wasInitializedOffline = !wasInitializedOnline;
 
     if (isSameAudiobookInitialized) {
       // Book already selected, check if we need to set progress
@@ -326,34 +326,19 @@ class AudioCubit extends SafeCubit<AudioState> {
         sleepTimer: state.maxSleepTimer,
       ),
     );
-
     final playlist = state.audiobook!.parts.map((part) {
-      if (part.isOffline) {
-        return AudioSource.file(
-          part.url,
-          tag: MediaItem(
-            // Specify a unique ID for each media item:
-            id: part.name,
-            // Metadata to display in the notification:
-            album: state.book?.title,
-            title: part.name,
-            artUri: Uri.parse(state.book?.coverUrl ?? ''),
-            duration: Duration(seconds: part.duration.floor()),
-          ),
-        );
-      }
-      return AudioSource.uri(
-        Uri.parse(part.url),
-        tag: MediaItem(
-          // Specify a unique ID for each media item:
-          id: part.name,
-          // Metadata to display in the notification:
-          album: state.book?.title,
-          title: part.name,
-          artUri: Uri.parse(state.book?.coverUrl ?? ''),
-          duration: Duration(seconds: part.duration.floor()),
-        ),
+      final mediaItem = MediaItem(
+        id: part.name,
+        album: state.book?.title,
+        title: part.name,
+        artUri: Uri.parse(state.book?.coverUrl ?? ''),
+        duration: Duration(seconds: part.duration.floor()),
       );
+
+      if (part.isOffline) {
+        return AudioSource.file(part.url, tag: mediaItem);
+      }
+      return AudioSource.uri(Uri.parse(part.url), tag: mediaItem);
     }).toList();
 
     // This gets the progress of the audiobook from the repository
@@ -370,8 +355,10 @@ class AudioCubit extends SafeCubit<AudioState> {
       await _audioSession.initializationFuture;
       await _player.setAudioSources(
         playlist,
-        initialIndex: foundPosition.$2,
+        // Position in the part
         initialPosition: Duration(seconds: foundPosition.$1),
+        // Part index
+        initialIndex: foundPosition.$2,
       );
       await _player.setLoopMode(LoopMode.off);
       await _player.setSpeed(AudioPlayerSpeedEnum.x1.value);
@@ -451,7 +438,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     }
   }
 
-  // This function finds the position in the index of the audiobook from
+  // This function finds the position in the part of the audiobook from
   // given timestamp in seconds
   (int positionInIndex, int index) _findPositionAndIndex(int position) {
     int index = 0;
