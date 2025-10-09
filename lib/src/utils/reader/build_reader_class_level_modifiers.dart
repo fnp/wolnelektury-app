@@ -107,14 +107,17 @@ class BuildReaderClassLevelModifiers {
 
       case 'spacer-asterisk':
         return _widgetSpanWithPadding(
-          mainAxisAlignment: MainAxisAlignment.center,
+          alignment: Alignment.center,
           padding: EdgeInsets.zero,
           child: Text(text, style: effStyle),
         );
 
       case 'separator_linia':
         return const WidgetSpan(
-          child: Divider(thickness: 1, color: Colors.grey),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Divider(thickness: 1, color: Colors.grey),
+          ),
         );
 
       case 'didaskalia':
@@ -130,15 +133,14 @@ class BuildReaderClassLevelModifiers {
   static WidgetSpan _widgetSpanWithPadding({
     required EdgeInsets padding,
     required Widget child,
-    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    Alignment alignment = Alignment.centerLeft,
   }) {
     return WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
       child: Padding(
         padding: padding,
-        child: Row(
-          mainAxisAlignment: mainAxisAlignment,
-          children: [Expanded(child: child)],
-        ),
+        child: Align(alignment: alignment, child: child),
       ),
     );
   }

@@ -19,13 +19,25 @@ class BuildReaderTagLevelModifiers {
     final className = element.attr?['class'];
     final spans = <InlineSpan>[];
 
+    // Helper for vertical spacing
+    InlineSpan spacer(double height) => WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: SizedBox(height: height),
+    );
+
+    TextStyle baseStyle = theme.textTheme.bodyMedium!.copyWith(
+      fontFamily: fontFamily,
+      fontSize: fontSize,
+    );
+
     switch (element.tag) {
       case ReaderBookTag.h2:
         spans.addAll([
-          const WidgetSpan(child: Row(children: [SizedBox(height: 40)])),
+          spacer(40),
           BuildReaderClassLevelModifiers.build(
             text,
-            theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+            baseStyle.copyWith(fontWeight: FontWeight.bold),
             fontFamily,
             fontSize,
             className,
@@ -33,15 +45,16 @@ class BuildReaderTagLevelModifiers {
             nextSibling,
             prevSibling,
           ),
-          const WidgetSpan(child: Row(children: [SizedBox(height: 40)])),
+          spacer(40),
         ]);
         break;
+
       case ReaderBookTag.h3:
         spans.addAll([
-          const WidgetSpan(child: Row(children: [SizedBox(height: 20)])),
+          spacer(20),
           BuildReaderClassLevelModifiers.build(
             text,
-            theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+            baseStyle.copyWith(fontWeight: FontWeight.bold),
             fontFamily,
             fontSize,
             className,
@@ -49,15 +62,16 @@ class BuildReaderTagLevelModifiers {
             nextSibling,
             prevSibling,
           ),
-          const WidgetSpan(child: Row(children: [SizedBox(height: 20)])),
+          spacer(20),
         ]);
         break;
+
       case ReaderBookTag.h4:
         spans.addAll([
-          const WidgetSpan(child: Row(children: [SizedBox(height: 10)])),
+          spacer(10),
           BuildReaderClassLevelModifiers.build(
             text,
-            theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+            baseStyle.copyWith(fontWeight: FontWeight.bold),
             fontFamily,
             fontSize,
             className,
@@ -65,14 +79,15 @@ class BuildReaderTagLevelModifiers {
             nextSibling,
             prevSibling,
           ),
-          const WidgetSpan(child: Row(children: [SizedBox(height: 10)])),
+          spacer(10),
         ]);
         break;
+
       case ReaderBookTag.h5:
         spans.add(
           BuildReaderClassLevelModifiers.build(
             text,
-            theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+            baseStyle.copyWith(fontWeight: FontWeight.bold),
             fontFamily,
             fontSize,
             className,
@@ -82,16 +97,15 @@ class BuildReaderTagLevelModifiers {
           ),
         );
         break;
+
       case ReaderBookTag.p:
         final shouldApplyIndent = isRecursive && text.length > 1;
-
         spans.add(
           BuildReaderClassLevelModifiers.build(
-            // Missing textIndent in recursive calls
             shouldApplyIndent
                 ? '${BuildReaderIndent.applyIndent(text, prevSibling)}$text'
                 : text,
-            theme.textTheme.bodyMedium!,
+            baseStyle,
             fontFamily,
             fontSize,
             className,
@@ -101,13 +115,14 @@ class BuildReaderTagLevelModifiers {
           ),
         );
         break;
+
       case ReaderBookTag.a:
       case ReaderBookTag.blockquote:
       case ReaderBookTag.div:
         spans.add(
           BuildReaderClassLevelModifiers.build(
             text,
-            theme.textTheme.bodyMedium!,
+            baseStyle,
             fontFamily,
             fontSize,
             className,
@@ -117,11 +132,12 @@ class BuildReaderTagLevelModifiers {
           ),
         );
         break;
+
       case ReaderBookTag.em:
         spans.add(
           BuildReaderClassLevelModifiers.build(
             text,
-            theme.textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.italic),
+            baseStyle.copyWith(fontStyle: FontStyle.italic),
             fontFamily,
             fontSize,
             className,
@@ -131,11 +147,12 @@ class BuildReaderTagLevelModifiers {
           ),
         );
         break;
+
       default:
         spans.add(
           BuildReaderClassLevelModifiers.build(
             '[Unsupported tag: ${element.tag}]',
-            theme.textTheme.bodyMedium!.copyWith(color: Colors.red),
+            baseStyle.copyWith(color: Colors.red),
             fontFamily,
             fontSize,
             null,

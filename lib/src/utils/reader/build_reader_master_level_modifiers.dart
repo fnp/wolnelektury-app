@@ -13,10 +13,7 @@ WidgetSpan buildMasterLevelRow({
         children: [
           Expanded(
             child: RichText(
-              text: TextSpan(
-                style: style,
-                children: children,
-              ),
+              text: TextSpan(style: style, children: children),
               textAlign: textAlign,
             ),
           ),

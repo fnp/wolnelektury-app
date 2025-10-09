@@ -40,7 +40,7 @@ class ReaderSpansWrapper extends StatelessWidget {
                     ),
                   ),
                 )
-              : const SizedBox(),
+              : null,
         ),
         Expanded(
           child: Padding(

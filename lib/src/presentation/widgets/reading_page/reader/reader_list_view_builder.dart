@@ -89,31 +89,35 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
             return _Header(state: widget.state);
           }
           final element = widget.state.book!.contents[index - 1];
-          return InkWellWrapper(
-            onLongPress: () => onLongPress(
-              cubit: cubit,
-              bookmarksCubit: bookmarksCubit,
-              context: context,
-              index: index,
-              element: element,
-            ),
-            child: VisibilityDetector(
-              key: ValueKey(element.hashCode),
-              onVisibilityChanged: (info) {
-                if (info.visibleFraction > 0) {
-                  cubit.setProgress(anchor: element.paragraphIndex);
-                }
-              },
-              child: Stack(
-                children: [
-                  ReaderYellowBackground(index: index),
-                  ReaderSpansWrapper(
-                    element: element,
-                    fontFamily: widget.state.fontType.familyName,
-                    fontSize: widget.state.getFontSize(theme),
-                    debugPrint: true,
-                  ),
-                ],
+          final isLast = index == widget.state.book!.contents.length;
+          return Padding(
+            padding: EdgeInsets.only(bottom: isLast ? Dimensions.spacer : 0),
+            child: InkWellWrapper(
+              onLongPress: () => onLongPress(
+                cubit: cubit,
+                bookmarksCubit: bookmarksCubit,
+                context: context,
+                index: index,
+                element: element,
+              ),
+              child: VisibilityDetector(
+                key: ValueKey(element.hashCode),
+                onVisibilityChanged: (info) {
+                  if (info.visibleFraction > 0) {
+                    cubit.setProgress(anchor: element.paragraphIndex);
+                  }
+                },
+                child: Stack(
+                  children: [
+                    ReaderYellowBackground(index: index),
+                    ReaderSpansWrapper(
+                      element: element,
+                      fontFamily: widget.state.fontType.familyName,
+                      fontSize: widget.state.getFontSize(theme),
+                      debugPrint: true,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

@@ -21,6 +21,7 @@ enum ReaderBookTag {
 class ReaderBookModelContent {
   final ReaderBookTag tag;
   final Map<String, dynamic>? attr;
+  // Either String or ReaderBookModelContent used for nested content
   final List<dynamic> contents;
   final int? paragraphIndex;
   final int? visibleNumber;

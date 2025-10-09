@@ -25,6 +25,7 @@ List<InlineSpan> buildReaderBase({
   bool isRecursive = false,
 }) {
   List<InlineSpan> spans = [];
+
   List<InlineSpan> getSpans(
     dynamic item, {
     dynamic nextSibling,
@@ -59,6 +60,7 @@ List<InlineSpan> buildReaderBase({
         ),
       );
       break;
+
     case 'miejsce_czas':
       spans.add(
         buildMasterLevelRow(
@@ -74,6 +76,7 @@ List<InlineSpan> buildReaderBase({
         ),
       );
       break;
+
     case 'lista_osoba':
       spans.add(
         buildMasterLevelRow(
@@ -87,6 +90,7 @@ List<InlineSpan> buildReaderBase({
         ),
       );
       break;
+
     default:
       spans = element.contents.asMap().entries.expand((entry) {
         final index = entry.key;
@@ -119,6 +123,7 @@ List<InlineSpan> _getSpans({
   required bool isRecursive,
 }) {
   if (item is ReaderBookModelContent) {
+    // Handle <a> (links / footnotes / references)
     if (item.tag == ReaderBookTag.a) {
       return [
         _handleLinkTags(
@@ -130,6 +135,7 @@ List<InlineSpan> _getSpans({
       ];
     }
 
+    // Recursively process other nested content
     return buildReaderBase(
       element: item,
       parent: element,
@@ -140,6 +146,7 @@ List<InlineSpan> _getSpans({
     );
   }
 
+  // Handle raw text
   if (item is String || item == null) {
     return BuildReaderTagLevelModifiers.build(
       text: item ?? '',
@@ -157,6 +164,7 @@ List<InlineSpan> _getSpans({
   return [];
 }
 
+/// Handles special inline links like footnotes and references.
 WidgetSpan _handleLinkTags({
   required ReaderBookModelContent element,
   required ReaderBookModelContent linkContent,
@@ -173,11 +181,19 @@ WidgetSpan _handleLinkTags({
   };
 
   final className = linkContent.attr?['class'];
-  if (icons[className] == null) {
-    return const WidgetSpan(child: SizedBox.shrink());
+  final iconData = icons[className];
+
+  if (iconData == null) {
+    return const WidgetSpan(
+      alignment: PlaceholderAlignment.bottom,
+      baseline: TextBaseline.alphabetic,
+      child: SizedBox.shrink(),
+    );
   }
 
   return WidgetSpan(
+    alignment: PlaceholderAlignment.bottom,
+    baseline: TextBaseline.alphabetic,
     child: GestureDetector(
       onTap: () => ReaderBottomSheet.show(
         element: element,
@@ -186,13 +202,10 @@ WidgetSpan _handleLinkTags({
         fontSize: fontSize,
         isTheme: className == 'theme',
       ),
+      behavior: HitTestBehavior.opaque,
       child: Padding(
         padding: const EdgeInsets.only(left: 2),
-        child: Icon(
-          icons[className]?.$1,
-          size: fontSize + 3,
-          color: icons[className]?.$2,
-        ),
+        child: Icon(iconData.$1, size: fontSize + 2, color: iconData.$2),
       ),
     ),
   );

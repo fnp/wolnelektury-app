@@ -21,7 +21,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     emit(state.copyWith(isLoading: true));
     final bookmarks = await _bookmarksRepository.getBookmarks();
     bookmarks.handle(
-      success: (data, p) {
+      success: (data, _) {
         final deduplicated = _deduplicateByAudioTimestamp(
           data,
           (b) => b.audioTimestamp,
@@ -36,7 +36,11 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   }
 
   Future<void> loadMoreMyLibraryBookmarks() async {
-    if (state.bookmarks.length % 10 != 0 || state.isLoadingMore) return;
+    if (state.bookmarks.length % 10 != 0 ||
+        state.isLoadingMore ||
+        state.isLoading) {
+      return;
+    }
     emit(state.copyWith(isLoadingMore: true));
     final books = await _bookmarksRepository.getBookmarks(
       offset: state.bookmarks.length,
@@ -44,9 +48,14 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
 
     books.handle(
       success: (data, _) {
+        final deduplicated = _deduplicateByAudioTimestamp(
+          data,
+          (b) => b.audioTimestamp,
+          (b) => b.slug,
+        );
         emit(
           state.copyWith(
-            bookmarks: [...state.bookmarks, ...data],
+            bookmarks: [...state.bookmarks, ...deduplicated],
             isLoadingMore: false,
           ),
         );
