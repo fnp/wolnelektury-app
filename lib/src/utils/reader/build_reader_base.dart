@@ -5,8 +5,6 @@ import 'package:wolnelektury/src/utils/reader/build_reader_master_level_modifier
 import 'package:wolnelektury/src/utils/reader/build_reader_tag_level_modifiers.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
-const String textIndent = '     ';
-
 /// This works on "levels" of the book model.
 /// Zero level is inside build_reader_spans_wrapper.dart, and it applies to the
 /// whole functions, things like padding should be done there.
@@ -27,12 +25,17 @@ List<InlineSpan> buildReaderBase({
   bool isRecursive = false,
 }) {
   List<InlineSpan> spans = [];
-  List<InlineSpan> getSpans(dynamic item, {dynamic sibling}) {
+  List<InlineSpan> getSpans(
+    dynamic item, {
+    dynamic nextSibling,
+    dynamic prevSibling,
+  }) {
     return _getSpans(
       item: item,
       element: element,
       parent: parent,
-      sibling: sibling,
+      nextSibling: nextSibling,
+      prevSibling: prevSibling,
       fontFamily: fontFamily,
       fontSize: fontSize,
       theme: theme,
@@ -88,11 +91,16 @@ List<InlineSpan> buildReaderBase({
       spans = element.contents.asMap().entries.expand((entry) {
         final index = entry.key;
         final item = entry.value;
-        final sibling = index + 1 < element.contents.length
+        final nextSibling = index + 1 < element.contents.length
             ? element.contents[index + 1]
             : null;
+        final prevSibling = index - 1 >= 0 ? element.contents[index - 1] : null;
 
-        return getSpans(item, sibling: sibling);
+        return getSpans(
+          item,
+          nextSibling: nextSibling,
+          prevSibling: prevSibling,
+        );
       }).toList();
   }
 
@@ -103,7 +111,8 @@ List<InlineSpan> _getSpans({
   required dynamic item,
   required ReaderBookModelContent element,
   ReaderBookModelContent? parent,
-  dynamic sibling,
+  dynamic nextSibling,
+  dynamic prevSibling,
   required String fontFamily,
   required double fontSize,
   required ThemeData theme,
@@ -140,7 +149,8 @@ List<InlineSpan> _getSpans({
       fontSize: fontSize,
       theme: theme,
       isRecursive: isRecursive,
-      sibling: sibling,
+      nextSibling: nextSibling,
+      prevSibling: prevSibling,
     );
   }
 
@@ -156,7 +166,7 @@ WidgetSpan _handleLinkTags({
   final icons = {
     'footnote footnote-pe': (
       Icons.not_listed_location_sharp,
-      CustomColors.secondaryBlueColor
+      CustomColors.secondaryBlueColor,
     ),
     'reference': (Icons.info, CustomColors.secondaryBlueColor),
     // 'theme': (Icons.color_lens, CustomColors.secondaryBlueColor),

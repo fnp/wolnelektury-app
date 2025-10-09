@@ -115,6 +115,9 @@ class _Slider extends StatelessWidget {
     final audioCubit = BlocProvider.of<AudioCubit>(context);
     return LayoutBuilder(
       builder: (context, constraints) {
+        if (constraints.maxWidth == double.infinity) {
+          return const SizedBox.shrink();
+        }
         final availableWidth =
             constraints.maxWidth - Dimensions.veryLargePadding * 2;
 

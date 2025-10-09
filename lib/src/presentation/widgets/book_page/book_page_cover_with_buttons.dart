@@ -328,7 +328,7 @@ class _HeartButton extends StatelessWidget {
                 icon: const Icon(
                   CustomIcons.for_you,
                   size: 20,
-                  color: CustomColors.white,
+                  color: CustomColors.black,
                 ),
                 onTap: () {
                   router.pushNamed(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
-import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_class_level_modifiers.dart';
+import 'package:wolnelektury/src/utils/reader/build_reader_indent.dart';
 
 class BuildReaderTagLevelModifiers {
   static List<InlineSpan> build({
@@ -12,7 +12,8 @@ class BuildReaderTagLevelModifiers {
     required double fontSize,
     required ThemeData theme,
     required bool isRecursive,
-    dynamic sibling,
+    dynamic nextSibling,
+    dynamic prevSibling,
   }) {
     final parentClassName = parent?.attr?['class'];
     final className = element.attr?['class'];
@@ -21,13 +22,7 @@ class BuildReaderTagLevelModifiers {
     switch (element.tag) {
       case ReaderBookTag.h2:
         spans.addAll([
-          const WidgetSpan(
-            child: Row(
-              children: [
-                SizedBox(height: 40),
-              ],
-            ),
-          ),
+          const WidgetSpan(child: Row(children: [SizedBox(height: 40)])),
           BuildReaderClassLevelModifiers.build(
             text,
             theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
@@ -35,26 +30,15 @@ class BuildReaderTagLevelModifiers {
             fontSize,
             className,
             parentClassName,
-            sibling,
+            nextSibling,
+            prevSibling,
           ),
-          const WidgetSpan(
-            child: Row(
-              children: [
-                SizedBox(height: 40),
-              ],
-            ),
-          ),
+          const WidgetSpan(child: Row(children: [SizedBox(height: 40)])),
         ]);
         break;
       case ReaderBookTag.h3:
         spans.addAll([
-          const WidgetSpan(
-            child: Row(
-              children: [
-                SizedBox(height: 20),
-              ],
-            ),
-          ),
+          const WidgetSpan(child: Row(children: [SizedBox(height: 20)])),
           BuildReaderClassLevelModifiers.build(
             text,
             theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
@@ -62,26 +46,15 @@ class BuildReaderTagLevelModifiers {
             fontSize,
             className,
             parentClassName,
-            sibling,
+            nextSibling,
+            prevSibling,
           ),
-          const WidgetSpan(
-            child: Row(
-              children: [
-                SizedBox(height: 20),
-              ],
-            ),
-          ),
+          const WidgetSpan(child: Row(children: [SizedBox(height: 20)])),
         ]);
         break;
       case ReaderBookTag.h4:
         spans.addAll([
-          const WidgetSpan(
-            child: Row(
-              children: [
-                SizedBox(height: 10),
-              ],
-            ),
-          ),
+          const WidgetSpan(child: Row(children: [SizedBox(height: 10)])),
           BuildReaderClassLevelModifiers.build(
             text,
             theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
@@ -89,15 +62,10 @@ class BuildReaderTagLevelModifiers {
             fontSize,
             className,
             parentClassName,
-            sibling,
+            nextSibling,
+            prevSibling,
           ),
-          const WidgetSpan(
-            child: Row(
-              children: [
-                SizedBox(height: 10),
-              ],
-            ),
-          ),
+          const WidgetSpan(child: Row(children: [SizedBox(height: 10)])),
         ]);
         break;
       case ReaderBookTag.h5:
@@ -109,21 +77,27 @@ class BuildReaderTagLevelModifiers {
             fontSize,
             className,
             parentClassName,
-            sibling,
+            nextSibling,
+            prevSibling,
           ),
         );
         break;
       case ReaderBookTag.p:
+        final shouldApplyIndent = isRecursive && text.length > 1;
+
         spans.add(
           BuildReaderClassLevelModifiers.build(
             // Missing textIndent in recursive calls
-            isRecursive && text.length > 1 ? '$textIndent$text' : text,
+            shouldApplyIndent
+                ? '${BuildReaderIndent.applyIndent(text, prevSibling)}$text'
+                : text,
             theme.textTheme.bodyMedium!,
             fontFamily,
             fontSize,
             className,
             parentClassName,
-            sibling,
+            nextSibling,
+            prevSibling,
           ),
         );
         break;
@@ -138,7 +112,8 @@ class BuildReaderTagLevelModifiers {
             fontSize,
             className,
             parentClassName,
-            sibling,
+            nextSibling,
+            prevSibling,
           ),
         );
         break;
@@ -146,14 +121,13 @@ class BuildReaderTagLevelModifiers {
         spans.add(
           BuildReaderClassLevelModifiers.build(
             text,
-            theme.textTheme.bodyMedium!.copyWith(
-              fontStyle: FontStyle.italic,
-            ),
+            theme.textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.italic),
             fontFamily,
             fontSize,
             className,
             parentClassName,
-            sibling,
+            nextSibling,
+            prevSibling,
           ),
         );
         break;
@@ -166,7 +140,8 @@ class BuildReaderTagLevelModifiers {
             fontSize,
             null,
             null,
-            sibling,
+            nextSibling,
+            prevSibling,
           ),
         );
         break;

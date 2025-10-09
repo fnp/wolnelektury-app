@@ -6,6 +6,7 @@ import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.d
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/paragraph_sheet/reading_page_paragraph_sheet.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
+import 'package:wolnelektury/src/utils/reader/build_reader_indent.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
 class ReaderSpansWrapper extends StatelessWidget {
@@ -48,7 +49,7 @@ class ReaderSpansWrapper extends StatelessWidget {
               text: TextSpan(
                 children: [
                   if (element.paragraphIndex != null)
-                    const TextSpan(text: textIndent),
+                    const TextSpan(text: BuildReaderIndent.textIndent),
                   ...buildReaderBase(
                     theme: Theme.of(context),
                     element: element,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
+import 'package:wolnelektury/src/utils/reader/build_reader_indent.dart';
 
 class BuildReaderClassLevelModifiers {
   static InlineSpan build(
@@ -11,13 +11,12 @@ class BuildReaderClassLevelModifiers {
     String? className,
     // Classname of the parent element
     String? parentClass,
-    // This is whole sibling element, n+1 from the current element contents
-    dynamic sibling,
+    // This is whole nextSibling element, n+1 from the current element contents
+    dynamic nextSibling,
+    // This is whole previousSibling element, n-1 from the current element contents
+    dynamic prevSibling,
   ) {
-    final effStyle = style.copyWith(
-      fontSize: fontSize,
-      fontFamily: fontFamily,
-    );
+    final effStyle = style.copyWith(fontSize: fontSize, fontFamily: fontFamily);
 
     // print('Text: $text of class: $className and parent class: $parentClass');
 
@@ -25,10 +24,7 @@ class BuildReaderClassLevelModifiers {
       // Text is italic and has padding
       case 'motto':
         return _widgetSpanWithPadding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 5,
-            horizontal: 20,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
           child: Text(
             text,
             style: effStyle.copyWith(fontStyle: FontStyle.italic),
@@ -51,20 +47,26 @@ class BuildReaderClassLevelModifiers {
       case 'verse':
       //todo should it have double indent?
       case 'wers_cd':
-        // Verse has sibling next to it, probably styled text, do not insert new line
-        if (sibling != null) {
+        // Verse has nextSibling next to it, probably styled text, do not insert new line
+        if (nextSibling != null) {
           return TextSpan(text: text, style: effStyle);
         }
         // Creates a new line of text for each verse
         return TextSpan(text: '$text\n', style: effStyle);
       case 'wers_wciety':
-        // Verse has sibling next to it, probably styled text, do not insert new line
-        if (sibling != null) {
-          return TextSpan(text: '$textIndent$text', style: effStyle);
+        // Verse has nextSibling next to it, probably styled text, do not insert new line
+        if (nextSibling != null) {
+          return TextSpan(
+            text: BuildReaderIndent.applyIndent(text, prevSibling),
+            style: effStyle,
+          );
         }
         // Creates a new line of text for each verse
         if (text.length > 1) {
-          return TextSpan(text: '$textIndent$text\n', style: effStyle);
+          return TextSpan(
+            text: '${BuildReaderIndent.applyIndent(text, prevSibling)}\n',
+            style: effStyle,
+          );
         }
         // Probably comma or dot, do not insert text indent, happens after footnotes etc
         return TextSpan(text: '$text\n', style: effStyle);
@@ -118,9 +120,7 @@ class BuildReaderClassLevelModifiers {
       case 'didaskalia':
         return TextSpan(
           text: text,
-          style: effStyle.copyWith(
-            fontStyle: FontStyle.italic,
-          ),
+          style: effStyle.copyWith(fontStyle: FontStyle.italic),
         );
     }
 
@@ -137,11 +137,7 @@ class BuildReaderClassLevelModifiers {
         padding: padding,
         child: Row(
           mainAxisAlignment: mainAxisAlignment,
-          children: [
-            Expanded(
-              child: child,
-            ),
-          ],
+          children: [Expanded(child: child)],
         ),
       ),
     );
