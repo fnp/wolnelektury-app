@@ -15,6 +15,9 @@ enum NotificationType {
 
   /// Navigates to the settings page
   settings,
+
+  /// Navigates to the list page
+  list,
 }
 
 @freezed

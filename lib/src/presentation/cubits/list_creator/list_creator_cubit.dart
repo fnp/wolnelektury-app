@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
@@ -252,18 +254,26 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   // ------- My Library -------
   // --------------------------
 
-  Future<void> deleteList(String slug) async {
+  Future<void> deleteList(String slug, {VoidCallback? onSuccess}) async {
     emit(state.copyWith(deletingSlug: slug, isDeleteFailure: false));
     final newState = List<BookListModel>.from(state.allLists);
+    final prevState = List<BookListModel>.from(state.allLists);
     newState.removeWhere((element) => element.slug == slug);
     emit(state.copyWith(allLists: newState));
     final result = await _listsRepository.deleteList(listSlug: slug);
     result.handle(
       success: (data, _) {
         emit(state.copyWith(deletingSlug: null));
+        onSuccess?.call();
       },
       failure: (failure) {
-        emit(state.copyWith(isDeleteFailure: true, deletingSlug: null));
+        emit(
+          state.copyWith(
+            isDeleteFailure: true,
+            deletingSlug: null,
+            allLists: prevState,
+          ),
+        );
       },
     );
   }

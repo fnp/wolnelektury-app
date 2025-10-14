@@ -75,6 +75,9 @@ class _AppLinksHandlerState extends State<AppLinksHandler>
           bookmarkPageConfig.name,
           pathParameters: {'uuid': slug},
         );
+      } else if (stringUri.contains('lista')) {
+        // Navigate to list
+        router.pushNamed(listPageConfig.name, pathParameters: {'slug': slug});
       }
     } catch (e, s) {
       print('Error parsing app link: $e, $s');

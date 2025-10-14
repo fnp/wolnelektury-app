@@ -131,6 +131,7 @@ List<InlineSpan> _getSpans({
           linkContent: item,
           fontFamily: fontFamily,
           fontSize: fontSize,
+          hasSomeContentAfter: nextSibling != null,
         ),
       ];
     }
@@ -165,48 +166,55 @@ List<InlineSpan> _getSpans({
 }
 
 /// Handles special inline links like footnotes and references.
-WidgetSpan _handleLinkTags({
+InlineSpan _handleLinkTags({
   required ReaderBookModelContent element,
   required ReaderBookModelContent linkContent,
   required String fontFamily,
   required double fontSize,
+  required bool
+  hasSomeContentAfter, // true jeśli po tym elemencie są jeszcze treści
 }) {
   final icons = {
-    'footnote footnote-pe': (
+    'footnote': (
       Icons.not_listed_location_sharp,
       CustomColors.secondaryBlueColor,
     ),
     'reference': (Icons.info, CustomColors.secondaryBlueColor),
-    // 'theme': (Icons.color_lens, CustomColors.secondaryBlueColor),
   };
 
   final className = linkContent.attr?['class'];
-  final iconData = icons[className];
+  final iconData = icons[className.toString().split(' ').first];
 
   if (iconData == null) {
-    return const WidgetSpan(
-      alignment: PlaceholderAlignment.bottom,
-      baseline: TextBaseline.alphabetic,
-      child: SizedBox.shrink(),
-    );
+    return const TextSpan(text: ''); // zamiast pustego WidgetSpan
   }
 
-  return WidgetSpan(
-    alignment: PlaceholderAlignment.bottom,
-    baseline: TextBaseline.alphabetic,
-    child: GestureDetector(
-      onTap: () => ReaderBottomSheet.show(
-        element: element,
-        linkContent: linkContent,
-        fontFamily: fontFamily,
-        fontSize: fontSize,
-        isTheme: className == 'theme',
+  return TextSpan(
+    children: [
+      WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        baseline: TextBaseline.alphabetic,
+        child: GestureDetector(
+          onTap: () => ReaderBottomSheet.show(
+            element: element,
+            linkContent: linkContent,
+            fontFamily: fontFamily,
+            fontSize: fontSize,
+            isTheme: className == 'theme',
+          ),
+          behavior: HitTestBehavior.opaque,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 2),
+            child: Icon(
+              iconData.$1,
+              size: fontSize + fontSize * 0.2,
+              color: iconData.$2,
+            ),
+          ),
+        ),
       ),
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 2),
-        child: Icon(iconData.$1, size: fontSize + 2, color: iconData.$2),
-      ),
-    ),
+      // There's nothing after the footnote, no need to add a new line
+      if (!hasSomeContentAfter) const TextSpan(text: '\n'),
+    ],
   );
 }

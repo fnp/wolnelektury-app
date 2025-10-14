@@ -18,7 +18,9 @@ class BuildReaderClassLevelModifiers {
   ) {
     final effStyle = style.copyWith(fontSize: fontSize, fontFamily: fontFamily);
 
-    // print('Text: $text of class: $className and parent class: $parentClass');
+    // print(
+    //   'Text: $text of class: $className and parent class: $parentClass, and nextSibling: ${nextSibling is ReaderBookModelContent ? nextSibling.tag : nextSibling}, and prevSibling: ${prevSibling is ReaderBookModelContent ? prevSibling.tag : prevSibling}',
+    // );
 
     switch (parentClass) {
       // Text is italic and has padding
@@ -125,6 +127,9 @@ class BuildReaderClassLevelModifiers {
           text: text,
           style: effStyle.copyWith(fontStyle: FontStyle.italic),
         );
+
+      case 'zastepnik_wersu':
+        return TextSpan(text: '$text\n', style: effStyle);
     }
 
     return TextSpan(text: text, style: effStyle);

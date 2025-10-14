@@ -6,25 +6,35 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/empty_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/lists/my_library_list_book.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/lists/my_library_list_delete_confirmation_dialog.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/images.dart';
+import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class MyLibraryList extends StatelessWidget {
   final BookListModel bookList;
-  const MyLibraryList({super.key, required this.bookList});
+  final bool includeBooks;
+  const MyLibraryList({
+    super.key,
+    required this.bookList,
+    required this.includeBooks,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
-      buildWhen: (p, c) =>
-          p.doesLocalListExistsAlready(bookList.name) !=
-          c.doesLocalListExistsAlready(bookList.name),
+      buildWhen: (p, c) {
+        return p.doesLocalListExistsAlready(bookList.name) !=
+            c.doesLocalListExistsAlready(bookList.name);
+      },
       builder: (context, state) {
         final isExisting = state.doesLocalListExistsAlready(bookList.name);
         return AnimatedSize(
@@ -38,9 +48,21 @@ class MyLibraryList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _Header(bookList: bookList),
-                      if (bookList.books.isNotEmpty) ...[
+                      if (bookList.books.isNotEmpty && includeBooks) ...[
                         _List(bookList: bookList),
                       ],
+                      if (bookList.books.isEmpty && includeBooks)
+                        Expanded(
+                          //todo translations
+                          child: EmptyWidget(
+                            image: Images.empty,
+                            message: 'Nie dodano jeszcze żadnych książek',
+                            onTap: () {
+                              router.pushNamed(cataloguePageConfig.name);
+                            },
+                            buttonText: 'Przeglądaj katalog',
+                          ),
+                        ),
                     ],
                   ),
                 )
@@ -89,55 +111,65 @@ class _Header extends StatelessWidget {
           borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
           color: CustomColors.primaryYellowColor,
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.veryLargePadding,
-                ),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    bookList.name,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: CustomColors.black,
-                      fontWeight: FontWeight.w600,
+        child: InkWellWrapper(
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
+          onTap: () {
+            router.pushNamed(
+              listPageConfig.name,
+              pathParameters: {'slug': bookList.slug},
+              extra: bookList,
+            );
+          },
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Dimensions.veryLargePadding,
+                  ),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      bookList.name,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: CustomColors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: Dimensions.elementHeight * 2,
-              height: Dimensions.elementHeight,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: CustomColors.red,
-                  borderRadius: BorderRadius.circular(
-                    Dimensions.borderRadiusOfCircle,
+              SizedBox(
+                width: Dimensions.elementHeight * 2,
+                height: Dimensions.elementHeight,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: CustomColors.red,
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.borderRadiusOfCircle,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      _DeleteButton(slug: bookList.slug),
+                      CustomButton(
+                        icon: CustomIcons.add,
+                        onPressed: () {
+                          listCubit.setListAsEdited(bookList.name);
+                          modeCubit.changeMode(AppModeEnum.listCreationMode);
+                          router.pushNamed(cataloguePageConfig.name);
+                        },
+                        backgroundColor: CustomColors.white,
+                      ),
+                    ],
                   ),
                 ),
-                child: Row(
-                  children: [
-                    _DeleteButton(slug: bookList.slug),
-                    CustomButton(
-                      icon: CustomIcons.add,
-                      onPressed: () {
-                        listCubit.setListAsEdited(bookList.name);
-                        modeCubit.changeMode(AppModeEnum.listCreationMode);
-                        router.pushNamed(cataloguePageConfig.name);
-                      },
-                      backgroundColor: CustomColors.white,
-                    ),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -151,6 +183,7 @@ class _DeleteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<ListCreatorCubit>(context);
+    final location = context.read<RouterCubit>().state.location;
     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
       buildWhen: (p, c) => p.deletingSlug != c.deletingSlug,
       builder: (context, state) {
@@ -177,7 +210,16 @@ class _DeleteButton extends StatelessWidget {
                     MyLibraryListDeleteConfirmationDialog.show(
                       context: context,
                       onDelete: () {
-                        cubit.deleteList(slug);
+                        cubit.deleteList(
+                          slug,
+                          onSuccess: () {
+                            if (location.contains(listPageConfig.name)) {
+                              if (router.canPop()) {
+                                router.pop();
+                              }
+                            }
+                          },
+                        );
                       },
                     );
                   },

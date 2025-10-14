@@ -16,8 +16,9 @@ class BuildReaderIndent {
     return false;
   }
 
-  static String applyIndent(String text, ReaderBookModelContent? prevSibling) {
+  static String applyIndent(String text, dynamic prevSibling) {
     if (text.trim().isEmpty) return text;
+    if (prevSibling is! ReaderBookModelContent) return '$textIndent$text';
     if (_shouldOmitIndent(prevSibling)) return text;
     return '$textIndent$text';
   }

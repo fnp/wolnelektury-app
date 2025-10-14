@@ -25,7 +25,13 @@ class FilteringCubit extends SafeCubit<FilteringState> {
     });
   }
 
-  void toggleTag(TagModel tag, {bool resetRest = false}) {
+  Future<void> toggleTag(
+    TagModel tag, {
+    bool resetRest = false,
+    bool triggerLoading = false,
+  }) async {
+    emit(state.copyWith(isLoading: triggerLoading));
+    await Future.delayed(const Duration(milliseconds: 150));
     if (resetRest) {
       emit(state.copyWith(selectedTags: [tag]));
       getTags();
@@ -38,6 +44,7 @@ class FilteringCubit extends SafeCubit<FilteringState> {
       selectedTags.add(tag);
     }
     emit(state.copyWith(selectedTags: selectedTags));
+    await Future.delayed(const Duration(milliseconds: 150));
     getTags();
   }
 
@@ -53,6 +60,7 @@ class FilteringCubit extends SafeCubit<FilteringState> {
           state.copyWith(
             tags: tags,
             pagination: pagination ?? state.pagination,
+            isLoading: false,
           ),
         );
       },
@@ -63,12 +71,12 @@ class FilteringCubit extends SafeCubit<FilteringState> {
               state.copyWith(
                 pagination: state.pagination.copyWith(next: null),
                 tags: [],
-                isLoadingMore: false,
+                isLoading: false,
               ),
             );
           },
           orElse: () {
-            emit(state.copyWith(isLoadingMore: false));
+            emit(state.copyWith(isLoading: false));
           },
         );
       },

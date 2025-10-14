@@ -30,6 +30,8 @@ const settingsPageConfig = _RouteConfig(
   path: '/settingsPage',
 );
 
+const listPageConfig = _RouteConfig(name: 'listPage', path: '/listPage/:slug');
+
 const bookPageConfig = _RouteConfig(name: 'bookPage', path: '/bookPage/:slug');
 
 const authorPageConfig = _RouteConfig(

@@ -7,6 +7,7 @@ import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_c
 import 'package:wolnelektury/src/presentation/enums/reader_font_type.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class ReadingPageSettingsFontStyle extends StatelessWidget {
   const ReadingPageSettingsFontStyle({super.key});
@@ -68,25 +69,36 @@ class ReadingPageSettingsFontStyle extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              cubit.changeFontType(ReaderFontType.sans);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                Dimensions.smallPadding,
+                          child: Padding(
+                            // InkWellWrapper's padding
+                            padding: const EdgeInsets.only(
+                              left: Dimensions.smallPadding,
+                              right: Dimensions.smallPadding / 2,
+                            ),
+                            child: InkWellWrapper(
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.borderRadiusOfCircle,
                               ),
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  LocaleKeys.reader_settings_sans.tr(),
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: state.fontType == ReaderFontType.sans
-                                        ? CustomColors.black
-                                        : CustomColors.grey,
+                              onTap: () {
+                                cubit.changeFontType(ReaderFontType.sans);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                  Dimensions.smallPadding,
+                                ),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    LocaleKeys.reader_settings_sans.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color:
+                                          state.fontType == ReaderFontType.sans
+                                          ? CustomColors.black
+                                          : CustomColors.grey,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -95,27 +107,37 @@ class ReadingPageSettingsFontStyle extends StatelessWidget {
                         ),
                         const SizedBox(width: Dimensions.smallPadding),
                         Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              cubit.changeFontType(ReaderFontType.serif);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                Dimensions.smallPadding,
+                          child: Padding(
+                            // InkWellWrapper's padding
+                            padding: const EdgeInsets.only(
+                              left: Dimensions.smallPadding,
+                              right: Dimensions.smallPadding / 2,
+                            ),
+                            child: InkWellWrapper(
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.borderRadiusOfCircle,
                               ),
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  LocaleKeys.reader_settings_serif.tr(),
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontFamily: sourceSerif4Family,
-                                    fontWeight: FontWeight.w600,
-                                    color:
-                                        state.fontType == ReaderFontType.serif
-                                        ? CustomColors.black
-                                        : CustomColors.grey,
+                              onTap: () {
+                                cubit.changeFontType(ReaderFontType.serif);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                  Dimensions.smallPadding,
+                                ),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    LocaleKeys.reader_settings_serif.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      fontFamily: sourceSerif4Family,
+                                      fontWeight: FontWeight.w600,
+                                      color:
+                                          state.fontType == ReaderFontType.serif
+                                          ? CustomColors.black
+                                          : CustomColors.grey,
+                                    ),
                                   ),
                                 ),
                               ),

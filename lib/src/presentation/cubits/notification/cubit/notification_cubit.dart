@@ -60,6 +60,13 @@ class NotificationCubit extends SafeCubit<NotificationState> {
       case NotificationType.settings:
         router.goNamed(settingsPageConfig.name);
         break;
+      case NotificationType.list:
+        if (notificationPayload.itemId != null) {
+          router.goNamed(
+            listPageConfig.name,
+            pathParameters: {'slug': notificationPayload.itemId!},
+          );
+        }
     }
   }
 

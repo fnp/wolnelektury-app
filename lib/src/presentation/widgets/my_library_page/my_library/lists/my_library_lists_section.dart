@@ -104,17 +104,20 @@ class MyLibraryListsSection extends StatelessWidget {
                               duration: const Duration(milliseconds: 300),
                               curve: defaultCurve,
                               child: isPending
-                                  ? MyLibraryList(bookList: state.pendingList!)
+                                  ? MyLibraryList(
+                                      bookList: state.pendingList!,
+                                      includeBooks: false,
+                                    )
                                   : const SizedBox(),
                             );
                           }
 
                           final effIndex = state.isAdding ? index - 1 : index;
 
-                          //TODO SKELETONIZER OF LISTS CALL
                           return MyLibraryList(
                             key: ValueKey(state.allLists[effIndex].slug),
                             bookList: state.allLists[effIndex],
+                            includeBooks: false,
                           );
                         },
                       );
