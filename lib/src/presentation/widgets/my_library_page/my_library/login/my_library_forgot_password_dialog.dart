@@ -73,6 +73,7 @@ class _MyLibraryForgotPasswordDialogState
               controller: _controller,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
+                fillColor: theme.colorScheme.primaryFixed,
                 hintText: LocaleKeys.account_email.tr(),
               ),
               onChanged: (value) {

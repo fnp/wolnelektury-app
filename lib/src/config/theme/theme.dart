@@ -41,6 +41,7 @@ ThemeData get lightTheme => _baseTheme.copyWith(
     tertiaryContainer: CustomColors.white,
     onTertiaryContainer: CustomColors.black,
     surfaceContainer: CustomColors.white,
+    primaryFixed: CustomColors.lightGrey,
   ),
 );
 
@@ -78,6 +79,7 @@ ThemeData get darkTheme => _baseTheme.copyWith(
     tertiaryContainer: CustomColors.black,
     onTertiaryContainer: CustomColors.darkModeGrey,
     surfaceContainer: CustomColors.lightGrey,
+    primaryFixed: CustomColors.lightGrey,
   ),
 );
 

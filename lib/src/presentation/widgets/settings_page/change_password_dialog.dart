@@ -143,7 +143,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
               controller: _currentPasswordController,
               decoration: InputDecoration(
                 hintText: LocaleKeys.settings_change_password_current.tr(),
-                fillColor: theme.colorScheme.surface,
+                fillColor: theme.colorScheme.primaryFixed,
               ),
               onChanged: (value) {
                 if (showCurrentPasswordError) validate();
@@ -169,7 +169,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
               controller: _newPasswordController,
               decoration: InputDecoration(
                 hintText: LocaleKeys.settings_change_password_new.tr(),
-                fillColor: theme.colorScheme.surface,
+                fillColor: theme.colorScheme.primaryFixed,
               ),
               onChanged: (value) {
                 if (showNewPasswordError) validate();
@@ -194,7 +194,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
               controller: _repeatPasswordController,
               decoration: InputDecoration(
                 hintText: LocaleKeys.settings_change_password_repeat.tr(),
-                fillColor: theme.colorScheme.surface,
+                fillColor: theme.colorScheme.primaryFixed,
               ),
               onChanged: (value) {
                 if (showRepeatPasswordError) validate();
