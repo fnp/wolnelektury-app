@@ -136,7 +136,7 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                       bottom: 0,
                       right: 0,
                       child: CustomButton(
-                        icon: isEditing ? Icons.check : CustomIcons.add,
+                        icon: Icons.check,
                         backgroundColor: CustomColors.green,
                         onPressed: () {
                           if (isEditing) {

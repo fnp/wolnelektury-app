@@ -45,10 +45,9 @@ class SettingsPage extends StatelessWidget {
           },
           listener: (context, state) {
             if (state.notificationsPermissionDenied) {
-              //todo translacja
               CustomSnackbar.error(
                 context,
-                'Permisje do powiadomień zostały zablokowane. Możesz je zmienić w ustawieniach aplikacji.',
+                LocaleKeys.settings_notifications_permission_error.tr(),
                 icon: const Icon(
                   Icons.settings,
                   color: CustomColors.white,

@@ -47,11 +47,13 @@ class LastReadPage extends StatelessWidget {
                         }
 
                         if (!state.isLoading && state.progresses.isEmpty) {
-                          //todo translations
                           return EmptyWidget(
                             image: Images.empty,
-                            message: 'Nie czytano jeszcze żadnych książek',
-                            buttonText: 'Przeglądaj katalog',
+                            message: LocaleKeys.common_empty_last_read_title
+                                .tr(),
+                            buttonText: LocaleKeys
+                                .common_empty_search_in_catalogue
+                                .tr(),
                             onTap: () {
                               router.goNamed(cataloguePageConfig.name);
                             },

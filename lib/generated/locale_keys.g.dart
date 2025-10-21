@@ -3,6 +3,7 @@
 // ignore_for_file: constant_identifier_names
 
 abstract class  LocaleKeys {
+  static const clear = 'clear';
   static const dashboard_catalogue = 'dashboard.catalogue';
   static const dashboard_donation = 'dashboard.donation';
   static const dashboard_last_read = 'dashboard.last_read';
@@ -118,6 +119,7 @@ abstract class  LocaleKeys {
   static const catalogue_author_more = 'catalogue.author.more';
   static const catalogue_author_load_more = 'catalogue.author.load_more';
   static const catalogue_author_translations = 'catalogue.author.translations';
+  static const catalogue_author_error = 'catalogue.author.error';
   static const catalogue_author = 'catalogue.author';
   static const catalogue = 'catalogue';
   static const last_read_title = 'last_read.title';
@@ -128,6 +130,7 @@ abstract class  LocaleKeys {
   static const reader_settings = 'reader.settings';
   static const reader = 'reader';
   static const book_more = 'book.more';
+  static const book_error = 'book.error';
   static const book = 'book';
   static const book_lists_sheet_title = 'book_lists.sheet.title';
   static const book_lists_sheet_add = 'book_lists.sheet.add';
@@ -165,6 +168,7 @@ abstract class  LocaleKeys {
   static const settings_title = 'settings.title';
   static const settings_notifications = 'settings.notifications';
   static const settings_notifications_error = 'settings.notifications_error';
+  static const settings_notifications_permission_error = 'settings.notifications_permission_error';
   static const settings_theme = 'settings.theme';
   static const settings_set_theme_off = 'settings.set_theme.off';
   static const settings_set_theme_on = 'settings.set_theme.on';
@@ -174,6 +178,15 @@ abstract class  LocaleKeys {
   static const settings_delete = 'settings.delete';
   static const settings_logout = 'settings.logout';
   static const settings = 'settings';
+  static const common_empty_page = 'common.empty_page';
+  static const common_empty_search_in_catalogue = 'common.empty.search_in_catalogue';
+  static const common_empty_last_read_title = 'common.empty.last_read_title';
+  static const common_empty_audiobooks_title = 'common.empty.audiobooks_title';
+  static const common_empty_bookmarks_title = 'common.empty.bookmarks_title';
+  static const common_empty_liked_title = 'common.empty.liked_title';
+  static const common_empty_lists_title = 'common.empty.lists_title';
+  static const common_empty_readers_title = 'common.empty.readers_title';
+  static const common_empty = 'common.empty';
   static const common_sorting_alpha_desc = 'common.sorting.alpha_desc';
   static const common_sorting_alpha_asc = 'common.sorting.alpha_asc';
   static const common_sorting_popularity_desc = 'common.sorting.popularity_desc';
@@ -188,6 +201,7 @@ abstract class  LocaleKeys {
   static const common_icon_button = 'common.icon_button';
   static const common_snackbar_not_logged = 'common.snackbar.not_logged';
   static const common_snackbar_revert = 'common.snackbar.revert';
+  static const common_snackbar_error = 'common.snackbar.error';
   static const common_snackbar = 'common.snackbar';
   static const common = 'common';
 

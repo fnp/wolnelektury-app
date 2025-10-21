@@ -78,10 +78,23 @@ class BookListsSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                      CustomButton(
-                        backgroundColor: CustomColors.white,
-                        icon: CustomIcons.close,
-                        onPressed: () => Navigator.of(context).pop(),
+                      BlocBuilder<ListCreatorCubit, ListCreatorState>(
+                        buildWhen: (p, c) {
+                          return p.booksToAdd != c.booksToAdd ||
+                              p.booksToRemove != c.booksToRemove;
+                        },
+                        builder: (context, state) {
+                          final showCheck =
+                              state.booksToAdd.isNotEmpty ||
+                              state.booksToRemove.isNotEmpty;
+                          return CustomButton(
+                            backgroundColor: showCheck
+                                ? CustomColors.green
+                                : CustomColors.white,
+                            icon: showCheck ? Icons.check : Icons.close,
+                            onPressed: () => Navigator.of(context).pop(),
+                          );
+                        },
                       ),
                     ],
                   ),

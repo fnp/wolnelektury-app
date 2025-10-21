@@ -198,7 +198,7 @@ class _Body extends StatelessWidget {
                 width: double.infinity,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainer,
+                    color: theme.colorScheme.inverseSurface,
                     borderRadius: const BorderRadius.all(Radius.circular(15)),
                   ),
                   child: Padding(
@@ -321,9 +321,9 @@ class _NoteState extends State<_Note> {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        const Icon(
+        Icon(
           CustomIcons.stylus_note,
-          color: CustomColors.black,
+          color: theme.colorScheme.onPrimary,
           size: 22,
         ),
       ],

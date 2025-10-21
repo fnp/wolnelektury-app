@@ -7,11 +7,13 @@ class CustomDropdownElement<T> {
   const CustomDropdownElement({
     required this.title,
     required this.element,
+    this.icon,
     this.isSelected = false,
   });
 
   final String title;
   final T element;
+  final IconData? icon;
   final bool isSelected;
 }
 
@@ -143,11 +145,23 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                                     _closeDropdown();
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: Dimensions.veryLargePadding,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: item.icon != null
+                                          ? Dimensions.mediumPadding
+                                          : Dimensions.veryLargePadding,
                                     ),
                                     child: Row(
                                       children: [
+                                        if (item.icon != null) ...[
+                                          Icon(
+                                            item.icon,
+                                            color: CustomColors.black,
+                                            size: 18,
+                                          ),
+                                          const SizedBox(
+                                            width: Dimensions.smallPadding,
+                                          ),
+                                        ],
                                         Expanded(
                                           child: Text(
                                             item.title,

@@ -171,6 +171,17 @@ class DashboardListeners extends StatelessWidget {
             authCubit.clearOnLostConnection();
           },
         ),
+        BlocListener<LikesCubit, LikesState>(
+          listenWhen: (p, c) {
+            return !p.isFailure && c.isFailure;
+          },
+          listener: (context, state) {
+            CustomSnackbar.error(
+              context,
+              LocaleKeys.common_snackbar_error.tr(),
+            );
+          },
+        ),
       ],
       child: child,
     );

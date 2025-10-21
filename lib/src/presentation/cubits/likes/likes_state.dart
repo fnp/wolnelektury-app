@@ -7,6 +7,7 @@ sealed class LikesState with _$LikesState {
     @Default([]) List<String> favourites,
     @Default(10) int itemsPerPage,
     @Default(false) bool isLoading,
+    @Default(false) bool isFailure,
   }) = _FavouritesState;
 }
 

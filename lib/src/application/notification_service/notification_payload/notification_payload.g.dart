@@ -28,4 +28,5 @@ const _$NotificationTypeEnumMap = {
   NotificationType.app: 'app',
   NotificationType.author: 'author',
   NotificationType.settings: 'settings',
+  NotificationType.list: 'list',
 };

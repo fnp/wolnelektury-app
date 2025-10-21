@@ -9,14 +9,12 @@ import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_c
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/empty_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/lists/my_library_list_book.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/lists/my_library_list_delete_confirmation_dialog.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
-import 'package:wolnelektury/src/utils/ui/images.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class MyLibraryList extends StatelessWidget {
@@ -51,18 +49,6 @@ class MyLibraryList extends StatelessWidget {
                       if (bookList.books.isNotEmpty && includeBooks) ...[
                         _List(bookList: bookList),
                       ],
-                      if (bookList.books.isEmpty && includeBooks)
-                        Expanded(
-                          //todo translations
-                          child: EmptyWidget(
-                            image: Images.empty,
-                            message: 'Nie dodano jeszcze żadnych książek',
-                            onTap: () {
-                              router.pushNamed(cataloguePageConfig.name);
-                            },
-                            buttonText: 'Przeglądaj katalog',
-                          ),
-                        ),
                     ],
                   ),
                 )

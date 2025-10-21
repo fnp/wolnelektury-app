@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/filtering/filtering_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
@@ -28,7 +30,14 @@ class FiltersPage extends StatelessWidget {
             horizontal: Dimensions.mediumPadding,
             vertical: Dimensions.spacer,
           ),
-          child: BlocBuilder<FilteringCubit, FilteringState>(
+          child: BlocConsumer<FilteringCubit, FilteringState>(
+            listenWhen: (p, c) {
+              return p.selectedTags.length != c.selectedTags.length;
+            },
+            listener: (context, state) {
+              // This clears the search bar when tags are changed
+              cubit.changeQuery('');
+            },
             // This triggers the load more if there's not enough items to fill the screen
             buildWhen: (p, c) => p.tags != c.tags,
             builder: (context, state) {
@@ -36,6 +45,7 @@ class FiltersPage extends StatelessWidget {
                 spacing: Dimensions.mediumPadding,
                 children: [
                   SearchBar(
+                    key: ValueKey(state.tags.length),
                     initialValue: state.query,
                     onChanged: (value) {
                       cubit.changeQuery(value);
@@ -134,7 +144,7 @@ class _SelectedTags extends StatelessWidget {
             }),
             if (state.selectedTags.isNotEmpty)
               ActionChip(
-                label: const Text('Wyczyść'),
+                label: Text(LocaleKeys.clear.tr()),
                 avatar: Icon(
                   CustomIcons.delete_forever,
                   color: theme.colorScheme.onPrimary,
@@ -159,8 +169,9 @@ class _FilteringChips extends StatelessWidget {
     final cubit = BlocProvider.of<FilteringCubit>(context);
     return SliverToBoxAdapter(
       child: BlocBuilder<FilteringCubit, FilteringState>(
-        buildWhen: (p, c) =>
-            p.tags != c.tags || p.selectedTags != c.selectedTags,
+        buildWhen: (p, c) {
+          return p.tags != c.tags || p.selectedTags != c.selectedTags;
+        },
         builder: (context, state) {
           return Wrap(
             key: ValueKey(state.tags.length),

@@ -94,6 +94,15 @@ class BookOverviewWidget extends StatelessWidget {
                         child: _AddToListButton(book.slug),
                       ),
                     ),
+                  if (state.isDefault && book.hasAudiobook)
+                    Positioned(
+                      left: 10 * effectiveScale,
+                      bottom: 10 * effectiveScale,
+                      child: Transform.scale(
+                        scale: effectiveScale,
+                        child: const _AudiobookMarker(),
+                      ),
+                    ),
                   if (state.isDefault)
                     Positioned(
                       right: 10 * effectiveScale,
@@ -199,6 +208,28 @@ class _CreateListButton extends StatelessWidget {
           );
         },
         isActive: false,
+      ),
+    );
+  }
+}
+
+class _AudiobookMarker extends StatelessWidget {
+  const _AudiobookMarker();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: 25,
+      child: Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: CustomColors.white,
+        ),
+        child: const Icon(
+          CustomIcons.headphones,
+          color: CustomColors.black,
+          size: 13,
+        ),
       ),
     );
   }

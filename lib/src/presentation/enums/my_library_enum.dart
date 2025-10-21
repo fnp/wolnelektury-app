@@ -14,7 +14,7 @@ extension MyLibraryEnumExtension on MyLibraryEnum {
       case MyLibraryEnum.lists:
         return 'Moje listy';
       case MyLibraryEnum.login:
-        return 'Zaloguj się';
+        return 'Logowanie';
     }
   }
 }

@@ -1,4 +1,5 @@
 {
+    "clear": "Wyczyść",
     "dashboard": {
         "catalogue": "katalog",
         "donation": "wpłać darowiznę",
@@ -138,7 +139,8 @@
             "back": "Powrót",
             "more": "Więcej szczegółów",
             "load_more": "Wczytaj więcej",
-            "translations": "Tłumaczenia"
+            "translations": "Tłumaczenia",
+            "error": "Nie udało się załadować danych autora 🙁"
         }
     },
     "last_read": {
@@ -152,7 +154,8 @@
         }
     },
     "book": {
-        "more": "więcej szczegółów"
+        "more": "więcej szczegółów",
+        "error": "Nie udało się załadować danych książki 🙁"
     },
     "book_lists": {
         "sheet": {
@@ -196,6 +199,7 @@
         "title": "Ustawienia",
         "notifications": "Powiadomienia",
         "notifications_error": "Nie udało się zmienić ustawień powiadomień",
+        "notifications_permission_error": "Brak uprawnień dla powiadomień. Możesz to zmienić w ustawieniach.",
         "theme": "Tryb ciemny",
         "set_theme": {
             "off": "off",
@@ -207,11 +211,21 @@
         "logout": "Wyloguj się"
     },
     "common": {
+        "empty_page": "Zabłądziliśmy, nic tutaj nie ma 👀",
+        "empty": {
+            "search_in_catalogue": "Przeglądaj katalog",
+            "last_read_title": "Nie czytano jeszcze żadnych książek",
+            "audiobooks_title": "Nie pobrano jeszcze żadnych audiobooków",
+            "bookmarks_title": "Nie dodano jeszcze żadnych zakładek",
+            "liked_title": "Nie polubiono jeszcze żadnych książek",
+            "lists_title": "Nie utworzono jeszcze żadnych list",
+            "readers_title": "Nie zapisano jeszcze żadnych książek"
+        },
         "sorting": {
-            "alpha_desc": "Alfabetycznie malejąco",
-            "alpha_asc": "Alfabetycznie rosnąco",
-            "popularity_desc": "Popularność malejąco",
-            "popularity_asc": "Popularność rosnąco"
+            "alpha_desc": "Alfabetycznie",
+            "alpha_asc": "Alfabetycznie",
+            "popularity_desc": "Popularność",
+            "popularity_asc": "Popularność"
         },
         "icon_button": {
             "read": "Czytaj",
@@ -223,7 +237,8 @@
         },
         "snackbar": {
             "not_logged": "Zaloguj się, aby skorzystać z tej funkcji",
-            "revert": "Cofnij"
+            "revert": "Cofnij",
+            "error": "Coś poszło nie tak, spróbuj ponownie"
         }
     }
 }

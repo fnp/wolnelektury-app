@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
@@ -25,6 +27,7 @@ class BookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     if (book == null) {
       return BlocProvider(
         create: (context) {
@@ -37,8 +40,12 @@ class BookPage extends StatelessWidget {
           },
           builder: (context, state) {
             if (!state.isLoading && state.book == null) {
-              //todo error
-              return const Center(child: Text('Error loading book'));
+              return Center(
+                child: Text(
+                  LocaleKeys.book_error.tr(),
+                  style: theme.textTheme.bodyLarge,
+                ),
+              );
             }
             final effectiveBook = state.isLoading
                 ? BookModel.empty()

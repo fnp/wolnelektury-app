@@ -87,10 +87,9 @@ class MyLibraryListsSection extends StatelessWidget {
                           : state.allLists.length;
 
                       if (!state.isLoading && state.allLists.isEmpty) {
-                        //todo translations
-                        return const EmptyWidget(
+                        return EmptyWidget(
                           image: Images.empty,
-                          message: 'Nie utworzono jeszcze żadnych list',
+                          message: LocaleKeys.common_empty_lists_title.tr(),
                         );
                       }
 

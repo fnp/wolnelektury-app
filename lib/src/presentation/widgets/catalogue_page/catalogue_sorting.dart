@@ -25,15 +25,14 @@ class CatalogueSorting extends StatelessWidget {
                       title: e.name.tr(),
                       element: e,
                       isSelected: e == state.sort,
+                      icon: e.icon,
                     ),
                   )
                   .toList(),
               onSelected: (element) {
                 BlocProvider.of<BooksCubit>(context).changeSort(element);
               },
-              icon: const Icon(
-                Icons.swap_vert,
-              ),
+              icon: const Icon(Icons.swap_vert),
               label: LocaleKeys.common_icon_button_sort.tr(),
             );
           },

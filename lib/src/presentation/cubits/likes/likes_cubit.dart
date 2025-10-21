@@ -35,7 +35,7 @@ class LikesCubit extends SafeCubit<LikesState> {
     final previousFavourites = state.favourites;
     final newFavourites = List<String>.from(state.favourites);
     newFavourites.add(slug);
-    emit(state.copyWith(favourites: newFavourites));
+    emit(state.copyWith(favourites: newFavourites, isFailure: false));
     final response = await _favouritesRepository.toggleFavourite(
       slug: slug,
       targetValue: true,
@@ -43,8 +43,7 @@ class LikesCubit extends SafeCubit<LikesState> {
     response.handle(
       success: (_, __) {},
       failure: (failure) {
-        //todo display snackbar
-        emit(state.copyWith(favourites: previousFavourites));
+        emit(state.copyWith(favourites: previousFavourites, isFailure: true));
       },
     );
   }

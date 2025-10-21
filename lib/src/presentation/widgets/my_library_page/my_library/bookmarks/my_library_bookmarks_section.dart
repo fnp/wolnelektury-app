@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
@@ -31,14 +33,14 @@ class MyLibraryBookmarksSection extends StatelessWidget {
                   p.bookmarks.isNotEmpty && c.bookmarks.isEmpty,
               builder: (context, state) {
                 if (!state.isLoading && state.bookmarks.isEmpty) {
-                  //todo translations
                   return ConnectivityWrapper(
                     builder: (context, hasConnection) {
                       return EmptyWidget(
                         image: Images.empty,
                         hasConnection: hasConnection,
-                        message: 'Nie dodano jeszcze żadnych zakładek',
-                        buttonText: 'Przeglądaj katalog',
+                        message: LocaleKeys.common_empty_bookmarks_title.tr(),
+                        buttonText: LocaleKeys.common_empty_search_in_catalogue
+                            .tr(),
                         onTap: () {
                           router.goNamed(cataloguePageConfig.name);
                         },

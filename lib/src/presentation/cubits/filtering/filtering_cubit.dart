@@ -54,6 +54,7 @@ class FilteringCubit extends SafeCubit<FilteringState> {
       tags: state.selectedTags,
       search: state.query,
     );
+
     result.handle(
       success: (tags, pagination) {
         emit(
@@ -109,7 +110,6 @@ class FilteringCubit extends SafeCubit<FilteringState> {
             emit(
               state.copyWith(
                 pagination: state.pagination.copyWith(next: null),
-                tags: [],
                 isLoadingMore: false,
               ),
             );

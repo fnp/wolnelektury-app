@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
@@ -32,11 +34,11 @@ class MyLibraryLikedSection extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state.favourites.isEmpty && !state.isLoading) {
-                  //todo translations
                   return EmptyWidget(
                     image: Images.empty,
-                    message: 'Nie polubiono jeszcze żadnych książek',
-                    buttonText: 'Przeglądaj katalog',
+                    message: LocaleKeys.common_empty_liked_title.tr(),
+                    buttonText: LocaleKeys.common_empty_search_in_catalogue
+                        .tr(),
                     onTap: () {
                       router.goNamed(cataloguePageConfig.name);
                     },

@@ -29,9 +29,15 @@ class _AuthorPageState extends State<AuthorPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     if (widget.authorSlug == null) {
-      //todo error
-      return const Text('Nie znaleziono autora');
+      return Center(
+        child: Text(
+          LocaleKeys.catalogue_author_error.tr(),
+          style: theme.textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+      );
     }
     return BlocProvider(
       lazy: false,

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$LikesState {
 
 // List of slugs
- List<String> get favourites; int get itemsPerPage; bool get isLoading;
+ List<String> get favourites; int get itemsPerPage; bool get isLoading; bool get isFailure;
 /// Create a copy of LikesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,16 +27,16 @@ $LikesStateCopyWith<LikesState> get copyWith => _$LikesStateCopyWithImpl<LikesSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikesState&&const DeepCollectionEquality().equals(other.favourites, favourites)&&(identical(other.itemsPerPage, itemsPerPage) || other.itemsPerPage == itemsPerPage)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LikesState&&const DeepCollectionEquality().equals(other.favourites, favourites)&&(identical(other.itemsPerPage, itemsPerPage) || other.itemsPerPage == itemsPerPage)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isFailure, isFailure) || other.isFailure == isFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(favourites),itemsPerPage,isLoading);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(favourites),itemsPerPage,isLoading,isFailure);
 
 @override
 String toString() {
-  return 'LikesState(favourites: $favourites, itemsPerPage: $itemsPerPage, isLoading: $isLoading)';
+  return 'LikesState(favourites: $favourites, itemsPerPage: $itemsPerPage, isLoading: $isLoading, isFailure: $isFailure)';
 }
 
 
@@ -47,7 +47,7 @@ abstract mixin class $LikesStateCopyWith<$Res>  {
   factory $LikesStateCopyWith(LikesState value, $Res Function(LikesState) _then) = _$LikesStateCopyWithImpl;
 @useResult
 $Res call({
- List<String> favourites, int itemsPerPage, bool isLoading
+ List<String> favourites, int itemsPerPage, bool isLoading, bool isFailure
 });
 
 
@@ -64,11 +64,12 @@ class _$LikesStateCopyWithImpl<$Res>
 
 /// Create a copy of LikesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? favourites = null,Object? itemsPerPage = null,Object? isLoading = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? favourites = null,Object? itemsPerPage = null,Object? isLoading = null,Object? isFailure = null,}) {
   return _then(_self.copyWith(
 favourites: null == favourites ? _self.favourites : favourites // ignore: cast_nullable_to_non_nullable
 as List<String>,itemsPerPage: null == itemsPerPage ? _self.itemsPerPage : itemsPerPage // ignore: cast_nullable_to_non_nullable
 as int,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isFailure: null == isFailure ? _self.isFailure : isFailure // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -80,7 +81,7 @@ as bool,
 
 
 class _FavouritesState implements LikesState {
-  const _FavouritesState({final  List<String> favourites = const [], this.itemsPerPage = 10, this.isLoading = false}): _favourites = favourites;
+  const _FavouritesState({final  List<String> favourites = const [], this.itemsPerPage = 10, this.isLoading = false, this.isFailure = false}): _favourites = favourites;
   
 
 // List of slugs
@@ -94,6 +95,7 @@ class _FavouritesState implements LikesState {
 
 @override@JsonKey() final  int itemsPerPage;
 @override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isFailure;
 
 /// Create a copy of LikesState
 /// with the given fields replaced by the non-null parameter values.
@@ -105,16 +107,16 @@ _$FavouritesStateCopyWith<_FavouritesState> get copyWith => __$FavouritesStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FavouritesState&&const DeepCollectionEquality().equals(other._favourites, _favourites)&&(identical(other.itemsPerPage, itemsPerPage) || other.itemsPerPage == itemsPerPage)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FavouritesState&&const DeepCollectionEquality().equals(other._favourites, _favourites)&&(identical(other.itemsPerPage, itemsPerPage) || other.itemsPerPage == itemsPerPage)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isFailure, isFailure) || other.isFailure == isFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_favourites),itemsPerPage,isLoading);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_favourites),itemsPerPage,isLoading,isFailure);
 
 @override
 String toString() {
-  return 'LikesState(favourites: $favourites, itemsPerPage: $itemsPerPage, isLoading: $isLoading)';
+  return 'LikesState(favourites: $favourites, itemsPerPage: $itemsPerPage, isLoading: $isLoading, isFailure: $isFailure)';
 }
 
 
@@ -125,7 +127,7 @@ abstract mixin class _$FavouritesStateCopyWith<$Res> implements $LikesStateCopyW
   factory _$FavouritesStateCopyWith(_FavouritesState value, $Res Function(_FavouritesState) _then) = __$FavouritesStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> favourites, int itemsPerPage, bool isLoading
+ List<String> favourites, int itemsPerPage, bool isLoading, bool isFailure
 });
 
 
@@ -142,11 +144,12 @@ class __$FavouritesStateCopyWithImpl<$Res>
 
 /// Create a copy of LikesState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? favourites = null,Object? itemsPerPage = null,Object? isLoading = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? favourites = null,Object? itemsPerPage = null,Object? isLoading = null,Object? isFailure = null,}) {
   return _then(_FavouritesState(
 favourites: null == favourites ? _self._favourites : favourites // ignore: cast_nullable_to_non_nullable
 as List<String>,itemsPerPage: null == itemsPerPage ? _self.itemsPerPage : itemsPerPage // ignore: cast_nullable_to_non_nullable
 as int,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isFailure: null == isFailure ? _self.isFailure : isFailure // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
