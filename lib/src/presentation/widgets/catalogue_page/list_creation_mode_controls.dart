@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -51,7 +52,9 @@ class ListCreationModeControls extends StatelessWidget {
                     ),
                     child: _Button(
                       color: CustomColors.white,
-                      onTap: () => router.pop(),
+                      onTap: () {
+                        router.pushNamed(myLibraryPageConfig.name);
+                      },
                       child: Text(
                         LocaleKeys.catalogue_list_creator_back.tr(),
                         style: theme.textTheme.bodyMedium?.copyWith(

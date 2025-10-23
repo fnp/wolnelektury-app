@@ -8,6 +8,7 @@ import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/detailed_author_model.dart';
 import 'package:wolnelektury/src/domain/text_search_result_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/search/search_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/catalogue_page/book_list.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
@@ -22,78 +23,84 @@ class SearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchCubit, SearchState>(
-      buildWhen: (p, c) {
-        return p.generic != c.generic ||
-            p.books != c.books ||
-            p.texts != c.texts ||
-            p.isLoadingResults != c.isLoadingResults;
-      },
-      builder: (context, state) {
-        return AnimatedBoxFade(
-          isChildVisible: !state.isLoadingResults,
-          collapsedChild: const Center(child: CustomLoader(strokeWidth: 2)),
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              if ((state.generic?.author ?? []).isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: PageSubtitle(
-                    subtitle: LocaleKeys.search_authors.tr().toUpperCase(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.mediumPadding,
-                      vertical: Dimensions.spacer,
+    return BlocBuilder<AppModeCubit, AppModeState>(
+      buildWhen: (p, c) => p.mode != c.mode,
+      builder: (context, modeState) {
+        return BlocBuilder<SearchCubit, SearchState>(
+          buildWhen: (p, c) {
+            return p.generic != c.generic ||
+                p.books != c.books ||
+                p.texts != c.texts ||
+                p.isLoadingResults != c.isLoadingResults;
+          },
+          builder: (context, state) {
+            return AnimatedBoxFade(
+              isChildVisible: !state.isLoadingResults,
+              collapsedChild: const Center(child: CustomLoader(strokeWidth: 2)),
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  if ((state.generic?.author ?? []).isNotEmpty &&
+                      !modeState.isListCreation) ...[
+                    SliverToBoxAdapter(
+                      child: PageSubtitle(
+                        subtitle: LocaleKeys.search_authors.tr().toUpperCase(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.mediumPadding,
+                          vertical: Dimensions.spacer,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.generic!.author.length,
-                    itemBuilder: (context, index) {
-                      return _AuthorElement(
-                        author: state.generic!.author[index],
-                      );
-                    },
-                  ),
-                ),
-              ],
-              if (state.books.isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: PageSubtitle(
-                    subtitle: LocaleKeys.search_books.tr().toUpperCase(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.mediumPadding,
-                      vertical: Dimensions.spacer,
+                    SliverToBoxAdapter(
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: state.generic!.author.length,
+                        itemBuilder: (context, index) {
+                          return _AuthorElement(
+                            author: state.generic!.author[index],
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ),
-                BookList(isLoading: false, books: state.books),
-              ],
-              if (state.texts.isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: PageSubtitle(
-                    subtitle: LocaleKeys.search_texts.tr().toUpperCase(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.mediumPadding,
-                      vertical: Dimensions.spacer,
+                  ],
+                  if (state.books.isNotEmpty) ...[
+                    SliverToBoxAdapter(
+                      child: PageSubtitle(
+                        subtitle: LocaleKeys.search_books.tr().toUpperCase(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.mediumPadding,
+                          vertical: Dimensions.spacer,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.texts.length,
-                    itemBuilder: (context, index) {
-                      return _TextElement(textSearch: state.texts[index]);
-                    },
-                  ),
-                ),
-              ],
-            ],
-          ),
+                    BookList(isLoading: false, books: state.books),
+                  ],
+                  if (state.texts.isNotEmpty && !modeState.isListCreation) ...[
+                    SliverToBoxAdapter(
+                      child: PageSubtitle(
+                        subtitle: LocaleKeys.search_texts.tr().toUpperCase(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.mediumPadding,
+                          vertical: Dimensions.spacer,
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: state.texts.length,
+                        itemBuilder: (context, index) {
+                          return _TextElement(textSearch: state.texts[index]);
+                        },
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            );
+          },
         );
       },
     );

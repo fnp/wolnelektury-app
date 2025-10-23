@@ -91,7 +91,7 @@ class BookOverviewWidget extends StatelessWidget {
                       bottom: 0,
                       child: Transform.scale(
                         scale: effectiveScale,
-                        child: _AddToListButton(book.slug),
+                        child: BookOverviewWidgetAddToListButton(book.slug),
                       ),
                     ),
                   if (state.isDefault && book.hasAudiobook)
@@ -292,9 +292,9 @@ class _HeartButton extends StatelessWidget {
   }
 }
 
-class _AddToListButton extends StatelessWidget {
+class BookOverviewWidgetAddToListButton extends StatelessWidget {
   final String slug;
-  const _AddToListButton(this.slug);
+  const BookOverviewWidgetAddToListButton(this.slug, {super.key});
 
   @override
   Widget build(BuildContext context) {

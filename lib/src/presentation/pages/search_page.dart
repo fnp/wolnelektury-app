@@ -34,36 +34,50 @@ class SearchPage extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SearchBar(
-                        onChanged: (value) {
-                          searchCubit.changeQuery(value);
-                        },
-                        onClear: () {
-                          searchCubit.changeQuery('');
-                        },
-                      ),
-                      const SizedBox(height: Dimensions.mediumPadding),
-                      const SingleChildScrollView(child: SearchHints()),
-                      Expanded(
-                        child: BlocBuilder<SearchCubit, SearchState>(
-                          buildWhen: (p, c) {
-                            return p.showResults != c.showResults;
-                          },
-                          builder: (context, state) {
-                            return AnimatedBoxFade(
-                              isChildVisible: state.showResults,
-                              child: const SearchResults(),
-                            );
-                          },
+                SearchBar(
+                  onChanged: (value) {
+                    searchCubit.changeQuery(value);
+                  },
+                  onClear: () {
+                    searchCubit.changeQuery('');
+                  },
+                ),
+                const SizedBox(height: Dimensions.mediumPadding),
+                BlocBuilder<SearchCubit, SearchState>(
+                  buildWhen: (p, c) {
+                    return p.showResults != c.showResults;
+                  },
+                  builder: (context, state) {
+                    if (state.showResults) {
+                      return const SizedBox.shrink();
+                    }
+                    return const Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [SearchHints()],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
+                BlocBuilder<SearchCubit, SearchState>(
+                  buildWhen: (p, c) {
+                    return p.showResults != c.showResults;
+                  },
+                  builder: (context, state) {
+                    if (!state.showResults) {
+                      return const SizedBox.shrink();
+                    }
+                    return Expanded(
+                      child: AnimatedBoxFade(
+                        isChildVisible: state.showResults,
+                        child: const SearchResults(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: Dimensions.mediumPadding),
                 BlocBuilder<SearchCubit, SearchState>(
                   buildWhen: (p, c) {
                     return p.showResults != c.showResults ||

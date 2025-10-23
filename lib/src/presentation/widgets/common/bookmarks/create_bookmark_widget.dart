@@ -120,6 +120,9 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                             bottom: Dimensions.mediumPadding,
                           ),
                         ),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: CustomColors.black,
+                        ),
                         maxLines: widget.lines,
                         minLines: widget.lines,
                       ),

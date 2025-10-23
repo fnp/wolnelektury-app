@@ -62,7 +62,11 @@ class DashboardListeners extends StatelessWidget {
             } else {
               context.read<ScrollCubit>().showAppBar();
             }
-            if (state.location != cataloguePageConfig.path) {
+            if (![
+              cataloguePageConfig.path,
+              searchPageConfig.path,
+              filtersPageConfig.path,
+            ].contains(state.location)) {
               final modeCubit = context.read<AppModeCubit>();
               if (modeCubit.state.mode == AppModeEnum.listCreationMode) {
                 modeCubit.changeMode(AppModeEnum.defaultMode);

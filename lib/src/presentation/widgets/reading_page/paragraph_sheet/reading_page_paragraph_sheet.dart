@@ -17,18 +17,24 @@ class ReadingPageParagraphSheet extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       useRootNavigator: true,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Dimensions.modalsBorderRadius),
           topRight: Radius.circular(Dimensions.modalsBorderRadius),
         ),
       ),
-      builder: (_) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: context.read<ReadingPageCubit>()),
-          BlocProvider.value(value: context.read<BookmarksCubit>()),
-        ],
-        child: const ReadingPageParagraphSheet(),
+      builder: (builderContext) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.viewInsetsOf(builderContext).bottom,
+        ),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: context.read<ReadingPageCubit>()),
+            BlocProvider.value(value: context.read<BookmarksCubit>()),
+          ],
+          child: const ReadingPageParagraphSheet(),
+        ),
       ),
     ).then((_) {
       onClosed?.call();
@@ -59,14 +65,16 @@ class ReadingPageParagraphSheet extends StatelessWidget {
             return AnimatedBoxFade(
               isChildVisible: !state.isAddingBookmark,
               collapsedChild: const _BookmarkNote(),
-              child: SizedBox(
-                height: 300,
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.all(Dimensions.mediumPadding),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Dimensions.mediumPadding,
+                ),
+                child: SingleChildScrollView(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     spacing: Dimensions.mediumPadding,
                     children: [
+                      const SizedBox(height: Dimensions.mediumPadding),
                       TextButtonWithIcon(
                         nonActiveText: 'przetłumacz (todo)',
                         nonActiveIcon: Icons.translate,
@@ -108,6 +116,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                         onPressed: () {},
                         activeColor: CustomColors.white,
                       ),
+                      const SizedBox(height: Dimensions.spacer),
                     ],
                   ),
                 ),

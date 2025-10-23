@@ -26,6 +26,11 @@ ThemeData get lightTheme => _baseTheme.copyWith(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
   ),
   scaffoldBackgroundColor: CustomColors.lightGrey,
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: CustomColors.black,
+    selectionColor: CustomColors.white.withValues(alpha: 0.5),
+    selectionHandleColor: CustomColors.black,
+  ),
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
     primary: CustomColors.primaryYellowColor,
@@ -63,6 +68,11 @@ ThemeData get darkTheme => _baseTheme.copyWith(
     }),
     side: BorderSide.none,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: CustomColors.black,
+    selectionColor: CustomColors.primaryYellowColor.withValues(alpha: 0.5),
+    selectionHandleColor: CustomColors.black,
   ),
   scaffoldBackgroundColor: CustomColors.darkGrey,
   colorScheme: const ColorScheme(
