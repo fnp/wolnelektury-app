@@ -28,7 +28,7 @@ class MyLibraryPill extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
           color: isSelected
-              ? CustomColors.green
+              ? CustomColors.secondaryBlueColor
               : theme.colorScheme.tertiaryContainer,
         ),
         child: SizedBox(
@@ -56,7 +56,7 @@ class MyLibraryPill extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: isSelected
-                              ? CustomColors.black
+                              ? CustomColors.white
                               : theme.colorScheme.onPrimary,
                           fontWeight: FontWeight.w600,
                         ),

@@ -41,4 +41,13 @@ extension AudioStateEx on AudioState {
   List<AudioBookPart> get parts => audiobook?.parts ?? [];
   int get maxSleepTimer => (wholeDuration / 60).ceil();
   int get currentMaxSleepTimer => maxSleepTimer - statePosition ~/ 60;
+  int partPositionInWholeDuration(int partIndex) {
+    final partsBefore = parts
+        .sublist(0, partIndex)
+        .fold(
+          0,
+          (previousValue, element) => previousValue + element.duration.floor(),
+        );
+    return partsBefore + (localPosition ?? 0);
+  }
 }

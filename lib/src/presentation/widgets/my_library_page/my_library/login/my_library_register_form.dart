@@ -271,7 +271,7 @@ class _FormState extends State<_Form> {
                 ),
                 Expanded(
                   child: ElevatedButton(
-                    style: blueElevatedButton,
+                    style: greenElevatedButton,
                     onPressed: () {
                       _validate(context);
                       if (!isAnyError) {

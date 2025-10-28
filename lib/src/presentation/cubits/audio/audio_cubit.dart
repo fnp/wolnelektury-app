@@ -94,7 +94,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     // New book selected, reset all values
     await stop();
 
-    emit(state.copyWith(book: book, isLoadingAudiobook: true));
+    emit(state.copyWith(book: book, isLoadingAudiobook: true, isError: false));
 
     final audiobookResponse = await _audiobookRepository.getAudiobook(
       slug: book.slug,
@@ -116,16 +116,9 @@ class AudioCubit extends SafeCubit<AudioState> {
         }
       },
       failure: (failure) {
-        emit(state.copyWith(isLoadingAudiobook: false));
-        //TODO handle failure
+        emit(state.copyWith(isLoadingAudiobook: false, isError: true));
       },
     );
-  }
-
-  Future<void> changePart(int part) async {
-    // Change part of the audiobook
-    if (part < 0 || part >= state.parts.length) return;
-    await _player.seek(Duration.zero, index: part);
   }
 
   void resetPlayToPart() {
@@ -310,7 +303,17 @@ class AudioCubit extends SafeCubit<AudioState> {
 
   void selectPart(int? part) {
     if (part == null || part < 0 || part >= state.parts.length) return;
+    // If the player is playing, listener will take care of updating the state
     _player.seek(Duration.zero, index: part);
+    // If the player is not playing, we need to update the state manually
+    if (!_player.playing) {
+      emit(
+        state.copyWith(
+          currentlyPlayingPart: part,
+          statePosition: state.partPositionInWholeDuration(part),
+        ),
+      );
+    }
   }
 
   Future<void> _preparePlaylist({int? overridenPosition}) async {
