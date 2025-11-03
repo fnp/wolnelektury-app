@@ -77,7 +77,7 @@ class _Content extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BookPageCoverWithButtons(book: book),
+            BookPageCoverWithButtons(book: book, allowListButton: true),
             const SizedBox(height: Dimensions.spacer),
             _DetailsTable(book: book),
             if (book.description != null)

@@ -70,19 +70,20 @@ class _ReadingPageState extends State<ReadingPage> {
         if (widget.book == null)
           BlocProvider(
             lazy: false,
-            create: (context) =>
-                SingleBookCubit(get.get(), get.get())..loadBookData(
-                  slug: slug!,
-                  onFinished: (book) {
-                    context.read<ReadingPageCubit>().init(
-                      book: book,
-                      itemScrollController: itemScrollController,
-                      overrideProgressAnchor: widget.overrideProgressAnchor,
-                      tryOffline: !hasConnection,
-                      scaleFactor: scaleFactor,
-                    );
-                  },
-                ),
+            create: (context) {
+              return SingleBookCubit(get.get(), get.get())..loadBookData(
+                slug: slug!,
+                onFinished: (book, isOffline) {
+                  context.read<ReadingPageCubit>().init(
+                    book: book,
+                    itemScrollController: itemScrollController,
+                    overrideProgressAnchor: widget.overrideProgressAnchor,
+                    tryOffline: isOffline,
+                    scaleFactor: scaleFactor,
+                  );
+                },
+              );
+            },
           ),
       ],
       child: child,

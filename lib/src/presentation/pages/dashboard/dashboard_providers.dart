@@ -25,14 +25,10 @@ class DashboardProviders extends StatelessWidget {
           create: (_) => DownloadCubit(get.get(), get.get(), get.get()),
         ),
         BlocProvider(create: (_) => LikesCubit(get.get())),
-        BlocProvider(
-          create: (_) => AudioCubit(get.get(), get.get()),
-          lazy: false,
-        ),
+        BlocProvider(create: (_) => AudioCubit(get.get(), get.get())),
         BlocProvider(create: (_) => ListCreatorCubit(get.get())),
         BlocProvider(create: (_) => ScrollCubit()),
         BlocProvider(
-          lazy: false,
           create: (_) {
             final insets = MediaQuery.viewInsetsOf(context);
             final size = MediaQuery.sizeOf(context);
@@ -55,7 +51,7 @@ class DashboardProviders extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) {
-            return get.get<AuthCubit>();
+            return get.get<AuthCubit>()..tryAutoLogin();
           },
         ),
       ],

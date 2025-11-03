@@ -22,6 +22,9 @@ class DashboardListeners extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final likesCubit = context.read<LikesCubit>();
+    final authCubit = context.read<AuthCubit>();
+    final syncCubit = context.read<SynchronizerCubit>();
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthCubit, AuthState>(
@@ -30,11 +33,8 @@ class DashboardListeners extends StatelessWidget {
           },
           listener: (context, state) {
             if (state.isLoginSuccess == true) {
-              final likesCubit = context.read<LikesCubit>();
               CustomSnackbar.success(context, LocaleKeys.login_success.tr());
-              context.read<SynchronizerCubit>().sentOutProgressSync();
-              context.read<SynchronizerCubit>().sendOutBookmarksSync();
-              context.read<SynchronizerCubit>().sendOutLikesSync(
+              syncCubit.triggerAllSyncs(
                 onFinish: () {
                   likesCubit.init();
                 },
@@ -148,16 +148,11 @@ class DashboardListeners extends StatelessWidget {
             return !p.isConnected && c.isConnected;
           },
           listener: (context, state) {
-            final authCubit = context.read<AuthCubit>();
-            final likesCubit = context.read<LikesCubit>();
-            final syncCubit = context.read<SynchronizerCubit>();
             authCubit.tryAutoLogin().then((_) {
               if (!context.mounted) return;
 
               if (context.read<AuthCubit>().state.isAuthenticated) {
-                syncCubit.sentOutProgressSync();
-                syncCubit.sendOutBookmarksSync();
-                syncCubit.sendOutLikesSync(
+                syncCubit.triggerAllSyncs(
                   onFinish: () {
                     likesCubit.init();
                   },
@@ -171,7 +166,6 @@ class DashboardListeners extends StatelessWidget {
             return p.isConnected && !c.isConnected;
           },
           listener: (context, state) {
-            final authCubit = context.read<AuthCubit>();
             authCubit.clearOnLostConnection();
           },
         ),

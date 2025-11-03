@@ -93,8 +93,8 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                   Flexible(
                     child: TextButtonWithIcon(
                       nonActiveText: isEditing
-                          ? LocaleKeys.reading_sheet_bookmark_edit.tr()
-                          : LocaleKeys.reading_sheet_bookmark_add.tr(),
+                          ? LocaleKeys.reading_sheet_bookmark_editing.tr()
+                          : LocaleKeys.reading_sheet_bookmark_adding.tr(),
                       nonActiveIcon: Icons.bookmark_add_rounded,
                       activeColor: CustomColors.white,
                     ),

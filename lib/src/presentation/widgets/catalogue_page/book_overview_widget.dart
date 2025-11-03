@@ -1,24 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
-import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
-import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
-import 'package:wolnelektury/src/presentation/widgets/book_lists/book_lists_sheet.dart';
-import 'package:wolnelektury/src/presentation/widgets/catalogue_page/book_overview_widget_button.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/catalogue_page/buttons/book_overview_widget_create_list_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/catalogue_page/buttons/book_overview_widget_heart_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/catalogue_page/buttons/book_overview_widget_list_creation_mode_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
-import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 
@@ -91,7 +84,9 @@ class BookOverviewWidget extends StatelessWidget {
                       bottom: 0,
                       child: Transform.scale(
                         scale: effectiveScale,
-                        child: BookOverviewWidgetAddToListButton(book.slug),
+                        child: BookOverviewWidgetListCreationModeButton(
+                          book.slug,
+                        ),
                       ),
                     ),
                   if (state.isDefault && book.hasAudiobook)
@@ -109,7 +104,7 @@ class BookOverviewWidget extends StatelessWidget {
                       bottom: 40 * effectiveScale,
                       child: Transform.scale(
                         scale: effectiveScale,
-                        child: _HeartButton(book: book),
+                        child: BookOverviewWidgetHeartButton(book: book),
                       ),
                     ),
                   if (state.isDefault)
@@ -118,7 +113,7 @@ class BookOverviewWidget extends StatelessWidget {
                       bottom: 10 * effectiveScale,
                       child: Transform.scale(
                         scale: effectiveScale,
-                        child: _CreateListButton(book: book),
+                        child: BookOverviewWidgetCreateListButton(book: book),
                       ),
                     ),
                 ],
@@ -161,58 +156,6 @@ class BookOverviewWidget extends StatelessWidget {
   }
 }
 
-class _CreateListButton extends StatelessWidget {
-  final BookModel book;
-  const _CreateListButton({required this.book});
-
-  @override
-  Widget build(BuildContext context) {
-    return AuthWrapper(
-      authChild: (user) {
-        return BookOverviewWidgetButton(
-          onTap: () {
-            final cubit = BlocProvider.of<ListCreatorCubit>(context);
-
-            cubit.init(force: true);
-            BookListsSheet.show(
-              context: context,
-              bookSlug: book.slug,
-              onSave: () {
-                cubit.save();
-              },
-            );
-          },
-          nonActiveBackgroundColor: CustomColors.white,
-          activeBackgroundColor: CustomColors.primaryYellowColor,
-          nonActiveIcon: CustomIcons.playlist_add,
-        );
-      },
-      nonAuthChild: BookOverviewWidgetButton(
-        nonActiveBackgroundColor: CustomColors.white,
-        nonActiveIcon: CustomIcons.playlist_add,
-        onTap: () {
-          CustomSnackbar.success(
-            context,
-            LocaleKeys.common_snackbar_not_logged.tr(),
-            icon: const Icon(
-              CustomIcons.for_you,
-              size: 20,
-              color: CustomColors.black,
-            ),
-            onTap: () {
-              router.pushNamed(
-                myLibraryPageConfig.name,
-                extra: MyLibraryEnum.login,
-              );
-            },
-          );
-        },
-        isActive: false,
-      ),
-    );
-  }
-}
-
 class _AudiobookMarker extends StatelessWidget {
   const _AudiobookMarker();
 
@@ -231,103 +174,6 @@ class _AudiobookMarker extends StatelessWidget {
           size: 13,
         ),
       ),
-    );
-  }
-}
-
-class _HeartButton extends StatelessWidget {
-  final BookModel book;
-  const _HeartButton({required this.book});
-
-  @override
-  Widget build(BuildContext context) {
-    final favouritesCubit = BlocProvider.of<LikesCubit>(context);
-    return BlocBuilder<LikesCubit, LikesState>(
-      buildWhen: (p, c) => p.favourites != c.favourites,
-      builder: (context, state) {
-        final isLiked = state.favourites.contains(book.slug);
-        return AuthWrapper(
-          authChild: (user) {
-            return BookOverviewWidgetButton(
-              nonActiveBackgroundColor: CustomColors.white,
-              activeBackgroundColor: CustomColors.primaryYellowColor,
-              nonActiveIcon: CustomIcons.favorite_filled,
-              activeIcon: CustomIcons.favorite_filled,
-              onTap: () {
-                if (isLiked) {
-                  favouritesCubit.removeFromFavourites(book.slug);
-                  return;
-                }
-
-                favouritesCubit.addToFavourites(book.slug);
-              },
-              isActive: isLiked,
-            );
-          },
-          nonAuthChild: BookOverviewWidgetButton(
-            nonActiveBackgroundColor: CustomColors.white,
-            nonActiveIcon: CustomIcons.favorite_filled,
-            onTap: () {
-              CustomSnackbar.success(
-                context,
-                LocaleKeys.common_snackbar_not_logged.tr(),
-                icon: const Icon(
-                  CustomIcons.for_you,
-                  size: 20,
-                  color: CustomColors.black,
-                ),
-                onTap: () {
-                  router.pushNamed(
-                    myLibraryPageConfig.name,
-                    extra: MyLibraryEnum.login,
-                  );
-                },
-              );
-            },
-            isActive: false,
-          ),
-        );
-      },
-    );
-  }
-}
-
-class BookOverviewWidgetAddToListButton extends StatelessWidget {
-  final String slug;
-  const BookOverviewWidgetAddToListButton(this.slug, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<ListCreatorCubit>(context);
-    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
-      buildWhen: (p, c) =>
-          p.isBookInEditedList(slug) != c.isBookInEditedList(slug),
-      builder: (context, state) {
-        final isBookInEditedList = state.isBookInEditedList(slug);
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          switchOutCurve: defaultCurve,
-          switchInCurve: defaultCurve,
-          transitionBuilder: (child, animation) =>
-              ScaleTransition(scale: animation, child: child),
-          child: CustomButton(
-            key: ValueKey(isBookInEditedList),
-            icon: isBookInEditedList ? Icons.check : CustomIcons.add,
-            backgroundColor: isBookInEditedList
-                ? CustomColors.green
-                : CustomColors.white,
-            iconColor: CustomColors.black,
-            onPressed: () {
-              if (isBookInEditedList) {
-                cubit.removeBookFromEditedList(slug);
-                return;
-              }
-
-              cubit.addBookToEditedList(slug);
-            },
-          ),
-        );
-      },
     );
   }
 }

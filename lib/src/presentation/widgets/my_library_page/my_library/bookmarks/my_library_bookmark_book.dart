@@ -32,9 +32,13 @@ class MyLibraryBookmarkBook extends StatelessWidget {
       singleBookCubit
         ..loadBookData(
           slug: bookmark.slug,
-          onFinished: (book) {
+          onFinished: (book, isOffline) {
             audioCubit
-                .pickBook(book, overrideProgressTimestamp: timestamp)
+                .pickBook(
+                  book,
+                  overrideProgressTimestamp: timestamp,
+                  tryOffline: isOffline,
+                )
                 .then((_) {
                   audioCubit.play(overridenPosition: timestamp);
                 });

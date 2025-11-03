@@ -21,6 +21,7 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> tryAutoLogin() async {
+    if (state.user != null) return;
     final token = await AppSecureStorageService().readAccessToken();
     if (token == null) return;
     await getAndSetUser();

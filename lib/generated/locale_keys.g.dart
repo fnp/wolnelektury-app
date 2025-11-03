@@ -20,7 +20,9 @@ abstract class  LocaleKeys {
   static const search_show_all = 'search.show_all';
   static const search = 'search';
   static const reading_sheet_bookmark_add = 'reading.sheet.bookmark_add';
+  static const reading_sheet_bookmark_adding = 'reading.sheet.bookmark_adding';
   static const reading_sheet_bookmark_edit = 'reading.sheet.bookmark_edit';
+  static const reading_sheet_bookmark_editing = 'reading.sheet.bookmark_editing';
   static const reading_sheet = 'reading.sheet';
   static const reading_snackbar_bookmark_added_success = 'reading.snackbar.bookmark_added_success';
   static const reading_snackbar_bookmark_edited_success = 'reading.snackbar.bookmark_edited_success';

@@ -17,6 +17,7 @@ import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cub
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_listen_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_read_button.dart';
+import 'package:wolnelektury/src/presentation/widgets/catalogue_page/buttons/book_overview_widget_create_list_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
@@ -38,6 +39,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
   final VoidCallback? onDelete;
   final VoidCallback? areFilesCorruptedCallback;
   final BookButtonType buttonTypes;
+  final bool allowListButton;
   const BookPageCoverWithButtons({
     super.key,
     required this.book,
@@ -46,6 +48,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
     this.offlineReader,
     this.onDelete,
     this.areFilesCorruptedCallback,
+    this.allowListButton = false,
   });
 
   @override
@@ -109,6 +112,18 @@ class BookPageCoverWithButtons extends StatelessWidget {
                               ],
                             ),
                           ),
+                        ),
+                      ),
+                    if (allowListButton)
+                      Positioned(
+                        right: Dimensions.mediumPadding,
+                        bottom:
+                            (Dimensions.mediumPadding * 2) +
+                            Dimensions.elementHeight,
+                        child: BookOverviewWidgetCreateListButton(
+                          book: book,
+                          size: Dimensions.elementHeight,
+                          iconSize: 20,
                         ),
                       ),
                     Positioned(

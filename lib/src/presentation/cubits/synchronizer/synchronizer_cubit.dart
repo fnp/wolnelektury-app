@@ -20,6 +20,15 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
     this._bookmarksRepository,
   ) : super(const SynchronizerState());
 
+  Future<void> triggerAllSyncs({VoidCallback? onFinish}) async {
+    await Future.wait([
+      sendOutLikesSync(),
+      sentOutProgressSync(),
+      sendOutBookmarksSync(),
+    ]);
+    onFinish?.call();
+  }
+
   // This is called once user is logged in or the internet connection is restored.
   Future<void> sentOutProgressSync() async {
     emit(state.copyWith(isLoading: true, isError: false));

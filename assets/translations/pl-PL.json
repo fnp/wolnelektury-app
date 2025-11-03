@@ -21,7 +21,9 @@
     "reading": {
         "sheet": {
             "bookmark_add": "dodaj zakładkę",
-            "bookmark_edit": "edytuj zakładkę"
+            "bookmark_adding": "dodawanie zakładki",
+            "bookmark_edit": "edytuj zakładkę",
+            "bookmark_editing": "edycja zakładki"
         },
         "snackbar": {
             "bookmark_added_success": "Zakładka dodana",
@@ -196,7 +198,7 @@
             "success": "Hasło zostało zmienione",
             "error": "Podano nieprawidłowe hasło"
         },
-        "title": "Ustawienia",
+        "title": "Aplikacja",
         "notifications": "Powiadomienia",
         "notifications_error": "Nie udało się zmienić ustawień powiadomień",
         "notifications_permission_error": "Brak uprawnień dla powiadomień. Możesz to zmienić w ustawieniach.",

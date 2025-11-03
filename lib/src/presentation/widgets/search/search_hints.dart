@@ -14,7 +14,7 @@ import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_c
 import 'package:wolnelektury/src/presentation/cubits/search/search_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/presentation/enums/hint_type_enum.dart';
-import 'package:wolnelektury/src/presentation/widgets/catalogue_page/book_overview_widget.dart';
+import 'package:wolnelektury/src/presentation/widgets/catalogue_page/buttons/book_overview_widget_list_creation_mode_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/page_subtitle.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -195,7 +195,7 @@ class _HintElement extends StatelessWidget {
           child: Row(
             children: [
               if (isInAddMode && hint.type == HintTypeEnum.book)
-                BookOverviewWidgetAddToListButton(hint.slug!),
+                BookOverviewWidgetListCreationModeButton(hint.slug!),
               if (fromLastSearched && !showPlusButton)
                 CustomButton(
                   onPressed: () {

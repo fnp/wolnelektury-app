@@ -6,9 +6,9 @@ import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dar
 import 'package:wolnelektury/src/presentation/cubits/books/books_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/filtering/filtering_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/catalogue_page/book_list.dart';
-import 'package:wolnelektury/src/presentation/widgets/catalogue_page/catalogue_filtering.dart';
-import 'package:wolnelektury/src/presentation/widgets/catalogue_page/catalogue_sorting.dart';
+import 'package:wolnelektury/src/presentation/widgets/catalogue_page/filter/catalogue_filtering.dart';
 import 'package:wolnelektury/src/presentation/widgets/catalogue_page/list_creation_mode_controls.dart';
+import 'package:wolnelektury/src/presentation/widgets/catalogue_page/sort/catalogue_sorting.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/custom_scroll_page.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 

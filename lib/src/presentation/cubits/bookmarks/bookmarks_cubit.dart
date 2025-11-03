@@ -230,6 +230,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     );
     response.handle(
       success: (data, _) {
+        print('Created audio bookmark: $data');
         emit(
           state.copyWith(
             isBookmarkSuccess: (Success.create, true),

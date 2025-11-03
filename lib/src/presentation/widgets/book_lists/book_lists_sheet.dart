@@ -6,7 +6,6 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_lists/book_lists_sheet_existing_lists.dart';
-import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
@@ -151,70 +150,81 @@ class AddNewListElementState extends State<AddNewListElement> {
         color: CustomColors.black,
         borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
       ),
-      child: SizedBox(
-        width: double.infinity,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minHeight: Dimensions.elementHeight,
-          ),
-          child: Row(
-            children: [
-              const SizedBox(width: Dimensions.mediumPadding),
-              const Icon(
-                CustomIcons.playlist_add,
-                color: CustomColors.white,
-                size: 22,
-              ),
-              const SizedBox(width: Dimensions.smallPadding),
-              Expanded(
-                child: Theme(
-                  data: theme.copyWith(inputDecorationTheme: alternativeInput),
-                  child: TextField(
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      hintText: LocaleKeys.book_lists_sheet_add.tr(),
-                      hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.white,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        isReadyToSave = value.isNotEmpty;
-                      });
-                    },
-                    controller: _controller,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: Dimensions.elementHeight),
+        child: Row(
+          children: [
+            const SizedBox(width: Dimensions.mediumPadding),
+            const Icon(
+              CustomIcons.playlist_add,
+              color: CustomColors.white,
+              size: 22,
+            ),
+            const SizedBox(width: Dimensions.smallPadding),
+            Expanded(
+              child: Theme(
+                data: theme.copyWith(
+                  inputDecorationTheme: alternativeInput,
+                  textSelectionTheme: theme.textSelectionTheme.copyWith(
+                    cursorColor: CustomColors.white,
+                    selectionHandleColor: CustomColors.white,
+                  ),
+                ),
+                child: TextField(
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    suffixIcon: isReadyToSave
+                        ? _SaveButton(
+                            onPressed: () {
+                              widget.onSave.call(_controller.text);
+                              _controller.clear();
+                              setState(() {
+                                isReadyToSave = false;
+                              });
+                            },
+                          )
+                        : const SizedBox.shrink(),
+                    hintText: LocaleKeys.book_lists_sheet_add.tr(),
+                    hintStyle: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: CustomColors.white,
-                      decorationColor: CustomColors.red,
                     ),
+                    border: InputBorder.none,
                   ),
-                ),
-              ),
-
-              AnimatedBoxFade(
-                isChildVisible: isReadyToSave,
-                child: ElevatedButton(
-                  style: greenElevatedButton,
-                  onPressed: () {
-                    widget.onSave.call(_controller.text);
-                    _controller.clear();
+                  onChanged: (value) {
                     setState(() {
-                      isReadyToSave = false;
+                      isReadyToSave = value.isNotEmpty;
                     });
                   },
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.center,
-                    child: Text(LocaleKeys.book_lists_sheet_save.tr()),
+                  controller: _controller,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: CustomColors.white,
+                    decorationColor: CustomColors.red,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+}
+
+class _SaveButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const _SaveButton({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: greenElevatedButton,
+      onPressed: onPressed,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.center,
+        child: Text(LocaleKeys.book_lists_sheet_save.tr()),
       ),
     );
   }

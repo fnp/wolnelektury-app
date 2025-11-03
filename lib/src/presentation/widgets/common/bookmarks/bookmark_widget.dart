@@ -168,32 +168,35 @@ class _Body extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: Dimensions.mediumPadding),
-              SizedBox(
-                width: double.infinity,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      left: BorderSide(color: CustomColors.black),
-                      right: BorderSide(color: CustomColors.black),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: Dimensions.mediumPadding,
-                      horizontal: Dimensions.veryLargePadding,
-                    ),
-                    child: Text(
-                      LocaleKeys.audio_dialog_paragraph.tr(
-                        namedArgs: {'paragraph': (bookmark.anchor).toString()},
+              if (bookmark.anchor != null)
+                SizedBox(
+                  width: double.infinity,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide(color: CustomColors.black),
+                        right: BorderSide(color: CustomColors.black),
                       ),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: CustomColors.black,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: Dimensions.mediumPadding,
+                        horizontal: Dimensions.veryLargePadding,
+                      ),
+                      child: Text(
+                        LocaleKeys.audio_dialog_paragraph.tr(
+                          namedArgs: {
+                            'paragraph': (bookmark.anchor ?? '').toString(),
+                          },
+                        ),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.black,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
               SizedBox(
                 width: double.infinity,
                 child: DecoratedBox(

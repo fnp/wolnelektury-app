@@ -338,6 +338,8 @@ class AudioCubit extends SafeCubit<AudioState> {
         duration: Duration(seconds: part.duration.floor()),
       );
 
+      print('Is part offline? ${part.isOffline}');
+
       if (part.isOffline) {
         return AudioSource.file(part.url, tag: mediaItem);
       }

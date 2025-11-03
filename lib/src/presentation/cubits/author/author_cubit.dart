@@ -92,8 +92,9 @@ class AuthorCubit extends SafeCubit<AuthorState> {
           ),
         );
       },
-      failure: (failure) =>
-          emit(state.copyWith(isLoadingAuthorsTranslations: false)),
+      failure: (failure) {
+        emit(state.copyWith(isLoadingAuthorsTranslations: false));
+      },
     );
 
     emit(state.copyWith(isLoadingAuthorsTranslations: false));

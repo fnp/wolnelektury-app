@@ -11,7 +11,10 @@ class BookOverviewWidgetButton extends StatelessWidget {
     this.isActive = false,
     this.activeIcon,
     this.activeBackgroundColor,
-  });
+    double? size,
+    double? iconSize,
+  }) : size = size ?? 25.0,
+       iconSize = iconSize ?? 16.0;
 
   final VoidCallback onTap;
 
@@ -23,12 +26,15 @@ class BookOverviewWidgetButton extends StatelessWidget {
 
   final bool isActive;
 
+  final double size;
+  final double iconSize;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox.square(
-        dimension: 25,
+        dimension: size,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: defaultCurve,
@@ -39,7 +45,7 @@ class BookOverviewWidgetButton extends StatelessWidget {
           child: Icon(
             isActive ? activeIcon ?? nonActiveIcon : nonActiveIcon,
             color: CustomColors.black,
-            size: 13,
+            size: iconSize,
           ),
         ),
       ),
