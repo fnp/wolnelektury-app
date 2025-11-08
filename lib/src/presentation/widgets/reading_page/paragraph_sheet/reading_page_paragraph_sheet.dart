@@ -7,6 +7,7 @@ import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_c
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/create_bookmark_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
+import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
@@ -45,6 +46,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
     final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
+    final selectedParagraph = readingPageCubit.state.selectedParagraph;
     return AnimatedSize(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
@@ -99,12 +101,6 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                         activeColor: CustomColors.white,
                       ),
                       TextButtonWithIcon(
-                        nonActiveText: 'zapisz cytat',
-                        nonActiveIcon: Icons.format_quote_rounded,
-                        onPressed: () {},
-                        activeColor: CustomColors.white,
-                      ),
-                      TextButtonWithIcon(
                         nonActiveText: 'słuchaj',
                         nonActiveIcon: Icons.headphones,
                         onPressed: () {},
@@ -113,7 +109,12 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                       TextButtonWithIcon(
                         nonActiveText: 'udostępnij',
                         nonActiveIcon: Icons.ios_share,
-                        onPressed: () {},
+                        onPressed: () {
+                          ShareUtils.shareParagraph(
+                            selectedParagraph?.paragraphIndex ?? 0,
+                            readingPageCubit.state.currentSlug ?? '',
+                          );
+                        },
                         activeColor: CustomColors.white,
                       ),
                       const SizedBox(height: Dimensions.spacer),

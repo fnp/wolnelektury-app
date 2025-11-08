@@ -22,4 +22,12 @@ class ShareUtils {
       ShareParams(text: '$_shareBaseUrl/katalog/lektura/$bookSlug'),
     );
   }
+
+  static Future<void> shareParagraph(int paragraphId, String bookSlug) async {
+    SharePlus.instance.share(
+      ShareParams(
+        text: '$_shareBaseUrl/katalog/czytnik/$bookSlug/$paragraphId',
+      ),
+    );
+  }
 }

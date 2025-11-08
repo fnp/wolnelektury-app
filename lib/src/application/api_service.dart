@@ -80,7 +80,6 @@ class ApiService {
           contentType: contentType,
         ),
       );
-      print(response);
       return ApiResponse.fromApiServiceResponse(response);
     } on DioException catch (e) {
       return _dioExceptionHandler(e);

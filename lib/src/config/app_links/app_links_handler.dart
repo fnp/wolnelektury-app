@@ -60,6 +60,7 @@ class _AppLinksHandlerState extends State<AppLinksHandler>
       final nonEmptySegments = segments
           .where((element) => element.isNotEmpty)
           .toList();
+
       final slug = nonEmptySegments.last;
 
       final String stringUri = uri.toString();
@@ -78,6 +79,15 @@ class _AppLinksHandlerState extends State<AppLinksHandler>
       } else if (stringUri.contains('lista')) {
         // Navigate to list
         router.pushNamed(listPageConfig.name, pathParameters: {'slug': slug});
+      } else if (stringUri.contains('czytnik')) {
+        // Navigate to paragraph in reader
+        final paragraphId = nonEmptySegments.last;
+        final slug = nonEmptySegments[nonEmptySegments.length - 2];
+
+        router.pushNamed(
+          readingPageConfigWithAnchor.name,
+          pathParameters: {'slug': slug, 'anchor': paragraphId.toString()},
+        );
       }
     } catch (e, s) {
       print('Error parsing app link: $e, $s');
