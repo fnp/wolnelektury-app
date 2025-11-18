@@ -180,7 +180,7 @@ class _BodyState extends State<_Body> {
                   },
                 ),
                 BlocProvider.value(
-                  value: context.read<ListCreatorCubit>()..init(),
+                  value: context.read<ListCreatorCubit>()..getLists(),
                 ),
               ],
               child: PageView(

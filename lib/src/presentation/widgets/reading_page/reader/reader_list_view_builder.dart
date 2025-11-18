@@ -90,6 +90,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
           }
           final element = widget.state.book!.contents[index - 1];
           final isLast = index == widget.state.book!.contents.length;
+
           return Padding(
             padding: EdgeInsets.only(bottom: isLast ? Dimensions.spacer : 0),
             child: InkWellWrapper(
@@ -104,7 +105,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
                 key: ValueKey(element.hashCode),
                 onVisibilityChanged: (info) {
                   if (info.visibleFraction > 0) {
-                    cubit.setProgress(anchor: element.paragraphIndex);
+                    cubit.setProgress(anchor: element.id);
                   }
                 },
                 child: Stack(

@@ -50,7 +50,7 @@ class BooksCubit extends SafeCubit<BooksState> {
     );
   }
 
-  Future<void> loadMore() async {
+  Future<void> getMoreBooks() async {
     if (state.pagination.next == null || state.isLoadingMore) return;
 
     emit(state.copyWith(isLoadingMore: true));

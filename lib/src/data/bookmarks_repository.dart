@@ -19,6 +19,8 @@ abstract class BookmarksRepository {
     int limit = 20,
   });
 
+  Future<DataState<BookmarkModel>> getBookmarkById({required String uuid});
+
   Future<DataState<List<BookmarkModel>>> getBookBookmarks({
     required String slug,
   });
@@ -64,6 +66,26 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
   static const String _sendSyncBookmarksEndpoint = '/sync/bookmark/';
   static String _receiveSyncBookmarksEndpoint(String ts) =>
       '/sync/bookmark?ts=$ts';
+
+  @override
+  Future<DataState<BookmarkModel>> getBookmarkById({
+    required String uuid,
+  }) async {
+    try {
+      final response = await _apiService.getRequest(
+        '$_bookmarksEndpoint/$uuid/',
+        useCache: CacheEnum.use,
+      );
+      if (response.hasData) {
+        return DataState.success(
+          data: BookmarkModel.fromJson(response.data!.first),
+        );
+      }
+      return const DataState.failure(Failure.notFound());
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
 
   @override
   Future<DataState<List<BookmarkModel>>> getBookmarks({

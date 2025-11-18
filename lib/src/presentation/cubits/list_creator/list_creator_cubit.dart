@@ -19,7 +19,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   // --------------------------
   // -------- Fetching --------
   // --------------------------
-  Future<void> init({bool force = false}) async {
+  Future<void> getLists({bool force = false}) async {
     if (state.allLists.isNotEmpty && !force) {
       return;
     }
@@ -42,7 +42,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     );
   }
 
-  Future<void> loadMoreLists() async {
+  Future<void> getMoreLists() async {
     if (state.pagination.next == null) return;
 
     emit(state.copyWith(isLoadingMore: true));
@@ -67,6 +67,19 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
             pagination: const ApiResponsePagination(),
           ),
         );
+      },
+    );
+  }
+
+  Future<void> getListBySlug(String listSlug) async {
+    emit(state.copyWith(isLoading: true));
+    final response = await _listsRepository.getList(listSlug: listSlug);
+    response.handle(
+      success: (list, _) {
+        emit(state.copyWith(isLoading: false, allLists: [list]));
+      },
+      failure: (failure) {
+        emit(state.copyWith(isLoading: false));
       },
     );
   }
@@ -181,7 +194,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     );
 
     // Reinitialize the state to fetch the latest lists
-    init(force: true);
+    getLists(force: true);
   }
 
   void _addBookToAddQueue({
@@ -421,10 +434,9 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     if (state.editedListToSave == null) return;
 
     emit(state.copyWith(isSavingEditedList: true, isSavingFailure: false));
-    final result = await _listsRepository.updateList(
+    final result = await _listsRepository.addBooksToList(
       listSlug: state.editedListToSave!.slug,
       bookSlugs: state.editedListToSave!.books,
-      listName: state.editedListToSave!.name,
     );
 
     result.handle(
@@ -445,7 +457,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
           ),
         );
         // Reinitialize the state to fetch the latest lists
-        init(force: true);
+        getLists(force: true);
       },
       failure: (failure) {
         emit(state.copyWith(isSavingEditedList: false, isSavingFailure: true));

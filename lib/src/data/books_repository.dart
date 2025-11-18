@@ -2,6 +2,7 @@ import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_offline_service.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/domain/book_text_audio_sync_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/domain/tag_model.dart';
 import 'package:wolnelektury/src/presentation/enums/sort_enum.dart';
@@ -22,14 +23,42 @@ abstract class BooksRepository {
   });
 
   Future<DataState<BookModel>> getBookBySlug({required String slug});
+
+  Future<DataState<List<BookTextAudioSyncModel>>> getBookTextAudioSync({
+    required String slug,
+  });
 }
 
 class BooksRepositoryImplementation extends BooksRepository {
   static const String _booksEndpoint = '/books';
+  static String _syncEndpoint(String slug) => '$_booksEndpoint/$slug/sync';
 
   final ApiService _apiService;
   final AppStorageOfflineService _offlineStorage;
   BooksRepositoryImplementation(this._apiService, this._offlineStorage);
+
+  @override
+  Future<DataState<List<BookTextAudioSyncModel>>> getBookTextAudioSync({
+    required String slug,
+  }) async {
+    try {
+      final response = await _apiService.getRequest(_syncEndpoint(slug));
+      if (response.hasData) {
+        return DataState.fromApiResponse(
+          response: response,
+          converter: (data) {
+            return serializer(
+              data: data,
+              serializer: BookTextAudioSyncModel.fromJson,
+            );
+          },
+        );
+      }
+      return const DataState.failure(Failure.notFound());
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
 
   @override
   Future<DataState<BookModel>> getBookBySlug({required String slug}) async {

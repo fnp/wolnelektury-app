@@ -16,14 +16,13 @@ class AuthorCubit extends SafeCubit<AuthorState> {
 
   Future<void> getAuthor(String slug) async {
     emit(state.copyWith(isLoading: true));
-    await Future.delayed(const Duration(seconds: 3));
 
     final result = await _authorRepository.getAuthor(slug: slug);
 
     result.handle(
       success: (author, _) {
         emit(state.copyWith(author: author));
-        getBooks(authorId: author.id);
+        getAuthorBooks(authorId: author.id);
       },
       failure: (failure) => emit(state.copyWith(isLoading: false)),
     );
@@ -31,7 +30,7 @@ class AuthorCubit extends SafeCubit<AuthorState> {
     emit(state.copyWith(isLoading: false));
   }
 
-  Future<void> getBooks({required int authorId}) async {
+  Future<void> getAuthorBooks({required int authorId}) async {
     emit(state.copyWith(isLoadingAuthorsBooks: true));
 
     final result = await _authorRepository.getAuthorsBooks(authorId: authorId);
@@ -50,7 +49,7 @@ class AuthorCubit extends SafeCubit<AuthorState> {
     );
   }
 
-  Future<void> loadMoreBooks() async {
+  Future<void> getMoreAuthorBooks() async {
     if (state.authorsBooksPagination.next == null) return;
 
     emit(state.copyWith(isLoadingAuthorsBooks: true));

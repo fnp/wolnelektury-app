@@ -45,7 +45,7 @@ class AuthCubit extends SafeCubit<AuthState> {
 
     final result = await _authRepository.login(
       username: email.toLowerCase(),
-      password: password.toLowerCase(),
+      password: password,
     );
 
     result.handle(
@@ -74,7 +74,7 @@ class AuthCubit extends SafeCubit<AuthState> {
 
     final result = await _authRepository.register(
       username: email.toLowerCase(),
-      password: password.toLowerCase(),
+      password: password,
       options: state.getListOfAgreements,
     );
 

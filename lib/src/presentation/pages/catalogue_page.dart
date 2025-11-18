@@ -88,7 +88,7 @@ class _Body extends StatelessWidget {
                       return CustomScrollPage(
                         key: ValueKey(state.isLoading),
                         onLoadMore: () {
-                          context.read<BooksCubit>().loadMore();
+                          context.read<BooksCubit>().getMoreBooks();
                         },
                         builder: (controller) {
                           return CustomScrollView(

@@ -91,6 +91,20 @@ List<InlineSpan> buildReaderBase({
       );
       break;
 
+    case 'spacer-asterisk':
+      spans.add(
+        buildMasterLevelRow(
+          textAlign: TextAlign.center,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontSize: fontSize,
+            fontFamily: fontFamily,
+          ),
+          children: [const TextSpan(text: '*')],
+        ),
+      );
+      break;
+
     default:
       spans = element.contents.asMap().entries.expand((entry) {
         final index = entry.key;
@@ -162,6 +176,21 @@ List<InlineSpan> _getSpans({
     );
   }
 
+  // Handle ReaderBookText
+  if (item is ReaderBookText) {
+    return BuildReaderTagLevelModifiers.build(
+      text: item.text,
+      element: element,
+      parent: parent,
+      fontFamily: fontFamily,
+      fontSize: fontSize,
+      theme: theme,
+      isRecursive: isRecursive,
+      nextSibling: nextSibling,
+      prevSibling: prevSibling,
+    );
+  }
+
   return [];
 }
 
@@ -200,7 +229,6 @@ InlineSpan _handleLinkTags({
             linkContent: linkContent,
             fontFamily: fontFamily,
             fontSize: fontSize,
-            isTheme: className == 'theme',
           ),
           behavior: HitTestBehavior.opaque,
           child: Padding(
@@ -213,8 +241,6 @@ InlineSpan _handleLinkTags({
           ),
         ),
       ),
-      // There's nothing after the footnote, no need to add a new line
-      if (!hasSomeContentAfter) const TextSpan(text: '\n'),
     ],
   );
 }

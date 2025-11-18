@@ -18,9 +18,9 @@ sealed class BookmarksState with _$BookmarksState {
 }
 
 extension BookmarksStateX on BookmarksState {
-  BookmarkModel? isSelectedParagraphBookmarked(int? paragraphIndex) {
+  BookmarkModel? isSelectedParagraphBookmarked(String? paragraphId) {
     return bookmarks.firstWhereOrNull(
-      (element) => element.anchor == paragraphIndex.toString(),
+      (element) => element.anchor == paragraphId,
     );
   }
 

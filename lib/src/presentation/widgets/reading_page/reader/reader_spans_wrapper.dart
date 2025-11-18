@@ -29,11 +29,11 @@ class ReaderSpansWrapper extends StatelessWidget {
       children: [
         SizedBox(
           width: 40,
-          child: element.paragraphIndex != null
+          child: element.visibleNumber != null
               ? Align(
                   alignment: Alignment.center,
                   child: Text(
-                    '${element.paragraphIndex}',
+                    '${element.visibleNumber}',
                     style: const TextStyle(
                       fontSize: 12,
                       color: CustomColors.darkModeGrey,
@@ -67,10 +67,7 @@ class ReaderSpansWrapper extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: 40,
-          child: _Bookmark(paragraphIndex: element.paragraphIndex),
-        ),
+        SizedBox(width: 40, child: _Bookmark(paragraphId: element.id)),
       ],
     );
   }
@@ -86,17 +83,17 @@ class ReaderSpansWrapper extends StatelessWidget {
 }
 
 class _Bookmark extends StatelessWidget {
-  final int? paragraphIndex;
-  const _Bookmark({this.paragraphIndex});
+  final String? paragraphId;
+  const _Bookmark({this.paragraphId});
 
   @override
   Widget build(BuildContext context) {
-    if (paragraphIndex == null) return const SizedBox.shrink();
+    if (paragraphId == null) return const SizedBox.shrink();
     return BlocBuilder<BookmarksCubit, BookmarksState>(
       buildWhen: (p, c) => p.bookmarks != c.bookmarks,
       builder: (context, state) {
         final isBookmarked = state.bookmarks.firstWhereOrNull(
-          (element) => element.anchor == paragraphIndex.toString(),
+          (element) => element.anchor == paragraphId,
         );
         if (isBookmarked == null) {
           return const SizedBox.shrink();

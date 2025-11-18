@@ -28,7 +28,6 @@ class ReaderBottomSheet extends StatelessWidget {
     required ReaderBookModelContent linkContent,
     required String fontFamily,
     required double fontSize,
-    required bool isTheme,
   }) {
     showModalBottomSheet(
       context: dashboardNavigationKey.currentContext!,
@@ -40,7 +39,6 @@ class ReaderBottomSheet extends StatelessWidget {
           fontFamily: fontFamily,
           fontSize: fontSize,
           debugPrint: true,
-          isTheme: isTheme,
         );
       },
     );

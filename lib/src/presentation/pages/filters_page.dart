@@ -60,7 +60,7 @@ class FiltersPage extends StatelessWidget {
                         CustomScrollPage(
                           ignoreTopbar: true,
                           onLoadMore: () {
-                            cubit.loadMore();
+                            cubit.getMoreTags();
                           },
                           builder: (controller) {
                             return CustomScrollView(

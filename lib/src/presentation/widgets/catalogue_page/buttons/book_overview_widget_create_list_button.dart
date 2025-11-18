@@ -35,7 +35,7 @@ class BookOverviewWidgetCreateListButton extends StatelessWidget {
           onTap: () {
             final cubit = BlocProvider.of<ListCreatorCubit>(context);
 
-            cubit.init(force: true);
+            cubit.getLists(force: true);
             BookListsSheet.show(
               context: context,
               bookSlug: book.slug,

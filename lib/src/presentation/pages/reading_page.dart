@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
@@ -15,12 +17,13 @@ import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_page_progress_indicator.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPage extends StatefulWidget {
   final BookModel? book;
   final String? slug;
-  final int? overrideProgressAnchor;
+  final String? overrideProgressAnchor;
   const ReadingPage({
     super.key,
     this.book,
@@ -71,7 +74,7 @@ class _ReadingPageState extends State<ReadingPage> {
           BlocProvider(
             lazy: false,
             create: (context) {
-              return SingleBookCubit(get.get(), get.get())..loadBookData(
+              return SingleBookCubit(get.get(), get.get())..getBookData(
                 slug: slug!,
                 onFinished: (book, isOffline) {
                   context.read<ReadingPageCubit>().init(
@@ -98,51 +101,62 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<ReadingPageCubit>(context);
-    return BookmarkListener(
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
-              buildWhen: (p, c) => c.shouldRebuild(p),
-              builder: (context, state) {
-                return AnimatedBoxFade(
-                  duration: const Duration(milliseconds: 400),
-                  isChildVisible: !state.isJsonLoading,
-                  collapsedChild: const _SkeletonPlaceholder(),
-                  child: state.book == null
-                      ? const SizedBox.shrink()
-                      : ReaderListViewBuilder(
-                          state: state,
-                          itemScrollController: itemScrollController,
-                        ),
-                );
-              },
+    return BlocListener<ReadingPageCubit, ReadingPageState>(
+      listenWhen: (p, c) {
+        return !p.isJsonLoadingError && c.isJsonLoadingError;
+      },
+      listener: (context, state) {
+        CustomSnackbar.error(
+          context,
+          LocaleKeys.reading_snackbar_reader_loading_error.tr(),
+        );
+      },
+      child: BookmarkListener(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
+                buildWhen: (p, c) => c.shouldRebuild(p),
+                builder: (context, state) {
+                  return AnimatedBoxFade(
+                    duration: const Duration(milliseconds: 400),
+                    isChildVisible: !state.isJsonLoading,
+                    collapsedChild: const _SkeletonPlaceholder(),
+                    child: state.book == null
+                        ? const SizedBox.shrink()
+                        : ReaderListViewBuilder(
+                            state: state,
+                            itemScrollController: itemScrollController,
+                          ),
+                  );
+                },
+              ),
             ),
-          ),
-          const Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: ReadingPageProgressIndicator(),
-          ),
-          Positioned(
-            bottom: Dimensions.modalsPadding,
-            right: Dimensions.modalsPadding,
-            child: CustomButton(
-              size: Dimensions.elementHeight,
-              backgroundColor: CustomColors.white,
-              icon: Icons.tune,
-              onPressed: () {
-                ReadingPageSettings.show(
-                  context: context,
-                  onClosed: () {
-                    cubit.saveSettings();
-                  },
-                );
-              },
+            const Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: ReadingPageProgressIndicator(),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: Dimensions.modalsPadding,
+              right: Dimensions.modalsPadding,
+              child: CustomButton(
+                size: Dimensions.elementHeight,
+                backgroundColor: CustomColors.white,
+                icon: Icons.tune,
+                onPressed: () {
+                  ReadingPageSettings.show(
+                    context: context,
+                    onClosed: () {
+                      cubit.saveSettings();
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -7,7 +7,11 @@ sealed class ReadingPageState with _$ReadingPageState {
     @Default(0.5) double textSizeFactor,
     @Default(ReaderFontType.sans) ReaderFontType fontType,
     @Default(false) bool isJsonLoading,
+    @Default(false) bool isJsonLoadingError,
     ReaderBookModel? book,
+
+    // Audio sync pairs
+    @Default([]) List<BookTextAudioSyncModel> audioSyncPairs,
 
     // ParagraphSheet
     int? selectedIndex,
@@ -23,11 +27,18 @@ sealed class ReadingPageState with _$ReadingPageState {
 }
 
 extension ReadingPageStateX on ReadingPageState {
-  int? findElementIndexByParagraphIndex(int paragraphIndex) {
+  int? findElementIndexByElementId(String elementId) {
     if (book == null) return null;
-    return book!.contents.indexWhere(
-      (element) => element.paragraphIndex == paragraphIndex,
+    final int index = book!.contents.indexWhere(
+      (element) => element.containsElementId(elementId),
     );
+
+    return index >= 0 ? index : null;
+  }
+
+  double? getTimestampForId(String id) {
+    final pair = audioSyncPairs.firstWhereOrNull((pair) => pair.id == id);
+    return pair?.timestamp;
   }
 
   bool shouldRebuild(ReadingPageState state) {

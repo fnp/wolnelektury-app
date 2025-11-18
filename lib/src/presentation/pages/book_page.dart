@@ -32,7 +32,7 @@ class BookPage extends StatelessWidget {
       return BlocProvider(
         create: (context) {
           return SingleBookCubit(get.get(), get.get())
-            ..loadBookData(slug: slug!);
+            ..getBookData(slug: slug!);
         },
         child: BlocBuilder<SingleBookCubit, SingleBookState>(
           buildWhen: (p, c) {

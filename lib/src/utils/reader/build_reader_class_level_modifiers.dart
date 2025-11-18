@@ -108,10 +108,11 @@ class BuildReaderClassLevelModifiers {
         );
 
       case 'spacer-asterisk':
+        print('Rendering spacer-asterisk');
         return _widgetSpanWithPadding(
           alignment: Alignment.center,
           padding: EdgeInsets.zero,
-          child: Text(text, style: effStyle),
+          child: Text('*', style: effStyle),
         );
 
       case 'separator_linia':

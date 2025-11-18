@@ -100,7 +100,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
         return const DataState.success(data: null);
       } else {
         final response = await _apiService.deleteRequest(
-          '$_likesEndpoint/$slug/',
+          '$_likesEndpoint$slug/',
         );
 
         if (response.error != null) {

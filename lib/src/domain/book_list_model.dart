@@ -13,4 +13,8 @@ sealed class BookListModel with _$BookListModel {
 
   factory BookListModel.fromJson(Map<String, dynamic> json) =>
       _$BookListModelFromJson(json);
+
+  factory BookListModel.empty() {
+    return const BookListModel(name: '', slug: '', books: []);
+  }
 }

@@ -19,7 +19,11 @@ class MyLibraryBookmarkBook extends StatelessWidget {
     required this.isLoading,
   });
 
-  void onListen(int? timestamp, bool isPlaying, BuildContext context) {
+  void onListen({
+    required int? timestamp,
+    required bool isPlaying,
+    required BuildContext context,
+  }) {
     if (timestamp == null) {
       return;
     }
@@ -30,7 +34,7 @@ class MyLibraryBookmarkBook extends StatelessWidget {
     } else {
       final singleBookCubit = context.read<SingleBookCubit>();
       singleBookCubit
-        ..loadBookData(
+        ..getBookData(
           slug: bookmark.slug,
           onFinished: (book, isOffline) {
             audioCubit
@@ -58,7 +62,7 @@ class MyLibraryBookmarkBook extends StatelessWidget {
           return singleBookCubit;
         }
         return singleBookCubit
-          ..loadBookData(slug: bookmark.slug)
+          ..getBookData(slug: bookmark.slug)
           ..checkIfMediaAreDownloaded(bookmark.slug);
       },
       child: BlocBuilder<SingleBookCubit, SingleBookState>(
@@ -81,7 +85,11 @@ class MyLibraryBookmarkBook extends StatelessWidget {
               isLoading: effectiveLoading,
               backgroundColor: CustomColors.primaryYellowColor,
               onListen: (int? timestamp, bool isPlaying) {
-                onListen(timestamp, isPlaying, context);
+                onListen(
+                  timestamp: timestamp,
+                  isPlaying: isPlaying,
+                  context: context,
+                );
               },
               isAudioAvailableOffline: state.isAudiobookDownloaded,
               isReaderAvailableOffline: state.isReaderDownloaded,

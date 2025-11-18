@@ -117,7 +117,7 @@ class _BooksLoadMore extends StatelessWidget {
             isLoading: state.isLoadingAuthorsBooks,
             onLoadMore: () {
               if (state.isLoadingAuthorsBooks) return;
-              cubit.loadMoreBooks();
+              cubit.getMoreAuthorBooks();
             },
           ),
         );

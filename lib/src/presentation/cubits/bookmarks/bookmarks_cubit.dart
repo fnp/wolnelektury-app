@@ -35,7 +35,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     );
   }
 
-  Future<void> loadMoreMyLibraryBookmarks() async {
+  Future<void> getMoreMyLibraryBookmarks() async {
     if (state.bookmarks.length % 10 != 0 ||
         state.isLoadingMore ||
         state.isLoading) {
@@ -230,7 +230,6 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     );
     response.handle(
       success: (data, _) {
-        print('Created audio bookmark: $data');
         emit(
           state.copyWith(
             isBookmarkSuccess: (Success.create, true),
@@ -240,6 +239,19 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
       },
       failure: (_) {
         emit(state.copyWith(isBookmarkSuccess: (Success.create, false)));
+      },
+    );
+  }
+
+  Future<void> getBookmarkById({required String uuid}) async {
+    emit(state.copyWith(isLoading: true));
+    final bookmark = await _bookmarksRepository.getBookmarkById(uuid: uuid);
+    bookmark.handle(
+      success: (data, _) {
+        emit(state.copyWith(isLoading: false, bookmarks: [data]));
+      },
+      failure: (error) {
+        emit(state.copyWith(isLoading: false));
       },
     );
   }
@@ -256,7 +268,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
       final slug = getSlug(item);
       final ts = getTimestamp(item);
 
-      // jeżeli nie ma wpisu dla sluga, to go dodaj
+      // If there's no entry for the slug, add it
       seen.putIfAbsent(slug, () => <int>{});
 
       if (ts == null || seen[slug]!.add(ts)) {

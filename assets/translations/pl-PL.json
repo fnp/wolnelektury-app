@@ -31,7 +31,8 @@
             "bookmark_deleted_success": "Zakładka usunięta",
             "bookmark_add_error": "Nie udało się dodać zakładki",
             "bookmark_edit_error": "Nie udało się edytować zakładki",
-            "bookmark_delete_error": "Nie udało się usunąć zakładki"
+            "bookmark_delete_error": "Nie udało się usunąć zakładki",
+            "reader_loading_error": "Nie udało się wczytać treści książki"
         }
     },
     "my_library": {
@@ -213,6 +214,7 @@
         "logout": "Wyloguj się"
     },
     "common": {
+        "bookmark_page_error": "Nie udało się pobrać zakładki, prawdopodobnie została usunięta 🙁",
         "empty_page": "Zabłądziliśmy, nic tutaj nie ma 👀",
         "empty": {
             "search_in_catalogue": "Przeglądaj katalog",
@@ -221,6 +223,7 @@
             "bookmarks_title": "Nie dodano jeszcze żadnych zakładek",
             "liked_title": "Nie polubiono jeszcze żadnych książek",
             "lists_title": "Nie utworzono jeszcze żadnych list",
+            "lists_content_title": "Dodaj książki do swoich list, aby je tutaj zobaczyć",
             "readers_title": "Nie zapisano jeszcze żadnych książek"
         },
         "sorting": {

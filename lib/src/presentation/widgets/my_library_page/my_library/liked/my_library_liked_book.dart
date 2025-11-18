@@ -18,7 +18,7 @@ class MyLibraryLikedBook extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         return SingleBookCubit(get.get(), get.get())
-          ..loadBookData(slug: bookSlug);
+          ..getBookData(slug: bookSlug);
       },
       child: BlocBuilder<SingleBookCubit, SingleBookState>(
         buildWhen: (p, c) {

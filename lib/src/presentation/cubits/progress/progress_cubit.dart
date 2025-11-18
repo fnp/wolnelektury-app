@@ -24,7 +24,7 @@ class ProgressCubit extends SafeCubit<ProgressState> {
     );
   }
 
-  Future<void> loadMore() async {
+  Future<void> getMoreProgresses() async {
     if (state.progresses.length % 10 != 0 || state.isLoadingMore) return;
     emit(state.copyWith(isLoadingMore: true));
     final books = await _progressRepository.getProgresses(

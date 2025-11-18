@@ -84,7 +84,7 @@ class FilteringCubit extends SafeCubit<FilteringState> {
     );
   }
 
-  Future<void> loadMore() async {
+  Future<void> getMoreTags() async {
     if (state.pagination.next == null) return;
 
     emit(state.copyWith(isLoadingMore: true));

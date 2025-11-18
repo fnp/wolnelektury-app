@@ -28,7 +28,7 @@ class BookListsSheetExistingLists extends StatelessWidget {
     return CustomScrollPage(
       ignoreTopbar: true,
       onLoadMore: () {
-        creatorCubit.loadMoreLists();
+        creatorCubit.getMoreLists();
       },
       builder: (scrollController) =>
           BlocBuilder<ListCreatorCubit, ListCreatorState>(

@@ -126,7 +126,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(playToPart: 0));
   }
 
-  // This is ussed to set the playToPart value, which is used to
+  // This is used to set the playToPart value, which is used to
   // set the sleep timer to the end of the part
   void decreasePlayToPart() {
     final currentlyPlayingPart = _player.currentIndex ?? 0;
@@ -151,7 +151,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     emit(state.copyWith(playToPart: currentlySetToPart));
   }
 
-  // This is ussed to set the playToPart value, which is used to
+  // This is used to set the playToPart value, which is used to
   // set the sleep timer to the end of the part
   void increasePlayToPart() {
     final currentlyPlayingPart = _player.currentIndex ?? 0;
@@ -216,7 +216,7 @@ class AudioCubit extends SafeCubit<AudioState> {
   Future<void> stop() async {
     _cancelSubscriptions();
     emit(AudioState(book: state.book, audiobook: state.audiobook));
-    Future.wait([
+    await Future.wait([
       _player.stop(),
       _player.seek(Duration.zero, index: 0),
       _player.setAudioSources([]),
@@ -278,6 +278,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     if (optionalSeconds == null && state.localPosition == null) {
       return;
     }
+
     // Seeked seconds
     final seconds = optionalSeconds ?? state.localPosition!;
     final foundPosition = _findPositionAndIndex(seconds);
@@ -338,8 +339,6 @@ class AudioCubit extends SafeCubit<AudioState> {
         duration: Duration(seconds: part.duration.floor()),
       );
 
-      print('Is part offline? ${part.isOffline}');
-
       if (part.isOffline) {
         return AudioSource.file(part.url, tag: mediaItem);
       }
@@ -353,9 +352,8 @@ class AudioCubit extends SafeCubit<AudioState> {
     );
     AppLogger.instance.d(
       'AudioCubit',
-      'Prepared playling for book ${state.book?.title}',
+      'Prepared playlist for book ${state.book?.title}',
     );
-
     try {
       await _audioSession.initializationFuture;
       await _player.setAudioSources(
@@ -547,8 +545,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     _sleepTimer?.cancel();
     _positionTimeoutTimer?.cancel();
     _cancelSubscriptions();
-    await _player.dispose();
-    await _audioSession.setActive(false);
+    await Future.wait([_player.dispose(), _audioSession.setActive(false)]);
     return super.close();
   }
 }

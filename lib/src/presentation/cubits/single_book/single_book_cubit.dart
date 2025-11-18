@@ -14,7 +14,7 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
   SingleBookCubit(this._booksRepository, this._offlineStorage)
     : super(const SingleBookState());
 
-  Future<void> loadBookData({
+  Future<void> getBookData({
     required String slug,
     Function(BookModel data, bool isOffline)? onFinished,
   }) async {
@@ -26,7 +26,7 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
         onFinished?.call(book, false);
       },
       failure: (failure) async {
-        //Try to get it from offline storage
+        // Try to get it from offline storage
         final offlineBook = await _offlineStorage.readOfflineBook(slug);
         if (offlineBook != null) {
           emit(state.copyWith(book: offlineBook.book, isLoading: false));

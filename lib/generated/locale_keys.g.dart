@@ -30,6 +30,7 @@ abstract class  LocaleKeys {
   static const reading_snackbar_bookmark_add_error = 'reading.snackbar.bookmark_add_error';
   static const reading_snackbar_bookmark_edit_error = 'reading.snackbar.bookmark_edit_error';
   static const reading_snackbar_bookmark_delete_error = 'reading.snackbar.bookmark_delete_error';
+  static const reading_snackbar_reader_loading_error = 'reading.snackbar.reader_loading_error';
   static const reading_snackbar = 'reading.snackbar';
   static const reading = 'reading';
   static const my_library_wifi_dialog_title = 'my_library.wifi_dialog.title';
@@ -180,6 +181,7 @@ abstract class  LocaleKeys {
   static const settings_delete = 'settings.delete';
   static const settings_logout = 'settings.logout';
   static const settings = 'settings';
+  static const common_bookmark_page_error = 'common.bookmark_page_error';
   static const common_empty_page = 'common.empty_page';
   static const common_empty_search_in_catalogue = 'common.empty.search_in_catalogue';
   static const common_empty_last_read_title = 'common.empty.last_read_title';
@@ -187,6 +189,7 @@ abstract class  LocaleKeys {
   static const common_empty_bookmarks_title = 'common.empty.bookmarks_title';
   static const common_empty_liked_title = 'common.empty.liked_title';
   static const common_empty_lists_title = 'common.empty.lists_title';
+  static const common_empty_lists_content_title = 'common.empty.lists_content_title';
   static const common_empty_readers_title = 'common.empty.readers_title';
   static const common_empty = 'common.empty';
   static const common_sorting_alpha_desc = 'common.sorting.alpha_desc';

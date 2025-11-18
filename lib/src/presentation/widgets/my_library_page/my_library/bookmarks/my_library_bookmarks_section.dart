@@ -56,7 +56,7 @@ class MyLibraryBookmarksSection extends StatelessWidget {
                         .getMyLibraryBookmarks();
                   },
                   onLoadMore: () {
-                    context.read<BookmarksCubit>().loadMoreMyLibraryBookmarks();
+                    context.read<BookmarksCubit>().getMoreMyLibraryBookmarks();
                   },
                   builder: (scrollController) {
                     return ListView.builder(

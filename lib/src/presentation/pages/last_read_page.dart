@@ -33,7 +33,7 @@ class LastReadPage extends StatelessWidget {
               Expanded(
                 child: CustomScrollPage(
                   onLoadMore: () {
-                    BlocProvider.of<ProgressCubit>(context).loadMore();
+                    BlocProvider.of<ProgressCubit>(context).getMoreProgresses();
                   },
                   builder: (controller) {
                     return BlocBuilder<ProgressCubit, ProgressState>(

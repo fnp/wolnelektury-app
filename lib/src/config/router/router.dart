@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
-import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
@@ -110,11 +109,8 @@ final GoRouter router = GoRouter(
           name: listPageConfig.name,
           pageBuilder: (context, state) {
             final slug = state.pathParameters['slug'];
-            final bookList = state.extra as BookListModel?;
             return MaterialPage(
-              child: _ColoredBackground(
-                child: ListPage(slug: slug, bookList: bookList),
-              ),
+              child: _ColoredBackground(child: ListPage(slug: slug)),
             );
           },
         ),
@@ -176,7 +172,7 @@ final GoRouter router = GoRouter(
           name: readingPageConfigWithAnchor.name,
           pageBuilder: (context, state) {
             final book = state.extra as BookModel?;
-            final anchor = int.tryParse(state.pathParameters['anchor'] ?? '');
+            final anchor = state.pathParameters['anchor'];
             final slug = state.pathParameters['slug'];
             return MaterialPage(
               child: _ColoredBackground(

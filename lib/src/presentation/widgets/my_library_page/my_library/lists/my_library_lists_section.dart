@@ -66,10 +66,10 @@ class MyLibraryListsSection extends StatelessWidget {
             Expanded(
               child: CustomScrollPage(
                 onRefresh: () {
-                  return BlocProvider.of<ListCreatorCubit>(context).init();
+                  return BlocProvider.of<ListCreatorCubit>(context).getLists();
                 },
                 onLoadMore: () {
-                  BlocProvider.of<ListCreatorCubit>(context).loadMoreLists();
+                  BlocProvider.of<ListCreatorCubit>(context).getMoreLists();
                 },
                 builder: (scrollController) {
                   return BlocBuilder<ListCreatorCubit, ListCreatorState>(
@@ -105,7 +105,7 @@ class MyLibraryListsSection extends StatelessWidget {
                               child: isPending
                                   ? MyLibraryList(
                                       bookList: state.pendingList!,
-                                      includeBooks: false,
+                                      isCompact: true,
                                     )
                                   : const SizedBox(),
                             );
@@ -116,7 +116,7 @@ class MyLibraryListsSection extends StatelessWidget {
                           return MyLibraryList(
                             key: ValueKey(state.allLists[effIndex].slug),
                             bookList: state.allLists[effIndex],
-                            includeBooks: false,
+                            isCompact: true,
                           );
                         },
                       );

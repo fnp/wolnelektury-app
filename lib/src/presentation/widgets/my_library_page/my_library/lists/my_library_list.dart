@@ -11,6 +11,7 @@ import 'package:wolnelektury/src/presentation/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/lists/my_library_list_book.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/lists/my_library_list_delete_confirmation_dialog.dart';
+import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
@@ -19,11 +20,11 @@ import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class MyLibraryList extends StatelessWidget {
   final BookListModel bookList;
-  final bool includeBooks;
+  final bool isCompact;
   const MyLibraryList({
     super.key,
     required this.bookList,
-    required this.includeBooks,
+    required this.isCompact,
   });
 
   @override
@@ -45,8 +46,8 @@ class MyLibraryList extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _Header(bookList: bookList),
-                      if (bookList.books.isNotEmpty && includeBooks) ...[
+                      _Header(bookList: bookList, includeShare: !isCompact),
+                      if (bookList.books.isNotEmpty && !isCompact) ...[
                         _List(bookList: bookList),
                       ],
                     ],
@@ -83,7 +84,8 @@ class _List extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   final BookListModel bookList;
-  const _Header({required this.bookList});
+  final bool includeShare;
+  const _Header({required this.bookList, required this.includeShare});
 
   @override
   Widget build(BuildContext context) {
@@ -92,71 +94,86 @@ class _Header extends StatelessWidget {
     final modeCubit = BlocProvider.of<AppModeCubit>(context);
     return SizedBox(
       height: Dimensions.elementHeight,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
-          color: CustomColors.primaryYellowColor,
-        ),
-        child: InkWellWrapper(
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
-          onTap: () {
-            router.pushNamed(
-              listPageConfig.name,
-              pathParameters: {'slug': bookList.slug},
-              extra: bookList,
-            );
-          },
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Dimensions.veryLargePadding,
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      bookList.name,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: CustomColors.black,
-                        fontWeight: FontWeight.w600,
+      child: Row(
+        children: [
+          Expanded(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  Dimensions.borderRadiusOfCircle,
+                ),
+                color: CustomColors.primaryYellowColor,
+              ),
+              child: InkWellWrapper(
+                borderRadius: BorderRadius.circular(
+                  Dimensions.borderRadiusOfCircle,
+                ),
+                onTap: () {
+                  router.pushNamed(
+                    listPageConfig.name,
+                    pathParameters: {'slug': bookList.slug},
+                  );
+                },
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.veryLargePadding,
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            bookList.name,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: CustomColors.black,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
+                    SizedBox(
+                      width: Dimensions.elementHeight * 2,
+                      height: Dimensions.elementHeight,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: CustomColors.red,
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.borderRadiusOfCircle,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            _DeleteButton(slug: bookList.slug),
+                            CustomButton(
+                              icon: CustomIcons.add,
+                              onPressed: () {
+                                listCubit.setListAsEdited(bookList.name);
+                                modeCubit.changeMode(
+                                  AppModeEnum.listCreationMode,
+                                );
+                                router.pushNamed(cataloguePageConfig.name);
+                              },
+                              backgroundColor: CustomColors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                width: Dimensions.elementHeight * 2,
-                height: Dimensions.elementHeight,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: CustomColors.red,
-                    borderRadius: BorderRadius.circular(
-                      Dimensions.borderRadiusOfCircle,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      _DeleteButton(slug: bookList.slug),
-                      CustomButton(
-                        icon: CustomIcons.add,
-                        onPressed: () {
-                          listCubit.setListAsEdited(bookList.name);
-                          modeCubit.changeMode(AppModeEnum.listCreationMode);
-                          router.pushNamed(cataloguePageConfig.name);
-                        },
-                        backgroundColor: CustomColors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          if (includeShare) ...[
+            const SizedBox(width: Dimensions.mediumPadding),
+            _ShareButton(slug: bookList.slug),
+          ],
+        ],
       ),
     );
   }
@@ -214,6 +231,22 @@ class _DeleteButton extends StatelessWidget {
                 ),
         );
       },
+    );
+  }
+}
+
+class _ShareButton extends StatelessWidget {
+  final String slug;
+  const _ShareButton({required this.slug});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomButton(
+      icon: CustomIcons.ios_share,
+      onPressed: () {
+        ShareUtils.shareBookList(slug);
+      },
+      backgroundColor: CustomColors.white,
     );
   }
 }

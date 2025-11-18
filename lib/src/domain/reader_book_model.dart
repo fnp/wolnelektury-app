@@ -1,4 +1,5 @@
 enum ReaderBookTag {
+  master,
   p,
   h2,
   h3,
@@ -18,79 +19,146 @@ enum ReaderBookTag {
   }
 }
 
-class ReaderBookModelContent {
+sealed class ReaderBookContentItem {
+  const ReaderBookContentItem();
+
+  dynamic toJson();
+  int? get paragraphIndex;
+
+  factory ReaderBookContentItem.fromJson(dynamic json) {
+    if (json is String) {
+      return ReaderBookText(json);
+    } else if (json is Map<String, dynamic>) {
+      return ReaderBookModelContent.fromJson(json);
+    } else {
+      throw ArgumentError('Invalid content type: $json');
+    }
+  }
+}
+
+/// Reprezentuje tekst w treści książki
+class ReaderBookText extends ReaderBookContentItem {
+  final String text;
+
+  const ReaderBookText(this.text);
+
+  @override
+  String toJson() => text;
+
+  @override
+  int? get paragraphIndex => null;
+}
+
+/// Reprezentuje zagnieżdżony element z tagiem, atrybutami i zawartością
+class ReaderBookModelContent extends ReaderBookContentItem {
   final ReaderBookTag tag;
+  final String? id;
   final Map<String, dynamic>? attr;
-  // Either String or ReaderBookModelContent used for nested content
-  final List<dynamic> contents;
+  final List<ReaderBookContentItem> contents;
+  @override
   final int? paragraphIndex;
   final int? visibleNumber;
 
-  ReaderBookModelContent({
+  const ReaderBookModelContent({
     required this.tag,
     required this.contents,
+    this.id,
     this.attr,
     this.paragraphIndex,
     this.visibleNumber,
   });
 
   factory ReaderBookModelContent.fromJson(Map<String, dynamic> json) {
+    final rawContents = json['contents'] as List<dynamic>? ?? [];
+
     return ReaderBookModelContent(
       tag: ReaderBookTag.fromString(json['tag'] ?? 'unknown'),
-      attr: json['attr'],
-      contents:
-          (json['contents'] as List<dynamic>?)
-              ?.map(
-                (item) => item is Map<String, dynamic>
-                    ? ReaderBookModelContent.fromJson(item)
-                    : item.toString(),
-              )
-              .toList() ??
-          [],
-      paragraphIndex: json['paragraphIndex'],
-      visibleNumber: json['visibleNumber'],
+      id: json['id'] as String?,
+      attr: (json['attr'] as Map?)?.cast<String, dynamic>(),
+      contents: rawContents
+          .map((item) => ReaderBookContentItem.fromJson(item))
+          .toList(),
+      paragraphIndex: json['paragraphIndex'] as int?,
+      visibleNumber: json['visibleNumber'] as int?,
     );
   }
 
+  /// Sprawdza czy ten element lub jego zagnieżdżone elementy zawierają określone ID
+  bool containsElementId(String targetId) {
+    // Sprawdź czy aktualny element ma szukane ID
+    if (id == targetId) {
+      return true;
+    }
+
+    // Rekurencyjnie sprawdź zagnieżdżone elementy
+    for (final content in contents) {
+      if (content is ReaderBookModelContent) {
+        if (content.containsElementId(targetId)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  @override
   Map<String, dynamic> toJson() {
-    return {
+    final result = <String, dynamic>{
       'tag': tag.name,
-      'attr': attr,
-      'contents': contents
-          .map((item) => item is ReaderBookModelContent ? item.toJson() : item)
-          .toList(),
-      'paragraphIndex': paragraphIndex,
-      'visibleNumber': visibleNumber,
+      'contents': contents.map((e) => e.toJson()).toList(),
     };
+
+    if (id != null) result['id'] = id;
+    if (attr != null) result['attr'] = attr;
+    if (paragraphIndex != null) result['paragraphIndex'] = paragraphIndex;
+    if (visibleNumber != null) result['visibleNumber'] = visibleNumber;
+
+    return result;
   }
 }
 
 class ReaderBookModel {
   final ReaderBookModelContent? headerLeft;
   final ReaderBookModelContent? headerRight;
-  final List<ReaderBookModelContent> contents;
+  final ReaderBookModelContent masterContent;
 
-  ReaderBookModel({required this.contents, this.headerLeft, this.headerRight});
+  const ReaderBookModel({
+    required this.masterContent,
+    this.headerLeft,
+    this.headerRight,
+  });
 
   factory ReaderBookModel.fromJson(Map<String, dynamic> json) {
+    final front1 = json['front1'] as List?;
+    final front2 = json['front2'] as List?;
+
     return ReaderBookModel(
-      headerLeft: (json['front1'] as List).firstOrNull != null
-          ? ReaderBookModelContent.fromJson(json['front1'].first)
+      headerLeft: (front1?.isNotEmpty ?? false)
+          ? ReaderBookModelContent.fromJson(front1!.first)
           : null,
-      headerRight: (json['front2'] as List).firstOrNull != null
-          ? ReaderBookModelContent.fromJson(json['front2'].first)
+      headerRight: (front2?.isNotEmpty ?? false)
+          ? ReaderBookModelContent.fromJson(front2!.first)
           : null,
-      contents: (json['contents'] as List)
-          .map((item) => ReaderBookModelContent.fromJson(item))
-          .toList(),
+      masterContent: ReaderBookModelContent.fromJson(json),
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'contents': contents.map((content) => content.toJson()).toList(),
-      'front1': headerLeft != null ? [headerLeft!.toJson()] : [],
-      'front2': headerRight != null ? [headerRight!.toJson()] : [],
-    };
+    final result = masterContent.toJson();
+
+    if (headerLeft != null) {
+      result['front1'] = [headerLeft!.toJson()];
+    }
+    if (headerRight != null) {
+      result['front2'] = [headerRight!.toJson()];
+    }
+
+    return result;
   }
+
+  /// Getter dla wstecznej kompatybilności - zwraca zawartość głównego elementu
+  /// Filtruje tylko ReaderBookModelContent, bo główna lista zawiera tylko takie elementy
+  List<ReaderBookModelContent> get contents =>
+      masterContent.contents.whereType<ReaderBookModelContent>().toList();
 }

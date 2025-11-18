@@ -11,12 +11,6 @@ abstract class ListsRepository {
     required List<String> bookSlugs,
   });
 
-  Future<DataState<void>> updateList({
-    required String listSlug,
-    required String listName,
-    required List<String> bookSlugs,
-  });
-
   Future<DataState<void>> deleteList({required String listSlug});
 
   Future<DataState<void>> deleteBookFromList({
@@ -111,27 +105,6 @@ class ListsRepositoryImplementation extends ListsRepository {
     try {
       final response = await _apiService.deleteRequest(
         _manageListEndpoint(listSlug),
-      );
-
-      if (response.hasError) {
-        return const DataState.failure(Failure.badResponse());
-      }
-      return const DataState.success(data: null);
-    } catch (e) {
-      return const DataState.failure(Failure.badResponse());
-    }
-  }
-
-  @override
-  Future<DataState<void>> updateList({
-    required String listSlug,
-    required String listName,
-    required List<String> bookSlugs,
-  }) async {
-    try {
-      final response = await _apiService.putRequest(
-        _manageListEndpoint(listSlug),
-        {'name': listName, 'books': bookSlugs},
       );
 
       if (response.hasError) {

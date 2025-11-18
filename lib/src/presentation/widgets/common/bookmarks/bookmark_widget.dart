@@ -27,6 +27,7 @@ class BookmarkWidget extends StatelessWidget {
   final Function(int? timestamp, bool isPlaying)? onListen;
   final bool isReaderAvailableOffline;
   final bool isAudioAvailableOffline;
+  final bool isDeletable;
   const BookmarkWidget({
     super.key,
     required this.bookmark,
@@ -35,6 +36,7 @@ class BookmarkWidget extends StatelessWidget {
     required this.backgroundColor,
     this.isReaderAvailableOffline = false,
     this.isAudioAvailableOffline = false,
+    this.isDeletable = true,
     this.onListen,
     this.messengerKey,
   });
@@ -65,6 +67,7 @@ class BookmarkWidget extends StatelessWidget {
                   onListen: onListen,
                   isAudioAvailableOffline: isAudioAvailableOffline,
                   isReaderAvailableOffline: isReaderAvailableOffline,
+                  isDeletable: isDeletable,
                 ),
         );
       },
@@ -80,12 +83,14 @@ class _Body extends StatelessWidget {
   final Function(int? timestamp, bool isPlaying)? onListen;
   final bool isReaderAvailableOffline;
   final bool isAudioAvailableOffline;
+  final bool isDeletable;
   const _Body({
     required this.book,
     required this.bookmark,
     required this.backgroundColor,
     this.isReaderAvailableOffline = false,
     this.isAudioAvailableOffline = false,
+    this.isDeletable = true,
     this.messengerKey,
     this.onListen,
   });
@@ -143,28 +148,29 @@ class _Body extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: Dimensions.smallPadding,
-                    children: [
-                      CustomButton(
-                        onPressed: () {
-                          bookmarkCubit.deleteBookmark(bookmark: bookmark);
-                          CustomSnackbar.success(
-                            context,
-                            LocaleKeys.audio_dialog_delete_paragraph.tr(),
-                            onRevert: () {
-                              bookmarkCubit.undoDeletion();
-                            },
-                            messengerKey: messengerKey,
-                          );
-                        },
-                        icon: CustomIcons.delete_forever,
-                        backgroundColor: CustomColors.red,
-                        iconColor: CustomColors.white,
-                      ),
-                    ],
-                  ),
+                  if (isDeletable)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: Dimensions.smallPadding,
+                      children: [
+                        CustomButton(
+                          onPressed: () {
+                            bookmarkCubit.deleteBookmark(bookmark: bookmark);
+                            CustomSnackbar.success(
+                              context,
+                              LocaleKeys.audio_dialog_delete_paragraph.tr(),
+                              onRevert: () {
+                                bookmarkCubit.undoDeletion();
+                              },
+                              messengerKey: messengerKey,
+                            );
+                          },
+                          icon: CustomIcons.delete_forever,
+                          backgroundColor: CustomColors.red,
+                          iconColor: CustomColors.white,
+                        ),
+                      ],
+                    ),
                 ],
               ),
               const SizedBox(height: Dimensions.mediumPadding),

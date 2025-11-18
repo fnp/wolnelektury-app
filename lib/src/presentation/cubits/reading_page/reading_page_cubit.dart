@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -9,6 +10,7 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/domain/book_text_audio_sync_model.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/presentation/enums/reader_font_type.dart';
@@ -19,27 +21,39 @@ part 'reading_page_cubit.freezed.dart';
 part 'reading_page_state.dart';
 
 class ReadingPageCubit extends SafeCubit<ReadingPageState> {
+  // ------------------------------------------
+  // Private fields
+  // ------------------------------------------
+  static double _fontSizeMultiplier = 9;
+
   DateTime? _lastProgressSent;
   bool _readyToSetProgress = false;
-  static double _fontSizeMultiplier = 9;
+
   final AppStorageSettingsService _settingsStorage;
   final BooksRepository _booksRepository;
   final ProgressRepository _progressRepository;
+
+  // ------------------------------------------
+  // Constructor
+  // ------------------------------------------
   ReadingPageCubit(
     this._settingsStorage,
     this._booksRepository,
     this._progressRepository,
   ) : super(const ReadingPageState());
 
+  // ------------------------------------------
+  // Initialization
+  // ------------------------------------------
   Future<void> init({
     required BookModel book,
     required ItemScrollController itemScrollController,
-    int? overrideProgressAnchor,
+    String? overrideProgressAnchor,
     bool tryOffline = false,
     double scaleFactor = 1,
   }) async {
     _fontSizeMultiplier = 9 * scaleFactor;
-    emit(state.copyWith(isJsonLoading: true));
+    emit(state.copyWith(isJsonLoading: true, isJsonLoadingError: false));
     final settings = await _settingsStorage.readReadingSettings();
     final bookJson = await _booksRepository.getBookJson(
       slug: book.slug,
@@ -48,6 +62,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
 
     bookJson.handle(
       success: (data, _) async {
+        await _getTextAudioSyncData(book.slug);
         emit(
           state.copyWith(
             currentSlug: book.slug,
@@ -60,14 +75,25 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
         await _getAndSetProgress(
           slug: book.slug,
           itemScrollController: itemScrollController,
-          overrideProgressAnchor: overrideProgressAnchor == null
-              ? null
-              : overrideProgressAnchor + 1,
+          overrideProgressAnchor: overrideProgressAnchor,
         );
       },
       failure: (failure) {
-        //TODO handle error
-        emit(state.copyWith(isJsonLoading: false));
+        emit(state.copyWith(isJsonLoading: false, isJsonLoadingError: true));
+      },
+    );
+  }
+
+  Future<void> _getTextAudioSyncData(String slug) async {
+    final audioSyncData = await _booksRepository.getBookTextAudioSync(
+      slug: slug,
+    );
+    audioSyncData.handle(
+      success: (data, _) {
+        emit(state.copyWith(audioSyncPairs: data));
+      },
+      failure: (_) {
+        emit(state.copyWith(audioSyncPairs: []));
       },
     );
   }
@@ -75,19 +101,13 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   Future<void> _getAndSetProgress({
     required String slug,
     required ItemScrollController itemScrollController,
-    int? overrideProgressAnchor,
+    String? overrideProgressAnchor,
   }) async {
     if (overrideProgressAnchor != null) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      itemScrollController
-          .scrollTo(
-            index: overrideProgressAnchor,
-            duration: const Duration(milliseconds: 500),
-            curve: defaultCurve,
-          )
-          .then((_) {
-            _readyToSetProgress = true;
-          });
+      await _scrollToAnchor(
+        anchor: overrideProgressAnchor,
+        itemScrollController: itemScrollController,
+      );
       return;
     }
     final progress = await _progressRepository.getProgressByBook(
@@ -97,25 +117,15 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       success: (data, _) async {
         AppLogger.instance.d(
           'ReadingPageCubit',
-          'Retrievied progress of the book ${state.currentSlug} with anchor ${data.textAnchor}',
+          'Retrieved progress of the book ${state.currentSlug} with anchor ${data.textAnchor}',
         );
         emit(state.copyWith(progress: data));
-        //todo This will be String in future
-        final int? anchor = int.tryParse(data.textAnchor ?? '');
-        if (anchor == null) return;
-        final foundIndex = state.findElementIndexByParagraphIndex(anchor);
-        if (foundIndex != null) {
-          await Future.delayed(const Duration(milliseconds: 500));
-          itemScrollController
-              .scrollTo(
-                index: foundIndex + 1,
-                duration: const Duration(milliseconds: 500),
-                curve: defaultCurve,
-              )
-              .then((_) {
-                _readyToSetProgress = true;
-              });
-        }
+
+        if (data.textAnchor == null) return;
+        await _scrollToAnchor(
+          anchor: data.textAnchor!,
+          itemScrollController: itemScrollController,
+        );
       },
       failure: (_) {
         _readyToSetProgress = true;
@@ -123,11 +133,33 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     );
   }
 
-  Future<void> setProgress({required int? anchor}) async {
+  Future<void> _scrollToAnchor({
+    required String anchor,
+    required ItemScrollController itemScrollController,
+  }) async {
+    final foundIndex = state.findElementIndexByElementId(anchor);
+    if (foundIndex != null) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      itemScrollController
+          .scrollTo(
+            index: foundIndex,
+            duration: const Duration(milliseconds: 500),
+            curve: defaultCurve,
+          )
+          .then((_) {
+            _readyToSetProgress = true;
+          });
+    }
+  }
+
+  // ------------------------------------------
+  // Progress management
+  // ------------------------------------------
+  Future<void> setProgress({required String? anchor}) async {
     // Didn't end up scrolling to the position yet
     if (!_readyToSetProgress) return;
     if (state.currentSlug == null || anchor == null) return;
-    if (state.progress?.textAnchor == anchor.toString()) return;
+    if (state.progress?.textAnchor == anchor) return;
 
     final now = DateTime.now();
     if (_lastProgressSent != null &&
@@ -165,6 +197,9 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     );
   }
 
+  // ------------------------------------------
+  // Settings management
+  // ------------------------------------------
   void changeTextSize(double textSizeFactor) {
     emit(state.copyWith(textSizeFactor: textSizeFactor));
   }
@@ -180,6 +215,9 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     );
   }
 
+  // ------------------------------------------
+  // UI State management
+  // ------------------------------------------
   void selectParagraph({int? index, ReaderBookModelContent? element}) {
     if (index == null && element == null) {
       emit(state.copyWith(isAddingBookmark: false));
