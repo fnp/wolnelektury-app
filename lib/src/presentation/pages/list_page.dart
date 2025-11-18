@@ -50,7 +50,10 @@ class _FetchedListWidget extends StatelessWidget {
           return AnimatedBoxFade(
             isChildVisible: !state.isLoading,
             collapsedChild: const Center(child: CircularProgressIndicator()),
-            child: _Body(bookList: list ?? BookListModel.empty()),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: _Body(bookList: list ?? BookListModel.empty()),
+            ),
           );
         },
       ),
