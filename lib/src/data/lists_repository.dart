@@ -72,6 +72,8 @@ class ListsRepositoryImplementation extends ListsRepository {
         'books': bookSlugs,
       });
 
+      print(response);
+
       if (response.hasError || !response.hasData) {
         return const DataState.failure(Failure.badResponse());
       }
@@ -142,6 +144,7 @@ class ListsRepositoryImplementation extends ListsRepository {
         url ?? _createListEndpoint,
         useCache: CacheEnum.ignore,
       );
+      print('GetLists response: $response');
       if (!response.hasData) {
         return const DataState.failure(Failure.notFound());
       }

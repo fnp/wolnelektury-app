@@ -29,9 +29,7 @@ class CustomSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(
-        Dimensions.borderRadiusOfCircle,
-      ),
+      borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final maxWidth = constraints.maxWidth - Dimensions.elementHeight;

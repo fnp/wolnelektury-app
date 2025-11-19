@@ -1,5 +1,1 @@
-enum Success {
-  update,
-  delete,
-  create,
-}
+enum Success { update, delete, create }

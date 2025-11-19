@@ -19,9 +19,7 @@ class MyLibraryListDeleteConfirmationDialog extends StatelessWidget {
   }) {
     showDialog(
       context: context,
-      builder: (_) => MyLibraryListDeleteConfirmationDialog(
-        onDelete: onDelete,
-      ),
+      builder: (_) => MyLibraryListDeleteConfirmationDialog(onDelete: onDelete),
     );
   }
 

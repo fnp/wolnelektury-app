@@ -1,4 +1,1 @@
-enum AppModeEnum {
-  defaultMode,
-  listCreationMode,
-}
+enum AppModeEnum { defaultMode, listCreationMode }

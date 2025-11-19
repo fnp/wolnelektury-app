@@ -1,4 +1,1 @@
-enum CacheEnum {
-  use,
-  ignore,
-}
+enum CacheEnum { use, ignore }

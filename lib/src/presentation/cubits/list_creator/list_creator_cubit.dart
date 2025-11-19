@@ -17,6 +17,173 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   ListCreatorCubit(this._listsRepository) : super(const ListCreatorState());
 
   // --------------------------
+  // ---- Helper Methods ------
+  // --------------------------
+
+  /// Creates a copy of the all lists with the specified list updated
+  List<BookListModel> _updateListInAllLists(BookListModel updatedList) {
+    final currentLists = List<BookListModel>.from(state.allLists);
+    final index = currentLists.indexWhere(
+      (list) =>
+          list.slug == updatedList.slug ||
+          (updatedList.slug.isEmpty && list.name == updatedList.name),
+    );
+    if (index != -1) {
+      currentLists[index] = updatedList;
+    }
+    return currentLists;
+  }
+
+  /// Finds a list by name or slug
+  BookListModel? _findList({String? name, String? slug}) {
+    return state.allLists.firstWhereOrNull(
+      (list) =>
+          (name != null && list.name == name) ||
+          (slug != null && list.slug == slug),
+    );
+  }
+
+  /// Checks if a book exists in remove queue for specific list
+  bool _isBookInRemoveQueue(String bookSlug, String listName) {
+    return state.booksToRemove.any(
+      (item) => item.$3 == bookSlug && item.$2 == listName,
+    );
+  }
+
+  /// Checks if a book exists in add queue for specific list
+  bool _isBookInAddQueue(String bookSlug, String listName) {
+    return state.booksToAdd.any(
+      (list) => list.books.contains(bookSlug) && list.name == listName,
+    );
+  }
+
+  /// Removes book from remove queue
+  void _removeFromRemoveQueue(String bookSlug, String listName) {
+    final updatedRemoveQueue = List<BookToRemove>.from(state.booksToRemove);
+    updatedRemoveQueue.removeWhere(
+      (item) => item.$3 == bookSlug && item.$2 == listName,
+    );
+    emit(state.copyWith(booksToRemove: updatedRemoveQueue));
+  }
+
+  /// Removes book from add queue for specific list
+  void _removeFromAddQueue(String bookSlug, String listName) {
+    final updatedAddQueue = List<BookListModel>.from(state.booksToAdd);
+    final index = updatedAddQueue.indexWhere((list) => list.name == listName);
+    if (index > -1) {
+      final books = List<String>.from(updatedAddQueue[index].books);
+      books.remove(bookSlug);
+      if (books.isEmpty) {
+        updatedAddQueue.removeAt(index);
+      } else {
+        updatedAddQueue[index] = updatedAddQueue[index].copyWith(books: books);
+      }
+    }
+    emit(state.copyWith(booksToAdd: updatedAddQueue));
+  }
+
+  /// Updates books in local list state
+  List<BookListModel> _updateBooksInList(
+    String listName,
+    String bookSlug, {
+    required bool add,
+  }) {
+    final currentLists = List<BookListModel>.from(state.allLists);
+    final index = currentLists.indexWhere((list) => list.name == listName);
+    if (index != -1) {
+      final list = currentLists[index];
+      final books = List<String>.from(list.books);
+      if (add && !books.contains(bookSlug)) {
+        books.add(bookSlug);
+        currentLists[index] = list.copyWith(books: books);
+      } else if (!add && books.contains(bookSlug)) {
+        books.remove(bookSlug);
+        currentLists[index] = list.copyWith(books: books);
+      }
+    }
+    return currentLists;
+  }
+
+  /// Updates edited list by adding or removing a book
+  void _updateEditedList(String bookSlug, {required bool add}) {
+    if (state.editedListToSave == null) return;
+
+    final updatedBooks = List<String>.from(state.editedListToSave!.books);
+    bool shouldUpdate = false;
+
+    if (add && !updatedBooks.contains(bookSlug)) {
+      updatedBooks.add(bookSlug);
+      shouldUpdate = true;
+    } else if (!add && updatedBooks.contains(bookSlug)) {
+      updatedBooks.remove(bookSlug);
+      shouldUpdate = true;
+    }
+
+    if (shouldUpdate) {
+      emit(
+        state.copyWith(
+          editedListToSave: state.editedListToSave!.copyWith(
+            books: updatedBooks,
+          ),
+        ),
+      );
+    }
+  }
+
+  /// Removes duplicates from lists based on slug
+  List<T> _removeDuplicates<T>(
+    List<T> newItems,
+    List<T> existingItems,
+    String Function(T) getSlug,
+  ) {
+    final existing = existingItems.map(getSlug).toSet();
+    return newItems.where((item) => !existing.contains(getSlug(item))).toList();
+  }
+
+  /// Processes books to add queue
+  Future<List<DataState>> _processBooksToAdd() async {
+    final responses = <DataState>[];
+
+    for (final element in state.booksToAdd) {
+      final result = element.slug.isNotEmpty
+          ? await _listsRepository.addBooksToList(
+              listSlug: element.slug,
+              bookSlugs: element.books,
+            )
+          : await _listsRepository.createList(
+              listName: element.name,
+              bookSlugs: element.books,
+            );
+      responses.add(result);
+    }
+
+    return responses;
+  }
+
+  /// Processes books to remove queue
+  Future<List<DataState>> _processBooksToRemove() async {
+    final responses = <DataState>[];
+
+    for (final element in state.booksToRemove) {
+      final result = await _listsRepository.deleteBookFromList(
+        listSlug: element.$1,
+        bookSlug: element.$3,
+      );
+      responses.add(result);
+    }
+
+    return responses;
+  }
+
+  /// Calculates only new books that need to be added
+  List<String> _getNewBooksToAdd() {
+    final originalBooks = state.editedList?.books ?? [];
+    return state.editedListToSave?.books
+            .where((book) => !originalBooks.contains(book))
+            .toList() ??
+        [];
+  } // --------------------------
+
   // -------- Fetching --------
   // --------------------------
   Future<void> getLists({bool force = false}) async {
@@ -51,10 +218,16 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     );
 
     lists.handle(
-      success: (lists, pagination) {
+      success: (newLists, pagination) {
+        final uniqueNewLists = _removeDuplicates(
+          newLists,
+          state.allLists,
+          (list) => list.slug,
+        );
+
         emit(
           state.copyWith(
-            allLists: [...state.allLists, ...lists],
+            allLists: [...state.allLists, ...uniqueNewLists],
             pagination: pagination ?? state.pagination,
             isLoadingMore: false,
           ),
@@ -76,7 +249,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     final response = await _listsRepository.getList(listSlug: listSlug);
     response.handle(
       success: (list, _) {
-        emit(state.copyWith(isLoading: false, allLists: [list]));
+        emit(state.copyWith(isLoading: false, fetchedSingleList: list));
       },
       failure: (failure) {
         emit(state.copyWith(isLoading: false));
@@ -91,13 +264,22 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   // ------ Bottom Sheet ------
   // --------------------------
   void newList(String listName, {List<String> bookSlugs = const []}) {
-    final newList = BookListModel(name: listName, books: bookSlugs, slug: '');
-    final newState = List<BookListModel>.from(state.allLists);
     if (state.listNameIsDuplicate(listName)) {
       return;
     }
+
+    // Remove duplicates from bookSlugs before creating the list
+    final uniqueBookSlugs = bookSlugs.toSet().toList();
+
+    final newList = BookListModel(
+      name: listName,
+      books: uniqueBookSlugs,
+      slug: '',
+    );
+    final newState = List<BookListModel>.from(state.allLists);
     newState.add(newList);
-    for (final bookSlug in bookSlugs) {
+
+    for (final bookSlug in uniqueBookSlugs) {
       _addBookToAddQueue(
         listName: newList.name,
         listSlug: newList.slug,
@@ -108,44 +290,28 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   }
 
   void addBookToListWithQueue(String listName, String bookSlug) {
-    final currentLists = List<BookListModel>.from(state.allLists);
-    final index = currentLists.indexWhere(
-      (element) => element.name == listName,
-    );
-    if (index != -1) {
-      final list = currentLists[index];
-      final books = List<String>.from(list.books);
-      if (!books.contains(bookSlug)) {
-        books.add(bookSlug);
-        currentLists[index] = list.copyWith(books: books);
-        _addBookToAddQueue(
-          listName: listName,
-          bookSlug: bookSlug,
-          listSlug: list.slug,
-        );
-        emit(state.copyWith(allLists: currentLists));
-      }
+    final list = _findList(name: listName);
+    if (list != null && !list.books.contains(bookSlug)) {
+      final updatedLists = _updateBooksInList(listName, bookSlug, add: true);
+      _addBookToAddQueue(
+        listName: listName,
+        bookSlug: bookSlug,
+        listSlug: list.slug,
+      );
+      emit(state.copyWith(allLists: updatedLists));
     }
   }
 
   void removeBookFromListWithQueue(String listName, String bookSlug) {
-    final currentLists = List<BookListModel>.from(state.allLists);
-    final index = currentLists.indexWhere(
-      (element) => element.name == listName,
-    );
-    if (index > -1) {
-      final list = currentLists[index];
-      final books = List<String>.from(list.books);
-      if (books.contains(bookSlug)) {
-        books.remove(bookSlug);
-        currentLists[index] = list.copyWith(books: books);
-        _addBookToRemoveQueue(
-          listSlug: list.slug,
-          listName: list.name,
-          bookSlug: bookSlug,
-        );
-        emit(state.copyWith(allLists: currentLists));
-      }
+    final list = _findList(name: listName);
+    if (list != null && list.books.contains(bookSlug)) {
+      final updatedLists = _updateBooksInList(listName, bookSlug, add: false);
+      _addBookToRemoveQueue(
+        listSlug: list.slug,
+        listName: list.name,
+        bookSlug: bookSlug,
+      );
+      emit(state.copyWith(allLists: updatedLists));
     }
   }
 
@@ -153,43 +319,18 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     if (state.booksToAdd.isEmpty && state.booksToRemove.isEmpty) {
       return;
     }
+
     emit(state.copyWith(isSuccess: true));
-    List<DataState> responses = [];
 
-    for (final element in state.booksToAdd) {
-      // Slug not empty, it means that the list already exists
-      if (element.slug.isNotEmpty) {
-        // List exists, we need to add books to it
-        final result = await _listsRepository.addBooksToList(
-          listSlug: element.slug,
-          bookSlugs: element.books,
-        );
-        responses.add(result);
-      } else {
-        // List doesn't exist, we need to create it with books
-        final result = await _listsRepository.createList(
-          listName: element.name,
-          bookSlugs: element.books,
-        );
-        responses.add(result);
-      }
-    }
-
-    for (final element in state.booksToRemove) {
-      // Remove books from lists by queue
-      final result = await _listsRepository.deleteBookFromList(
-        listSlug: element.$1,
-        bookSlug: element.$3,
-      );
-
-      responses.add(result);
-    }
+    final addResponses = await _processBooksToAdd();
+    final removeResponses = await _processBooksToRemove();
+    final allResponses = [...addResponses, ...removeResponses];
 
     emit(
       state.copyWith(
         booksToAdd: [],
         booksToRemove: [],
-        isSuccess: responses.every((element) => element.isSuccess),
+        isSuccess: allResponses.every((response) => response.isSuccess),
       ),
     );
 
@@ -203,16 +344,8 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     required String bookSlug,
   }) {
     // Check if the book isn't in local removeQueue
-    final alreadyInRemoveQueue = state.booksToRemove.any(
-      (element) => element.$3 == bookSlug && element.$2 == listName,
-    );
-    if (alreadyInRemoveQueue) {
-      // Remove it from the remove queue
-      final newState = List<BookToRemove>.from(state.booksToRemove);
-      newState.removeWhere(
-        (element) => element.$3 == bookSlug && element.$2 == listName,
-      );
-      emit(state.copyWith(booksToRemove: newState));
+    if (_isBookInRemoveQueue(bookSlug, listName)) {
+      _removeFromRemoveQueue(bookSlug, listName);
       return;
     }
 
@@ -220,9 +353,12 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     final index = newState.indexWhere((element) => element.name == listName);
     if (index > -1) {
       final books = List<String>.from(newState[index].books);
-      books.add(bookSlug);
-      newState[index] = newState[index].copyWith(books: books);
-      emit(state.copyWith(booksToAdd: newState));
+      // Check if book is not already in the list to avoid duplicates
+      if (!books.contains(bookSlug)) {
+        books.add(bookSlug);
+        newState[index] = newState[index].copyWith(books: books);
+        emit(state.copyWith(booksToAdd: newState));
+      }
     } else {
       final newList = BookListModel(
         name: listName,
@@ -240,23 +376,17 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     required String bookSlug,
   }) {
     // Check if the books isn't in local addQueue
-    final alreadyInAddQueue = state.booksToAdd.any(
-      (element) => element.books.contains(bookSlug) && element.name == listName,
-    );
-    if (alreadyInAddQueue) {
-      // Remove it from the local add queue
-      final newState = List<BookListModel>.from(state.booksToAdd);
-      newState.removeWhere(
-        (element) =>
-            element.books.contains(bookSlug) && element.name == listName,
-      );
-      emit(state.copyWith(booksToAdd: newState));
+    if (_isBookInAddQueue(bookSlug, listName)) {
+      _removeFromAddQueue(bookSlug, listName);
       return;
     }
-    // Add it to the remove queue
-    final toRemove = List<BookToRemove>.from(state.booksToRemove);
-    toRemove.add((listSlug, listName, bookSlug));
-    emit(state.copyWith(booksToRemove: toRemove));
+
+    // Check if the book is not already in the remove queue to avoid duplicates
+    if (!_isBookInRemoveQueue(bookSlug, listName)) {
+      final toRemove = List<BookToRemove>.from(state.booksToRemove);
+      toRemove.add((listSlug, listName, bookSlug));
+      emit(state.copyWith(booksToRemove: toRemove));
+    }
   }
 
   // --------------------------
@@ -392,72 +522,43 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
 
   // Using listName because we need to retrieve up2date list from the state
   void setListAsEdited(String listName) {
-    final list = state.allLists.firstWhereOrNull(
-      (element) => element.name == listName,
-    );
+    final list = _findList(name: listName);
     emit(state.copyWith(editedList: list, editedListToSave: list));
   }
 
   void addBookToEditedList(String bookSlug) {
-    if (state.editedListToSave == null) return;
-
-    final updatedBooks = List<String>.from(state.editedListToSave!.books);
-    if (!updatedBooks.contains(bookSlug)) {
-      updatedBooks.add(bookSlug);
-      emit(
-        state.copyWith(
-          editedListToSave: state.editedListToSave!.copyWith(
-            books: updatedBooks,
-          ),
-        ),
-      );
-    }
+    _updateEditedList(bookSlug, add: true);
   }
 
   void removeBookFromEditedList(String bookSlug) {
-    if (state.editedListToSave == null) return;
-
-    final updatedBooks = List<String>.from(state.editedListToSave!.books);
-    if (updatedBooks.contains(bookSlug)) {
-      updatedBooks.remove(bookSlug);
-      emit(
-        state.copyWith(
-          editedListToSave: state.editedListToSave!.copyWith(
-            books: updatedBooks,
-          ),
-        ),
-      );
-    }
+    _updateEditedList(bookSlug, add: false);
   }
 
   void saveEditedList() async {
     if (state.editedListToSave == null) return;
-
     emit(state.copyWith(isSavingEditedList: true, isSavingFailure: false));
+    final newBooks = _getNewBooksToAdd();
     final result = await _listsRepository.addBooksToList(
       listSlug: state.editedListToSave!.slug,
-      bookSlugs: state.editedListToSave!.books,
+      bookSlugs: newBooks,
     );
 
     result.handle(
       success: (data, _) {
-        final updatedLists = List<BookListModel>.from(state.allLists);
-        final index = updatedLists.indexWhere(
-          (element) => element.slug == state.editedList!.slug,
+        final updatedLists = _updateListInAllLists(state.editedListToSave!);
+        final updatedSingleList = updatedLists.firstWhereOrNull(
+          (list) => list.slug == state.fetchedSingleList?.slug,
         );
-        if (index != -1) {
-          updatedLists[index] = state.editedList!;
-        }
+
         emit(
           state.copyWith(
             allLists: updatedLists,
+            fetchedSingleList: updatedSingleList,
             editedList: null,
             editedListToSave: null,
             isSavingEditedList: false,
           ),
         );
-        // Reinitialize the state to fetch the latest lists
-        getLists(force: true);
       },
       failure: (failure) {
         emit(state.copyWith(isSavingEditedList: false, isSavingFailure: true));

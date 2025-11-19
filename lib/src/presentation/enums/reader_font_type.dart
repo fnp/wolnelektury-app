@@ -1,9 +1,6 @@
 import 'package:wolnelektury/src/config/theme/theme.dart';
 
-enum ReaderFontType {
-  sans,
-  serif,
-}
+enum ReaderFontType { sans, serif }
 
 extension ReaderFontTypeExtension on ReaderFontType {
   String get familyName {

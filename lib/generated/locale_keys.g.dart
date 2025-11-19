@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const clear = 'clear';
   static const dashboard_catalogue = 'dashboard.catalogue';
   static const dashboard_donation = 'dashboard.donation';
@@ -22,41 +22,69 @@ abstract class  LocaleKeys {
   static const reading_sheet_bookmark_add = 'reading.sheet.bookmark_add';
   static const reading_sheet_bookmark_adding = 'reading.sheet.bookmark_adding';
   static const reading_sheet_bookmark_edit = 'reading.sheet.bookmark_edit';
-  static const reading_sheet_bookmark_editing = 'reading.sheet.bookmark_editing';
+  static const reading_sheet_bookmark_editing =
+      'reading.sheet.bookmark_editing';
   static const reading_sheet = 'reading.sheet';
-  static const reading_snackbar_bookmark_added_success = 'reading.snackbar.bookmark_added_success';
-  static const reading_snackbar_bookmark_edited_success = 'reading.snackbar.bookmark_edited_success';
-  static const reading_snackbar_bookmark_deleted_success = 'reading.snackbar.bookmark_deleted_success';
-  static const reading_snackbar_bookmark_add_error = 'reading.snackbar.bookmark_add_error';
-  static const reading_snackbar_bookmark_edit_error = 'reading.snackbar.bookmark_edit_error';
-  static const reading_snackbar_bookmark_delete_error = 'reading.snackbar.bookmark_delete_error';
-  static const reading_snackbar_reader_loading_error = 'reading.snackbar.reader_loading_error';
+  static const reading_snackbar_bookmark_added_success =
+      'reading.snackbar.bookmark_added_success';
+  static const reading_snackbar_bookmark_edited_success =
+      'reading.snackbar.bookmark_edited_success';
+  static const reading_snackbar_bookmark_deleted_success =
+      'reading.snackbar.bookmark_deleted_success';
+  static const reading_snackbar_bookmark_add_error =
+      'reading.snackbar.bookmark_add_error';
+  static const reading_snackbar_bookmark_edit_error =
+      'reading.snackbar.bookmark_edit_error';
+  static const reading_snackbar_bookmark_delete_error =
+      'reading.snackbar.bookmark_delete_error';
+  static const reading_snackbar_reader_loading_error =
+      'reading.snackbar.reader_loading_error';
   static const reading_snackbar = 'reading.snackbar';
   static const reading = 'reading';
   static const my_library_wifi_dialog_title = 'my_library.wifi_dialog.title';
-  static const my_library_wifi_dialog_content = 'my_library.wifi_dialog.content';
+  static const my_library_wifi_dialog_content =
+      'my_library.wifi_dialog.content';
   static const my_library_wifi_dialog_button = 'my_library.wifi_dialog.button';
   static const my_library_wifi_dialog = 'my_library.wifi_dialog';
-  static const my_library_lists_creation_failure = 'my_library.lists.creation_failure';
-  static const my_library_lists_deletion_failure = 'my_library.lists.deletion_failure';
-  static const my_library_lists_book_removal_failure = 'my_library.lists.book_removal_failure';
-  static const my_library_lists_delete_dialog_title = 'my_library.lists.delete_dialog.title';
-  static const my_library_lists_delete_dialog_content = 'my_library.lists.delete_dialog.content';
-  static const my_library_lists_delete_dialog_cancel = 'my_library.lists.delete_dialog.cancel';
-  static const my_library_lists_delete_dialog_delete = 'my_library.lists.delete_dialog.delete';
-  static const my_library_lists_delete_dialog = 'my_library.lists.delete_dialog';
+  static const my_library_lists_creation_failure =
+      'my_library.lists.creation_failure';
+  static const my_library_lists_deletion_failure =
+      'my_library.lists.deletion_failure';
+  static const my_library_lists_book_removal_failure =
+      'my_library.lists.book_removal_failure';
+  static const my_library_lists_delete_dialog_title =
+      'my_library.lists.delete_dialog.title';
+  static const my_library_lists_delete_dialog_content =
+      'my_library.lists.delete_dialog.content';
+  static const my_library_lists_delete_dialog_cancel =
+      'my_library.lists.delete_dialog.cancel';
+  static const my_library_lists_delete_dialog_delete =
+      'my_library.lists.delete_dialog.delete';
+  static const my_library_lists_delete_dialog =
+      'my_library.lists.delete_dialog';
   static const my_library_lists = 'my_library.lists';
-  static const my_library_offline_corrupted_audiobook_title = 'my_library.offline.corrupted_audiobook.title';
-  static const my_library_offline_corrupted_audiobook_content = 'my_library.offline.corrupted_audiobook.content';
-  static const my_library_offline_corrupted_audiobook_delete = 'my_library.offline.corrupted_audiobook.delete';
-  static const my_library_offline_corrupted_audiobook_download = 'my_library.offline.corrupted_audiobook.download';
-  static const my_library_offline_corrupted_audiobook = 'my_library.offline.corrupted_audiobook';
-  static const my_library_offline_snackbar_reader_removed = 'my_library.offline.snackbar.reader_removed';
-  static const my_library_offline_snackbar_audiobook_removed = 'my_library.offline.snackbar.audiobook_removed';
-  static const my_library_offline_snackbar_audiobook_error = 'my_library.offline.snackbar.audiobook_error';
-  static const my_library_offline_snackbar_audiobook_already_downloading = 'my_library.offline.snackbar.audiobook_already_downloading';
-  static const my_library_offline_snackbar_audiobook_downloading_start = 'my_library.offline.snackbar.audiobook_downloading_start';
-  static const my_library_offline_snackbar_audiobook_downloading_success = 'my_library.offline.snackbar.audiobook_downloading_success';
+  static const my_library_offline_corrupted_audiobook_title =
+      'my_library.offline.corrupted_audiobook.title';
+  static const my_library_offline_corrupted_audiobook_content =
+      'my_library.offline.corrupted_audiobook.content';
+  static const my_library_offline_corrupted_audiobook_delete =
+      'my_library.offline.corrupted_audiobook.delete';
+  static const my_library_offline_corrupted_audiobook_download =
+      'my_library.offline.corrupted_audiobook.download';
+  static const my_library_offline_corrupted_audiobook =
+      'my_library.offline.corrupted_audiobook';
+  static const my_library_offline_snackbar_reader_removed =
+      'my_library.offline.snackbar.reader_removed';
+  static const my_library_offline_snackbar_audiobook_removed =
+      'my_library.offline.snackbar.audiobook_removed';
+  static const my_library_offline_snackbar_audiobook_error =
+      'my_library.offline.snackbar.audiobook_error';
+  static const my_library_offline_snackbar_audiobook_already_downloading =
+      'my_library.offline.snackbar.audiobook_already_downloading';
+  static const my_library_offline_snackbar_audiobook_downloading_start =
+      'my_library.offline.snackbar.audiobook_downloading_start';
+  static const my_library_offline_snackbar_audiobook_downloading_success =
+      'my_library.offline.snackbar.audiobook_downloading_success';
   static const my_library_offline_snackbar = 'my_library.offline.snackbar';
   static const my_library_offline = 'my_library.offline';
   static const my_library = 'my_library';
@@ -72,8 +100,10 @@ abstract class  LocaleKeys {
   static const login_success = 'login.success';
   static const login_logout = 'login.logout';
   static const login_user_name_validation = 'login.user_name_validation';
-  static const login_password_validation_empty = 'login.password_validation_empty';
-  static const login_repeat_password_validation = 'login.repeat_password_validation';
+  static const login_password_validation_empty =
+      'login.password_validation_empty';
+  static const login_repeat_password_validation =
+      'login.repeat_password_validation';
   static const login_email_validation = 'login.email_validation';
   static const login_no_account = 'login.no_account';
   static const login_has_account = 'login.has_account';
@@ -83,10 +113,14 @@ abstract class  LocaleKeys {
   static const login_errors_login = 'login.errors.login';
   static const login_errors_register = 'login.errors.register';
   static const login_errors = 'login.errors';
-  static const login_register_flow_dialog_title = 'login.register_flow_dialog.title';
-  static const login_register_flow_dialog_content = 'login.register_flow_dialog.content';
-  static const login_register_flow_dialog_button = 'login.register_flow_dialog.button';
-  static const login_register_flow_dialog_error = 'login.register_flow_dialog.error';
+  static const login_register_flow_dialog_title =
+      'login.register_flow_dialog.title';
+  static const login_register_flow_dialog_content =
+      'login.register_flow_dialog.content';
+  static const login_register_flow_dialog_button =
+      'login.register_flow_dialog.button';
+  static const login_register_flow_dialog_error =
+      'login.register_flow_dialog.error';
   static const login_register_flow_dialog = 'login.register_flow_dialog';
   static const login_reset_dialog_title = 'login.reset_dialog.title';
   static const login_reset_dialog_content = 'login.reset_dialog.content';
@@ -102,10 +136,14 @@ abstract class  LocaleKeys {
   static const audio_dialog_error = 'audio_dialog.error';
   static const audio_dialog_paragraph = 'audio_dialog.paragraph';
   static const audio_dialog_delete_paragraph = 'audio_dialog.delete_paragraph';
-  static const audio_dialog_settings_sleep_timer = 'audio_dialog.settings.sleep_timer';
-  static const audio_dialog_settings_speed_selector = 'audio_dialog.settings.speed_selector';
-  static const audio_dialog_settings_part_selector = 'audio_dialog.settings.part_selector';
-  static const audio_dialog_settings_part_selector_specific = 'audio_dialog.settings.part_selector_specific';
+  static const audio_dialog_settings_sleep_timer =
+      'audio_dialog.settings.sleep_timer';
+  static const audio_dialog_settings_speed_selector =
+      'audio_dialog.settings.speed_selector';
+  static const audio_dialog_settings_part_selector =
+      'audio_dialog.settings.part_selector';
+  static const audio_dialog_settings_part_selector_specific =
+      'audio_dialog.settings.part_selector_specific';
   static const audio_dialog_settings = 'audio_dialog.settings';
   static const audio_dialog = 'audio_dialog';
   static const account_title = 'account.title';
@@ -113,8 +151,10 @@ abstract class  LocaleKeys {
   static const account_password = 'account.password';
   static const account = 'account';
   static const catalogue_title = 'catalogue.title';
-  static const catalogue_list_creator_failure = 'catalogue.list_creator.failure';
-  static const catalogue_list_creator_success = 'catalogue.list_creator.success';
+  static const catalogue_list_creator_failure =
+      'catalogue.list_creator.failure';
+  static const catalogue_list_creator_success =
+      'catalogue.list_creator.success';
   static const catalogue_list_creator_back = 'catalogue.list_creator.back';
   static const catalogue_list_creator_save = 'catalogue.list_creator.save';
   static const catalogue_list_creator = 'catalogue.list_creator';
@@ -149,29 +189,45 @@ abstract class  LocaleKeys {
   static const settings_social_yt = 'settings.social.yt';
   static const settings_social = 'settings.social';
   static const settings_delete_account_title = 'settings.delete_account.title';
-  static const settings_delete_account_content = 'settings.delete_account.content';
-  static const settings_delete_account_button = 'settings.delete_account.button';
-  static const settings_delete_account_cancel = 'settings.delete_account.cancel';
-  static const settings_delete_account_success = 'settings.delete_account.success';
+  static const settings_delete_account_content =
+      'settings.delete_account.content';
+  static const settings_delete_account_button =
+      'settings.delete_account.button';
+  static const settings_delete_account_cancel =
+      'settings.delete_account.cancel';
+  static const settings_delete_account_success =
+      'settings.delete_account.success';
   static const settings_delete_account_error = 'settings.delete_account.error';
   static const settings_delete_account = 'settings.delete_account';
-  static const settings_change_password_title = 'settings.change_password.title';
-  static const settings_change_password_title_alt = 'settings.change_password.title_alt';
-  static const settings_change_password_content = 'settings.change_password.content';
-  static const settings_change_password_button = 'settings.change_password.button';
-  static const settings_change_password_current = 'settings.change_password.current';
-  static const settings_change_password_current_validation = 'settings.change_password.current_validation';
+  static const settings_change_password_title =
+      'settings.change_password.title';
+  static const settings_change_password_title_alt =
+      'settings.change_password.title_alt';
+  static const settings_change_password_content =
+      'settings.change_password.content';
+  static const settings_change_password_button =
+      'settings.change_password.button';
+  static const settings_change_password_current =
+      'settings.change_password.current';
+  static const settings_change_password_current_validation =
+      'settings.change_password.current_validation';
   static const settings_change_password_new = 'settings.change_password.new';
-  static const settings_change_password_new_validation = 'settings.change_password.new_validation';
-  static const settings_change_password_repeat = 'settings.change_password.repeat';
-  static const settings_change_password_repeat_validation = 'settings.change_password.repeat_validation';
-  static const settings_change_password_success = 'settings.change_password.success';
-  static const settings_change_password_error = 'settings.change_password.error';
+  static const settings_change_password_new_validation =
+      'settings.change_password.new_validation';
+  static const settings_change_password_repeat =
+      'settings.change_password.repeat';
+  static const settings_change_password_repeat_validation =
+      'settings.change_password.repeat_validation';
+  static const settings_change_password_success =
+      'settings.change_password.success';
+  static const settings_change_password_error =
+      'settings.change_password.error';
   static const settings_change_password = 'settings.change_password';
   static const settings_title = 'settings.title';
   static const settings_notifications = 'settings.notifications';
   static const settings_notifications_error = 'settings.notifications_error';
-  static const settings_notifications_permission_error = 'settings.notifications_permission_error';
+  static const settings_notifications_permission_error =
+      'settings.notifications_permission_error';
   static const settings_theme = 'settings.theme';
   static const settings_set_theme_off = 'settings.set_theme.off';
   static const settings_set_theme_on = 'settings.set_theme.on';
@@ -183,18 +239,21 @@ abstract class  LocaleKeys {
   static const settings = 'settings';
   static const common_bookmark_page_error = 'common.bookmark_page_error';
   static const common_empty_page = 'common.empty_page';
-  static const common_empty_search_in_catalogue = 'common.empty.search_in_catalogue';
+  static const common_empty_search_in_catalogue =
+      'common.empty.search_in_catalogue';
   static const common_empty_last_read_title = 'common.empty.last_read_title';
   static const common_empty_audiobooks_title = 'common.empty.audiobooks_title';
   static const common_empty_bookmarks_title = 'common.empty.bookmarks_title';
   static const common_empty_liked_title = 'common.empty.liked_title';
   static const common_empty_lists_title = 'common.empty.lists_title';
-  static const common_empty_lists_content_title = 'common.empty.lists_content_title';
+  static const common_empty_lists_content_title =
+      'common.empty.lists_content_title';
   static const common_empty_readers_title = 'common.empty.readers_title';
   static const common_empty = 'common.empty';
   static const common_sorting_alpha_desc = 'common.sorting.alpha_desc';
   static const common_sorting_alpha_asc = 'common.sorting.alpha_asc';
-  static const common_sorting_popularity_desc = 'common.sorting.popularity_desc';
+  static const common_sorting_popularity_desc =
+      'common.sorting.popularity_desc';
   static const common_sorting_popularity_asc = 'common.sorting.popularity_asc';
   static const common_sorting = 'common.sorting';
   static const common_icon_button_read = 'common.icon_button.read';
@@ -209,5 +268,4 @@ abstract class  LocaleKeys {
   static const common_snackbar_error = 'common.snackbar.error';
   static const common_snackbar = 'common.snackbar';
   static const common = 'common';
-
 }

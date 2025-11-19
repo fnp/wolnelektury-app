@@ -16,10 +16,7 @@ class ApiUtils {
     }
   }
 
-  static String applyLimit({
-    required String apiUrl,
-    required int limit,
-  }) {
+  static String applyLimit({required String apiUrl, required int limit}) {
     if (apiUrl.contains('?')) {
       return '$apiUrl&limit=$limit';
     }

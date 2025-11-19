@@ -4,9 +4,7 @@ import 'package:wolnelektury/src/presentation/cubits/author/author_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/catalogue_page/book_list.dart';
 
 class AuthorPageBooks extends StatelessWidget {
-  const AuthorPageBooks({
-    super.key,
-  });
+  const AuthorPageBooks({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +13,7 @@ class AuthorPageBooks extends StatelessWidget {
         return p.authorsBooks != c.authorsBooks;
       },
       builder: (context, state) {
-        return BookList(
-          isLoading: false,
-          books: state.authorsBooks,
-        );
+        return BookList(isLoading: false, books: state.authorsBooks);
       },
     );
   }

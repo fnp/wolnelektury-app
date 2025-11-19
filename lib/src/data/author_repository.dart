@@ -8,9 +8,7 @@ import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';
 
 abstract class AuthorRepository {
-  Future<DataState<DetailedAuthorModel>> getAuthor({
-    required String slug,
-  });
+  Future<DataState<DetailedAuthorModel>> getAuthor({required String slug});
 
   Future<DataState<List<BookModel>>> getAuthorsBooks({
     required int authorId,
@@ -36,22 +34,16 @@ class AuthorRepositoryImplementation extends AuthorRepository {
     required String slug,
   }) async {
     try {
-      final response = await _apiService.getRequest(
-        _authorEndpoint(slug),
-      );
+      final response = await _apiService.getRequest(_authorEndpoint(slug));
 
       if (response.hasData) {
         return DataState.success(
           data: DetailedAuthorModel.fromJson(response.data!.first),
         );
       }
-      return const DataState.failure(
-        Failure.notFound(),
-      );
+      return const DataState.failure(Failure.notFound());
     } catch (e) {
-      return const DataState.failure(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -66,14 +58,9 @@ class AuthorRepositoryImplementation extends AuthorRepository {
         apiUrl: url ?? _booksEndpoint,
       );
 
-      effectiveUrl = ApiUtils.applyLimit(
-        apiUrl: effectiveUrl,
-        limit: 6,
-      );
+      effectiveUrl = ApiUtils.applyLimit(apiUrl: effectiveUrl, limit: 6);
 
-      final response = await _apiService.getRequest(
-        effectiveUrl,
-      );
+      final response = await _apiService.getRequest(effectiveUrl);
 
       return DataState.fromApiResponse(
         response: response,
@@ -82,9 +69,7 @@ class AuthorRepositoryImplementation extends AuthorRepository {
         },
       );
     } catch (e) {
-      return const DataState.failure(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 
@@ -99,9 +84,7 @@ class AuthorRepositoryImplementation extends AuthorRepository {
         limit: 6,
       );
 
-      final response = await _apiService.getRequest(
-        effectiveUrl,
-      );
+      final response = await _apiService.getRequest(effectiveUrl);
 
       return DataState.fromApiResponse(
         response: response,
@@ -110,9 +93,7 @@ class AuthorRepositoryImplementation extends AuthorRepository {
         },
       );
     } catch (e) {
-      return const DataState.failure(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 }

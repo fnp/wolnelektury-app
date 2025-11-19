@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class TextFieldLabel extends StatelessWidget {
-  const TextFieldLabel({
-    required this.label,
-    super.key,
-  });
+  const TextFieldLabel({required this.label, super.key});
 
   final String label;
 
@@ -19,9 +16,7 @@ class TextFieldLabel extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: theme.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.w500,
-        ),
+        style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
       ),
     );
   }

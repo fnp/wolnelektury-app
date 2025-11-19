@@ -14,12 +14,12 @@ sealed class DetailedAuthorModel with _$DetailedAuthorModel {
   }) = _DetailedAuthorModel;
 
   factory DetailedAuthorModel.skeletonized() => const DetailedAuthorModel(
-        id: 0,
-        name: 'Autor',
-        slug: 'slug',
-        description: 'Opis autora',
-        photo: null,
-      );
+    id: 0,
+    name: 'Autor',
+    slug: 'slug',
+    description: 'Opis autora',
+    photo: null,
+  );
 
   factory DetailedAuthorModel.fromJson(Map<String, dynamic> json) =>
       _$DetailedAuthorModelFromJson(json);

@@ -14,9 +14,7 @@ class ReaderYellowBackground extends StatelessWidget {
       builder: (context, innerState) {
         return Positioned.fill(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 34,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 34),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: innerState.selectedIndex == index

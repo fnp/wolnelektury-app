@@ -37,14 +37,8 @@ class CustomButton extends StatelessWidget {
             ),
             onTap: onPressed,
             child: Padding(
-              padding: const EdgeInsets.all(
-                Dimensions.smallPadding,
-              ),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: iconSize,
-              ),
+              padding: const EdgeInsets.all(Dimensions.smallPadding),
+              child: Icon(icon, color: iconColor, size: iconSize),
             ),
           ),
         ),

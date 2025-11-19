@@ -35,7 +35,7 @@ class CustomAudioSession {
         androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
         avAudioSessionCategoryOptions:
             AVAudioSessionCategoryOptions.allowBluetoothA2dp |
-                AVAudioSessionCategoryOptions.defaultToSpeaker,
+            AVAudioSessionCategoryOptions.defaultToSpeaker,
         avAudioSessionMode: AVAudioSessionMode.spokenAudio,
         avAudioSessionRouteSharingPolicy:
             AVAudioSessionRouteSharingPolicy.defaultPolicy,

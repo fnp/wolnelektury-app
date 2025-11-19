@@ -17,10 +17,7 @@ class CustomLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.square(
       dimension: size,
-      child: CircularProgressIndicator(
-        color: color,
-        strokeWidth: strokeWidth,
-      ),
+      child: CircularProgressIndicator(color: color, strokeWidth: strokeWidth),
     );
   }
 }

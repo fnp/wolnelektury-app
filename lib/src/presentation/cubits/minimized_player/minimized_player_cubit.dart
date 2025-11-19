@@ -7,15 +7,8 @@ part 'minimized_player_cubit.freezed.dart';
 part 'minimized_player_state.dart';
 
 class MinimizedPlayerCubit extends SafeCubit<MinimizedPlayerState> {
-  MinimizedPlayerCubit({
-    required double maxWidth,
-    required double maxHeight,
-  }) : super(
-          MinimizedPlayerState(
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
-          ),
-        ) {
+  MinimizedPlayerCubit({required double maxWidth, required double maxHeight})
+    : super(MinimizedPlayerState(maxWidth: maxWidth, maxHeight: maxHeight)) {
     _init();
   }
 

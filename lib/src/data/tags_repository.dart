@@ -28,10 +28,7 @@ class TagsRepositoryImplementation extends TagsRepository {
         tags: tags,
         apiUrl: url ?? _tagsEndpoint,
       );
-      effectiveUrl = ApiUtils.applySearch(
-        apiUrl: effectiveUrl,
-        search: search,
-      );
+      effectiveUrl = ApiUtils.applySearch(apiUrl: effectiveUrl, search: search);
       final response = await _apiService.getRequest(effectiveUrl);
       return DataState.fromApiResponse(
         response: response,
@@ -40,9 +37,7 @@ class TagsRepositoryImplementation extends TagsRepository {
         },
       );
     } catch (e) {
-      return const DataState.failure(
-        Failure.badResponse(),
-      );
+      return const DataState.failure(Failure.badResponse());
     }
   }
 }

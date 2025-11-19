@@ -14,6 +14,7 @@ sealed class ListCreatorState with _$ListCreatorState {
     @Default(false) bool isLoading,
     @Default(false) bool isLoadingMore,
     @Default([]) List<BookListModel> allLists,
+    BookListModel? fetchedSingleList,
     @Default(ApiResponsePagination()) ApiResponsePagination pagination,
 
     // Editing list
@@ -69,6 +70,7 @@ extension ListCreatorStateX on ListCreatorState {
   ));
 
   bool isBookInEditedList(String bookSlug) {
-    return editedListToSave?.books.contains(bookSlug) ?? false;
+    return (editedListToSave?.books.contains(bookSlug) ?? false) &&
+        deletingSlug != bookSlug;
   }
 }

@@ -49,6 +49,14 @@
                     android:scheme="https"
                     android:host="wolnelektury.pl"
                     android:pathPrefix="/katalog/zakladka/" />
+                <data
+                    android:scheme="https"
+                    android:host="wolnelektury.pl"
+                    android:pathPrefix="/lista/" />
+                <data
+                    android:scheme="https"
+                    android:host="wolnelektury.pl"
+                    android:pathPrefix="/czytnik/" />
             </intent-filter>
 
             <intent-filter>

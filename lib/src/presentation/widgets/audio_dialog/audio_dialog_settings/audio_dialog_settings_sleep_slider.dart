@@ -34,12 +34,10 @@ class AudioDialogSettingsSleepSlider extends StatelessWidget {
               return Text(
                 LocaleKeys.audio_dialog_settings_sleep_timer.tr(
                   namedArgs: {
-                    'time': (min(
-                              state.sleepTimer,
-                              state.currentMaxSleepTimer,
-                            ) ~/
-                            state.speed.value)
-                        .toString(),
+                    'time':
+                        (min(state.sleepTimer, state.currentMaxSleepTimer) ~/
+                                state.speed.value)
+                            .toString(),
                   },
                 ),
                 style: theme.textTheme.bodySmall?.copyWith(
@@ -50,9 +48,7 @@ class AudioDialogSettingsSleepSlider extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(
-          height: Dimensions.smallPadding,
-        ),
+        const SizedBox(height: Dimensions.smallPadding),
         BlocBuilder<AudioCubit, AudioState>(
           buildWhen: (p, c) =>
               p.sleepTimer != c.sleepTimer ||
@@ -62,9 +58,7 @@ class AudioDialogSettingsSleepSlider extends StatelessWidget {
               sliderChild: const FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                    right: Dimensions.smallPadding,
-                  ),
+                  padding: EdgeInsets.only(right: Dimensions.smallPadding),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -72,18 +66,13 @@ class AudioDialogSettingsSleepSlider extends StatelessWidget {
                     ),
                     child: SizedBox.square(
                       dimension: 30,
-                      child: Icon(
-                        CustomIcons.timer,
-                        size: 20,
-                      ),
+                      child: Icon(CustomIcons.timer, size: 20),
                     ),
                   ),
                 ),
               ),
-              slideDoubleValue: min(
-                    state.currentMaxSleepTimer,
-                    state.sleepTimer,
-                  ) /
+              slideDoubleValue:
+                  min(state.currentMaxSleepTimer, state.sleepTimer) /
                   state.currentMaxSleepTimer,
               onPointerDown: (localPosition, maxWidth) {
                 final x = localPosition;

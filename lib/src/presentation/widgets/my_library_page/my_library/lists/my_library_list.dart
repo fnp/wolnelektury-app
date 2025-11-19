@@ -152,6 +152,7 @@ class _Header extends StatelessWidget {
                             CustomButton(
                               icon: CustomIcons.add,
                               onPressed: () {
+                                print('Editing list: ${bookList.name}');
                                 listCubit.setListAsEdited(bookList.name);
                                 modeCubit.changeMode(
                                   AppModeEnum.listCreationMode,

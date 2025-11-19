@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
-import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
@@ -27,32 +26,41 @@ class ListPage extends StatelessWidget {
   }
 }
 
-class _FetchedListWidget extends StatelessWidget {
+class _FetchedListWidget extends StatefulWidget {
   final String slug;
   const _FetchedListWidget({required this.slug});
 
   @override
+  State<_FetchedListWidget> createState() => _FetchedListWidgetState();
+}
+
+class _FetchedListWidgetState extends State<_FetchedListWidget> {
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return ListCreatorCubit(get.get())..getListBySlug(slug);
-      },
+    return BlocProvider.value(
+      value: context.read<ListCreatorCubit>()..getListBySlug(widget.slug),
       child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
         buildWhen: (p, c) {
-          return p.allLists != c.allLists || p.isLoading != c.isLoading;
+          return p.fetchedSingleList != c.fetchedSingleList ||
+              p.isLoading != c.isLoading;
         },
         builder: (context, state) {
-          final list = state.allLists.firstOrNull;
+          final list = state.fetchedSingleList;
           if (list == null && !state.isLoading) {
             return const _EmptyWidget();
           }
+
+          print('fetched list is $list');
 
           return AnimatedBoxFade(
             isChildVisible: !state.isLoading,
             collapsedChild: const Center(child: CircularProgressIndicator()),
             child: Align(
               alignment: Alignment.topCenter,
-              child: _Body(bookList: list ?? BookListModel.empty()),
+              child: _Body(
+                bookList: list ?? BookListModel.empty(),
+                key: ValueKey(list?.slug ?? 'empty'),
+              ),
             ),
           );
         },
@@ -63,7 +71,7 @@ class _FetchedListWidget extends StatelessWidget {
 
 class _Body extends StatelessWidget {
   final BookListModel bookList;
-  const _Body({required this.bookList});
+  const _Body({required this.bookList, super.key});
 
   @override
   Widget build(BuildContext context) {
