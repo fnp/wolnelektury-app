@@ -4,6 +4,7 @@ import 'package:wolnelektury/src/data/auth_repository.dart';
 import 'package:wolnelektury/src/data/author_repository.dart';
 import 'package:wolnelektury/src/data/bookmarks_repository.dart';
 import 'package:wolnelektury/src/data/books_repository.dart';
+import 'package:wolnelektury/src/data/donation_repository.dart';
 import 'package:wolnelektury/src/data/likes_repository.dart';
 import 'package:wolnelektury/src/data/lists_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
@@ -43,6 +44,9 @@ Future<void> initializeRepositories({required GetIt getIt}) async {
   );
   getIt.registerSingleton<SearchRepository>(
     SearchRepositoryImplementation(getIt.get()),
+  );
+  getIt.registerSingleton<DonationRepository>(
+    DonationRepositoryImplementation(getIt.get()),
   );
   // Cubit
   getIt.registerSingleton<AuthCubit>(AuthCubit(getIt.get()));

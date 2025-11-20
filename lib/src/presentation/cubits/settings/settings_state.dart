@@ -17,6 +17,8 @@ sealed class SettingsState with _$SettingsState {
     bool? isChangingPasswordSuccess,
     @Default(false) bool isDeletingAccount,
     bool? isDeletingAccountSuccess,
+    @Default(false) bool isSendingResetPassword,
+    bool? resetPasswordSuccess,
   }) = _SettingsState;
 }
 

@@ -104,7 +104,9 @@
         "reset_dialog": {
             "title": "Resetowanie hasła",
             "content": "Wprowadź adres e-mail na który wyślemy link do zresetowania hasła",
-            "button": "Wyślij"
+            "button": "Wyślij",
+            "success": "Link do zresetowania hasła został wysłany na podany adres email",
+            "error": "Nie udało się wysłać linku do zresetowania hasła"
         }
     },
     "donation": {

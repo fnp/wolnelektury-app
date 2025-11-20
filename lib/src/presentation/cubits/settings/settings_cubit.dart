@@ -40,6 +40,31 @@ class SettingsCubit extends SafeCubit<SettingsState> {
     await openAppSettings();
   }
 
+  Future<void> resetPassword(String email) async {
+    emit(
+      state.copyWith(isSendingResetPassword: true, resetPasswordSuccess: null),
+    );
+    final result = await _authRepository.resetPassword(email);
+    result.handle(
+      success: (_, __) {
+        emit(
+          state.copyWith(
+            isSendingResetPassword: false,
+            resetPasswordSuccess: true,
+          ),
+        );
+      },
+      failure: (f) {
+        emit(
+          state.copyWith(
+            isSendingResetPassword: false,
+            resetPasswordSuccess: false,
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> reviewApp() async {
     final InAppReview inAppReview = InAppReview.instance;
     if (Platform.isAndroid) {

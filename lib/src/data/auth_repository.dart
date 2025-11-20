@@ -27,6 +27,8 @@ abstract class AuthRepository {
     required String oldPassword,
   });
 
+  Future<DataState<void>> resetPassword(String email);
+
   Future<DataState<void>> deleteAccount(String password);
 
   Future<DataState<bool>> getNotificationsSettings();
@@ -45,8 +47,25 @@ class AuthRepositoryImplementation extends AuthRepository {
   static const String _loginEndpoint = '/login/';
   static const String _registerEndpoint = '/register/';
   static const String _tokenEndpoint = '/deviceTokens/';
+  static const String _resetPasswordEndpoint = '/password-reset/';
 
   AuthRepositoryImplementation(this._apiService);
+
+  @override
+  Future<DataState<void>> resetPassword(String email) async {
+    try {
+      final response = await _apiService.postRequest(_resetPasswordEndpoint, {
+        'email': email,
+      });
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
 
   @override
   Future<DataState<void>> setNotificationsSettings(bool enabled) async {
