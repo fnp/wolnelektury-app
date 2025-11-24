@@ -15,6 +15,8 @@ sealed class ReadingPageState with _$ReadingPageState {
 
     // ParagraphSheet
     int? selectedIndex,
+    int? highlightedIndex,
+    @Default(false) bool isEnabledHighlighting,
     ReaderBookModelContent? selectedParagraph,
     @Default(false) bool isAddingBookmark,
 

@@ -121,7 +121,9 @@ class _MyLibraryForgotPasswordDialogState
             height: Dimensions.elementHeight,
             child: TextField(
               textInputAction: TextInputAction.done,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: CustomColors.black,
+              ),
               controller: _controller,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(

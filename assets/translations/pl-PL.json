@@ -155,7 +155,8 @@
         "settings": {
             "sans": "krój bezszeryfowy",
             "serif": "krój szeryfowy",
-            "dark_mode": "Tryb ciemny"
+            "dark_mode": "Tryb ciemny",
+            "text_sync": "Synchronizacja z audiobookiem"
         }
     },
     "book": {

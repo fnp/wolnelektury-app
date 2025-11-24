@@ -119,13 +119,14 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const SizedBox(height: Dimensions.veryLargePadding),
-                      TextButtonWithIcon(
-                        nonActiveText: 'przetłumacz (todo)',
-                        nonActiveIcon: Icons.translate,
-                        onPressed: () {},
-                        activeColor: CustomColors.white,
-                      ),
-                      const SizedBox(height: Dimensions.mediumPadding),
+                      //todo
+                      // TextButtonWithIcon(
+                      //   nonActiveText: 'przetłumacz (todo)',
+                      //   nonActiveIcon: Icons.translate,
+                      //   onPressed: () {},
+                      //   activeColor: CustomColors.white,
+                      // ),
+                      // const SizedBox(height: Dimensions.mediumPadding),
                       TextButtonWithIcon(
                         nonActiveText: LocaleKeys.reading_sheet_bookmark_add
                             .tr(),
@@ -149,30 +150,39 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                           if (state.audioSyncPairs.isEmpty) {
                             return const SizedBox.shrink();
                           }
-                          return TextButtonWithIcon(
-                            nonActiveText: 'słuchaj',
-                            nonActiveIcon: Icons.headphones,
-                            onPressed: () {
-                              if (selectedParagraph?.id == null) {
-                                return;
-                              }
-                              final timestamp = state.getTimestampForId(
-                                selectedParagraph!.id!,
-                              );
-                              if (timestamp == null) {
-                                return;
-                              }
-                              onListen(
-                                timestamp: timestamp.floor(),
-                                context: context,
-                                slug: readingPageCubit.state.currentSlug!,
-                              );
-                            },
-                            activeColor: CustomColors.white,
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              //todo
+                              TextButtonWithIcon(
+                                nonActiveText: 'słuchaj',
+                                nonActiveIcon: Icons.headphones,
+                                onPressed: () {
+                                  if (selectedParagraph?.id == null) {
+                                    return;
+                                  }
+                                  final timestamp = state.getTimestampForId(
+                                    selectedParagraph!.id!,
+                                  );
+                                  if (timestamp == null) {
+                                    return;
+                                  }
+                                  readingPageCubit.enableHighlighting(true);
+                                  Navigator.of(context).pop();
+                                  onListen(
+                                    timestamp: timestamp.floor(),
+                                    context: context,
+                                    slug: readingPageCubit.state.currentSlug!,
+                                  );
+                                },
+                                activeColor: CustomColors.white,
+                              ),
+                              const SizedBox(height: Dimensions.mediumPadding),
+                            ],
                           );
                         },
                       ),
-                      const SizedBox(height: Dimensions.mediumPadding),
+                      //todo
                       TextButtonWithIcon(
                         nonActiveText: 'udostępnij',
                         nonActiveIcon: Icons.ios_share,

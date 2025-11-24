@@ -28,7 +28,7 @@ class AppStorageLikesService {
     final result =
         await (_storage.select(_storage.likes)
               ..where((tbl) => tbl.isLiked.equals(true))
-              ..orderBy([(t) => OrderingTerm.desc(t.slug)]))
+              ..orderBy([(t) => OrderingTerm.asc(t.slug)]))
             .get();
 
     return result.map((e) => e.slug).toList();

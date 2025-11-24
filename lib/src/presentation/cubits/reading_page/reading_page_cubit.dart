@@ -136,9 +136,14 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   Future<void> _scrollToAnchor({
     required String anchor,
     required ItemScrollController itemScrollController,
+    bool markHighlighted = false,
   }) async {
     final foundIndex = state.findElementIndexByElementId(anchor);
     if (foundIndex != null) {
+      if (markHighlighted) {
+        if (state.highlightedIndex == foundIndex) return;
+        emit(state.copyWith(highlightedIndex: foundIndex));
+      }
       await Future.delayed(const Duration(milliseconds: 500));
       itemScrollController
           .scrollTo(
@@ -223,6 +228,34 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       emit(state.copyWith(isAddingBookmark: false));
     }
     emit(state.copyWith(selectedIndex: index, selectedParagraph: element));
+  }
+
+  void highlightParagraph({
+    required ItemScrollController itemScrollController,
+    int audioTimestamp = 0,
+  }) {
+    if (!state.isEnabledHighlighting) return;
+    final pair = state.audioSyncPairs.lastWhereOrNull(
+      (pair) => pair.timestamp <= audioTimestamp,
+    );
+    if (pair == null) {
+      stopHighlighting();
+      return;
+    }
+
+    _scrollToAnchor(
+      anchor: pair.id,
+      itemScrollController: itemScrollController,
+      markHighlighted: true,
+    );
+  }
+
+  void stopHighlighting() {
+    emit(state.copyWith(highlightedIndex: null, isEnabledHighlighting: false));
+  }
+
+  void enableHighlighting(bool value) {
+    emit(state.copyWith(isEnabledHighlighting: value));
   }
 
   void setVisualProgress(int index) {

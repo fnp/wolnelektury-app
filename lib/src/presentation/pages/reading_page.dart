@@ -6,6 +6,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
@@ -124,9 +125,13 @@ class _Body extends StatelessWidget {
                     collapsedChild: const _SkeletonPlaceholder(),
                     child: state.book == null
                         ? const SizedBox.shrink()
-                        : ReaderListViewBuilder(
-                            state: state,
+                        : _HighlightedParagraphListener(
+                            bookSlug: state.currentSlug,
                             itemScrollController: itemScrollController,
+                            child: ReaderListViewBuilder(
+                              state: state,
+                              itemScrollController: itemScrollController,
+                            ),
                           ),
                   );
                 },
@@ -148,6 +153,7 @@ class _Body extends StatelessWidget {
                 onPressed: () {
                   ReadingPageSettings.show(
                     context: context,
+                    slug: cubit.state.currentSlug!,
                     onClosed: () {
                       cubit.saveSettings();
                     },
@@ -185,6 +191,57 @@ class _SkeletonPlaceholder extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _HighlightedParagraphListener extends StatelessWidget {
+  final ItemScrollController itemScrollController;
+  final String? bookSlug;
+  final Widget child;
+  const _HighlightedParagraphListener({
+    required this.itemScrollController,
+    required this.child,
+    this.bookSlug,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final readingCubit = context.read<ReadingPageCubit>();
+    return BlocSelector<ReadingPageCubit, ReadingPageState, bool>(
+      selector: (state) {
+        return state.isEnabledHighlighting;
+      },
+      builder: (context, isEnabled) {
+        return MultiBlocListener(
+          listeners: [
+            BlocListener<AudioCubit, AudioState>(
+              listenWhen: (p, c) {
+                return c.book?.slug == bookSlug &&
+                    p.statePosition != c.statePosition &&
+                    c.statePosition % 5 == 0;
+              },
+              listener: (context, state) {
+                readingCubit.highlightParagraph(
+                  itemScrollController: itemScrollController,
+                  audioTimestamp: state.statePosition,
+                );
+              },
+            ),
+            BlocListener<AudioCubit, AudioState>(
+              listenWhen: (p, c) {
+                return p.isPlaying != c.isPlaying;
+              },
+              listener: (context, state) {
+                if (!state.isPlaying) {
+                  readingCubit.stopHighlighting();
+                }
+              },
+            ),
+          ],
+          child: child,
+        );
+      },
     );
   }
 }

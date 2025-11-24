@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_font_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_font_style.dart';
+import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_highlighting.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_theme.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPageSettings extends StatelessWidget {
-  static const double _height = 200;
-  const ReadingPageSettings({super.key});
+  final String slug;
+  static const double _height = 250;
+  const ReadingPageSettings({super.key, required this.slug});
 
   static void show({
     required BuildContext context,
     required VoidCallback onClosed,
+    required String slug,
   }) {
     showModalBottomSheet(
       context: context,
@@ -23,9 +27,12 @@ class ReadingPageSettings extends StatelessWidget {
           topRight: Radius.circular(Dimensions.modalsBorderRadius),
         ),
       ),
-      builder: (_) => BlocProvider.value(
-        value: context.read<ReadingPageCubit>(),
-        child: const ReadingPageSettings(),
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: context.read<ReadingPageCubit>()),
+          BlocProvider.value(value: context.read<AudioCubit>()),
+        ],
+        child: ReadingPageSettings(slug: slug),
       ),
     ).then((_) {
       onClosed.call();
@@ -34,16 +41,31 @@ class ReadingPageSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
       height: ReadingPageSettings._height,
       child: Padding(
-        padding: EdgeInsets.all(Dimensions.mediumPadding),
+        padding: const EdgeInsets.all(Dimensions.mediumPadding),
         child: Column(
           spacing: Dimensions.mediumPadding,
           children: [
-            ReadingPageSettingsFontSize(),
-            ReadingPageSettingsFontStyle(),
-            ReadingPageSettingsTheme(),
+            const ReadingPageSettingsFontSize(),
+            const ReadingPageSettingsFontStyle(),
+            const ReadingPageSettingsTheme(),
+            BlocBuilder<AudioCubit, AudioState>(
+              buildWhen: (p, c) {
+                return p.isPlaying != c.isPlaying || p.book != c.book;
+              },
+              builder: (context, state) {
+                final disable = !state.isPlaying || state.book?.slug != slug;
+                return Opacity(
+                  opacity: disable ? 0.5 : 1,
+                  child: AbsorbPointer(
+                    absorbing: disable,
+                    child: const ReadingPageSettingsHighlighting(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),

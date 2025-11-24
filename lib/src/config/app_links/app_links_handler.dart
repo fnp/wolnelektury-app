@@ -61,6 +61,11 @@ class _AppLinksHandlerState extends State<AppLinksHandler>
           .where((element) => element.isNotEmpty)
           .toList();
 
+      // Jeśli nie ma segmentów (np. https://wolnelektury.pl/ lub /app/), po prostu otwórz aplikację
+      if (nonEmptySegments.isEmpty) {
+        return; // Otwórz aplikację na ekranie głównym
+      }
+
       final slug = nonEmptySegments.last;
 
       final String stringUri = uri.toString();
