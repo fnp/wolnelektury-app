@@ -35,7 +35,9 @@ class MyLibraryList extends StatelessWidget {
             c.doesLocalListExistsAlready(bookList.name);
       },
       builder: (context, state) {
-        final isExisting = state.doesLocalListExistsAlready(bookList.name);
+        final isExisting =
+            state.doesLocalListExistsAlready(bookList.name) ||
+            state.fetchedSingleList?.slug == bookList.slug;
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
           curve: defaultCurve,

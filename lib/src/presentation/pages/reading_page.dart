@@ -24,16 +24,12 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 class ReadingPage extends StatefulWidget {
   final BookModel? book;
   final String? slug;
-  final String? overrideProgressAnchor;
-  const ReadingPage({
-    super.key,
-    this.book,
-    this.slug,
-    this.overrideProgressAnchor,
-  }) : assert(
-         book != null || slug != null,
-         'Either book or slug must be provided',
-       );
+  final String? targetAnchor;
+  const ReadingPage({super.key, this.book, this.slug, this.targetAnchor})
+    : assert(
+        book != null || slug != null,
+        'Either book or slug must be provided',
+      );
 
   @override
   State<ReadingPage> createState() => _ReadingPageState();
@@ -57,7 +53,7 @@ class _ReadingPageState extends State<ReadingPage> {
               cubit.init(
                 book: widget.book!,
                 itemScrollController: itemScrollController,
-                overrideProgressAnchor: widget.overrideProgressAnchor,
+                targetAnchor: widget.targetAnchor,
                 tryOffline: !hasConnection,
                 scaleFactor: scaleFactor,
               );
@@ -81,7 +77,7 @@ class _ReadingPageState extends State<ReadingPage> {
                   context.read<ReadingPageCubit>().init(
                     book: book,
                     itemScrollController: itemScrollController,
-                    overrideProgressAnchor: widget.overrideProgressAnchor,
+                    targetAnchor: widget.targetAnchor,
                     tryOffline: isOffline,
                     scaleFactor: scaleFactor,
                   );
@@ -219,7 +215,7 @@ class _HighlightedParagraphListener extends StatelessWidget {
               listenWhen: (p, c) {
                 return c.book?.slug == bookSlug &&
                     p.statePosition != c.statePosition &&
-                    c.statePosition % 5 == 0;
+                    c.statePosition % 3 == 0;
               },
               listener: (context, state) {
                 readingCubit.highlightParagraph(

@@ -178,7 +178,7 @@ final GoRouter router = GoRouter(
               child: _ColoredBackground(
                 child: ReadingPage(
                   book: book,
-                  overrideProgressAnchor: anchor,
+                  targetAnchor: anchor,
                   slug: slug,
                 ),
               ),

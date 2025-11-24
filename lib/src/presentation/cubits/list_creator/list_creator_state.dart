@@ -46,6 +46,9 @@ extension ListCreatorStateX on ListCreatorState {
   }
 
   bool isBookInList(String listName, String bookSlug) {
+    if (fetchedSingleList != null && fetchedSingleList!.name == listName) {
+      return fetchedSingleList!.books.contains(bookSlug);
+    }
     return (allLists
                 .firstWhereOrNull((element) => element.name == listName)
                 ?.books ??

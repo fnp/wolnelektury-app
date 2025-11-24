@@ -50,8 +50,6 @@ class _FetchedListWidgetState extends State<_FetchedListWidget> {
             return const _EmptyWidget();
           }
 
-          print('fetched list is $list');
-
           return AnimatedBoxFade(
             isChildVisible: !state.isLoading,
             collapsedChild: const Center(child: CircularProgressIndicator()),
@@ -75,6 +73,7 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('building body with list: $bookList');
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(

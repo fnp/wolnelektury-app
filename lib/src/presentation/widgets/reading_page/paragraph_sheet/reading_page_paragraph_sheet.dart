@@ -73,7 +73,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
             audioCubit
                 .pickBook(
                   book,
-                  overrideProgressTimestamp: timestamp,
+                  targetTimestamp: timestamp,
                   tryOffline: isOffline,
                 )
                 .then((_) {

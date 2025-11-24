@@ -52,11 +52,11 @@
                 <data
                     android:scheme="https"
                     android:host="wolnelektury.pl"
-                    android:pathPrefix="/lista/" />
+                    android:pathPrefix="/katalog/lista/" />
                 <data
                     android:scheme="https"
                     android:host="wolnelektury.pl"
-                    android:pathPrefix="/czytnik/" />
+                    android:pathPrefix="/katalog/czytnik/" />
                 <data
                     android:scheme="https"
                     android:host="wolnelektury.pl"
