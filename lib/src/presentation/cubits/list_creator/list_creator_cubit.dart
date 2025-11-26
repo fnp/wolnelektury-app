@@ -20,6 +20,10 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   // ---- Helper Methods ------
   // --------------------------
 
+  void resetState() {
+    emit(const ListCreatorState());
+  }
+
   /// Creates a copy of the all lists with the specified list updated
   List<BookListModel> _updateListInAllLists(BookListModel updatedList) {
     final currentLists = List<BookListModel>.from(state.allLists);

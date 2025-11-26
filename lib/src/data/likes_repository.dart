@@ -20,6 +20,8 @@ abstract class LikesRepository {
 
   Future<DataState<void>> sendOutLikesSync();
   Future<DataState<void>> receiveInLikesSync();
+
+  Future<DataState<void>> reset();
 }
 
 class FavouritesRepositoryImplementation extends LikesRepository
@@ -38,6 +40,16 @@ class FavouritesRepositoryImplementation extends LikesRepository
   static const String _sendSyncLikesEndpoint = '/sync/userlistitem/';
   static String _receiveSyncLikesEndpoint(String ts) =>
       '/sync/userlistitem?favourites=true&ts=$ts';
+
+  @override
+  Future<DataState<void>> reset() async {
+    try {
+      await _likesStorage.clear();
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
 
   @override
   Future<DataState<List<String>>> getFavourites() async {
@@ -181,7 +193,9 @@ class FavouritesRepositoryImplementation extends LikesRepository
       for (final e in response.data!) {
         try {
           final syncModel = LikeSyncModel.fromJson(e);
-          likes.add(syncModel);
+          if (syncModel.favorites) {
+            likes.add(syncModel);
+          }
         } catch (_) {
           // Wrong JSON, skip
         }
@@ -193,11 +207,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
             // Null timestamp shouldn't ever happen, but just in case
             (e.timestamp ?? 0) * 1000,
           );
-          return (
-            slug: e.slug,
-            isLiked: e.deleted != true,
-            timestamp: updatedAt,
-          );
+          return (slug: e.slug, isLiked: !e.deleted, timestamp: updatedAt);
         }).toList(),
       );
 

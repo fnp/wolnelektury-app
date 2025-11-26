@@ -73,7 +73,6 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('building body with list: $bookList');
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(

@@ -13,6 +13,11 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   final BookmarksRepository _bookmarksRepository;
   BookmarksCubit(this._bookmarksRepository) : super(const BookmarksState());
 
+  Future<void> reset() async {
+    await _bookmarksRepository.reset();
+    emit(const BookmarksState());
+  }
+
   // --------------------------
   // ------- My Library -------
   // --------------------------

@@ -49,6 +49,8 @@ abstract class BookmarksRepository {
 
   Future<DataState<void>> sendOutBookmarksSync();
   Future<DataState<void>> receiveInBookmarksSync();
+
+  Future<DataState<void>> reset();
 }
 
 class BookmarksRepositoryImplementation extends BookmarksRepository
@@ -66,6 +68,16 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
   static const String _sendSyncBookmarksEndpoint = '/sync/bookmark/';
   static String _receiveSyncBookmarksEndpoint(String ts) =>
       '/sync/bookmark?ts=$ts';
+
+  @override
+  Future<DataState<void>> reset() async {
+    try {
+      await _bookmarksStorage.clear();
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
 
   @override
   Future<DataState<BookmarkModel>> getBookmarkById({
@@ -349,7 +361,6 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
       });
 
       if ((response.data ?? []).isNotEmpty) {
-        print('Created audio bookmark response: ${response.data!.first}');
         return DataState.success(
           data: BookmarkModel.fromJson(response.data!.first),
         );

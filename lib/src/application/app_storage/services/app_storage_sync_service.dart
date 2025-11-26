@@ -32,6 +32,10 @@ class AppStorageSyncService {
     return syncData;
   }
 
+  Future<void> clearSyncData() async {
+    await _storage.delete(_storage.syncInfo).go();
+  }
+
   Future<void> updateSyncData({
     DateTime? receivedProgressSyncAt,
     DateTime? sentProgressSyncAt,

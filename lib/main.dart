@@ -90,8 +90,14 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (context) => AppModeCubit()),
         BlocProvider(
-          create: (context) =>
-              SynchronizerCubit(get.get(), get.get(), get.get()),
+          create: (context) {
+            return SynchronizerCubit(
+              get.get(),
+              get.get(),
+              get.get(),
+              get.get(),
+            );
+          },
         ),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(

@@ -38,7 +38,6 @@ class NotificationService {
 
   static Future<String?> getNotificationToken() async {
     final id = await FirebaseMessaging.instance.getToken();
-    print(id);
     return id;
   }
 

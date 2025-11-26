@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SynchronizerState {
 
- bool get isLoading; bool get isError;
+ bool get isLoading; bool get isWorking; bool get isError;
 /// Create a copy of SynchronizerState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $SynchronizerStateCopyWith<SynchronizerState> get copyWith => _$SynchronizerStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SynchronizerState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isError, isError) || other.isError == isError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SynchronizerState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isWorking, isWorking) || other.isWorking == isWorking)&&(identical(other.isError, isError) || other.isError == isError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isError);
+int get hashCode => Object.hash(runtimeType,isLoading,isWorking,isError);
 
 @override
 String toString() {
-  return 'SynchronizerState(isLoading: $isLoading, isError: $isError)';
+  return 'SynchronizerState(isLoading: $isLoading, isWorking: $isWorking, isError: $isError)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $SynchronizerStateCopyWith<$Res>  {
   factory $SynchronizerStateCopyWith(SynchronizerState value, $Res Function(SynchronizerState) _then) = _$SynchronizerStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, bool isError
+ bool isLoading, bool isWorking, bool isError
 });
 
 
@@ -63,9 +63,10 @@ class _$SynchronizerStateCopyWithImpl<$Res>
 
 /// Create a copy of SynchronizerState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isError = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isWorking = null,Object? isError = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isWorking: null == isWorking ? _self.isWorking : isWorking // ignore: cast_nullable_to_non_nullable
 as bool,isError: null == isError ? _self.isError : isError // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -78,10 +79,11 @@ as bool,
 
 
 class _SynchronizerState implements SynchronizerState {
-  const _SynchronizerState({this.isLoading = false, this.isError = false});
+  const _SynchronizerState({this.isLoading = false, this.isWorking = false, this.isError = false});
   
 
 @override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isWorking;
 @override@JsonKey() final  bool isError;
 
 /// Create a copy of SynchronizerState
@@ -94,16 +96,16 @@ _$SynchronizerStateCopyWith<_SynchronizerState> get copyWith => __$SynchronizerS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SynchronizerState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isError, isError) || other.isError == isError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SynchronizerState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isWorking, isWorking) || other.isWorking == isWorking)&&(identical(other.isError, isError) || other.isError == isError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isError);
+int get hashCode => Object.hash(runtimeType,isLoading,isWorking,isError);
 
 @override
 String toString() {
-  return 'SynchronizerState(isLoading: $isLoading, isError: $isError)';
+  return 'SynchronizerState(isLoading: $isLoading, isWorking: $isWorking, isError: $isError)';
 }
 
 
@@ -114,7 +116,7 @@ abstract mixin class _$SynchronizerStateCopyWith<$Res> implements $SynchronizerS
   factory _$SynchronizerStateCopyWith(_SynchronizerState value, $Res Function(_SynchronizerState) _then) = __$SynchronizerStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, bool isError
+ bool isLoading, bool isWorking, bool isError
 });
 
 
@@ -131,9 +133,10 @@ class __$SynchronizerStateCopyWithImpl<$Res>
 
 /// Create a copy of SynchronizerState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isError = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isWorking = null,Object? isError = null,}) {
   return _then(_SynchronizerState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isWorking: null == isWorking ? _self.isWorking : isWorking // ignore: cast_nullable_to_non_nullable
 as bool,isError: null == isError ? _self.isError : isError // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

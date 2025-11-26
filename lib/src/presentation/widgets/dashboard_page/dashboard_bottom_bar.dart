@@ -67,7 +67,6 @@ class DashboardBottomBar extends StatelessWidget {
                               ),
                               _NavigationItem(
                                 onTap: () {
-                                  //TODO Should navigate to dono page when logged in
                                   DonationDialog.show(context);
                                 },
                                 icon: CustomIcons.savings,

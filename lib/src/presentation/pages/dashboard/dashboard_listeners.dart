@@ -20,11 +20,23 @@ class DashboardListeners extends StatelessWidget {
 
   final Widget child;
 
+  Future<void> syncAppWithDb(
+    SynchronizerCubit syncCubit,
+    LikesCubit likesCubit,
+  ) async {
+    syncCubit.triggerAllSyncs(
+      onFinish: () {
+        likesCubit.init();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final likesCubit = context.read<LikesCubit>();
     final authCubit = context.read<AuthCubit>();
     final syncCubit = context.read<SynchronizerCubit>();
+    final listCreatorCubit = context.read<ListCreatorCubit>();
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthCubit, AuthState>(
@@ -34,22 +46,22 @@ class DashboardListeners extends StatelessWidget {
           listener: (context, state) {
             if (state.isLoginSuccess == true) {
               CustomSnackbar.success(context, LocaleKeys.login_success.tr());
-              syncCubit.triggerAllSyncs(
-                onFinish: () {
-                  likesCubit.init();
-                },
-              );
+              syncAppWithDb(syncCubit, likesCubit);
             }
             if (state.isLoginSuccess == false) {
               CustomSnackbar.error(context, LocaleKeys.login_errors_login.tr());
             }
           },
         ),
+        // Logout listener
         BlocListener<AuthCubit, AuthState>(
           listenWhen: (p, c) {
             return p.user != null && c.user == null;
           },
           listener: (context, state) {
+            listCreatorCubit.resetState();
+            likesCubit.resetState();
+            syncCubit.cleanupSyncData();
             CustomSnackbar.success(context, LocaleKeys.login_logout.tr());
           },
         ),
@@ -152,11 +164,7 @@ class DashboardListeners extends StatelessWidget {
               if (!context.mounted) return;
 
               if (context.read<AuthCubit>().state.isAuthenticated) {
-                syncCubit.triggerAllSyncs(
-                  onFinish: () {
-                    likesCubit.init();
-                  },
-                );
+                syncAppWithDb(syncCubit, likesCubit);
               }
             });
           },

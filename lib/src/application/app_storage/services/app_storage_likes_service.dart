@@ -6,6 +6,11 @@ class AppStorageLikesService {
 
   AppStorageLikesService(this._storage);
 
+  Future<void> clear() async {
+    final query = _storage.delete(_storage.likes);
+    await query.go();
+  }
+
   Future<void> upsertMultipleLikes(
     List<({String slug, bool isLiked, DateTime? timestamp})> likes,
   ) async {

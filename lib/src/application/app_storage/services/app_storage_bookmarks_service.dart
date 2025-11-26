@@ -6,6 +6,11 @@ class AppStorageBookmarksService {
 
   AppStorageBookmarksService(this._storage);
 
+  Future<void> clear() async {
+    final query = _storage.delete(_storage.bookmarks);
+    await query.go();
+  }
+
   Future<void> upsertMultipleBookmarks(
     List<
       ({

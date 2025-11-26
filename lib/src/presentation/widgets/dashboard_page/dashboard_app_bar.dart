@@ -7,6 +7,7 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/synchronizer/synchronizer_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -73,9 +74,32 @@ class DashboardAppBar extends StatelessWidget {
                           duration: const Duration(milliseconds: 300),
                           curve: defaultCurve,
                           child:
+                              BlocBuilder<SynchronizerCubit, SynchronizerState>(
+                                buildWhen: (p, c) {
+                                  return p.isWorking != c.isWorking;
+                                },
+                                builder: (context, state) {
+                                  if (state.isWorking) {
+                                    return const CustomButton(
+                                      icon: Icons.sync,
+                                      iconColor: CustomColors.black,
+                                      backgroundColor: Colors.transparent,
+                                    );
+                                  }
+                                  return const SizedBox(
+                                    height: Dimensions.elementHeight,
+                                  );
+                                },
+                              ),
+                        ),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 300),
+                          curve: defaultCurve,
+                          child:
                               BlocBuilder<ConnectivityCubit, ConnectivityState>(
-                                buildWhen: (p, c) =>
-                                    p.isConnected != c.isConnected,
+                                buildWhen: (p, c) {
+                                  return p.isConnected != c.isConnected;
+                                },
                                 builder: (context, state) {
                                   if (!state.isConnected) {
                                     return const CustomButton(

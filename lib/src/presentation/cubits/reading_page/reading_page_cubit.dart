@@ -68,7 +68,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     bool tryOffline = false,
     double scaleFactor = 1,
   }) async {
-    _fontSizeMultiplier = 9 * scaleFactor;
+    _fontSizeMultiplier = _fontSizeMultiplier * scaleFactor;
     emit(state.copyWith(isJsonLoading: true, isJsonLoadingError: false));
     final settings = await _settingsStorage.readReadingSettings();
     final bookJson = await _booksRepository.getBookJson(
