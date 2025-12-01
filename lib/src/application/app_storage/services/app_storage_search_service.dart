@@ -11,7 +11,11 @@ class AppStorageSearchService {
   AppStorageSearchService(this._storage);
 
   Future<List<HintModel>> readLastSearched() async {
-    final results = await _storage.select(_storage.lastSearched).get();
+    final results =
+        await (_storage.select(_storage.lastSearched)..orderBy([
+              (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc),
+            ]))
+            .get();
     return results
         .map((e) => HintModel.fromJson(jsonDecode(e.hintJson)))
         .toList();

@@ -161,7 +161,13 @@
     },
     "book": {
         "more": "więcej szczegółów",
-        "error": "Nie udało się załadować danych książki 🙁"
+        "error": "Nie udało się załadować danych książki 🙁",
+        "epoch": "Epoka",
+        "kind": "Rodzaj",
+        "genre": "Gatunek",
+        "available_in": "Dostępne w",
+        "content_warning": "Uwaga, tekst zawiera {warnings}.",
+        "content_audiences": "Idealne dla: {audiences}."
     },
     "book_lists": {
         "sheet": {

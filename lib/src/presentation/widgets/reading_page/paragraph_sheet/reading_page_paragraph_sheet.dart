@@ -153,7 +153,6 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              //todo
                               TextButtonWithIcon(
                                 nonActiveText: 'słuchaj',
                                 nonActiveIcon: Icons.headphones,
@@ -182,7 +181,6 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                           );
                         },
                       ),
-                      //todo
                       TextButtonWithIcon(
                         nonActiveText: 'udostępnij',
                         nonActiveIcon: Icons.ios_share,

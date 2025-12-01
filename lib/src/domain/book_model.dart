@@ -19,6 +19,11 @@ sealed class BookModel with _$BookModel {
     @Default([]) List<KindModel> kinds,
     @Default([]) List<AuthorModel> authors,
     @Default([]) List<BookTranslator> translators,
+    @JsonKey(name: 'content_warnings')
+    @Default([])
+    List<String> contentWarnings,
+    @Default([]) List<String> audiences,
+    @JsonKey(name: 'elevenreader_link') String? elevenReaderLink,
     @JsonKey(name: 'fragment_data') BookFragmentData? fragment,
     @JsonKey(name: 'simple_thumb') String? simpleThumb,
     @JsonKey(name: 'cover_thumb') String? coverThumb,

@@ -35,6 +35,15 @@ _BookModel _$BookModelFromJson(Map<String, dynamic> json) => _BookModel(
           ?.map((e) => BookTranslator.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
+  contentWarnings:
+      (json['content_warnings'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
+  audiences:
+      (json['audiences'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+  elevenReaderLink: json['elevenreader_link'] as String?,
   fragment: json['fragment_data'] == null
       ? null
       : BookFragmentData.fromJson(
@@ -62,6 +71,9 @@ Map<String, dynamic> _$BookModelToJson(_BookModel instance) =>
       'kinds': instance.kinds,
       'authors': instance.authors,
       'translators': instance.translators,
+      'content_warnings': instance.contentWarnings,
+      'audiences': instance.audiences,
+      'elevenreader_link': instance.elevenReaderLink,
       'fragment_data': instance.fragment,
       'simple_thumb': instance.simpleThumb,
       'cover_thumb': instance.coverThumb,

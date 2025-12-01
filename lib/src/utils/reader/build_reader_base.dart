@@ -203,12 +203,14 @@ InlineSpan _handleLinkTags({
   required bool
   hasSomeContentAfter, // true jeśli po tym elemencie są jeszcze treści
 }) {
+  const referenceString = 'reference';
+  const footnoteString = 'footnote';
   final icons = {
-    'footnote': (
+    footnoteString: (
       Icons.not_listed_location_sharp,
       CustomColors.secondaryBlueColor,
     ),
-    'reference': (Icons.info, CustomColors.secondaryBlueColor),
+    referenceString: (Icons.info, CustomColors.secondaryBlueColor),
   };
 
   final className = linkContent.attr?['class'];
@@ -229,6 +231,9 @@ InlineSpan _handleLinkTags({
             linkContent: linkContent,
             fontFamily: fontFamily,
             fontSize: fontSize,
+            type: className == footnoteString
+                ? ReaderBottomSheetType.footnote
+                : ReaderBottomSheetType.reference,
           ),
           behavior: HitTestBehavior.opaque,
           child: Padding(
