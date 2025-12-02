@@ -47,7 +47,6 @@ class BuildReaderClassLevelModifiers {
 
     switch (className) {
       case 'verse':
-      //todo should it have double indent?
       case 'wers_cd':
         // Verse has nextSibling next to it, probably styled text, do not insert new line
         if (nextSibling != null) {

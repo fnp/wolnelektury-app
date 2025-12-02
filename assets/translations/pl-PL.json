@@ -23,7 +23,9 @@
             "bookmark_add": "dodaj zakładkę",
             "bookmark_adding": "dodawanie zakładki",
             "bookmark_edit": "edytuj zakładkę",
-            "bookmark_editing": "edycja zakładki"
+            "bookmark_editing": "edycja zakładki",
+            "listen": "słuchaj",
+            "share": "udostępnij"
         },
         "snackbar": {
             "bookmark_added_success": "Zakładka dodana",
@@ -124,7 +126,9 @@
             "sleep_timer": "wyłącz za {time} minut",
             "speed_selector": "prędkość odtwarzania {speed}",
             "part_selector": "odtwarzaj do końca",
-            "part_selector_specific": "rozdziału {part}"
+            "part_selector_specific": "rozdziału {part}",
+            "read_here_title": "czytaj od bieżącej pozycji",
+            "read_here_button": "Przejdź"
         }
     },
     "account": {
@@ -180,6 +184,9 @@
         }
     },
     "settings": {
+        "sponsors": {
+            "title": "Sponsorzy"
+        },
         "social": {
             "title": "Społeczność",
             "ig": "Instagram",

@@ -154,7 +154,8 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               TextButtonWithIcon(
-                                nonActiveText: 'słuchaj',
+                                nonActiveText: LocaleKeys.reading_sheet_listen
+                                    .tr(),
                                 nonActiveIcon: Icons.headphones,
                                 onPressed: () {
                                   if (selectedParagraph?.id == null) {
@@ -182,7 +183,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                         },
                       ),
                       TextButtonWithIcon(
-                        nonActiveText: 'udostępnij',
+                        nonActiveText: LocaleKeys.reading_sheet_share.tr(),
                         nonActiveIcon: Icons.ios_share,
                         onPressed: () {
                           ShareUtils.shareParagraph(

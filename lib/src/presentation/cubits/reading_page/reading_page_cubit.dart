@@ -66,6 +66,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     required ItemScrollController itemScrollController,
     String? targetAnchor,
     bool tryOffline = false,
+    bool isCurrentlyPlayingAudioOfThisBook = false,
     double scaleFactor = 1,
   }) async {
     _fontSizeMultiplier = _fontSizeMultiplier * scaleFactor;
@@ -92,6 +93,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
           slug: book.slug,
           itemScrollController: itemScrollController,
           targetAnchor: targetAnchor,
+          isCurrentlyPlayingAudioOfThisBook: isCurrentlyPlayingAudioOfThisBook,
         );
       },
       failure: (failure) {
@@ -123,6 +125,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     required String slug,
     required ItemScrollController itemScrollController,
     String? targetAnchor,
+    bool isCurrentlyPlayingAudioOfThisBook = false,
   }) async {
     // Override progress with provided anchor
     if (targetAnchor != null) {
@@ -135,6 +138,8 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
         markHighlighted: true,
       ).then((_) {
         enableHighlighting(true);
+        // If audio is playing, do not disable highlighting
+        if (isCurrentlyPlayingAudioOfThisBook) return;
         Future.delayed(const Duration(seconds: 3), () {
           enableHighlighting(false);
         });
@@ -293,7 +298,9 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       stopHighlighting();
       return;
     }
-
+    print(
+      'Highlighting for ${pair.id} in reading page cubit for timestamp $audioTimestamp',
+    );
     _scrollToAnchor(
       anchor: pair.id,
       itemScrollController: itemScrollController,

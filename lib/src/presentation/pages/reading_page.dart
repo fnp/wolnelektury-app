@@ -44,6 +44,9 @@ class _ReadingPageState extends State<ReadingPage> {
     final child = _Body(itemScrollController: itemScrollController);
     final hasConnection = context.read<ConnectivityCubit>().state.isConnected;
     final scaleFactor = MediaQuery.textScalerOf(context).scale(1);
+    final audioState = context.read<AudioCubit>().state;
+    final isPlayingAudioOfThisBook =
+        audioState.book?.slug == slug && audioState.isPlaying;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -56,6 +59,7 @@ class _ReadingPageState extends State<ReadingPage> {
                 targetAnchor: widget.targetAnchor,
                 tryOffline: !hasConnection,
                 scaleFactor: scaleFactor,
+                isCurrentlyPlayingAudioOfThisBook: isPlayingAudioOfThisBook,
               );
             }
             return cubit;
@@ -80,6 +84,7 @@ class _ReadingPageState extends State<ReadingPage> {
                     targetAnchor: widget.targetAnchor,
                     tryOffline: isOffline,
                     scaleFactor: scaleFactor,
+                    isCurrentlyPlayingAudioOfThisBook: isPlayingAudioOfThisBook,
                   );
                 },
               );

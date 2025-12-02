@@ -25,7 +25,9 @@ class DashboardProviders extends StatelessWidget {
           create: (_) => DownloadCubit(get.get(), get.get(), get.get()),
         ),
         BlocProvider(create: (_) => LikesCubit(get.get())),
-        BlocProvider(create: (_) => AudioCubit(get.get(), get.get())),
+        BlocProvider(
+          create: (_) => AudioCubit(get.get(), get.get(), get.get()),
+        ),
         BlocProvider(create: (_) => ListCreatorCubit(get.get())),
         BlocProvider(create: (_) => ScrollCubit()),
         BlocProvider(

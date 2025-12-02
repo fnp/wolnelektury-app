@@ -10,6 +10,7 @@ import 'package:wolnelektury/src/presentation/widgets/common/page_header.dart';
 import 'package:wolnelektury/src/presentation/widgets/settings_page/change_password_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/settings_page/delete_account_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/settings_page/socials_bottom_sheet.dart';
+import 'package:wolnelektury/src/presentation/widgets/settings_page/sponsors_bottom_sheet.dart';
 import 'package:wolnelektury/src/presentation/widgets/settings_page/theme_toggle_switch.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -116,6 +117,12 @@ class SettingsPage extends StatelessWidget {
                   text: LocaleKeys.settings_social_title.tr(),
                   onTap: () {
                     SocialsBottomSheet.show(context: context);
+                  },
+                ),
+                _SettingsContainer(
+                  text: LocaleKeys.settings_sponsors_title.tr(),
+                  onTap: () {
+                    SponsorsBottomSheet.show(context: context);
                   },
                 ),
                 if (isAuthorized)

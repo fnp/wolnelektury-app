@@ -10,7 +10,6 @@ sealed class GenericSearchResultModel with _$GenericSearchResultModel {
   const factory GenericSearchResultModel({
     @Default([]) List<DetailedAuthorModel> author,
     @Default([]) List<GenreModel> genre,
-    //todo theme?
   }) = _GenericSearchResultModel;
 
   factory GenericSearchResultModel.fromJson(Map<String, dynamic> json) =>

@@ -15,6 +15,9 @@ sealed class AudioState with _$AudioState {
     @Default(false) bool isPreparingSession,
     @Default(false) bool isPreparingPlaylist,
 
+    // Text sync pairs
+    @Default([]) List<BookTextAudioSyncModel> textSyncPairs,
+
     // Settings
     @Default(false) bool isSettingsOpened,
     @Default(false) bool isBookmarksOpened,
@@ -31,6 +34,13 @@ sealed class AudioState with _$AudioState {
 }
 
 extension AudioStateEx on AudioState {
+  String? get getIdForTimestamp {
+    final pair = textSyncPairs.lastWhereOrNull(
+      (pair) => pair.timestamp <= statePosition,
+    );
+    return pair?.id;
+  }
+
   int get wholeDuration => parts
       .fold(
         0,

@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 
@@ -23,7 +24,6 @@ class MyLibraryRegisterFormInfoBox extends StatelessWidget {
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(
-        // vertical: Dimensions.largePadding,
         left: Dimensions.veryLargePadding,
         right: Dimensions.veryLargePadding,
         bottom: Dimensions.veryLargePadding,
@@ -50,24 +50,33 @@ class MyLibraryRegisterFormInfoBox extends StatelessWidget {
               );
             },
           ),
-          SizedBox(
-            height: 40,
-            child: Row(
-              spacing: Dimensions.veryLargePadding,
-              children: [
-                Expanded(
-                  child: SvgPicture.asset(
-                    Images.mkidn,
-                    alignment: Alignment.centerLeft,
-                  ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: CustomColors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(Dimensions.mediumPadding),
+              child: SizedBox(
+                height: 40,
+                child: Row(
+                  spacing: Dimensions.veryLargePadding,
+                  children: [
+                    Expanded(
+                      child: SvgPicture.asset(
+                        Images.mkidn,
+                        alignment: Alignment.centerLeft,
+                      ),
+                    ),
+                    Expanded(
+                      child: SvgPicture.asset(
+                        Images.pfron,
+                        alignment: Alignment.centerLeft,
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: SvgPicture.asset(
-                    Images.pfron,
-                    alignment: Alignment.centerLeft,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
           Row(

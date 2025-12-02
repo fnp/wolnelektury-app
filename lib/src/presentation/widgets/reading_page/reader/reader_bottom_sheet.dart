@@ -72,9 +72,7 @@ class _ReaderBottomSheetState extends State<ReaderBottomSheet> {
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setNavigationDelegate(
           NavigationDelegate(
-            onProgress: (int progress) {
-              // Update loading bar.
-            },
+            onProgress: (int progress) {},
             onPageStarted: (String url) {},
             onPageFinished: (String url) {},
             onHttpError: (HttpResponseError error) {},

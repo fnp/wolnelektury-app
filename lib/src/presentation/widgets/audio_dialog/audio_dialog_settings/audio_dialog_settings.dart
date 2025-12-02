@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_settings/audio_dialog_settings_read_here.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_settings/audio_dialog_settings_sleep_slider.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_settings/audio_dialog_settings_speed_selector.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
@@ -24,7 +25,7 @@ class AudioDialogSettings extends StatelessWidget {
             duration: const Duration(milliseconds: 500),
             isChildVisible: state.isSettingsOpened,
             child: SizedBox(
-              height: MediaQuery.sizeOf(context).height / 4,
+              height: MediaQuery.sizeOf(context).height / 3,
               child: const Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: Dimensions.modalsPadding,
@@ -37,8 +38,8 @@ class AudioDialogSettings extends StatelessWidget {
                   children: [
                     AudioDialogSettingsSpeedSelector(),
                     AudioDialogSettingsSleepSlider(),
-                    // todo to chyba niepotrzebne?
                     // AudioDialogSettingsPartSelector(),
+                    AudioDialogSettingsReadHere(),
                   ],
                 ),
               ),

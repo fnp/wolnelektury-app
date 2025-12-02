@@ -28,56 +28,58 @@ class SocialsBottomSheet extends StatelessWidget {
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            shape: const RoundedRectangleBorder(borderRadius: borderRadius),
-            leading: Image.asset(Images.facebook, width: 24, height: 24),
-            title: Text(
-              LocaleKeys.settings_social_fb.tr(),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              shape: const RoundedRectangleBorder(borderRadius: borderRadius),
+              leading: Image.asset(Images.facebook, width: 24, height: 24),
+              title: Text(
+                LocaleKeys.settings_social_fb.tr(),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
+              onTap: () {
+                _launchInBrowser(
+                  Uri.parse('https://www.facebook.com/wolnelektury'),
+                );
+              },
             ),
-            onTap: () {
-              _launchInBrowser(
-                Uri.parse('https://www.facebook.com/wolnelektury'),
-              );
-            },
-          ),
-          ListTile(
-            shape: const RoundedRectangleBorder(borderRadius: borderRadius),
-            leading: Image.asset(Images.instagram, width: 24, height: 24),
-            title: Text(
-              LocaleKeys.settings_social_ig.tr(),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+            ListTile(
+              shape: const RoundedRectangleBorder(borderRadius: borderRadius),
+              leading: Image.asset(Images.instagram, width: 24, height: 24),
+              title: Text(
+                LocaleKeys.settings_social_ig.tr(),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
+              onTap: () {
+                _launchInBrowser(
+                  Uri.parse('https://www.instagram.com/wolnelektury/'),
+                );
+              },
             ),
-            onTap: () {
-              _launchInBrowser(
-                Uri.parse('https://www.instagram.com/wolnelektury/'),
-              );
-            },
-          ),
-          ListTile(
-            shape: const RoundedRectangleBorder(borderRadius: borderRadius),
-            leading: Image.asset(Images.youtube, width: 24, height: 24),
-            title: Text(
-              LocaleKeys.settings_social_yt.tr(),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+            ListTile(
+              shape: const RoundedRectangleBorder(borderRadius: borderRadius),
+              leading: Image.asset(Images.youtube, width: 24, height: 24),
+              title: Text(
+                LocaleKeys.settings_social_yt.tr(),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
+              onTap: () {
+                _launchInBrowser(
+                  Uri.parse('https://www.youtube.com/@WolneLekturyYT'),
+                );
+              },
             ),
-            onTap: () {
-              _launchInBrowser(
-                Uri.parse('https://www.youtube.com/@WolneLekturyYT'),
-              );
-            },
-          ),
-          const SizedBox(height: Dimensions.spacer),
-        ],
+            const SizedBox(height: Dimensions.spacer),
+          ],
+        ),
       ),
     );
   }

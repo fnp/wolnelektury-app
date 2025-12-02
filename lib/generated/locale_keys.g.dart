@@ -23,6 +23,8 @@ abstract class  LocaleKeys {
   static const reading_sheet_bookmark_adding = 'reading.sheet.bookmark_adding';
   static const reading_sheet_bookmark_edit = 'reading.sheet.bookmark_edit';
   static const reading_sheet_bookmark_editing = 'reading.sheet.bookmark_editing';
+  static const reading_sheet_listen = 'reading.sheet.listen';
+  static const reading_sheet_share = 'reading.sheet.share';
   static const reading_sheet = 'reading.sheet';
   static const reading_snackbar_bookmark_added_success = 'reading.snackbar.bookmark_added_success';
   static const reading_snackbar_bookmark_edited_success = 'reading.snackbar.bookmark_edited_success';
@@ -108,6 +110,8 @@ abstract class  LocaleKeys {
   static const audio_dialog_settings_speed_selector = 'audio_dialog.settings.speed_selector';
   static const audio_dialog_settings_part_selector = 'audio_dialog.settings.part_selector';
   static const audio_dialog_settings_part_selector_specific = 'audio_dialog.settings.part_selector_specific';
+  static const audio_dialog_settings_read_here_title = 'audio_dialog.settings.read_here_title';
+  static const audio_dialog_settings_read_here_button = 'audio_dialog.settings.read_here_button';
   static const audio_dialog_settings = 'audio_dialog.settings';
   static const audio_dialog = 'audio_dialog';
   static const account_title = 'account.title';
@@ -152,6 +156,8 @@ abstract class  LocaleKeys {
   static const book_lists_sheet_delete = 'book_lists.sheet.delete';
   static const book_lists_sheet = 'book_lists.sheet';
   static const book_lists = 'book_lists';
+  static const settings_sponsors_title = 'settings.sponsors.title';
+  static const settings_sponsors = 'settings.sponsors';
   static const settings_social_title = 'settings.social.title';
   static const settings_social_ig = 'settings.social.ig';
   static const settings_social_fb = 'settings.social.fb';

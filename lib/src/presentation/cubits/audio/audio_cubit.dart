@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/data/audiobook_repository.dart';
+import 'package:wolnelektury/src/data/books_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/domain/book_text_audio_sync_model.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/presentation/enums/audio_player_speed_enum.dart';
 import 'package:wolnelektury/src/utils/audio/custom_audio_session.dart';
@@ -24,9 +27,13 @@ part 'audio_state.dart';
 class AudioCubit extends SafeCubit<AudioState> {
   final AudiobookRepository _audiobookRepository;
   final ProgressRepository _progressRepository;
+  final BooksRepository _booksRepository;
 
-  AudioCubit(this._audiobookRepository, this._progressRepository)
-    : super(const AudioState());
+  AudioCubit(
+    this._audiobookRepository,
+    this._progressRepository,
+    this._booksRepository,
+  ) : super(const AudioState());
 
   /// Timer for sleep functionality (stops playback after specified duration)
   Timer? _sleepTimer;
@@ -101,6 +108,7 @@ class AudioCubit extends SafeCubit<AudioState> {
     if (isSameAudiobookInitialized) {
       // Book already selected, check if we need to set progress
       await _getAndSetProgress(targetTimestamp: targetTimestamp);
+      await _getTextAudioSyncData(book.slug);
 
       // Determine if we need to reload due to online/offline mode change
       final modeChanged =
@@ -125,8 +133,9 @@ class AudioCubit extends SafeCubit<AudioState> {
     );
 
     audiobookResponse.handle(
-      success: (data, pagination) {
+      success: (data, pagination) async {
         // Successfully loaded audiobook parts
+        await _getTextAudioSyncData(book.slug);
         emit(
           state.copyWith(
             audiobook: AudiobookModel.create(parts: data),
@@ -368,6 +377,21 @@ class AudioCubit extends SafeCubit<AudioState> {
         ),
       );
     }
+  }
+
+  /// Fetches text-to-audio synchronization data for the book.
+  Future<void> _getTextAudioSyncData(String slug) async {
+    final audioSyncData = await _booksRepository.getBookTextAudioSync(
+      slug: slug,
+    );
+    audioSyncData.handle(
+      success: (data, _) {
+        emit(state.copyWith(textSyncPairs: data));
+      },
+      failure: (_) {
+        emit(state.copyWith(textSyncPairs: []));
+      },
+    );
   }
 
   /// Prepares the audio playlist for playback
