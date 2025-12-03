@@ -187,7 +187,10 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       await Future.delayed(const Duration(milliseconds: 500));
       itemScrollController
           .scrollTo(
-            index: foundIndex,
+            // + 1 because of the header element at the beggining
+            index: foundIndex + 1,
+            // This makes a little space above the element
+            alignment: 0.1,
             duration: const Duration(milliseconds: 500),
             curve: defaultCurve,
           )
