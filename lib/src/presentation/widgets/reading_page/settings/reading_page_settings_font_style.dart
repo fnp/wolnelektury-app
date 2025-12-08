@@ -9,8 +9,8 @@ import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
-class ReadingPageSettingsFontStyle extends StatelessWidget {
-  const ReadingPageSettingsFontStyle({super.key});
+class ReadingPageSettingsSheetFontStyle extends StatelessWidget {
+  const ReadingPageSettingsSheetFontStyle({super.key});
 
   @override
   Widget build(BuildContext context) {

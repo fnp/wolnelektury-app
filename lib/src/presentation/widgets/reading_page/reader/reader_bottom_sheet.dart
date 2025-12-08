@@ -3,6 +3,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 enum ReaderBottomSheetType { reference, footnote }
@@ -53,6 +55,7 @@ class ReaderBottomSheet extends StatefulWidget {
 
 class _ReaderBottomSheetState extends State<ReaderBottomSheet> {
   WebViewController? controller;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +76,16 @@ class _ReaderBottomSheetState extends State<ReaderBottomSheet> {
         ..setNavigationDelegate(
           NavigationDelegate(
             onProgress: (int progress) {},
-            onPageStarted: (String url) {},
-            onPageFinished: (String url) {},
+            onPageStarted: (String url) {
+              setState(() {
+                isLoading = true;
+              });
+            },
+            onPageFinished: (String url) {
+              setState(() {
+                isLoading = false;
+              });
+            },
             onHttpError: (HttpResponseError error) {},
             onWebResourceError: (WebResourceError error) {},
             onNavigationRequest: (NavigationRequest request) {
@@ -82,6 +93,7 @@ class _ReaderBottomSheetState extends State<ReaderBottomSheet> {
             },
           ),
         )
+        ..setBackgroundColor(Colors.transparent)
         ..loadRequest(Uri.parse(link));
 
       child = ConstrainedBox(
@@ -90,39 +102,58 @@ class _ReaderBottomSheetState extends State<ReaderBottomSheet> {
           maxHeight: MediaQuery.of(context).size.height * 0.5,
         ),
         child: Column(
-          children: [Expanded(child: WebViewWidget(controller: controller!))],
+          children: [
+            Expanded(
+              child: isLoading
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: CustomLoader(
+                            color: CustomColors.primaryYellowColor,
+                          ),
+                        ),
+                      ],
+                    )
+                  : WebViewWidget(controller: controller!),
+            ),
+          ],
         ),
       );
     }
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        minHeight: 150,
-        maxHeight: MediaQuery.of(context).size.height * 0.5,
-      ),
-      child:
-          child ??
-          Padding(
-            padding: const EdgeInsets.all(Dimensions.spacer),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text.rich(
-                    TextSpan(
-                      children: buildReaderBase(
-                        theme: Theme.of(context),
-                        element: widget.linkContent,
-                        parent: widget.element,
-                        fontFamily: widget.fontFamily,
-                        fontSize: widget.fontSize,
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: 150,
+          maxHeight: MediaQuery.of(context).size.height * 0.5,
+        ),
+        child:
+            child ??
+            Padding(
+              padding: const EdgeInsets.all(Dimensions.spacer),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text.rich(
+                      TextSpan(
+                        children: buildReaderBase(
+                          theme: Theme.of(context),
+                          element: widget.linkContent,
+                          parent: widget.element,
+                          fontFamily: widget.fontFamily,
+                          fontSize: widget.fontSize,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+      ),
     );
   }
 }

@@ -57,3 +57,5 @@ const filtersPageConfig = _RouteConfig(
 );
 
 const notFoundPageConfig = _RouteConfig(name: 'notFound', path: '/notFound');
+
+const splashPageConfig = _RouteConfig(name: 'splashPage', path: '/splashPage');

@@ -11,33 +11,35 @@ class CatalogueSorting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BooksCubit, BooksState>(
-      buildWhen: (p, c) => p.sort != c.sort,
-      builder: (context, state) {
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return CustomDropdown<SortEnum>(
-              highlightButton: state.isAnySortSelected,
-              width: constraints.maxWidth,
-              items: SortEnum.values
-                  .map(
-                    (e) => CustomDropdownElement(
-                      title: e.name.tr(),
-                      element: e,
-                      isSelected: e == state.sort,
-                      icon: e.icon,
-                    ),
-                  )
-                  .toList(),
-              onSelected: (element) {
-                BlocProvider.of<BooksCubit>(context).changeSort(element);
-              },
-              icon: const Icon(Icons.swap_vert),
-              label: LocaleKeys.common_icon_button_sort.tr(),
-            );
-          },
-        );
-      },
+    return ExcludeSemantics(
+      child: BlocBuilder<BooksCubit, BooksState>(
+        buildWhen: (p, c) => p.sort != c.sort,
+        builder: (context, state) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return CustomDropdown<SortEnum>(
+                highlightButton: state.isAnySortSelected,
+                width: constraints.maxWidth,
+                items: SortEnum.values
+                    .map(
+                      (e) => CustomDropdownElement(
+                        title: e.name.tr(),
+                        element: e,
+                        isSelected: e == state.sort,
+                        icon: e.icon,
+                      ),
+                    )
+                    .toList(),
+                onSelected: (element) {
+                  BlocProvider.of<BooksCubit>(context).changeSort(element);
+                },
+                icon: const Icon(Icons.swap_vert),
+                label: LocaleKeys.common_icon_button_sort.tr(),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

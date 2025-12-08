@@ -20,66 +20,70 @@ class SponsorsBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Column(
-          spacing: Dimensions.veryLargePadding,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: CustomColors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.mediumPadding),
-                child: SizedBox(
-                  height: 60,
-                  child: Row(
-                    spacing: Dimensions.veryLargePadding,
-                    children: [
-                      Expanded(
-                        child: SvgPicture.asset(
-                          Images.mkidn,
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                      Expanded(
-                        child: SvgPicture.asset(
-                          Images.pfron,
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                    ],
-                  ),
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            spacing: Dimensions.veryLargePadding,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: CustomColors.white,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              ),
-            ),
-            Row(
-              spacing: Dimensions.veryLargePadding,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    LocaleKeys.login_info_mkidn.tr(),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
+                child: Padding(
+                  padding: const EdgeInsets.all(Dimensions.mediumPadding),
+                  child: SizedBox(
+                    height: 60,
+                    child: Row(
+                      spacing: Dimensions.veryLargePadding,
+                      children: [
+                        Expanded(
+                          child: SvgPicture.asset(
+                            Images.mkidn,
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        Expanded(
+                          child: SvgPicture.asset(
+                            Images.pfron,
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    LocaleKeys.login_info_pfron.tr(),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
+              ),
+              Row(
+                spacing: Dimensions.veryLargePadding,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      LocaleKeys.login_info_mkidn.tr(),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: Dimensions.spacer),
-          ],
+                  Expanded(
+                    child: Text(
+                      LocaleKeys.login_info_pfron.tr(),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: Dimensions.spacer),
+            ],
+          ),
         ),
       ),
     );

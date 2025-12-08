@@ -17,6 +17,7 @@ import 'package:wolnelektury/src/presentation/pages/not_found_page.dart';
 import 'package:wolnelektury/src/presentation/pages/reading_page.dart';
 import 'package:wolnelektury/src/presentation/pages/search_page.dart';
 import 'package:wolnelektury/src/presentation/pages/settings_page.dart';
+import 'package:wolnelektury/src/presentation/pages/splashscreen.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/my_library_page.dart';
 
 extension GoRouterX on GoRouter {
@@ -43,8 +44,14 @@ final mainPathsOrder = [
 
 final GoRouter router = GoRouter(
   navigatorKey: routerNavigationKey,
-  initialLocation: cataloguePageConfig.path,
+  initialLocation: splashPageConfig.path,
   routes: [
+    GoRoute(
+      path: splashPageConfig.path,
+      builder: (context, state) {
+        return const SplashScreen();
+      },
+    ),
     ShellRoute(
       navigatorKey: dashboardNavigationKey,
       builder: (context, state, child) => DashboardWrapper(child: child),

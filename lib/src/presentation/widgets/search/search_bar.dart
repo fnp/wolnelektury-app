@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -52,6 +54,8 @@ class SearchBarState extends State<SearchBar> {
         spacing: Dimensions.mediumPadding,
         children: [
           CustomButton(
+            semanticLabel: LocaleKeys.common_semantic_back_to_previous_page
+                .tr(),
             icon: Icons.arrow_back,
             iconColor: theme.colorScheme.onSurface,
             backgroundColor: theme.colorScheme.tertiaryContainer,
@@ -122,6 +126,8 @@ class SearchBarState extends State<SearchBar> {
                           ),
                         )
                       : CustomButton(
+                          semanticLabel: LocaleKeys.common_semantic_clear_search
+                              .tr(),
                           key: const ValueKey('clear_search'),
                           icon: Icons.close,
                           onPressed: () {

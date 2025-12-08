@@ -128,7 +128,7 @@
             "part_selector": "odtwarzaj do końca",
             "part_selector_specific": "rozdziału {part}",
             "read_here_title": "czytaj od bieżącej pozycji",
-            "read_here_button": "Przejdź"
+            "read_here_button": "Do tekstu"
         }
     },
     "account": {
@@ -160,7 +160,8 @@
             "sans": "krój bezszeryfowy",
             "serif": "krój szeryfowy",
             "dark_mode": "Tryb ciemny",
-            "text_sync": "Synchronizacja z audiobookiem"
+            "text_sync": "Synchronizacja z audiobookiem",
+            "open_reading_settings": "Otwórz ustawienia czytania"
         }
     },
     "book": {
@@ -260,6 +261,47 @@
             "not_logged": "Zaloguj się, aby skorzystać z tej funkcji",
             "revert": "Cofnij",
             "error": "Coś poszło nie tak, spróbuj ponownie"
+        },
+        "semantic": {
+            "share_book": "Udostępnij książkę",
+            "delete_book": "Usuń książkę",
+            "close_audio": "Zamknij audio",
+            "close_audio_dialog": "Zamknij okno dialogowe audio",
+            "add_audio_bookmark": "Dodaj zakładkę do audio",
+            "rewind_15s": "Cofnij 15 sekund",
+            "play_pause": "Odtwórz / Pauza",
+            "forward_15s": "Przewiń do przodu o 15 sekund",
+            "open_audio_settings": "Otwórz ustawienia audio",
+            "close_book_lists": "Zamknij okno list książek",
+            "back_to_previous_page": "Wróć do poprzedniej strony",
+            "clear_search": "Wyczyść wyszukiwanie",
+            "delete_last_searched": "Usuń ostatnio wyszukiwane hasło {query}",
+            "files_corrupted": "Pliki książki są uszkodzone",
+            "book_downloaded": "Książka została pobrana",
+            "cancel_download": "Anuluj pobieranie",
+            "download_book": "Pobierz książkę",
+            "delete_or_go_back": "Usuń zakładkę",
+            "go_back_without_saving": "Wróć bez zapisywania zakładki",
+            "note": "Notatka",
+            "save_bookmark_changes": "Zapisz zmiany w zakładce",
+            "create_bookmark": "Utwórz zakładkę",
+            "delete_bookmark": "Usuń zakładkę",
+            "share_bookmark": "Udostępnij zakładkę",
+            "remove_book_from_list": "Usuń książkę z listy {listName}",
+            "add_book_to_list": "Dodaj książkę do listy {listName}",
+            "close_dialog": "Zamknij dialog",
+            "share_author": "Udostępnij autora",
+            "close_author_dialog": "Zamknij okno dialogowe autora",
+            "go_back": "Cofnij",
+            "syncing_data": "Synchronizuję dane",
+            "no_internet_connection": "Brak połączenia z internetem",
+            "search": "Szukaj",
+            "settings": "Ustawienia",
+            "edit_list": "Edytuj listę {listName}",
+            "delete_list": "Usuń listę {listName}",
+            "share_book_list": "Udostępnij listę książek",
+            "remove_from_edited_list": "Usuń książkę z edytowanej listy",
+            "add_to_edited_list": "Dodaj książkę do edytowanej listy"
         }
     }
 }

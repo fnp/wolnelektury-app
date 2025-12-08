@@ -198,6 +198,8 @@ class _HintElement extends StatelessWidget {
                 BookOverviewWidgetListCreationModeButton(hint.slug!),
               if (fromLastSearched && !showPlusButton)
                 CustomButton(
+                  semanticLabel: LocaleKeys.common_semantic_delete_last_searched
+                      .tr(namedArgs: {'query': hint.label}),
                   onPressed: () {
                     context.read<SearchCubit>().deleteLastSearchedHint(
                       hint.label,

@@ -69,7 +69,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     bool isCurrentlyPlayingAudioOfThisBook = false,
     double scaleFactor = 1,
   }) async {
-    _fontSizeMultiplier = _fontSizeMultiplier * scaleFactor;
+    _fontSizeMultiplier = 9 * scaleFactor;
     emit(state.copyWith(isJsonLoading: true, isJsonLoadingError: false));
     final settings = await _settingsStorage.readReadingSettings();
     final bookJson = await _booksRepository.getBookJson(
@@ -301,9 +301,6 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       stopHighlighting();
       return;
     }
-    print(
-      'Highlighting for ${pair.id} in reading page cubit for timestamp $audioTimestamp',
-    );
     _scrollToAnchor(
       anchor: pair.id,
       itemScrollController: itemScrollController,

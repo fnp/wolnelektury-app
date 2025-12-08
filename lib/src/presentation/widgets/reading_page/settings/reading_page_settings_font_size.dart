@@ -4,10 +4,10 @@ import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_c
 import 'package:wolnelektury/src/presentation/widgets/common/custom_slider.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
-class ReadingPageSettingsFontSize extends StatelessWidget {
+class ReadingPageSettingsSheetFontSize extends StatelessWidget {
   static const double _minThreshold = 0.08;
   static const double _maxThreshold = 0.9;
-  const ReadingPageSettingsFontSize({super.key});
+  const ReadingPageSettingsSheetFontSize({super.key});
 
   @override
   Widget build(BuildContext context) {

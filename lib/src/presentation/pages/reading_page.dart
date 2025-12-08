@@ -16,7 +16,7 @@ import 'package:wolnelektury/src/presentation/widgets/common/button/custom_butto
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_bookmark_listener.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_list_view_builder.dart';
 import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_page_progress_indicator.dart';
-import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings.dart';
+import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_sheet.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -148,11 +148,13 @@ class _Body extends StatelessWidget {
               bottom: Dimensions.modalsPadding,
               right: Dimensions.modalsPadding,
               child: CustomButton(
+                semanticLabel: LocaleKeys.reader_settings_open_reading_settings
+                    .tr(),
                 size: Dimensions.elementHeight,
                 backgroundColor: CustomColors.white,
                 icon: Icons.tune,
                 onPressed: () {
-                  ReadingPageSettings.show(
+                  ReadingPageSettingsSheet.show(
                     context: context,
                     slug: cubit.state.currentSlug!,
                     onClosed: () {

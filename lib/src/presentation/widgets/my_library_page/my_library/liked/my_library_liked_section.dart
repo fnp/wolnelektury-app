@@ -42,6 +42,9 @@ class MyLibraryLikedSection extends StatelessWidget {
                     onTap: () {
                       router.goNamed(cataloguePageConfig.name);
                     },
+                    onRefresh: () {
+                      context.read<LikesCubit>().init();
+                    },
                   );
                 }
                 return CustomScrollPage(

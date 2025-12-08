@@ -67,7 +67,10 @@ class MyLibraryBookmarkBook extends StatelessWidget {
       },
       child: BlocBuilder<SingleBookCubit, SingleBookState>(
         buildWhen: (p, c) {
-          return p.book != c.book || p.isLoading != c.isLoading;
+          return p.book != c.book ||
+              p.isLoading != c.isLoading ||
+              p.isAudiobookDownloaded != c.isAudiobookDownloaded ||
+              p.isReaderDownloaded != c.isReaderDownloaded;
         },
         builder: (context, state) {
           final effectiveLoading = isLoading || state.isLoading;

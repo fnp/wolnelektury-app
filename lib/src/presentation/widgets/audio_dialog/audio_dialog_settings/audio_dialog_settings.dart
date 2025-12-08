@@ -24,24 +24,22 @@ class AudioDialogSettings extends StatelessWidget {
           return AnimatedBoxFade(
             duration: const Duration(milliseconds: 500),
             isChildVisible: state.isSettingsOpened,
-            child: SizedBox(
-              height: MediaQuery.sizeOf(context).height / 3,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Dimensions.modalsPadding,
-                  vertical: Dimensions.veryLargePadding,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AudioDialogSettingsSpeedSelector(),
-                    AudioDialogSettingsSleepSlider(),
-                    // AudioDialogSettingsPartSelector(),
-                    AudioDialogSettingsReadHere(),
-                  ],
-                ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Dimensions.modalsPadding,
+                vertical: Dimensions.veryLargePadding,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: Dimensions.largePadding,
+                children: [
+                  AudioDialogSettingsSpeedSelector(),
+                  AudioDialogSettingsSleepSlider(),
+                  // AudioDialogSettingsPartSelector(),
+                  AudioDialogSettingsReadHere(),
+                ],
               ),
             ),
           );

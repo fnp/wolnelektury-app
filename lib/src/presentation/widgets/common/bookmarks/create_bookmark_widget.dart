@@ -72,6 +72,10 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomButton(
+                    semanticLabel: isEditing
+                        ? LocaleKeys.common_semantic_delete_or_go_back.tr()
+                        : LocaleKeys.common_semantic_go_back_without_saving
+                              .tr(),
                     icon: isEditing
                         ? CustomIcons.delete_forever
                         : Icons.arrow_back,
@@ -127,10 +131,11 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                         minLines: widget.lines,
                       ),
                     ),
-                    const Positioned(
+                    Positioned(
                       top: 0,
                       right: 0,
                       child: CustomButton(
+                        semanticLabel: LocaleKeys.common_semantic_note.tr(),
                         icon: CustomIcons.stylus_note,
                         backgroundColor: CustomColors.white,
                       ),
@@ -139,6 +144,10 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                       bottom: 0,
                       right: 0,
                       child: CustomButton(
+                        semanticLabel: isEditing
+                            ? LocaleKeys.common_semantic_save_bookmark_changes
+                                  .tr()
+                            : LocaleKeys.common_semantic_create_bookmark.tr(),
                         icon: Icons.check,
                         backgroundColor: CustomColors.green,
                         onPressed: () {

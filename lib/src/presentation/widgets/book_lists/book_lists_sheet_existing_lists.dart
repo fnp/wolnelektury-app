@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
@@ -144,12 +146,18 @@ class _Element extends StatelessWidget {
                     switchOutCurve: defaultCurve,
                     child: isBookInList
                         ? CustomButton(
+                            semanticLabel: LocaleKeys
+                                .common_semantic_remove_book_from_list
+                                .tr(namedArgs: {'listName': listName}),
                             key: ValueKey('remove_$listName'),
                             backgroundColor: CustomColors.white,
                             icon: CustomIcons.delete_forever,
                             onPressed: onRemove,
                           )
                         : CustomButton(
+                            semanticLabel: LocaleKeys
+                                .common_semantic_add_book_to_list
+                                .tr(namedArgs: {'listName': listName}),
                             key: ValueKey('add_$listName'),
                             backgroundColor: CustomColors.white,
                             icon: CustomIcons.add,

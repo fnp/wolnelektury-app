@@ -22,6 +22,7 @@ class AudioDialogTopBar extends StatelessWidget {
           buildWhen: (p, c) => p.isPreparingPlaylist != c.isPreparingPlaylist,
           builder: (context, state) {
             return CustomButton(
+              semanticLabel: LocaleKeys.common_semantic_close_audio.tr(),
               backgroundColor: CustomColors.red,
               iconColor: CustomColors.white,
               icon: CustomIcons.close,
@@ -72,6 +73,7 @@ class AudioDialogTopBar extends StatelessWidget {
         ),
         const Spacer(),
         CustomButton(
+          semanticLabel: LocaleKeys.common_semantic_close_audio_dialog.tr(),
           backgroundColor: CustomColors.black,
           iconColor: CustomColors.white,
           icon: CustomIcons.hide,

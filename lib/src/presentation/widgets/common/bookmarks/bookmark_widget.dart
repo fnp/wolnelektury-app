@@ -120,32 +120,38 @@ class _Body extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            book.title,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: CustomColors.black,
+                    child: Semantics(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Semantics(
+                              child: Text(
+                                book.title,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: CustomColors.black,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        Flexible(
-                          child: Text(
-                            book.authors.map((e) => e.name).join(', '),
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: CustomColors.black,
+                          Flexible(
+                            child: Semantics(
+                              child: Text(
+                                book.authors.map((e) => e.name).join(', '),
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: CustomColors.black,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   if (isDeletable)
@@ -154,6 +160,9 @@ class _Body extends StatelessWidget {
                       spacing: Dimensions.smallPadding,
                       children: [
                         CustomButton(
+                          semanticLabel: LocaleKeys
+                              .common_semantic_delete_bookmark
+                              .tr(),
                           onPressed: () {
                             bookmarkCubit.deleteBookmark(bookmark: bookmark);
                             CustomSnackbar.success(
@@ -217,7 +226,7 @@ class _Body extends StatelessWidget {
                       right: Dimensions.mediumPadding,
                       left: Dimensions.veryLargePadding,
                     ),
-                    child: _Note(note: bookmark.note),
+                    child: ExcludeSemantics(child: _Note(note: bookmark.note)),
                   ),
                 ),
               ),
@@ -231,69 +240,93 @@ class _Body extends StatelessWidget {
                   final isListeningAvailable =
                       bookmark.audioTimestamp != null &&
                       (hasConnection || isAudioAvailableOffline);
-                  return Row(
-                    spacing: Dimensions.mediumPadding,
-                    children: [
-                      Flexible(
-                        child: Opacity(
-                          opacity: isReadingAvailable ? 1.0 : 0.5,
-                          child: IgnorePointer(
-                            ignoring: !isReadingAvailable,
-                            child: TextButtonWithIcon(
-                              onPressed: () {
-                                if (messengerKey != null) {
-                                  Navigator.of(context).pop();
-                                }
-                                router.pushNamed(
-                                  readingPageConfigWithAnchor.name,
-                                  extra: book,
-                                  pathParameters: {
-                                    'slug': book.slug,
-                                    if (bookmark.anchor != null)
-                                      'anchor': bookmark.anchor!,
-                                  },
-                                );
-                              },
-                              nonActiveText: LocaleKeys.common_icon_button_read
-                                  .tr(),
-                              nonActiveIcon: CustomIcons.book_5,
+                  return Semantics(
+                    container: true,
+                    child: Row(
+                      spacing: Dimensions.mediumPadding,
+                      children: [
+                        Flexible(
+                          child: Semantics(
+                            button: true,
+                            enabled: isReadingAvailable,
+                            label: LocaleKeys.common_icon_button_read.tr(),
+                            child: Opacity(
+                              opacity: isReadingAvailable ? 1.0 : 0.5,
+                              child: IgnorePointer(
+                                ignoring: !isReadingAvailable,
+                                child: ExcludeSemantics(
+                                  child: TextButtonWithIcon(
+                                    onPressed: () {
+                                      if (messengerKey != null) {
+                                        Navigator.of(context).pop();
+                                      }
+                                      router.pushNamed(
+                                        readingPageConfigWithAnchor.name,
+                                        extra: book,
+                                        pathParameters: {
+                                          'slug': book.slug,
+                                          if (bookmark.anchor != null)
+                                            'anchor': bookmark.anchor!,
+                                        },
+                                      );
+                                    },
+                                    nonActiveText: LocaleKeys
+                                        .common_icon_button_read
+                                        .tr(),
+                                    nonActiveIcon: CustomIcons.book_5,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Flexible(
-                        child: Opacity(
-                          opacity: isListeningAvailable ? 1.0 : 0.5,
-                          child: IgnorePointer(
-                            ignoring: !isListeningAvailable,
-                            child: BlocBuilder<AudioCubit, AudioState>(
-                              buildWhen: (p, c) => p.isPlaying != c.isPlaying,
-                              builder: (context, state) {
-                                return TextButtonWithIcon(
-                                  onPressed: () {
-                                    onListen?.call(
-                                      bookmark.audioTimestamp,
-                                      state.isPlaying,
+                        Flexible(
+                          child: Semantics(
+                            button: true,
+                            enabled: isListeningAvailable,
+                            label: LocaleKeys.common_icon_button_listen.tr(),
+                            child: Opacity(
+                              opacity: isListeningAvailable ? 1.0 : 0.5,
+                              child: IgnorePointer(
+                                ignoring: !isListeningAvailable,
+                                child: BlocBuilder<AudioCubit, AudioState>(
+                                  buildWhen: (p, c) =>
+                                      p.isPlaying != c.isPlaying,
+                                  builder: (context, state) {
+                                    return ExcludeSemantics(
+                                      child: TextButtonWithIcon(
+                                        onPressed: () {
+                                          onListen?.call(
+                                            bookmark.audioTimestamp,
+                                            state.isPlaying,
+                                          );
+                                        },
+                                        nonActiveText: LocaleKeys
+                                            .common_icon_button_listen
+                                            .tr(),
+                                        nonActiveIcon: CustomIcons.headphones,
+                                      ),
                                     );
                                   },
-                                  nonActiveText: LocaleKeys
-                                      .common_icon_button_listen
-                                      .tr(),
-                                  nonActiveIcon: CustomIcons.headphones,
-                                );
-                              },
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      CustomButton(
-                        onPressed: () {
-                          ShareUtils.shareBookmark(bookmark);
-                        },
-                        icon: CustomIcons.ios_share,
-                        iconColor: CustomColors.black,
-                      ),
-                    ],
+                        ExcludeSemantics(
+                          child: CustomButton(
+                            semanticLabel: LocaleKeys
+                                .common_semantic_share_bookmark
+                                .tr(),
+                            onPressed: () {
+                              ShareUtils.shareBookmark(bookmark);
+                            },
+                            icon: CustomIcons.ios_share,
+                            iconColor: CustomColors.black,
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),

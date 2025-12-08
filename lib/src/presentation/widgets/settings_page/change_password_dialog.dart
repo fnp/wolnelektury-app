@@ -115,144 +115,148 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
     return DialogWrapper(
       title: LocaleKeys.settings_change_password_title_alt.tr().toUpperCase(),
       icon: Icons.lock,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  LocaleKeys.settings_change_password_content.tr(),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    LocaleKeys.settings_change_password_content.tr(),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: Dimensions.spacer, width: double.infinity),
+              ],
+            ),
+            const SizedBox(height: Dimensions.spacer, width: double.infinity),
 
-          // Current password
-          SizedBox(
-            height: Dimensions.elementHeight,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              obscureText: true,
-              style: theme.textTheme.bodyMedium,
-              controller: _currentPasswordController,
-              decoration: InputDecoration(
-                hintText: LocaleKeys.settings_change_password_current.tr(),
-                fillColor: theme.colorScheme.primaryFixed,
+            // Current password
+            SizedBox(
+              height: Dimensions.elementHeight,
+              child: TextField(
+                textInputAction: TextInputAction.next,
+                obscureText: true,
+                style: theme.textTheme.bodyMedium,
+                controller: _currentPasswordController,
+                decoration: InputDecoration(
+                  hintText: LocaleKeys.settings_change_password_current.tr(),
+                  fillColor: theme.colorScheme.primaryFixed,
+                ),
+                onChanged: (value) {
+                  if (showCurrentPasswordError) validate();
+                },
               ),
-              onChanged: (value) {
-                if (showCurrentPasswordError) validate();
-              },
             ),
-          ),
-          AnimatedBoxSize(
-            isChildVisible: showCurrentPasswordError,
-            child: TextFieldValidationError(
-              message: LocaleKeys.settings_change_password_current_validation
-                  .tr(),
-            ),
-          ),
-          const SizedBox(height: Dimensions.smallPadding),
-
-          // New password
-          SizedBox(
-            height: Dimensions.elementHeight,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              obscureText: true,
-              style: theme.textTheme.bodyMedium,
-              controller: _newPasswordController,
-              decoration: InputDecoration(
-                hintText: LocaleKeys.settings_change_password_new.tr(),
-                fillColor: theme.colorScheme.primaryFixed,
+            AnimatedBoxSize(
+              isChildVisible: showCurrentPasswordError,
+              child: TextFieldValidationError(
+                message: LocaleKeys.settings_change_password_current_validation
+                    .tr(),
               ),
-              onChanged: (value) {
-                if (showNewPasswordError) validate();
-              },
             ),
-          ),
-          AnimatedBoxSize(
-            isChildVisible: showNewPasswordError,
-            child: TextFieldValidationError(
-              message: LocaleKeys.settings_change_password_new_validation.tr(),
-            ),
-          ),
-          const SizedBox(height: Dimensions.smallPadding),
+            const SizedBox(height: Dimensions.smallPadding),
 
-          // Repeat password
-          SizedBox(
-            height: Dimensions.elementHeight,
-            child: TextField(
-              textInputAction: TextInputAction.done,
-              obscureText: true,
-              style: theme.textTheme.bodyMedium,
-              controller: _repeatPasswordController,
-              decoration: InputDecoration(
-                hintText: LocaleKeys.settings_change_password_repeat.tr(),
-                fillColor: theme.colorScheme.primaryFixed,
+            // New password
+            SizedBox(
+              height: Dimensions.elementHeight,
+              child: TextField(
+                textInputAction: TextInputAction.next,
+                obscureText: true,
+                style: theme.textTheme.bodyMedium,
+                controller: _newPasswordController,
+                decoration: InputDecoration(
+                  hintText: LocaleKeys.settings_change_password_new.tr(),
+                  fillColor: theme.colorScheme.primaryFixed,
+                ),
+                onChanged: (value) {
+                  if (showNewPasswordError) validate();
+                },
               ),
-              onChanged: (value) {
-                if (showRepeatPasswordError) validate();
-              },
             ),
-          ),
-          AnimatedBoxSize(
-            isChildVisible: showRepeatPasswordError,
-            child: TextFieldValidationError(
-              message: LocaleKeys.settings_change_password_repeat_validation
-                  .tr(),
+            AnimatedBoxSize(
+              isChildVisible: showNewPasswordError,
+              child: TextFieldValidationError(
+                message: LocaleKeys.settings_change_password_new_validation
+                    .tr(),
+              ),
             ),
-          ),
-          const SizedBox(height: Dimensions.smallPadding),
+            const SizedBox(height: Dimensions.smallPadding),
 
-          Row(
-            children: [
-              Expanded(
-                child: BlocBuilder<SettingsCubit, SettingsState>(
-                  buildWhen: (p, c) {
-                    return p.isChangingPassword != c.isChangingPassword;
-                  },
-                  builder: (context, state) {
-                    return ElevatedButton(
-                      style: yellowElevatedButton,
-                      onPressed: () {
-                        validate();
-                        if (!showCurrentPasswordError &&
-                            !showNewPasswordError &&
-                            !showRepeatPasswordError) {
-                          context.read<SettingsCubit>().changePassword(
-                            newPassword: _newPasswordController.text.trim(),
-                            oldPassword: _currentPasswordController.text.trim(),
-                          );
-                        }
-                      },
-                      child: AnimatedBoxFade(
-                        isChildVisible: !state.isChangingPassword,
-                        duration: const Duration(milliseconds: 300),
-                        collapsedChild: const CustomLoader(
-                          size: 20,
-                          strokeWidth: 2,
-                        ),
-                        child: Text(
-                          LocaleKeys.settings_change_password_button.tr(),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
+            // Repeat password
+            SizedBox(
+              height: Dimensions.elementHeight,
+              child: TextField(
+                textInputAction: TextInputAction.done,
+                obscureText: true,
+                style: theme.textTheme.bodyMedium,
+                controller: _repeatPasswordController,
+                decoration: InputDecoration(
+                  hintText: LocaleKeys.settings_change_password_repeat.tr(),
+                  fillColor: theme.colorScheme.primaryFixed,
+                ),
+                onChanged: (value) {
+                  if (showRepeatPasswordError) validate();
+                },
+              ),
+            ),
+            AnimatedBoxSize(
+              isChildVisible: showRepeatPasswordError,
+              child: TextFieldValidationError(
+                message: LocaleKeys.settings_change_password_repeat_validation
+                    .tr(),
+              ),
+            ),
+            const SizedBox(height: Dimensions.smallPadding),
+
+            Row(
+              children: [
+                Expanded(
+                  child: BlocBuilder<SettingsCubit, SettingsState>(
+                    buildWhen: (p, c) {
+                      return p.isChangingPassword != c.isChangingPassword;
+                    },
+                    builder: (context, state) {
+                      return ElevatedButton(
+                        style: yellowElevatedButton,
+                        onPressed: () {
+                          validate();
+                          if (!showCurrentPasswordError &&
+                              !showNewPasswordError &&
+                              !showRepeatPasswordError) {
+                            context.read<SettingsCubit>().changePassword(
+                              newPassword: _newPasswordController.text.trim(),
+                              oldPassword: _currentPasswordController.text
+                                  .trim(),
+                            );
+                          }
+                        },
+                        child: AnimatedBoxFade(
+                          isChildVisible: !state.isChangingPassword,
+                          duration: const Duration(milliseconds: 300),
+                          collapsedChild: const CustomLoader(
+                            size: 20,
+                            strokeWidth: 2,
+                          ),
+                          child: Text(
+                            LocaleKeys.settings_change_password_button.tr(),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

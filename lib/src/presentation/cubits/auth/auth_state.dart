@@ -5,11 +5,15 @@ sealed class AuthState with _$AuthState {
   const factory AuthState({
     @Default(false) bool isLoading,
     @Default(false) bool isLoadingAgreements,
+
     bool? isLoginSuccess,
     bool? isRegisterSuccess,
     bool? isLoginSuccessFromRegisterFlow,
+
     UserModel? user,
     RegisterAgreementModel? agreements,
+
+    @Default(false) bool wasLoggedInWhileOnline,
 
     // UI
     @Default(false) bool shouldShowRegisterForm,

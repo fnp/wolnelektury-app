@@ -20,64 +20,67 @@ class AudioDialogBookmarks extends StatelessWidget {
     final audioCubit = BlocProvider.of<AudioCubit>(context);
     final bookmarksCubit = BlocProvider.of<BookmarksCubit>(context);
     final size = MediaQuery.of(context).size;
-    return BookmarkListener(
-      scaffoldMessengerKey: AudioDialog.messengerKey,
-      child: BlocBuilder<AudioCubit, AudioState>(
-        buildWhen: (p, c) => p.isBookmarksOpened != c.isBookmarksOpened,
-        builder: (context, state) {
-          return DecoratedBox(
-            decoration: BoxDecoration(
-              color: CustomColors.primaryYellowColor,
-              borderRadius: BorderRadius.circular(
-                Dimensions.modalsBorderRadius,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(Dimensions.modalsBorderRadius),
+      child: BookmarkListener(
+        scaffoldMessengerKey: AudioDialog.messengerKey,
+        child: BlocBuilder<AudioCubit, AudioState>(
+          buildWhen: (p, c) => p.isBookmarksOpened != c.isBookmarksOpened,
+          builder: (context, state) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: CustomColors.primaryYellowColor,
+                borderRadius: BorderRadius.circular(
+                  Dimensions.modalsBorderRadius,
+                ),
               ),
-            ),
-            child: AnimatedBoxFade(
-              duration: const Duration(milliseconds: 500),
-              collapsedChild: const SizedBox.shrink(),
-              isChildVisible: state.isBookmarksOpened,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  height: size.height * 0.66,
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      CreateBookmarkWidget(
-                        onCreate: (note) {
-                          if (state.book == null) return;
-                          final cubit = context.read<AudioCubit>();
-                          final currentPosition = cubit.state.statePosition;
-                          bookmarksCubit.createAudioBookmark(
-                            slug: cubit.state.book!.slug,
-                            timestamp: currentPosition,
-                            note: note,
-                          );
-                        },
-                        onDelete: () {},
-                        onUpdate: (_) {},
-                        onGoBack: () {
-                          audioCubit.toggleBookmarks(false);
-                        },
-                        autofocus: true,
-                        maxHeight: 180,
-                      ),
-                      const SizedBox(height: Dimensions.mediumPadding),
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.mediumPadding,
-                          ),
-                          child: _ListOfExistingBookmarks(),
+              child: AnimatedBoxFade(
+                duration: const Duration(milliseconds: 500),
+                collapsedChild: const SizedBox.shrink(),
+                isChildVisible: state.isBookmarksOpened,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    height: size.height * 0.66,
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        CreateBookmarkWidget(
+                          onCreate: (note) {
+                            if (state.book == null) return;
+                            final cubit = context.read<AudioCubit>();
+                            final currentPosition = cubit.state.statePosition;
+                            bookmarksCubit.createAudioBookmark(
+                              slug: cubit.state.book!.slug,
+                              timestamp: currentPosition,
+                              note: note,
+                            );
+                          },
+                          onDelete: () {},
+                          onUpdate: (_) {},
+                          onGoBack: () {
+                            audioCubit.toggleBookmarks(false);
+                          },
+                          autofocus: true,
+                          maxHeight: 180,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: Dimensions.mediumPadding),
+                        const Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.mediumPadding,
+                            ),
+                            child: _ListOfExistingBookmarks(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

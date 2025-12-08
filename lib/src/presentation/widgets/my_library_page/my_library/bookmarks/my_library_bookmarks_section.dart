@@ -19,6 +19,7 @@ class MyLibraryBookmarksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<BookmarksCubit>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Dimensions.mediumPadding),
       child: Column(
@@ -28,9 +29,11 @@ class MyLibraryBookmarksSection extends StatelessWidget {
           PageSubtitle(subtitle: MyLibraryEnum.bookmarks.title),
           Expanded(
             child: BlocBuilder<BookmarksCubit, BookmarksState>(
-              buildWhen: (p, c) =>
-                  p.isLoading != c.isLoading ||
-                  p.bookmarks.isNotEmpty && c.bookmarks.isEmpty,
+              buildWhen: (p, c) {
+                return p.isLoading != c.isLoading ||
+                    p.bookmarks.isNotEmpty && c.bookmarks.isEmpty ||
+                    p.bookmarks.isEmpty && c.bookmarks.isNotEmpty;
+              },
               builder: (context, state) {
                 if (!state.isLoading && state.bookmarks.isEmpty) {
                   return ConnectivityWrapper(
@@ -44,6 +47,9 @@ class MyLibraryBookmarksSection extends StatelessWidget {
                         onTap: () {
                           router.goNamed(cataloguePageConfig.name);
                         },
+                        onRefresh: () {
+                          cubit.getMyLibraryBookmarks();
+                        },
                       );
                     },
                   );
@@ -51,12 +57,10 @@ class MyLibraryBookmarksSection extends StatelessWidget {
 
                 return CustomScrollPage(
                   onRefresh: () {
-                    return context
-                        .read<BookmarksCubit>()
-                        .getMyLibraryBookmarks();
+                    return cubit.getMyLibraryBookmarks();
                   },
                   onLoadMore: () {
-                    context.read<BookmarksCubit>().getMoreMyLibraryBookmarks();
+                    cubit.getMoreMyLibraryBookmarks();
                   },
                   builder: (scrollController) {
                     return ListView.builder(

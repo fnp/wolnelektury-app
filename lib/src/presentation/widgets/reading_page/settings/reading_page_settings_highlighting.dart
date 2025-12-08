@@ -7,8 +7,8 @@ import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_c
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ReadingPageSettingsHighlighting extends StatelessWidget {
-  const ReadingPageSettingsHighlighting({super.key});
+class ReadingPageSettingsSheetHighlighting extends StatelessWidget {
+  const ReadingPageSettingsSheetHighlighting({super.key});
 
   @override
   Widget build(BuildContext context) {

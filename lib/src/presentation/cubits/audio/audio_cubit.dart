@@ -104,27 +104,28 @@ class AudioCubit extends SafeCubit<AudioState> {
     final isSameAudiobookInitialized = state.book?.slug == book.slug;
     final wasInitializedOnline = state.parts.any((e) => !e.isOffline);
     final wasInitializedOffline = !wasInitializedOnline;
-
     if (isSameAudiobookInitialized) {
-      // Book already selected, check if we need to set progress
-      await _getAndSetProgress(targetTimestamp: targetTimestamp);
-      await _getTextAudioSyncData(book.slug);
-
       // Determine if we need to reload due to online/offline mode change
       final modeChanged =
           (wasInitializedOffline && !tryOffline) ||
           (wasInitializedOnline && tryOffline);
 
       // Same book, same mode - no reload needed
-      if (!modeChanged) return;
-    }
+      // Only skip reload if there's no target timestamp (not jumping to specific position)
+      if (!modeChanged && targetTimestamp == null) {
+        await _getAndSetProgress(targetTimestamp: targetTimestamp);
+        return;
+      }
 
-    // New book selected, reset all values
+      // Mode changed, fetch sync data before reloading
+      await _getTextAudioSyncData(book.slug);
+    }
+    // New book selected (or mode changed), reset all values
     // Stop current playback and clear player state
+    emit(state.copyWith(book: book, isLoadingAudiobook: true, isError: false));
     await stop();
 
     // Update state to show loading and clear any previous errors
-    emit(state.copyWith(book: book, isLoadingAudiobook: true, isError: false));
 
     // Fetch audiobook data (parts/chapters) from repository
     final audiobookResponse = await _audiobookRepository.getAudiobook(
@@ -264,13 +265,19 @@ class AudioCubit extends SafeCubit<AudioState> {
   /// Stops playback completely and resets the player to initial state
   /// Preserves book and audiobook data but clears playback state
   Future<void> stop() async {
-    _cancelSubscriptions();
     // Reset to clean state while keeping book data
-    emit(AudioState(book: state.book, audiobook: state.audiobook));
+    emit(
+      AudioState(
+        book: state.book,
+        audiobook: state.audiobook,
+        isLoadingAudiobook: state.isLoadingAudiobook,
+      ),
+    );
+    await _cancelSubscriptions();
     await Future.wait([
       _player.stop(),
       _player.seek(Duration.zero, index: 0),
-      _player.setAudioSources([]),
+      _player.clearAudioSources(),
       _audioSession.setActive(false),
     ]);
   }
@@ -645,9 +652,9 @@ class AudioCubit extends SafeCubit<AudioState> {
   }
 
   /// Cancels all active stream subscriptions
-  void _cancelSubscriptions() {
-    _positionController?.cancel();
-    _playerStateController?.cancel();
+  Future<void> _cancelSubscriptions() async {
+    await _positionController?.cancel();
+    await _playerStateController?.cancel();
   }
 
   /// Cleanup: stops playback, cancels timers, and disposes resources
@@ -659,9 +666,12 @@ class AudioCubit extends SafeCubit<AudioState> {
     _sleepTimer?.cancel();
     _positionTimeoutTimer?.cancel();
     // Cancel stream subscriptions
-    _cancelSubscriptions();
     // Dispose player and release audio session
-    await Future.wait([_player.dispose(), _audioSession.setActive(false)]);
+    await Future.wait([
+      _player.dispose(),
+      _audioSession.setActive(false),
+      _cancelSubscriptions(),
+    ]);
     return super.close();
   }
 }

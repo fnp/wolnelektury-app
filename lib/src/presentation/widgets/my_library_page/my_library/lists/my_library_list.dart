@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
@@ -152,6 +154,9 @@ class _Header extends StatelessWidget {
                           children: [
                             _DeleteButton(slug: bookList.slug),
                             CustomButton(
+                              semanticLabel: LocaleKeys
+                                  .common_semantic_edit_list
+                                  .tr(namedArgs: {'listName': bookList.name}),
                               icon: CustomIcons.add,
                               onPressed: () {
                                 listCubit.setListAsEdited(bookList.name);
@@ -210,6 +215,9 @@ class _DeleteButton extends StatelessWidget {
                   ),
                 )
               : CustomButton(
+                  semanticLabel: LocaleKeys.common_semantic_delete_list.tr(
+                    namedArgs: {'listName': slug},
+                  ),
                   icon: CustomIcons.delete_forever,
                   onPressed: () {
                     MyLibraryListDeleteConfirmationDialog.show(
@@ -244,6 +252,7 @@ class _ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomButton(
+      semanticLabel: LocaleKeys.common_semantic_share_book_list.tr(),
       icon: CustomIcons.ios_share,
       onPressed: () {
         ShareUtils.shareBookList(slug);

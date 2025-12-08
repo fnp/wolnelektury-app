@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/custom_button.dart';
@@ -83,6 +85,7 @@ class BookPageCoverDownloadButtonState
     if ((widget.areFilesCorruptedCallback != null || widget.isError) &&
         !isCurrentDownload) {
       child = CustomButton(
+        semanticLabel: LocaleKeys.common_semantic_files_corrupted.tr(),
         key: const ValueKey('corrupted_files_button'),
         icon: CustomIcons.error,
         backgroundColor: CustomColors.red,
@@ -98,8 +101,9 @@ class BookPageCoverDownloadButtonState
       return child;
     }
     if (widget.isDownloaded) {
-      child = const CustomButton(
-        key: ValueKey('check_button'),
+      child = CustomButton(
+        semanticLabel: LocaleKeys.common_semantic_book_downloaded.tr(),
+        key: const ValueKey('check_button'),
         icon: Icons.check,
         backgroundColor: CustomColors.green,
         onPressed: null,
@@ -115,6 +119,7 @@ class BookPageCoverDownloadButtonState
           );
         },
         child: CustomButton(
+          semanticLabel: LocaleKeys.common_semantic_cancel_download.tr(),
           icon: CustomIcons.close,
           backgroundColor: CustomColors.primaryYellowColor,
           onPressed: widget.onDownloadCancel,
@@ -122,6 +127,7 @@ class BookPageCoverDownloadButtonState
       );
     } else {
       child = CustomButton(
+        semanticLabel: LocaleKeys.common_semantic_download_book.tr(),
         key: const ValueKey('download_button'),
         icon: CustomIcons.download,
         backgroundColor: CustomColors.primaryYellowColor,

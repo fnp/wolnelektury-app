@@ -14,7 +14,6 @@ import 'package:wolnelektury/src/presentation/cubits/download/download_cubit.dar
 import 'package:wolnelektury/src/presentation/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
-import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_listen_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/book_page/book_page_cover_read_button.dart';
 import 'package:wolnelektury/src/presentation/widgets/catalogue_page/buttons/book_overview_widget_create_list_button.dart';
@@ -130,6 +129,8 @@ class BookPageCoverWithButtons extends StatelessWidget {
                       right: Dimensions.mediumPadding,
                       bottom: Dimensions.mediumPadding,
                       child: CustomButton(
+                        semanticLabel: LocaleKeys.common_semantic_share_book
+                            .tr(),
                         icon: CustomIcons.ios_share,
                         onPressed: () {
                           ShareUtils.shareBook(book.slug);
@@ -210,6 +211,7 @@ class _TitleWithAutorsAndDelete extends StatelessWidget {
             return AnimatedBoxFade(
               isChildVisible: state.downloadingBookAudiobookSlug != book.slug,
               child: CustomButton(
+                semanticLabel: LocaleKeys.common_semantic_delete_book.tr(),
                 icon: CustomIcons.delete_forever,
                 onPressed: onDelete,
                 backgroundColor: CustomColors.red,
@@ -234,10 +236,13 @@ class _TitleWithAuthors extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          book.title,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
+        Semantics(
+          label: book.title,
+          child: Text(
+            book.title,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         ...book.authors.map((author) {
@@ -294,7 +299,9 @@ class _Image extends StatelessWidget {
             )
           : CachedNetworkImage(
               imageUrl: coverUrl ?? '',
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
               placeholder: (context, url) =>
                   Center(child: SvgPicture.asset(Images.logo)),
             ),
@@ -314,7 +321,7 @@ class _HeartButton extends StatelessWidget {
       builder: (context, state) {
         final isLiked = state.favourites.contains(book.slug);
         return AuthWrapper(
-          authChild: (user) {
+          child: (isAuthenticated, wasLoggedInWhileOnline) {
             return TextButtonWithIcon(
               nonActiveText: LocaleKeys.common_icon_button_like.tr(),
               nonActiveIcon: CustomIcons.favorite,
@@ -323,6 +330,10 @@ class _HeartButton extends StatelessWidget {
               activeIcon: CustomIcons.favorite_filled,
               isActive: isLiked,
               onPressed: () {
+                if (!isAuthenticated) {
+                  CustomSnackbar.loginRequired(context);
+                  return;
+                }
                 if (isLiked) {
                   favouritesCubit.removeFromFavourites(book.slug);
                   return;
@@ -332,28 +343,6 @@ class _HeartButton extends StatelessWidget {
               },
             );
           },
-          nonAuthChild: TextButtonWithIcon(
-            nonActiveText: LocaleKeys.common_icon_button_like.tr(),
-            nonActiveIcon: CustomIcons.favorite,
-            isActive: false,
-            onPressed: () {
-              CustomSnackbar.success(
-                context,
-                LocaleKeys.common_snackbar_not_logged.tr(),
-                icon: const Icon(
-                  CustomIcons.for_you,
-                  size: 20,
-                  color: CustomColors.black,
-                ),
-                onTap: () {
-                  router.pushNamed(
-                    myLibraryPageConfig.name,
-                    extra: MyLibraryEnum.login,
-                  );
-                },
-              );
-            },
-          ),
         );
       },
     );

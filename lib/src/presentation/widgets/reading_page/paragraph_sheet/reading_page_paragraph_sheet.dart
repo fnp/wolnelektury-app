@@ -90,116 +90,122 @@ class ReadingPageParagraphSheet extends StatelessWidget {
     final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
     final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
     final selectedParagraph = readingPageCubit.state.selectedParagraph;
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-      child: BlocListener<BookmarksCubit, BookmarksState>(
-        listenWhen: (p, c) => p.isBookmarkSuccess != c.isBookmarkSuccess,
-        listener: (context, state) {
-          if (state.isBookmarkSuccess != null &&
-              state.isBookmarkSuccess!.$2 == true) {
-            readingPageCubit.toggleIsAddingBookmark();
-            readingPageCubit.selectParagraph();
-            bookmarkCubit.setEditingBookmark(null);
-            Navigator.of(context).pop();
-          }
-        },
-        child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
-          buildWhen: (p, c) => p.isAddingBookmark != c.isAddingBookmark,
-          builder: (context, state) {
-            return AnimatedBoxFade(
-              isChildVisible: !state.isAddingBookmark,
-              collapsedChild: const _BookmarkNote(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.mediumPadding,
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: Dimensions.veryLargePadding),
-                      //todo
-                      // TextButtonWithIcon(
-                      //   nonActiveText: 'przetłumacz (todo)',
-                      //   nonActiveIcon: Icons.translate,
-                      //   onPressed: () {},
-                      //   activeColor: CustomColors.white,
-                      // ),
-                      // const SizedBox(height: Dimensions.mediumPadding),
-                      TextButtonWithIcon(
-                        nonActiveText: LocaleKeys.reading_sheet_bookmark_add
-                            .tr(),
-                        nonActiveIcon: Icons.bookmark_add_rounded,
-                        onPressed: () {
-                          readingPageCubit.toggleIsAddingBookmark();
-                          final isBookmarked = bookmarkCubit.state
-                              .isSelectedParagraphBookmarked(
-                                selectedParagraph?.id,
-                              );
-                          bookmarkCubit.setEditingBookmark(isBookmarked);
-                        },
-                        activeColor: CustomColors.white,
-                      ),
-                      const SizedBox(height: Dimensions.mediumPadding),
-                      BlocBuilder<ReadingPageCubit, ReadingPageState>(
-                        buildWhen: (p, c) {
-                          return p.audioSyncPairs != c.audioSyncPairs;
-                        },
-                        builder: (context, state) {
-                          if (state.audioSyncPairs.isEmpty) {
-                            return const SizedBox.shrink();
-                          }
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextButtonWithIcon(
-                                nonActiveText: LocaleKeys.reading_sheet_listen
-                                    .tr(),
-                                nonActiveIcon: Icons.headphones,
-                                onPressed: () {
-                                  if (selectedParagraph?.id == null) {
-                                    return;
-                                  }
-                                  final timestamp = state.getTimestampForId(
-                                    selectedParagraph!.id!,
-                                  );
-                                  if (timestamp == null) {
-                                    return;
-                                  }
-                                  readingPageCubit.enableHighlighting(true);
-                                  Navigator.of(context).pop();
-                                  onListen(
-                                    timestamp: timestamp.floor(),
-                                    context: context,
-                                    slug: readingPageCubit.state.currentSlug!,
-                                  );
-                                },
-                                activeColor: CustomColors.white,
-                              ),
-                              const SizedBox(height: Dimensions.mediumPadding),
-                            ],
-                          );
-                        },
-                      ),
-                      TextButtonWithIcon(
-                        nonActiveText: LocaleKeys.reading_sheet_share.tr(),
-                        nonActiveIcon: Icons.ios_share,
-                        onPressed: () {
-                          ShareUtils.shareParagraph(
-                            selectedParagraph?.id ?? '',
-                            readingPageCubit.state.currentSlug ?? '',
-                          );
-                        },
-                        activeColor: CustomColors.white,
-                      ),
-                      const SizedBox(height: Dimensions.spacer * 2),
-                    ],
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        child: BlocListener<BookmarksCubit, BookmarksState>(
+          listenWhen: (p, c) => p.isBookmarkSuccess != c.isBookmarkSuccess,
+          listener: (context, state) {
+            if (state.isBookmarkSuccess != null &&
+                state.isBookmarkSuccess!.$2 == true) {
+              readingPageCubit.toggleIsAddingBookmark();
+              readingPageCubit.selectParagraph();
+              bookmarkCubit.setEditingBookmark(null);
+              Navigator.of(context).pop();
+            }
+          },
+          child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
+            buildWhen: (p, c) => p.isAddingBookmark != c.isAddingBookmark,
+            builder: (context, state) {
+              return AnimatedBoxFade(
+                isChildVisible: !state.isAddingBookmark,
+                collapsedChild: const _BookmarkNote(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Dimensions.mediumPadding,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: Dimensions.veryLargePadding),
+                        //todo
+                        // TextButtonWithIcon(
+                        //   nonActiveText: 'przetłumacz (todo)',
+                        //   nonActiveIcon: Icons.translate,
+                        //   onPressed: () {},
+                        //   activeColor: CustomColors.white,
+                        // ),
+                        // const SizedBox(height: Dimensions.mediumPadding),
+                        TextButtonWithIcon(
+                          nonActiveText: LocaleKeys.reading_sheet_bookmark_add
+                              .tr(),
+                          nonActiveIcon: Icons.bookmark_add_rounded,
+                          onPressed: () {
+                            readingPageCubit.toggleIsAddingBookmark();
+                            final isBookmarked = bookmarkCubit.state
+                                .isSelectedParagraphBookmarked(
+                                  selectedParagraph?.id,
+                                );
+                            bookmarkCubit.setEditingBookmark(isBookmarked);
+                          },
+                          activeColor: CustomColors.white,
+                        ),
+                        const SizedBox(height: Dimensions.mediumPadding),
+                        BlocBuilder<ReadingPageCubit, ReadingPageState>(
+                          buildWhen: (p, c) {
+                            return p.audioSyncPairs != c.audioSyncPairs;
+                          },
+                          builder: (context, state) {
+                            if (state.audioSyncPairs.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextButtonWithIcon(
+                                  nonActiveText: LocaleKeys.reading_sheet_listen
+                                      .tr(),
+                                  nonActiveIcon: Icons.headphones,
+                                  onPressed: () {
+                                    if (selectedParagraph?.id == null) {
+                                      return;
+                                    }
+                                    final timestamp = state.getTimestampForId(
+                                      selectedParagraph!.id!,
+                                    );
+                                    if (timestamp == null) {
+                                      return;
+                                    }
+                                    readingPageCubit.enableHighlighting(true);
+                                    Navigator.of(context).pop();
+                                    onListen(
+                                      timestamp: timestamp.floor(),
+                                      context: context,
+                                      slug: readingPageCubit.state.currentSlug!,
+                                    );
+                                  },
+                                  activeColor: CustomColors.white,
+                                ),
+                                const SizedBox(
+                                  height: Dimensions.mediumPadding,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        TextButtonWithIcon(
+                          nonActiveText: LocaleKeys.reading_sheet_share.tr(),
+                          nonActiveIcon: Icons.ios_share,
+                          onPressed: () {
+                            ShareUtils.shareParagraph(
+                              selectedParagraph?.id ?? '',
+                              readingPageCubit.state.currentSlug ?? '',
+                            );
+                          },
+                          activeColor: CustomColors.white,
+                        ),
+                        const SizedBox(height: Dimensions.spacer * 2),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

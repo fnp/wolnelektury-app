@@ -1,7 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
@@ -83,11 +87,13 @@ class CustomSnackbar {
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(Dimensions.smallPadding),
-                      child: Text(
-                        LocaleKeys.common_snackbar_revert.tr().toUpperCase(),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                      child: Semantics(
+                        child: Text(
+                          LocaleKeys.common_snackbar_revert.tr().toUpperCase(),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -96,6 +102,31 @@ class CustomSnackbar {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  static void loginRequired(
+    BuildContext context, {
+    GlobalKey<ScaffoldMessengerState>? messengerKey,
+  }) {
+    (messengerKey ?? scaffoldMessengerKey).currentState!.hideCurrentSnackBar();
+    (messengerKey ?? scaffoldMessengerKey).currentState!.showSnackBar(
+      _getDefault(
+        context: context,
+        message: LocaleKeys.common_snackbar_not_logged.tr(),
+        isSuccess: true,
+        icon: const Icon(
+          CustomIcons.for_you,
+          size: 20,
+          color: CustomColors.black,
+        ),
+        onTap: () {
+          router.pushNamed(
+            myLibraryPageConfig.name,
+            extra: MyLibraryEnum.login,
+          );
+        },
       ),
     );
   }

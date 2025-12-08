@@ -5,6 +5,7 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 class CustomButton extends StatelessWidget {
   const CustomButton({
     required this.icon,
+    required this.semanticLabel,
     this.backgroundColor = CustomColors.primaryYellowColor,
     this.iconColor = CustomColors.black,
     this.onPressed,
@@ -19,26 +20,31 @@ class CustomButton extends StatelessWidget {
   final IconData icon;
   final double size;
   final double iconSize;
+  final String semanticLabel;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: SizedBox.square(
-        dimension: size,
-        child: Ink(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: backgroundColor,
-          ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(
-              Dimensions.borderRadiusOfCircle,
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: Material(
+        type: MaterialType.transparency,
+        child: SizedBox.square(
+          dimension: size,
+          child: Ink(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: backgroundColor,
             ),
-            onTap: onPressed,
-            child: Padding(
-              padding: const EdgeInsets.all(Dimensions.smallPadding),
-              child: Icon(icon, color: iconColor, size: iconSize),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(
+                Dimensions.borderRadiusOfCircle,
+              ),
+              onTap: onPressed,
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.smallPadding),
+                child: Icon(icon, color: iconColor, size: iconSize),
+              ),
             ),
           ),
         ),

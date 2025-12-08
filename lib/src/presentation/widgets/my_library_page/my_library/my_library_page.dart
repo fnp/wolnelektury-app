@@ -8,7 +8,9 @@ import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.d
 import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/offline/offline_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/audiobooks/my_library_audiobooks_section.dart';
 import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/bookmarks/my_library_bookmarks_section.dart';
@@ -35,20 +37,24 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
         return p.isAuthenticated != c.isAuthenticated;
       },
       builder: (context, authState) {
-        return ConnectivityWrapper(
-          key: (ValueKey(authState.isAuthenticated)),
-          builder: (context, hasConnection) {
-            List<MyLibraryEnum> myLibraryEnums = hasConnection
-                ? (authState.isAuthenticated
-                      ? availableOnlineAuthEnums
-                      : availableOnlineNoAuthEnums)
-                : availableOfflineEnums;
+        return AuthWrapper(
+          child: (isAuthenticated, wasLoggedInWhileOnline) {
+            return ConnectivityWrapper(
+              key: (ValueKey(authState.isAuthenticated)),
+              builder: (context, hasConnection) {
+                List<MyLibraryEnum> myLibraryEnums = hasConnection
+                    ? (authState.isAuthenticated
+                          ? availableOnlineAuthEnums
+                          : availableOnlineNoAuthEnums)
+                    : availableOfflineEnums(wasLoggedInWhileOnline);
 
-            return _Body(
-              myLibraryEnums: myLibraryEnums,
-              openOnEnum: widget.openOnEnum,
-              hasConnection: hasConnection,
-              isAuth: authState.isAuthenticated,
+                return _Body(
+                  myLibraryEnums: myLibraryEnums,
+                  openOnEnum: widget.openOnEnum,
+                  hasConnection: hasConnection,
+                  isAuth: authState.isAuthenticated,
+                );
+              },
             );
           },
         );
@@ -108,6 +114,7 @@ class _BodyState extends State<_Body> {
   @override
   Widget build(BuildContext context) {
     final routerCubit = context.read<RouterCubit>();
+    final scrollCubit = context.read<ScrollCubit>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -145,6 +152,7 @@ class _BodyState extends State<_Body> {
                         currentPageIndex = index;
                         _opacity = 0;
                       });
+                      scrollCubit.showAppBar();
                       // Delay to allow the opacity animation to start
                       // This decreases the flickering effect a lot
                       await Future.delayed(

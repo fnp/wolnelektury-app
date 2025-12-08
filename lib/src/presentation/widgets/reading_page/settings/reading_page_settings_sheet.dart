@@ -8,10 +8,10 @@ import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/read
 import 'package:wolnelektury/src/presentation/widgets/reading_page/settings/reading_page_settings_theme.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ReadingPageSettings extends StatelessWidget {
+class ReadingPageSettingsSheet extends StatelessWidget {
   final String slug;
   static const double _height = 250;
-  const ReadingPageSettings({super.key, required this.slug});
+  const ReadingPageSettingsSheet({super.key, required this.slug});
 
   static void show({
     required BuildContext context,
@@ -32,7 +32,7 @@ class ReadingPageSettings extends StatelessWidget {
           BlocProvider.value(value: context.read<ReadingPageCubit>()),
           BlocProvider.value(value: context.read<AudioCubit>()),
         ],
-        child: ReadingPageSettings(slug: slug),
+        child: ReadingPageSettingsSheet(slug: slug),
       ),
     ).then((_) {
       onClosed.call();
@@ -41,32 +41,36 @@ class ReadingPageSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: ReadingPageSettings._height,
-      child: Padding(
-        padding: const EdgeInsets.all(Dimensions.mediumPadding),
-        child: Column(
-          spacing: Dimensions.mediumPadding,
-          children: [
-            const ReadingPageSettingsFontSize(),
-            const ReadingPageSettingsFontStyle(),
-            const ReadingPageSettingsTheme(),
-            BlocBuilder<AudioCubit, AudioState>(
-              buildWhen: (p, c) {
-                return p.isPlaying != c.isPlaying || p.book != c.book;
-              },
-              builder: (context, state) {
-                final disable = !state.isPlaying || state.book?.slug != slug;
-                return Opacity(
-                  opacity: disable ? 0.5 : 1,
-                  child: AbsorbPointer(
-                    absorbing: disable,
-                    child: const ReadingPageSettingsHighlighting(),
-                  ),
-                );
-              },
-            ),
-          ],
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: SizedBox(
+        height: ReadingPageSettingsSheet._height,
+        child: Padding(
+          padding: const EdgeInsets.all(Dimensions.mediumPadding),
+          child: Column(
+            spacing: Dimensions.mediumPadding,
+            children: [
+              const ReadingPageSettingsSheetFontSize(),
+              const ReadingPageSettingsSheetFontStyle(),
+              const ReadingPageSettingsSheetTheme(),
+              BlocBuilder<AudioCubit, AudioState>(
+                buildWhen: (p, c) {
+                  return p.isPlaying != c.isPlaying || p.book != c.book;
+                },
+                builder: (context, state) {
+                  final disable = !state.isPlaying || state.book?.slug != slug;
+                  return Opacity(
+                    opacity: disable ? 0.5 : 1,
+                    child: AbsorbPointer(
+                      absorbing: disable,
+                      child: const ReadingPageSettingsSheetHighlighting(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

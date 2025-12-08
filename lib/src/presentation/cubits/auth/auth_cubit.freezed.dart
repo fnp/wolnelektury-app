@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthState {
 
- bool get isLoading; bool get isLoadingAgreements; bool? get isLoginSuccess; bool? get isRegisterSuccess; bool? get isLoginSuccessFromRegisterFlow; UserModel? get user; RegisterAgreementModel? get agreements;// UI
+ bool get isLoading; bool get isLoadingAgreements; bool? get isLoginSuccess; bool? get isRegisterSuccess; bool? get isLoginSuccessFromRegisterFlow; UserModel? get user; RegisterAgreementModel? get agreements; bool get wasLoggedInWhileOnline;// UI
  bool get shouldShowRegisterForm;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -27,16 +27,16 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingAgreements, isLoadingAgreements) || other.isLoadingAgreements == isLoadingAgreements)&&(identical(other.isLoginSuccess, isLoginSuccess) || other.isLoginSuccess == isLoginSuccess)&&(identical(other.isRegisterSuccess, isRegisterSuccess) || other.isRegisterSuccess == isRegisterSuccess)&&(identical(other.isLoginSuccessFromRegisterFlow, isLoginSuccessFromRegisterFlow) || other.isLoginSuccessFromRegisterFlow == isLoginSuccessFromRegisterFlow)&&(identical(other.user, user) || other.user == user)&&(identical(other.agreements, agreements) || other.agreements == agreements)&&(identical(other.shouldShowRegisterForm, shouldShowRegisterForm) || other.shouldShowRegisterForm == shouldShowRegisterForm));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingAgreements, isLoadingAgreements) || other.isLoadingAgreements == isLoadingAgreements)&&(identical(other.isLoginSuccess, isLoginSuccess) || other.isLoginSuccess == isLoginSuccess)&&(identical(other.isRegisterSuccess, isRegisterSuccess) || other.isRegisterSuccess == isRegisterSuccess)&&(identical(other.isLoginSuccessFromRegisterFlow, isLoginSuccessFromRegisterFlow) || other.isLoginSuccessFromRegisterFlow == isLoginSuccessFromRegisterFlow)&&(identical(other.user, user) || other.user == user)&&(identical(other.agreements, agreements) || other.agreements == agreements)&&(identical(other.wasLoggedInWhileOnline, wasLoggedInWhileOnline) || other.wasLoggedInWhileOnline == wasLoggedInWhileOnline)&&(identical(other.shouldShowRegisterForm, shouldShowRegisterForm) || other.shouldShowRegisterForm == shouldShowRegisterForm));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isLoadingAgreements,isLoginSuccess,isRegisterSuccess,isLoginSuccessFromRegisterFlow,user,agreements,shouldShowRegisterForm);
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingAgreements,isLoginSuccess,isRegisterSuccess,isLoginSuccessFromRegisterFlow,user,agreements,wasLoggedInWhileOnline,shouldShowRegisterForm);
 
 @override
 String toString() {
-  return 'AuthState(isLoading: $isLoading, isLoadingAgreements: $isLoadingAgreements, isLoginSuccess: $isLoginSuccess, isRegisterSuccess: $isRegisterSuccess, isLoginSuccessFromRegisterFlow: $isLoginSuccessFromRegisterFlow, user: $user, agreements: $agreements, shouldShowRegisterForm: $shouldShowRegisterForm)';
+  return 'AuthState(isLoading: $isLoading, isLoadingAgreements: $isLoadingAgreements, isLoginSuccess: $isLoginSuccess, isRegisterSuccess: $isRegisterSuccess, isLoginSuccessFromRegisterFlow: $isLoginSuccessFromRegisterFlow, user: $user, agreements: $agreements, wasLoggedInWhileOnline: $wasLoggedInWhileOnline, shouldShowRegisterForm: $shouldShowRegisterForm)';
 }
 
 
@@ -47,7 +47,7 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, bool isLoadingAgreements, bool? isLoginSuccess, bool? isRegisterSuccess, bool? isLoginSuccessFromRegisterFlow, UserModel? user, RegisterAgreementModel? agreements, bool shouldShowRegisterForm
+ bool isLoading, bool isLoadingAgreements, bool? isLoginSuccess, bool? isRegisterSuccess, bool? isLoginSuccessFromRegisterFlow, UserModel? user, RegisterAgreementModel? agreements, bool wasLoggedInWhileOnline, bool shouldShowRegisterForm
 });
 
 
@@ -64,7 +64,7 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isLoadingAgreements = null,Object? isLoginSuccess = freezed,Object? isRegisterSuccess = freezed,Object? isLoginSuccessFromRegisterFlow = freezed,Object? user = freezed,Object? agreements = freezed,Object? shouldShowRegisterForm = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isLoadingAgreements = null,Object? isLoginSuccess = freezed,Object? isRegisterSuccess = freezed,Object? isLoginSuccessFromRegisterFlow = freezed,Object? user = freezed,Object? agreements = freezed,Object? wasLoggedInWhileOnline = null,Object? shouldShowRegisterForm = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingAgreements: null == isLoadingAgreements ? _self.isLoadingAgreements : isLoadingAgreements // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,8 @@ as bool?,isRegisterSuccess: freezed == isRegisterSuccess ? _self.isRegisterSucce
 as bool?,isLoginSuccessFromRegisterFlow: freezed == isLoginSuccessFromRegisterFlow ? _self.isLoginSuccessFromRegisterFlow : isLoginSuccessFromRegisterFlow // ignore: cast_nullable_to_non_nullable
 as bool?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserModel?,agreements: freezed == agreements ? _self.agreements : agreements // ignore: cast_nullable_to_non_nullable
-as RegisterAgreementModel?,shouldShowRegisterForm: null == shouldShowRegisterForm ? _self.shouldShowRegisterForm : shouldShowRegisterForm // ignore: cast_nullable_to_non_nullable
+as RegisterAgreementModel?,wasLoggedInWhileOnline: null == wasLoggedInWhileOnline ? _self.wasLoggedInWhileOnline : wasLoggedInWhileOnline // ignore: cast_nullable_to_non_nullable
+as bool,shouldShowRegisterForm: null == shouldShowRegisterForm ? _self.shouldShowRegisterForm : shouldShowRegisterForm // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -109,7 +110,7 @@ $RegisterAgreementModelCopyWith<$Res>? get agreements {
 
 
 class _AuthState implements AuthState {
-  const _AuthState({this.isLoading = false, this.isLoadingAgreements = false, this.isLoginSuccess, this.isRegisterSuccess, this.isLoginSuccessFromRegisterFlow, this.user, this.agreements, this.shouldShowRegisterForm = false});
+  const _AuthState({this.isLoading = false, this.isLoadingAgreements = false, this.isLoginSuccess, this.isRegisterSuccess, this.isLoginSuccessFromRegisterFlow, this.user, this.agreements, this.wasLoggedInWhileOnline = false, this.shouldShowRegisterForm = false});
   
 
 @override@JsonKey() final  bool isLoading;
@@ -119,6 +120,7 @@ class _AuthState implements AuthState {
 @override final  bool? isLoginSuccessFromRegisterFlow;
 @override final  UserModel? user;
 @override final  RegisterAgreementModel? agreements;
+@override@JsonKey() final  bool wasLoggedInWhileOnline;
 // UI
 @override@JsonKey() final  bool shouldShowRegisterForm;
 
@@ -132,16 +134,16 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingAgreements, isLoadingAgreements) || other.isLoadingAgreements == isLoadingAgreements)&&(identical(other.isLoginSuccess, isLoginSuccess) || other.isLoginSuccess == isLoginSuccess)&&(identical(other.isRegisterSuccess, isRegisterSuccess) || other.isRegisterSuccess == isRegisterSuccess)&&(identical(other.isLoginSuccessFromRegisterFlow, isLoginSuccessFromRegisterFlow) || other.isLoginSuccessFromRegisterFlow == isLoginSuccessFromRegisterFlow)&&(identical(other.user, user) || other.user == user)&&(identical(other.agreements, agreements) || other.agreements == agreements)&&(identical(other.shouldShowRegisterForm, shouldShowRegisterForm) || other.shouldShowRegisterForm == shouldShowRegisterForm));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingAgreements, isLoadingAgreements) || other.isLoadingAgreements == isLoadingAgreements)&&(identical(other.isLoginSuccess, isLoginSuccess) || other.isLoginSuccess == isLoginSuccess)&&(identical(other.isRegisterSuccess, isRegisterSuccess) || other.isRegisterSuccess == isRegisterSuccess)&&(identical(other.isLoginSuccessFromRegisterFlow, isLoginSuccessFromRegisterFlow) || other.isLoginSuccessFromRegisterFlow == isLoginSuccessFromRegisterFlow)&&(identical(other.user, user) || other.user == user)&&(identical(other.agreements, agreements) || other.agreements == agreements)&&(identical(other.wasLoggedInWhileOnline, wasLoggedInWhileOnline) || other.wasLoggedInWhileOnline == wasLoggedInWhileOnline)&&(identical(other.shouldShowRegisterForm, shouldShowRegisterForm) || other.shouldShowRegisterForm == shouldShowRegisterForm));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isLoadingAgreements,isLoginSuccess,isRegisterSuccess,isLoginSuccessFromRegisterFlow,user,agreements,shouldShowRegisterForm);
+int get hashCode => Object.hash(runtimeType,isLoading,isLoadingAgreements,isLoginSuccess,isRegisterSuccess,isLoginSuccessFromRegisterFlow,user,agreements,wasLoggedInWhileOnline,shouldShowRegisterForm);
 
 @override
 String toString() {
-  return 'AuthState(isLoading: $isLoading, isLoadingAgreements: $isLoadingAgreements, isLoginSuccess: $isLoginSuccess, isRegisterSuccess: $isRegisterSuccess, isLoginSuccessFromRegisterFlow: $isLoginSuccessFromRegisterFlow, user: $user, agreements: $agreements, shouldShowRegisterForm: $shouldShowRegisterForm)';
+  return 'AuthState(isLoading: $isLoading, isLoadingAgreements: $isLoadingAgreements, isLoginSuccess: $isLoginSuccess, isRegisterSuccess: $isRegisterSuccess, isLoginSuccessFromRegisterFlow: $isLoginSuccessFromRegisterFlow, user: $user, agreements: $agreements, wasLoggedInWhileOnline: $wasLoggedInWhileOnline, shouldShowRegisterForm: $shouldShowRegisterForm)';
 }
 
 
@@ -152,7 +154,7 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, bool isLoadingAgreements, bool? isLoginSuccess, bool? isRegisterSuccess, bool? isLoginSuccessFromRegisterFlow, UserModel? user, RegisterAgreementModel? agreements, bool shouldShowRegisterForm
+ bool isLoading, bool isLoadingAgreements, bool? isLoginSuccess, bool? isRegisterSuccess, bool? isLoginSuccessFromRegisterFlow, UserModel? user, RegisterAgreementModel? agreements, bool wasLoggedInWhileOnline, bool shouldShowRegisterForm
 });
 
 
@@ -169,7 +171,7 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isLoadingAgreements = null,Object? isLoginSuccess = freezed,Object? isRegisterSuccess = freezed,Object? isLoginSuccessFromRegisterFlow = freezed,Object? user = freezed,Object? agreements = freezed,Object? shouldShowRegisterForm = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isLoadingAgreements = null,Object? isLoginSuccess = freezed,Object? isRegisterSuccess = freezed,Object? isLoginSuccessFromRegisterFlow = freezed,Object? user = freezed,Object? agreements = freezed,Object? wasLoggedInWhileOnline = null,Object? shouldShowRegisterForm = null,}) {
   return _then(_AuthState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingAgreements: null == isLoadingAgreements ? _self.isLoadingAgreements : isLoadingAgreements // ignore: cast_nullable_to_non_nullable
@@ -178,7 +180,8 @@ as bool?,isRegisterSuccess: freezed == isRegisterSuccess ? _self.isRegisterSucce
 as bool?,isLoginSuccessFromRegisterFlow: freezed == isLoginSuccessFromRegisterFlow ? _self.isLoginSuccessFromRegisterFlow : isLoginSuccessFromRegisterFlow // ignore: cast_nullable_to_non_nullable
 as bool?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserModel?,agreements: freezed == agreements ? _self.agreements : agreements // ignore: cast_nullable_to_non_nullable
-as RegisterAgreementModel?,shouldShowRegisterForm: null == shouldShowRegisterForm ? _self.shouldShowRegisterForm : shouldShowRegisterForm // ignore: cast_nullable_to_non_nullable
+as RegisterAgreementModel?,wasLoggedInWhileOnline: null == wasLoggedInWhileOnline ? _self.wasLoggedInWhileOnline : wasLoggedInWhileOnline // ignore: cast_nullable_to_non_nullable
+as bool,shouldShowRegisterForm: null == shouldShowRegisterForm ? _self.shouldShowRegisterForm : shouldShowRegisterForm // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

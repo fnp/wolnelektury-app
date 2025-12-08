@@ -48,77 +48,88 @@ class BookListsSheet extends StatelessWidget {
     final theme = Theme.of(context);
     final availableHeight = MediaQuery.sizeOf(context).height / 2;
     final cubit = BlocProvider.of<ListCreatorCubit>(context);
-    return Padding(
-      padding: MediaQuery.viewInsetsOf(context),
-      child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
-        buildWhen: (p, c) {
-          return p.allLists != c.allLists;
-        },
-        builder: (context, state) {
-          return ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: availableHeight,
-              minWidth: double.infinity,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(Dimensions.modalsPadding),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child: Padding(
+        padding: MediaQuery.viewInsetsOf(context),
+        child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
+          buildWhen: (p, c) {
+            return p.allLists != c.allLists;
+          },
+          builder: (context, state) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: availableHeight,
+                minWidth: double.infinity,
+              ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(Dimensions.modalsPadding),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Expanded(
-                        child: Text(
-                          LocaleKeys.book_lists_sheet_title.tr().toUpperCase(),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w900,
-                            height: 1.14,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              LocaleKeys.book_lists_sheet_title
+                                  .tr()
+                                  .toUpperCase(),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                height: 1.14,
+                              ),
+                            ),
+                          ),
+                          BlocBuilder<ListCreatorCubit, ListCreatorState>(
+                            buildWhen: (p, c) {
+                              return p.booksToAdd != c.booksToAdd ||
+                                  p.booksToRemove != c.booksToRemove;
+                            },
+                            builder: (context, state) {
+                              final showCheck =
+                                  state.booksToAdd.isNotEmpty ||
+                                  state.booksToRemove.isNotEmpty;
+                              return CustomButton(
+                                semanticLabel: LocaleKeys
+                                    .common_semantic_close_book_lists
+                                    .tr(),
+                                backgroundColor: showCheck
+                                    ? CustomColors.green
+                                    : CustomColors.white,
+                                icon: showCheck ? Icons.check : Icons.close,
+                                onPressed: () => Navigator.of(context).pop(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: Dimensions.spacer),
+                      Flexible(
+                        child: AnimatedSize(
+                          duration: const Duration(milliseconds: 300),
+                          curve: defaultCurve,
+                          child: BookListsSheetExistingLists(
+                            currentlyWorkingOnBookSlug: bookSlug,
+                            effectiveList: state.allLists,
                           ),
                         ),
                       ),
-                      BlocBuilder<ListCreatorCubit, ListCreatorState>(
-                        buildWhen: (p, c) {
-                          return p.booksToAdd != c.booksToAdd ||
-                              p.booksToRemove != c.booksToRemove;
-                        },
-                        builder: (context, state) {
-                          final showCheck =
-                              state.booksToAdd.isNotEmpty ||
-                              state.booksToRemove.isNotEmpty;
-                          return CustomButton(
-                            backgroundColor: showCheck
-                                ? CustomColors.green
-                                : CustomColors.white,
-                            icon: showCheck ? Icons.check : Icons.close,
-                            onPressed: () => Navigator.of(context).pop(),
-                          );
+                      const SizedBox(height: Dimensions.mediumPadding),
+                      AddNewListElement(
+                        onSave: (String text) {
+                          cubit.newList(text, bookSlugs: [bookSlug]);
                         },
                       ),
                     ],
                   ),
-                  const SizedBox(height: Dimensions.spacer),
-                  Flexible(
-                    child: AnimatedSize(
-                      duration: const Duration(milliseconds: 300),
-                      curve: defaultCurve,
-                      child: BookListsSheetExistingLists(
-                        currentlyWorkingOnBookSlug: bookSlug,
-                        effectiveList: state.allLists,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: Dimensions.mediumPadding),
-                  AddNewListElement(
-                    onSave: (String text) {
-                      cubit.newList(text, bookSlugs: [bookSlug]);
-                    },
-                  ),
-                ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog_book_cover.dart';
@@ -32,6 +33,7 @@ class AudioDialog extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider.value(value: context.read<ScrollCubit>()),
+            BlocProvider.value(value: context.read<AuthCubit>()),
             BlocProvider.value(
               value: context.read<AudioCubit>()..toggleBookmarks(false),
             ),
@@ -102,7 +104,10 @@ class AudioDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AudioCubit, AudioState>(
-      buildWhen: (p, c) => p.isPreparingPlaylist != c.isPreparingPlaylist,
+      buildWhen: (p, c) {
+        return p.isPreparingPlaylist != c.isPreparingPlaylist ||
+            p.book?.slug != c.book?.slug;
+      },
       builder: (context, state) {
         return Center(
           child: SingleChildScrollView(

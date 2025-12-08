@@ -100,99 +100,101 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
     return DialogWrapper(
       title: LocaleKeys.settings_delete_account_title.tr().toUpperCase(),
       icon: Icons.delete_forever,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            LocaleKeys.settings_delete_account_content.tr(),
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: Dimensions.spacer),
-
-          // Current password field
-          SizedBox(
-            height: Dimensions.elementHeight,
-            child: TextField(
-              obscureText: true,
-              controller: _currentPasswordController,
-              style: theme.textTheme.bodyMedium,
-              decoration: InputDecoration(
-                hintText: LocaleKeys.settings_change_password_current.tr(),
-                fillColor: theme.colorScheme.surface,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              LocaleKeys.settings_delete_account_content.tr(),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
               ),
-              onChanged: (value) {
-                if (showCurrentPasswordError) validate();
-              },
             ),
-          ),
-          AnimatedBoxSize(
-            isChildVisible: showCurrentPasswordError,
-            duration: const Duration(milliseconds: 200),
-            child: TextFieldValidationError(
-              message: LocaleKeys.settings_change_password_current_validation
-                  .tr(),
-            ),
-          ),
+            const SizedBox(height: Dimensions.spacer),
 
-          const SizedBox(height: Dimensions.spacer),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            spacing: Dimensions.mediumPadding,
-            children: [
-              ElevatedButton(
-                style: yellowElevatedButton,
-                onPressed: () {
-                  Navigator.of(context).pop();
+            // Current password field
+            SizedBox(
+              height: Dimensions.elementHeight,
+              child: TextField(
+                obscureText: true,
+                controller: _currentPasswordController,
+                style: theme.textTheme.bodyMedium,
+                decoration: InputDecoration(
+                  hintText: LocaleKeys.settings_change_password_current.tr(),
+                  fillColor: theme.colorScheme.surface,
+                ),
+                onChanged: (value) {
+                  if (showCurrentPasswordError) validate();
                 },
-                child: Text(
-                  LocaleKeys.settings_delete_account_cancel.tr(),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+              ),
+            ),
+            AnimatedBoxSize(
+              isChildVisible: showCurrentPasswordError,
+              duration: const Duration(milliseconds: 200),
+              child: TextFieldValidationError(
+                message: LocaleKeys.settings_change_password_current_validation
+                    .tr(),
+              ),
+            ),
+
+            const SizedBox(height: Dimensions.spacer),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              spacing: Dimensions.mediumPadding,
+              children: [
+                ElevatedButton(
+                  style: yellowElevatedButton,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    LocaleKeys.settings_delete_account_cancel.tr(),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: BlocBuilder<SettingsCubit, SettingsState>(
-                  buildWhen: (p, c) =>
-                      p.isDeletingAccount != c.isDeletingAccount,
-                  builder: (context, state) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        validate();
-                        if (!showCurrentPasswordError) {
-                          context.read<SettingsCubit>().deleteAccount(
-                            _currentPasswordController.text.trim(),
-                          );
-                        }
-                      },
-                      child: AnimatedBoxFade(
-                        isChildVisible: !state.isDeletingAccount,
-                        duration: const Duration(milliseconds: 300),
-                        collapsedChild: CustomLoader(
-                          size: 20,
-                          strokeWidth: 2,
-                          color: theme.colorScheme.onError,
-                        ),
-                        child: Text(
-                          LocaleKeys.settings_delete_account_button.tr(),
-                          style: theme.textTheme.bodyMedium?.copyWith(
+                Expanded(
+                  child: BlocBuilder<SettingsCubit, SettingsState>(
+                    buildWhen: (p, c) =>
+                        p.isDeletingAccount != c.isDeletingAccount,
+                    builder: (context, state) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          validate();
+                          if (!showCurrentPasswordError) {
+                            context.read<SettingsCubit>().deleteAccount(
+                              _currentPasswordController.text.trim(),
+                            );
+                          }
+                        },
+                        child: AnimatedBoxFade(
+                          isChildVisible: !state.isDeletingAccount,
+                          duration: const Duration(milliseconds: 300),
+                          collapsedChild: CustomLoader(
+                            size: 20,
+                            strokeWidth: 2,
                             color: theme.colorScheme.onError,
-                            fontWeight: FontWeight.bold,
+                          ),
+                          child: Text(
+                            LocaleKeys.settings_delete_account_button.tr(),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onError,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

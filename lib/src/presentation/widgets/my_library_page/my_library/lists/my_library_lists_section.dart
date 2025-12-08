@@ -90,6 +90,11 @@ class MyLibraryListsSection extends StatelessWidget {
                         return EmptyWidget(
                           image: Images.empty,
                           message: LocaleKeys.common_empty_lists_title.tr(),
+                          onRefresh: () {
+                            BlocProvider.of<ListCreatorCubit>(
+                              context,
+                            ).getLists();
+                          },
                         );
                       }
 
