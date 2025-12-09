@@ -74,15 +74,11 @@ class ReadingPageParagraphSheet extends StatelessWidget {
         ..getBookData(
           slug: slug,
           onFinished: (book, isOffline) {
-            audioCubit
-                .pickBook(
-                  book,
-                  targetTimestamp: timestamp,
-                  tryOffline: isOffline,
-                )
-                .then((_) {
-                  audioCubit.play(overridenPosition: timestamp);
-                });
+            audioCubit.pickBook(
+              book,
+              targetTimestamp: timestamp,
+              tryOffline: isOffline,
+            );
           },
         )
         ..checkIfMediaAreDownloaded(slug);
@@ -144,6 +140,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                               onPressed: () {
                                 if (!isAuthenticated &&
                                     !wasLoggedInWhileOnline) {
+                                  Navigator.of(context).pop();
                                   CustomSnackbar.loginRequired(context);
                                   return;
                                 }

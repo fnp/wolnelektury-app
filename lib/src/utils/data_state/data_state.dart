@@ -55,4 +55,18 @@ extension DataStateX<T> on DataState<T> {
       DataStateFailure<T>(failure: final failure0) => failure(failure0),
     };
   }
+
+  void asyncHandle({
+    required Future<void> Function(T data, ApiResponsePagination? pagination)
+    success,
+    required Future<void> Function(Failure failure) failure,
+  }) async {
+    return switch (this) {
+      DataStateSuccess<T>(:final data, :final pagination) => await success(
+        data,
+        pagination,
+      ),
+      DataStateFailure<T>(failure: final failure0) => await failure(failure0),
+    };
+  }
 }

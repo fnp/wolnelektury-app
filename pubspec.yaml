@@ -55,7 +55,7 @@ dependencies:
   go_router: 15.1.2
   html: ^0.15.4
   in_app_review: 2.0.11
-  just_audio: 0.10.3
+  just_audio: 0.10.5
   just_audio_background: ^0.0.1-beta.17
   json_annotation: 4.9.0
   mockito: 5.4.6

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/presentation/pages/author_page.dart';
@@ -40,6 +41,13 @@ final mainPathsOrder = [
   cataloguePageConfig.path,
   lastReadPageConfig.path,
   myLibraryPageConfig.path,
+];
+
+final availableOfflinePaths = [
+  readingPageConfig.path,
+  readingPageConfigWithAnchor.path,
+  myLibraryPageConfig.path,
+  settingsPageConfig.path,
 ];
 
 final GoRouter router = GoRouter(
@@ -215,6 +223,23 @@ final GoRouter router = GoRouter(
           },
         ),
       ],
+      redirect: (context, state) {
+        final hasConnection = context
+            .read<ConnectivityCubit>()
+            .state
+            .isConnected;
+
+        if (!hasConnection) {
+          final isGoingToOfflineAvailable = availableOfflinePaths.any(
+            (path) => state.uri.toString().startsWith(path),
+          );
+          if (!isGoingToOfflineAvailable) {
+            return myLibraryPageConfig.path;
+          }
+        }
+
+        return null;
+      },
     ),
   ],
 );
