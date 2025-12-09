@@ -21,6 +21,7 @@ class ReadingPageSettingsSheet extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       useRootNavigator: true,
+      enableDrag: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Dimensions.modalsBorderRadius),

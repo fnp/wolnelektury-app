@@ -103,7 +103,11 @@ class BookPageCoverWithButtons extends StatelessWidget {
                             child: Row(
                               spacing: Dimensions.smallPadding,
                               children: [
-                                const Icon(Icons.sd_storage_outlined, size: 16),
+                                Icon(
+                                  Icons.sd_storage_outlined,
+                                  size: 16,
+                                  color: theme.colorScheme.onSurface,
+                                ),
                                 Text(
                                   '${offlineAudiobook!.totalSizeInMB.toStringAsFixed(0)} MB',
                                   style: theme.textTheme.labelMedium,

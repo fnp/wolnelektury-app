@@ -4,16 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/audio_dialog/audio_dialog.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_fade.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/create_bookmark_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPageParagraphSheet extends StatelessWidget {
@@ -40,6 +43,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
             BlocProvider.value(value: context.read<BookmarksCubit>()),
             BlocProvider.value(value: context.read<AudioCubit>()),
             BlocProvider.value(value: context.read<ScrollCubit>()),
+            BlocProvider.value(value: context.read<AuthCubit>()),
             BlocProvider(
               create: (context) {
                 return SingleBookCubit(get.get(), get.get());
@@ -130,19 +134,29 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                         //   activeColor: CustomColors.white,
                         // ),
                         // const SizedBox(height: Dimensions.mediumPadding),
-                        TextButtonWithIcon(
-                          nonActiveText: LocaleKeys.reading_sheet_bookmark_add
-                              .tr(),
-                          nonActiveIcon: Icons.bookmark_add_rounded,
-                          onPressed: () {
-                            readingPageCubit.toggleIsAddingBookmark();
-                            final isBookmarked = bookmarkCubit.state
-                                .isSelectedParagraphBookmarked(
-                                  selectedParagraph?.id,
-                                );
-                            bookmarkCubit.setEditingBookmark(isBookmarked);
+                        AuthWrapper(
+                          child: (isAuthenticated, wasLoggedInWhileOnline) {
+                            return TextButtonWithIcon(
+                              nonActiveText: LocaleKeys
+                                  .reading_sheet_bookmark_add
+                                  .tr(),
+                              nonActiveIcon: Icons.bookmark_add_rounded,
+                              onPressed: () {
+                                if (!isAuthenticated &&
+                                    !wasLoggedInWhileOnline) {
+                                  CustomSnackbar.loginRequired(context);
+                                  return;
+                                }
+                                readingPageCubit.toggleIsAddingBookmark();
+                                final isBookmarked = bookmarkCubit.state
+                                    .isSelectedParagraphBookmarked(
+                                      selectedParagraph?.id,
+                                    );
+                                bookmarkCubit.setEditingBookmark(isBookmarked);
+                              },
+                              activeColor: CustomColors.white,
+                            );
                           },
-                          activeColor: CustomColors.white,
                         ),
                         const SizedBox(height: Dimensions.mediumPadding),
                         BlocBuilder<ReadingPageCubit, ReadingPageState>(

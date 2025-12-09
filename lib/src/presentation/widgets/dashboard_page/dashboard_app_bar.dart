@@ -96,7 +96,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                                             .common_semantic_syncing_data
                                             .tr(),
                                         icon: Icons.sync,
-                                        iconColor: CustomColors.black,
+                                        iconColor: theme.colorScheme.onPrimary,
                                         backgroundColor: Colors.transparent,
                                       );
                                     }
@@ -124,7 +124,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                                             .common_semantic_no_internet_connection
                                             .tr(),
                                         icon: CustomIcons.signal_disconnected,
-                                        iconColor: CustomColors.black,
+                                        iconColor: theme.colorScheme.onPrimary,
                                         backgroundColor: Colors.transparent,
                                       );
                                     }

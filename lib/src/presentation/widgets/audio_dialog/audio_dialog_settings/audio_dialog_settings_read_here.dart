@@ -5,6 +5,7 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/presentation/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
@@ -77,11 +78,13 @@ class AudioDialogSettingsReadHere extends StatelessWidget {
                             Text(
                               LocaleKeys.audio_dialog_settings_read_here_button
                                   .tr(),
-                              style: theme.textTheme.bodyMedium,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: CustomColors.black,
+                              ),
                             ),
                             const Icon(
                               Icons.arrow_forward,
-                              color: Colors.black,
+                              color: CustomColors.black,
                               size: 18,
                             ),
                           ],
