@@ -43,11 +43,11 @@ final mainPathsOrder = [
   myLibraryPageConfig.path,
 ];
 
-final availableOfflinePaths = [
-  readingPageConfig.path,
-  readingPageConfigWithAnchor.path,
-  myLibraryPageConfig.path,
-  settingsPageConfig.path,
+final availableOfflineNames = [
+  readingPageConfig.name,
+  readingPageConfigWithAnchor.name,
+  myLibraryPageConfig.name,
+  settingsPageConfig.name,
 ];
 
 final GoRouter router = GoRouter(
@@ -230,8 +230,8 @@ final GoRouter router = GoRouter(
             .isConnected;
 
         if (!hasConnection) {
-          final isGoingToOfflineAvailable = availableOfflinePaths.any(
-            (path) => state.uri.toString().startsWith(path),
+          final isGoingToOfflineAvailable = availableOfflineNames.any(
+            (name) => state.uri.toString().contains(name),
           );
           if (!isGoingToOfflineAvailable) {
             return myLibraryPageConfig.path;

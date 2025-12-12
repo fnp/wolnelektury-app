@@ -114,20 +114,17 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
             const SizedBox(height: Dimensions.spacer),
 
             // Current password field
-            SizedBox(
-              height: Dimensions.elementHeight,
-              child: TextField(
-                obscureText: true,
-                controller: _currentPasswordController,
-                style: theme.textTheme.bodyMedium,
-                decoration: InputDecoration(
-                  hintText: LocaleKeys.settings_change_password_current.tr(),
-                  fillColor: theme.colorScheme.surface,
-                ),
-                onChanged: (value) {
-                  if (showCurrentPasswordError) validate();
-                },
+            TextField(
+              obscureText: true,
+              controller: _currentPasswordController,
+              style: theme.textTheme.bodyMedium,
+              decoration: InputDecoration(
+                hintText: LocaleKeys.settings_change_password_current.tr(),
+                fillColor: theme.colorScheme.surface,
               ),
+              onChanged: (value) {
+                if (showCurrentPasswordError) validate();
+              },
             ),
             AnimatedBoxSize(
               isChildVisible: showCurrentPasswordError,
@@ -181,6 +178,7 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
                           ),
                           child: Text(
                             LocaleKeys.settings_delete_account_button.tr(),
+                            textAlign: TextAlign.center,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onError,
                               fontWeight: FontWeight.bold,

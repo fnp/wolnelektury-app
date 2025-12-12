@@ -50,6 +50,7 @@ class LoadMoreButton extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
+                      color: CustomColors.black,
                     ),
                   ),
                 ),

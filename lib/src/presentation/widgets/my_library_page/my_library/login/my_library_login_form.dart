@@ -70,19 +70,16 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
               ),
             ],
           ),
-          SizedBox(
-            height: Dimensions.elementHeight,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-              controller: _usernameController,
-              onChanged: (_) {
-                if (showUsernameError) {
-                  _validate();
-                }
-              },
-            ),
+          TextField(
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.text,
+            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+            controller: _usernameController,
+            onChanged: (_) {
+              if (showUsernameError) {
+                _validate();
+              }
+            },
           ),
           const SizedBox(height: Dimensions.mediumPadding),
           Row(
@@ -101,53 +98,50 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
               ),
             ],
           ),
-          SizedBox(
-            height: Dimensions.elementHeight,
-            child: TextField(
-              textInputAction: TextInputAction.go,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-              controller: _passwordController,
-              onSubmitted: (value) {
+          TextField(
+            textInputAction: TextInputAction.go,
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+            controller: _passwordController,
+            onSubmitted: (value) {
+              _validate();
+              if (!isAnyError) {
+                BlocProvider.of<AuthCubit>(context).login(
+                  email: _usernameController.text,
+                  password: _passwordController.text,
+                );
+              }
+            },
+            onChanged: (_) {
+              if (showPasswordError) {
                 _validate();
-                if (!isAnyError) {
-                  BlocProvider.of<AuthCubit>(context).login(
-                    email: _usernameController.text,
-                    password: _passwordController.text,
-                  );
-                }
-              },
-              onChanged: (_) {
-                if (showPasswordError) {
-                  _validate();
-                }
-              },
-              decoration: InputDecoration(
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    MyLibraryForgotPasswordDialog.show(context: context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: Dimensions.veryLargePadding,
-                      left: Dimensions.mediumPadding,
-                    ),
-                    child: SizedBox(
-                      width: 110,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          LocaleKeys.login_forgot,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            decoration: TextDecoration.underline,
-                            color: CustomColors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ).tr(),
-                      ),
+              }
+            },
+            decoration: InputDecoration(
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  MyLibraryForgotPasswordDialog.show(context: context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: Dimensions.veryLargePadding,
+                    left: Dimensions.mediumPadding,
+                  ),
+                  child: SizedBox(
+                    width: 110,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        LocaleKeys.login_forgot,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          decoration: TextDecoration.underline,
+                          color: CustomColors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ).tr(),
                     ),
                   ),
                 ),
@@ -213,7 +207,10 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                                 size: 18,
                                 strokeWidth: 2,
                               )
-                            : const Text(LocaleKeys.login_login).tr(),
+                            : const Text(
+                                LocaleKeys.login_login,
+                                textAlign: TextAlign.center,
+                              ).tr(),
                       ),
                     ),
                   );

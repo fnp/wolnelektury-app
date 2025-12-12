@@ -45,7 +45,7 @@ class FiltersPage extends StatelessWidget {
                 spacing: Dimensions.mediumPadding,
                 children: [
                   SearchBar(
-                    key: ValueKey(state.tags.length),
+                    key: ValueKey(state.selectedTags.length),
                     initialValue: state.query,
                     onChanged: (value) {
                       cubit.changeQuery(value);
@@ -64,6 +64,7 @@ class FiltersPage extends StatelessWidget {
                           },
                           builder: (controller) {
                             return CustomScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
                               controller: controller,
                               slivers: [
                                 SliverStickyHeader(

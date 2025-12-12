@@ -128,21 +128,16 @@ class _FormState extends State<_Form> {
                 ),
               ],
             ),
-            SizedBox(
-              height: Dimensions.elementHeight,
-              child: TextField(
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.emailAddress,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.black,
-                ),
-                controller: _emailController,
-                onChanged: (_) {
-                  if (showEmailError) {
-                    _validate(context);
-                  }
-                },
-              ),
+            TextField(
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.emailAddress,
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+              controller: _emailController,
+              onChanged: (_) {
+                if (showEmailError) {
+                  _validate(context);
+                }
+              },
             ),
             const SizedBox(height: Dimensions.mediumPadding),
             Row(
@@ -161,23 +156,18 @@ class _FormState extends State<_Form> {
                 ),
               ],
             ),
-            SizedBox(
-              height: Dimensions.elementHeight,
-              child: TextField(
-                textInputAction: TextInputAction.go,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.black,
-                ),
-                controller: _passwordController,
-                onChanged: (_) {
-                  if (showPasswordError) {
-                    _validate(context);
-                  }
-                },
-              ),
+            TextField(
+              textInputAction: TextInputAction.go,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+              controller: _passwordController,
+              onChanged: (_) {
+                if (showPasswordError) {
+                  _validate(context);
+                }
+              },
             ),
             const SizedBox(height: Dimensions.mediumPadding),
             Row(
@@ -198,23 +188,18 @@ class _FormState extends State<_Form> {
                 ),
               ],
             ),
-            SizedBox(
-              height: Dimensions.elementHeight,
-              child: TextField(
-                textInputAction: TextInputAction.go,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.black,
-                ),
-                controller: _confirmPasswordController,
-                onChanged: (_) {
-                  if (showConfirmPasswordError) {
-                    _validate(context);
-                  }
-                },
-              ),
+            TextField(
+              textInputAction: TextInputAction.go,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+              controller: _confirmPasswordController,
+              onChanged: (_) {
+                if (showConfirmPasswordError) {
+                  _validate(context);
+                }
+              },
             ),
             const SizedBox(height: Dimensions.mediumPadding),
             BlocBuilder<AuthCubit, AuthState>(
@@ -292,7 +277,10 @@ class _FormState extends State<_Form> {
                                   size: 18,
                                   strokeWidth: 2,
                                 )
-                              : const Text(LocaleKeys.login_register).tr(),
+                              : const Text(
+                                  LocaleKeys.login_register,
+                                  textAlign: TextAlign.center,
+                                ).tr(),
                         );
                       },
                     ),

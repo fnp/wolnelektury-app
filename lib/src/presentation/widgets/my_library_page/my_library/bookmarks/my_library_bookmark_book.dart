@@ -37,15 +37,11 @@ class MyLibraryBookmarkBook extends StatelessWidget {
         ..getBookData(
           slug: bookmark.slug,
           onFinished: (book, isOffline) {
-            audioCubit
-                .pickBook(
-                  book,
-                  targetTimestamp: timestamp,
-                  tryOffline: isOffline,
-                )
-                .then((_) {
-                  audioCubit.play(overridenPosition: timestamp);
-                });
+            audioCubit.pickBook(
+              book,
+              targetTimestamp: timestamp,
+              tryOffline: isOffline,
+            );
           },
         )
         ..checkIfMediaAreDownloaded(bookmark.slug);

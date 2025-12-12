@@ -135,21 +135,18 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             const SizedBox(height: Dimensions.spacer, width: double.infinity),
 
             // Current password
-            SizedBox(
-              height: Dimensions.elementHeight,
-              child: TextField(
-                textInputAction: TextInputAction.next,
-                obscureText: true,
-                style: theme.textTheme.bodyMedium,
-                controller: _currentPasswordController,
-                decoration: InputDecoration(
-                  hintText: LocaleKeys.settings_change_password_current.tr(),
-                  fillColor: theme.colorScheme.primaryFixed,
-                ),
-                onChanged: (value) {
-                  if (showCurrentPasswordError) validate();
-                },
+            TextField(
+              textInputAction: TextInputAction.next,
+              obscureText: true,
+              style: theme.textTheme.bodyMedium,
+              controller: _currentPasswordController,
+              decoration: InputDecoration(
+                hintText: LocaleKeys.settings_change_password_current.tr(),
+                fillColor: theme.colorScheme.primaryFixed,
               ),
+              onChanged: (value) {
+                if (showCurrentPasswordError) validate();
+              },
             ),
             AnimatedBoxSize(
               isChildVisible: showCurrentPasswordError,
@@ -161,21 +158,18 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             const SizedBox(height: Dimensions.smallPadding),
 
             // New password
-            SizedBox(
-              height: Dimensions.elementHeight,
-              child: TextField(
-                textInputAction: TextInputAction.next,
-                obscureText: true,
-                style: theme.textTheme.bodyMedium,
-                controller: _newPasswordController,
-                decoration: InputDecoration(
-                  hintText: LocaleKeys.settings_change_password_new.tr(),
-                  fillColor: theme.colorScheme.primaryFixed,
-                ),
-                onChanged: (value) {
-                  if (showNewPasswordError) validate();
-                },
+            TextField(
+              textInputAction: TextInputAction.next,
+              obscureText: true,
+              style: theme.textTheme.bodyMedium,
+              controller: _newPasswordController,
+              decoration: InputDecoration(
+                hintText: LocaleKeys.settings_change_password_new.tr(),
+                fillColor: theme.colorScheme.primaryFixed,
               ),
+              onChanged: (value) {
+                if (showNewPasswordError) validate();
+              },
             ),
             AnimatedBoxSize(
               isChildVisible: showNewPasswordError,
@@ -187,21 +181,18 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             const SizedBox(height: Dimensions.smallPadding),
 
             // Repeat password
-            SizedBox(
-              height: Dimensions.elementHeight,
-              child: TextField(
-                textInputAction: TextInputAction.done,
-                obscureText: true,
-                style: theme.textTheme.bodyMedium,
-                controller: _repeatPasswordController,
-                decoration: InputDecoration(
-                  hintText: LocaleKeys.settings_change_password_repeat.tr(),
-                  fillColor: theme.colorScheme.primaryFixed,
-                ),
-                onChanged: (value) {
-                  if (showRepeatPasswordError) validate();
-                },
+            TextField(
+              textInputAction: TextInputAction.done,
+              obscureText: true,
+              style: theme.textTheme.bodyMedium,
+              controller: _repeatPasswordController,
+              decoration: InputDecoration(
+                hintText: LocaleKeys.settings_change_password_repeat.tr(),
+                fillColor: theme.colorScheme.primaryFixed,
               ),
+              onChanged: (value) {
+                if (showRepeatPasswordError) validate();
+              },
             ),
             AnimatedBoxSize(
               isChildVisible: showRepeatPasswordError,

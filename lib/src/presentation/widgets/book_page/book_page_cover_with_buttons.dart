@@ -154,14 +154,17 @@ class BookPageCoverWithButtons extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Flexible(
-                        child: onDelete == null
-                            ? _TitleWithAuthors(book: book)
-                            : _TitleWithAutorsAndDelete(
-                                book: book,
-                                onDelete: onDelete!,
-                              ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: onDelete == null
+                              ? _TitleWithAuthors(book: book)
+                              : _TitleWithAutorsAndDelete(
+                                  book: book,
+                                  onDelete: onDelete!,
+                                ),
+                        ),
                       ),
+                      const SizedBox(height: Dimensions.mediumPadding),
                       if (buttonTypes == BookButtonType.all ||
                           buttonTypes == BookButtonType.offlineReader)
                         BookPageCoverReadButton(
@@ -250,36 +253,25 @@ class _TitleWithAuthors extends StatelessWidget {
           ),
         ),
         ...book.authors.map((author) {
-          return Expanded(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.topLeft,
-              child: Column(
-                children: [
-                  InkWellWrapper(
-                    borderRadius: BorderRadius.circular(5),
-                    onTap: () {
-                      router.pushNamed(
-                        authorPageConfig.name,
-                        pathParameters: {'slug': author.slug},
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        author.name,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+          return InkWellWrapper(
+            borderRadius: BorderRadius.circular(5),
+            onTap: () {
+              router.pushNamed(
+                authorPageConfig.name,
+                pathParameters: {'slug': author.slug},
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                author.name,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           );
         }),
-        if (book.authors.isEmpty) const Spacer(),
       ],
     );
   }

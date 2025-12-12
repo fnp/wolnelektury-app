@@ -113,12 +113,12 @@ class AudioCubit extends SafeCubit<AudioState> {
       // Same book, same mode - no reload needed
       // Only skip reload if there's no target timestamp (not jumping to specific position)
       if (!modeChanged && targetTimestamp == null) {
+        await _getTextAudioSyncData(book.slug);
         await _getAndSetProgress(targetTimestamp: targetTimestamp);
         return;
       }
 
       // Mode changed, fetch sync data before reloading
-      await _getTextAudioSyncData(book.slug);
     }
     // New book selected (or mode changed), reset all values
     // Stop current playback and clear player state
@@ -252,6 +252,7 @@ class AudioCubit extends SafeCubit<AudioState> {
       emit(state.copyWith(statePosition: 0));
       _player.seek(const Duration(seconds: 0), index: 0);
     }
+    await _player.setVolume(1);
     await _player.play();
   }
 
@@ -273,6 +274,7 @@ class AudioCubit extends SafeCubit<AudioState> {
         isLoadingAudiobook: state.isLoadingAudiobook,
       ),
     );
+    await _player.setVolume(0);
     await _cancelSubscriptions();
     await Future.wait([
       _player.stop(),
@@ -388,6 +390,7 @@ class AudioCubit extends SafeCubit<AudioState> {
 
   /// Fetches text-to-audio synchronization data for the book.
   Future<void> _getTextAudioSyncData(String slug) async {
+    emit(state.copyWith(textSyncPairs: []));
     final audioSyncData = await _booksRepository.getBookTextAudioSync(
       slug: slug,
     );

@@ -56,6 +56,7 @@ class _AuthorPageState extends State<AuthorPage> {
             SliverToBoxAdapter(child: _TranslationsHeader()),
             AuthorPageTranslations(),
             SliverToBoxAdapter(child: _TranslationsLoadMore()),
+            SliverToBoxAdapter(child: SizedBox(height: Dimensions.spacer)),
           ],
         ),
       ),

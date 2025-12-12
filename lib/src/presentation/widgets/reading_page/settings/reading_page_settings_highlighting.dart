@@ -24,15 +24,20 @@ class ReadingPageSettingsSheetHighlighting extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: Dimensions.veryLargePadding),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  LocaleKeys.reader_settings_text_sync.tr(),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.black,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: Dimensions.veryLargePadding,
+                ),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    LocaleKeys.reader_settings_text_sync.tr(),
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),

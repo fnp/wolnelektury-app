@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/app_secure_storage_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_cache_service.dart';
+import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
 
 class ApiService {
@@ -52,6 +54,8 @@ class ApiService {
             // Disallow retrying, this is already a retry
             allowRetry: false,
           );
+        } else {
+          get.get<AuthCubit>().logout();
         }
       }
       return _dioExceptionHandler(e);

@@ -301,10 +301,15 @@ class _DetailsTableRow extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
+          const SizedBox(width: Dimensions.mediumPadding),
           Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: pills,
+            child: SingleChildScrollView(
+              reverse: true,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: pills,
+              ),
             ),
           ),
         ],
@@ -341,14 +346,17 @@ class _Pill extends StatelessWidget {
             horizontal: Dimensions.mediumPadding,
             vertical: Dimensions.smallPadding,
           ),
-          child: Text(
-            label,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-              color: textColor,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+                color: textColor,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),

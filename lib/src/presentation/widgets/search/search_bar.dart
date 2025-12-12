@@ -10,10 +10,12 @@ class SearchBar extends StatefulWidget {
   final VoidCallback onClear;
   final Function(String) onChanged;
   final String? initialValue;
+  final bool autofocus;
   const SearchBar({
     super.key,
     required this.onChanged,
     required this.onClear,
+    this.autofocus = true,
     this.initialValue,
   });
 
@@ -65,7 +67,7 @@ class SearchBarState extends State<SearchBar> {
           ),
           Expanded(
             child: TextField(
-              autofocus: true,
+              autofocus: widget.autofocus,
               textInputAction: TextInputAction.done,
               controller: controller,
               onChanged: (value) {

@@ -106,20 +106,19 @@ class _MyLibraryForgotPasswordDialogState
     return DialogWrapper(
       title: LocaleKeys.login_reset_dialog_title.tr().toUpperCase(),
       icon: Icons.lock,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            LocaleKeys.login_reset_dialog_content,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ).tr(),
-          const SizedBox(height: Dimensions.spacer),
-          SizedBox(
-            height: Dimensions.elementHeight,
-            child: TextField(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              LocaleKeys.login_reset_dialog_content,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ).tr(),
+            const SizedBox(height: Dimensions.spacer),
+            TextField(
               textInputAction: TextInputAction.done,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: CustomColors.black,
@@ -136,57 +135,57 @@ class _MyLibraryForgotPasswordDialogState
                 }
               },
             ),
-          ),
-          AnimatedBoxSize(
-            isChildVisible: showEmailError,
-            child: TextFieldValidationError(
-              message: LocaleKeys.login_email_validation.tr(),
+            AnimatedBoxSize(
+              isChildVisible: showEmailError,
+              child: TextFieldValidationError(
+                message: LocaleKeys.login_email_validation.tr(),
+              ),
             ),
-          ),
-          const SizedBox(height: Dimensions.smallPadding),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: yellowElevatedButton,
-                  onPressed: () {
-                    validate();
-                    if (!showEmailError) {
-                      context.read<SettingsCubit>().resetPassword(
-                        _controller.text,
-                      );
-                    }
-                  },
-                  child: BlocBuilder<SettingsCubit, SettingsState>(
-                    buildWhen: (p, c) {
-                      return p.isSendingResetPassword !=
-                          c.isSendingResetPassword;
-                    },
-                    builder: (context, state) {
-                      if (state.isSendingResetPassword) {
-                        return const SizedBox(
-                          width: 15,
-                          height: 15,
-                          child: CustomLoader(
-                            strokeWidth: 2,
-                            color: CustomColors.black,
-                          ),
+            const SizedBox(height: Dimensions.smallPadding),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: yellowElevatedButton,
+                    onPressed: () {
+                      validate();
+                      if (!showEmailError) {
+                        context.read<SettingsCubit>().resetPassword(
+                          _controller.text,
                         );
                       }
-                      return Text(
-                        LocaleKeys.login_reset_dialog_button.tr(),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
                     },
+                    child: BlocBuilder<SettingsCubit, SettingsState>(
+                      buildWhen: (p, c) {
+                        return p.isSendingResetPassword !=
+                            c.isSendingResetPassword;
+                      },
+                      builder: (context, state) {
+                        if (state.isSendingResetPassword) {
+                          return const SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CustomLoader(
+                              strokeWidth: 2,
+                              color: CustomColors.black,
+                            ),
+                          );
+                        }
+                        return Text(
+                          LocaleKeys.login_reset_dialog_button.tr(),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
