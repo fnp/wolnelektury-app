@@ -23,12 +23,12 @@ class AudioDialogControls extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         AuthWrapper(
-          child: (isAuthenticated, wasLoggedInWhileOnline) => CustomButton(
+          child: (isAuthenticated) => CustomButton(
             semanticLabel: LocaleKeys.common_semantic_add_audio_bookmark.tr(),
             icon: CustomIcons.bookmark_add,
             backgroundColor: CustomColors.grey,
             onPressed: () {
-              if (isAuthenticated || wasLoggedInWhileOnline) {
+              if (isAuthenticated) {
                 audioCubit.toggleBookmarks(true);
                 return;
               }

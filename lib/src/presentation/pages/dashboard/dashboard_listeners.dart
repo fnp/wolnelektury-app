@@ -62,7 +62,6 @@ class DashboardListeners extends StatelessWidget {
             listCreatorCubit.resetState();
             likesCubit.resetState();
             syncCubit.cleanupSyncData();
-            CustomSnackbar.success(context, LocaleKeys.login_logout.tr());
           },
         ),
         BlocListener<RouterCubit, RouterState>(

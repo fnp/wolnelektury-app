@@ -13,8 +13,6 @@ sealed class AuthState with _$AuthState {
     UserModel? user,
     RegisterAgreementModel? agreements,
 
-    @Default(false) bool wasLoggedInWhileOnline,
-
     // UI
     @Default(false) bool shouldShowRegisterForm,
   }) = _AuthState;

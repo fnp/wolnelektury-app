@@ -82,7 +82,7 @@ class _Body extends StatelessWidget {
           children: [
             const SizedBox(height: Dimensions.largePadding),
             MyLibraryList(bookList: bookList, isCompact: false),
-            const SizedBox(height: Dimensions.largePadding),
+            const SizedBox(height: Dimensions.spacer),
           ],
         ),
       ),

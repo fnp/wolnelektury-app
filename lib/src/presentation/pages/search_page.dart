@@ -117,6 +117,7 @@ class SearchPage extends StatelessWidget {
                     );
                   },
                 ),
+                const SizedBox(height: Dimensions.spacer),
               ],
             ),
           );

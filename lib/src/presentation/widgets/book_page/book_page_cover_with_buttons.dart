@@ -317,7 +317,7 @@ class _HeartButton extends StatelessWidget {
       builder: (context, state) {
         final isLiked = state.favourites.contains(book.slug);
         return AuthWrapper(
-          child: (isAuthenticated, wasLoggedInWhileOnline) {
+          child: (isAuthenticated) {
             return TextButtonWithIcon(
               nonActiveText: LocaleKeys.common_icon_button_like.tr(),
               nonActiveIcon: CustomIcons.favorite,

@@ -23,7 +23,7 @@ class BookOverviewWidgetCreateListButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AuthWrapper(
-      child: (isAuthenticated, wasLoggedInWhileOnline) {
+      child: (isAuthenticated) {
         return BookOverviewWidgetButton(
           size: size,
           iconSize: iconSize,

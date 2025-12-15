@@ -14,9 +14,9 @@ import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_b
 import 'package:wolnelektury/src/presentation/widgets/common/auth_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/bookmarks/create_bookmark_widget.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_with_icon.dart';
+import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
-import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPageParagraphSheet extends StatelessWidget {
@@ -130,73 +130,62 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                         //   activeColor: CustomColors.white,
                         // ),
                         // const SizedBox(height: Dimensions.mediumPadding),
-                        AuthWrapper(
-                          child: (isAuthenticated, wasLoggedInWhileOnline) {
-                            return TextButtonWithIcon(
-                              nonActiveText: LocaleKeys
-                                  .reading_sheet_bookmark_add
-                                  .tr(),
-                              nonActiveIcon: Icons.bookmark_add_rounded,
-                              onPressed: () {
-                                if (!isAuthenticated &&
-                                    !wasLoggedInWhileOnline) {
-                                  Navigator.of(context).pop();
-                                  CustomSnackbar.loginRequired(context);
-                                  return;
-                                }
-                                readingPageCubit.toggleIsAddingBookmark();
-                                final isBookmarked = bookmarkCubit.state
-                                    .isSelectedParagraphBookmarked(
-                                      selectedParagraph?.id,
-                                    );
-                                bookmarkCubit.setEditingBookmark(isBookmarked);
-                              },
-                              activeColor: CustomColors.white,
-                            );
-                          },
+                        _BookmarksWrapper(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextButtonWithIcon(
+                                nonActiveText: LocaleKeys
+                                    .reading_sheet_bookmark_add
+                                    .tr(),
+                                nonActiveIcon: Icons.bookmark_add_rounded,
+                                onPressed: () {
+                                  readingPageCubit.toggleIsAddingBookmark();
+                                  final isBookmarked = bookmarkCubit.state
+                                      .isSelectedParagraphBookmarked(
+                                        selectedParagraph?.id,
+                                      );
+                                  bookmarkCubit.setEditingBookmark(
+                                    isBookmarked,
+                                  );
+                                },
+                                activeColor: CustomColors.white,
+                              ),
+                              const SizedBox(height: Dimensions.mediumPadding),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: Dimensions.mediumPadding),
-                        BlocBuilder<ReadingPageCubit, ReadingPageState>(
-                          buildWhen: (p, c) {
-                            return p.audioSyncPairs != c.audioSyncPairs;
-                          },
-                          builder: (context, state) {
-                            if (state.audioSyncPairs.isEmpty) {
-                              return const SizedBox.shrink();
-                            }
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                TextButtonWithIcon(
-                                  nonActiveText: LocaleKeys.reading_sheet_listen
-                                      .tr(),
-                                  nonActiveIcon: Icons.headphones,
-                                  onPressed: () {
-                                    if (selectedParagraph?.id == null) {
-                                      return;
-                                    }
-                                    final timestamp = state.getTimestampForId(
-                                      selectedParagraph!.id!,
-                                    );
-                                    if (timestamp == null) {
-                                      return;
-                                    }
-                                    readingPageCubit.enableHighlighting(true);
-                                    Navigator.of(context).pop();
-                                    onListen(
-                                      timestamp: timestamp.floor(),
-                                      context: context,
-                                      slug: readingPageCubit.state.currentSlug!,
-                                    );
-                                  },
-                                  activeColor: CustomColors.white,
-                                ),
-                                const SizedBox(
-                                  height: Dimensions.mediumPadding,
-                                ),
-                              ],
-                            );
-                          },
+                        _ListeningWrapper(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextButtonWithIcon(
+                                nonActiveText: LocaleKeys.reading_sheet_listen
+                                    .tr(),
+                                nonActiveIcon: Icons.headphones,
+                                onPressed: () {
+                                  if (selectedParagraph?.id == null) {
+                                    return;
+                                  }
+                                  final timestamp = state.getTimestampForId(
+                                    selectedParagraph!.id!,
+                                  );
+                                  if (timestamp == null) {
+                                    return;
+                                  }
+                                  readingPageCubit.enableHighlighting(true);
+                                  Navigator.of(context).pop();
+                                  onListen(
+                                    timestamp: timestamp.floor(),
+                                    context: context,
+                                    slug: readingPageCubit.state.currentSlug!,
+                                  );
+                                },
+                                activeColor: CustomColors.white,
+                              ),
+                              const SizedBox(height: Dimensions.mediumPadding),
+                            ],
+                          ),
                         ),
                         TextButtonWithIcon(
                           nonActiveText: LocaleKeys.reading_sheet_share.tr(),
@@ -253,6 +242,57 @@ class _BookmarkNote extends StatelessWidget {
       },
       onUpdate: (note) {
         bookmarkCubit.updateBookmark(note: note);
+      },
+    );
+  }
+}
+
+class _ListeningWrapper extends StatelessWidget {
+  final Widget child;
+  const _ListeningWrapper({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConnectivityWrapper(
+      builder: (context, hasConnection) {
+        if (!hasConnection) {
+          return const SizedBox.shrink();
+        }
+        return BlocBuilder<ReadingPageCubit, ReadingPageState>(
+          buildWhen: (p, c) {
+            return p.audioSyncPairs != c.audioSyncPairs;
+          },
+          builder: (context, state) {
+            if (state.audioSyncPairs.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            return child;
+          },
+        );
+      },
+    );
+  }
+}
+
+class _BookmarksWrapper extends StatelessWidget {
+  final Widget child;
+  const _BookmarksWrapper({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConnectivityWrapper(
+      builder: (context, hasConnection) {
+        if (!hasConnection) {
+          return const SizedBox.shrink();
+        }
+        return AuthWrapper(
+          child: (isAuthenticated) {
+            if (!isAuthenticated) {
+              return const SizedBox.shrink();
+            }
+            return child;
+          },
+        );
       },
     );
   }

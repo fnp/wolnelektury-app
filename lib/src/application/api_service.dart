@@ -11,6 +11,26 @@ class ApiService {
   final AppStorageCacheService _cacheStorage;
   ApiService(this._dio, this._cacheStorage);
 
+  Future<String?> get handleAccessToken async {
+    try {
+      return await AppSecureStorageService().readAccessToken();
+    } catch (_) {
+      await AppSecureStorageService().deleteAll();
+      get.get<AuthCubit>().logout();
+      return null;
+    }
+  }
+
+  Future<String?> get handleRefreshToken async {
+    try {
+      return await AppSecureStorageService().readRefreshToken();
+    } catch (_) {
+      await AppSecureStorageService().deleteAll();
+      get.get<AuthCubit>().logout();
+      return null;
+    }
+  }
+
   Future<ApiResponse> getRequest(
     String endpoint, {
     allowRetry = true,
@@ -26,7 +46,7 @@ class ApiService {
       }
     }
 
-    final accessToken = await AppSecureStorageService().readAccessToken();
+    String? accessToken = await handleAccessToken;
 
     try {
       final response = await _dio.get(
@@ -74,7 +94,8 @@ class ApiService {
     dynamic data, {
     String? contentType,
   }) async {
-    final accessToken = await AppSecureStorageService().readAccessToken();
+    String? accessToken = await handleAccessToken;
+
     try {
       final response = await _dio.post(
         endpoint,
@@ -92,7 +113,8 @@ class ApiService {
 
   Future<ApiResponse> putRequest(String endpoint, dynamic data) async {
     try {
-      final accessToken = await AppSecureStorageService().readAccessToken();
+      String? accessToken = await handleAccessToken;
+
       final response = await _dio.put(
         endpoint,
         data: data,
@@ -107,7 +129,8 @@ class ApiService {
 
   Future<ApiResponse> deleteRequest(String endpoint) async {
     try {
-      final accessToken = await AppSecureStorageService().readAccessToken();
+      String? accessToken = await handleAccessToken;
+
       final response = await _dio.delete(
         endpoint,
         options: createOptions(accessToken: accessToken),
@@ -128,7 +151,7 @@ class ApiService {
   }
 
   Future<bool> _handleTokenRefresh() async {
-    final refreshToken = await AppSecureStorageService().readRefreshToken();
+    final refreshToken = await handleRefreshToken;
 
     if (refreshToken == null) {
       return false;

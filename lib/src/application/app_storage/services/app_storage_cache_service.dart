@@ -5,7 +5,7 @@ import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 
 class AppStorageCacheService {
-  static const Duration cacheValidity = Duration(days: 7);
+  static const Duration cacheValidity = Duration(days: 3);
   final AppStorage _storage;
 
   AppStorageCacheService(this._storage);

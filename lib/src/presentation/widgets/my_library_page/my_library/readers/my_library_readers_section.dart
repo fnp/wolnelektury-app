@@ -61,6 +61,9 @@ class MyLibraryReadersSection extends StatelessWidget {
                               onTap: () {
                                 router.goNamed(cataloguePageConfig.name);
                               },
+                              onRefresh: () {
+                                offlineCubit.loadOfflineBooks();
+                              },
                               hasConnection: hasConnection,
                             );
                           },

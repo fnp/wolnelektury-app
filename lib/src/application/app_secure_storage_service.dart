@@ -7,7 +7,12 @@ class AppSecureStorageService {
   AppSecureStorageService._();
   static AppSecureStorageService? _instance;
 
-  final _storage = const FlutterSecureStorage();
+  late final FlutterSecureStorage _storage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+    ),
+  );
 
   factory AppSecureStorageService() {
     _instance ??= AppSecureStorageService._();
@@ -20,6 +25,10 @@ class AppSecureStorageService {
   }) async {
     await _storage.write(key: _accessToken, value: accessToken);
     await _storage.write(key: _refreshToken, value: refreshToken);
+  }
+
+  Future<void> deleteAll() async {
+    await _storage.deleteAll();
   }
 
   Future<String?> readAccessToken() async {

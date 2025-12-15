@@ -102,50 +102,14 @@ class AppStorage extends _$AppStorage {
   }
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onUpgrade: (m, from, to) async {
       if (from < 2) {
-        await m.createTable(offlineBooks);
+        // Migration here
       }
-      if (from < 3) {
-        await m.createTable(progresses);
-        await m.createTable(syncInfo);
-        await m.createIndex(
-          Index(
-            'progresses_updated_at_idx',
-            'CREATE INDEX progresses_updated_at_idx ON progresses(updated_at)',
-          ),
-        );
-      }
-      if (from < 4) {
-        await m.addColumn(syncInfo, syncInfo.sentLikesSyncAt);
-        await m.addColumn(syncInfo, syncInfo.receivedLikesSyncAt);
-        await m.addColumn(syncInfo, syncInfo.receivedBookmarksSyncAt);
-        await m.addColumn(syncInfo, syncInfo.sentBookmarksSyncAt);
-        await m.createTable(likes);
-        await m.createTable(bookmarks);
-        await m.createIndex(
-          Index(
-            'bookmarks_updated_at_idx',
-            'CREATE INDEX bookmarks_updated_at_idx ON bookmarks(updated_at)',
-          ),
-        );
-        await m.createIndex(
-          Index(
-            'likes_updated_at_idx',
-            'CREATE INDEX likes_updated_at_idx ON likes(updated_at)',
-          ),
-        );
-      }
-      if (from < 5) {
-        await m.createTable(lastSearched);
-      }
-    },
-    onCreate: (m) async {
-      await m.createAll();
     },
   );
 }

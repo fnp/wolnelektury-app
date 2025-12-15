@@ -62,6 +62,9 @@ class MyLibraryAudiobooksSection extends StatelessWidget {
                                 router.goNamed(cataloguePageConfig.name);
                               },
                               hasConnection: hasConnection,
+                              onRefresh: () {
+                                offlineCubit.loadOfflineBooks();
+                              },
                             );
                           },
                         );

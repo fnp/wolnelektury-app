@@ -5,18 +5,16 @@ import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({required this.child, super.key});
 
-  final Widget Function(bool isAuthenticated, bool wasLoggedInWhileOnline)
-  child;
+  final Widget Function(bool isAuthenticated) child;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       buildWhen: (p, c) {
-        return p.isAuthenticated != c.isAuthenticated ||
-            p.wasLoggedInWhileOnline != c.wasLoggedInWhileOnline;
+        return p.isAuthenticated != c.isAuthenticated;
       },
       builder: (context, state) {
-        return child(state.isAuthenticated, state.wasLoggedInWhileOnline);
+        return child(state.isAuthenticated);
       },
     );
   }

@@ -92,6 +92,7 @@ class _Body extends StatelessWidget {
                         },
                         builder: (controller) {
                           return CustomScrollView(
+                            // physics: const AlwaysScrollableScrollPhysics(),
                             controller: controller,
                             slivers: const [_BooksList()],
                           );

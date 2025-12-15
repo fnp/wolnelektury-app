@@ -38,7 +38,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
       },
       builder: (context, authState) {
         return AuthWrapper(
-          child: (isAuthenticated, wasLoggedInWhileOnline) {
+          child: (isAuthenticated) {
             return ConnectivityWrapper(
               key: (ValueKey(authState.isAuthenticated)),
               builder: (context, hasConnection) {
@@ -46,7 +46,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
                     ? (authState.isAuthenticated
                           ? availableOnlineAuthEnums
                           : availableOnlineNoAuthEnums)
-                    : availableOfflineEnums(wasLoggedInWhileOnline);
+                    : availableOfflineEnums;
 
                 return _Body(
                   myLibraryEnums: myLibraryEnums,

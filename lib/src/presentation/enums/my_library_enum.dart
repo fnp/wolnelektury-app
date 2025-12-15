@@ -19,12 +19,8 @@ extension MyLibraryEnumExtension on MyLibraryEnum {
   }
 }
 
-List<MyLibraryEnum> availableOfflineEnums(bool includeBookmarks) {
-  return [
-    MyLibraryEnum.audiobooks,
-    MyLibraryEnum.readers,
-    if (includeBookmarks) MyLibraryEnum.bookmarks,
-  ];
+List<MyLibraryEnum> get availableOfflineEnums {
+  return [MyLibraryEnum.audiobooks, MyLibraryEnum.readers];
 }
 
 List<MyLibraryEnum> get availableOnlineAuthEnums {

@@ -20,7 +20,7 @@ class BookOverviewWidgetHeartButton extends StatelessWidget {
       builder: (context, state) {
         final isLiked = state.favourites.contains(book.slug);
         return AuthWrapper(
-          child: (isAuthenticated, wasLoggedInWhileOnline) {
+          child: (isAuthenticated) {
             return BookOverviewWidgetButton(
               nonActiveBackgroundColor: CustomColors.white,
               activeBackgroundColor: CustomColors.primaryYellowColor,

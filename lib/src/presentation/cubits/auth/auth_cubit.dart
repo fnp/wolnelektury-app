@@ -17,7 +17,7 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   void clearOnLostConnection() {
-    emit(AuthState(wasLoggedInWhileOnline: state.user != null));
+    emit(const AuthState());
   }
 
   Future<void> tryAutoLogin() async {
@@ -93,7 +93,7 @@ class AuthCubit extends SafeCubit<AuthState> {
   Future<void> logout() async {
     await _authRepository.deleteDeviceToken();
     await AppSecureStorageService().clearTokens();
-    emit(state.copyWith(user: null, wasLoggedInWhileOnline: false));
+    emit(state.copyWith(user: null));
   }
 
   Future<void> getAndSetUser() async {

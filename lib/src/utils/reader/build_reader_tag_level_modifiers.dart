@@ -149,18 +149,18 @@ class BuildReaderTagLevelModifiers {
         break;
 
       default:
-        spans.add(
-          BuildReaderClassLevelModifiers.build(
-            '[Unsupported tag: ${element.tag}]',
-            baseStyle.copyWith(color: Colors.red),
-            fontFamily,
-            fontSize,
-            null,
-            null,
-            nextSibling,
-            prevSibling,
-          ),
-        );
+        // spans.add(
+        //   BuildReaderClassLevelModifiers.build(
+        //     '[Unsupported tag: ${element.tag}]',
+        //     baseStyle.copyWith(color: Colors.red),
+        //     fontFamily,
+        //     fontSize,
+        //     null,
+        //     null,
+        //     nextSibling,
+        //     prevSibling,
+        //   ),
+        // );
         break;
     }
 
