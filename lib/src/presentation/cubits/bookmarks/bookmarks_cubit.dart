@@ -23,7 +23,6 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   // --------------------------
 
   Future<void> getMyLibraryBookmarks() async {
-    print('Getting my library bookmarks');
     emit(state.copyWith(isLoading: true));
     final bookmarks = await _bookmarksRepository.getBookmarks();
     bookmarks.handle(
@@ -42,7 +41,6 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   }
 
   Future<void> getMoreMyLibraryBookmarks() async {
-    print('Getting more my library bookmarks');
     if (state.bookmarks.length % 10 != 0 ||
         state.isLoadingMore ||
         state.isLoading) {

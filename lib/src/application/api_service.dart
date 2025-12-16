@@ -15,8 +15,6 @@ class ApiService {
     try {
       return await AppSecureStorageService().readAccessToken();
     } catch (_) {
-      await AppSecureStorageService().deleteAll();
-      get.get<AuthCubit>().logout();
       return null;
     }
   }
@@ -25,16 +23,14 @@ class ApiService {
     try {
       return await AppSecureStorageService().readRefreshToken();
     } catch (_) {
-      await AppSecureStorageService().deleteAll();
-      get.get<AuthCubit>().logout();
       return null;
     }
   }
 
   Future<ApiResponse> getRequest(
     String endpoint, {
-    allowRetry = true,
-    useCache = CacheEnum.use,
+    bool allowRetry = true,
+    CacheEnum useCache = CacheEnum.use,
   }) async {
     if (useCache == CacheEnum.use) {
       final response = await _cacheStorage.readCache(endpoint);
@@ -71,11 +67,14 @@ class ApiService {
         if (refreshSuccess) {
           return await getRequest(
             endpoint,
+            useCache: useCache,
             // Disallow retrying, this is already a retry
             allowRetry: false,
           );
         } else {
+          await AppSecureStorageService().deleteAll();
           get.get<AuthCubit>().logout();
+          return _dioExceptionHandler(e);
         }
       }
       return _dioExceptionHandler(e);
@@ -93,9 +92,9 @@ class ApiService {
     String endpoint,
     dynamic data, {
     String? contentType,
+    bool allowRetry = true,
   }) async {
     String? accessToken = await handleAccessToken;
-
     try {
       final response = await _dio.post(
         endpoint,
@@ -107,11 +106,34 @@ class ApiService {
       );
       return ApiResponse.fromApiServiceResponse(response);
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        // Only retry once
+        if (!allowRetry) return _dioExceptionHandler(e);
+
+        final refreshSuccess = await _handleTokenRefresh();
+        if (refreshSuccess) {
+          return await postRequest(
+            endpoint,
+            data,
+            contentType: contentType,
+            // Disallow retrying, this is already a retry
+            allowRetry: false,
+          );
+        } else {
+          await AppSecureStorageService().deleteAll();
+          get.get<AuthCubit>().logout();
+          return _dioExceptionHandler(e);
+        }
+      }
       return _dioExceptionHandler(e);
     }
   }
 
-  Future<ApiResponse> putRequest(String endpoint, dynamic data) async {
+  Future<ApiResponse> putRequest(
+    String endpoint,
+    dynamic data, {
+    bool allowRetry = true,
+  }) async {
     try {
       String? accessToken = await handleAccessToken;
 
@@ -123,11 +145,32 @@ class ApiService {
 
       return ApiResponse.fromApiServiceResponse(response);
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        // Only retry once
+        if (!allowRetry) return _dioExceptionHandler(e);
+
+        final refreshSuccess = await _handleTokenRefresh();
+        if (refreshSuccess) {
+          return await putRequest(
+            endpoint,
+            data,
+            // Disallow retrying, this is already a retry
+            allowRetry: false,
+          );
+        } else {
+          await AppSecureStorageService().deleteAll();
+          get.get<AuthCubit>().logout();
+          return _dioExceptionHandler(e);
+        }
+      }
       return _dioExceptionHandler(e);
     }
   }
 
-  Future<ApiResponse> deleteRequest(String endpoint) async {
+  Future<ApiResponse> deleteRequest(
+    String endpoint, {
+    bool allowRetry = true,
+  }) async {
     try {
       String? accessToken = await handleAccessToken;
 
@@ -146,6 +189,23 @@ class ApiService {
         );
       }
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        // Only retry once
+        if (!allowRetry) return _dioExceptionHandler(e);
+
+        final refreshSuccess = await _handleTokenRefresh();
+        if (refreshSuccess) {
+          return await deleteRequest(
+            endpoint,
+            // Disallow retrying, this is already a retry
+            allowRetry: false,
+          );
+        } else {
+          await AppSecureStorageService().deleteAll();
+          get.get<AuthCubit>().logout();
+          return _dioExceptionHandler(e);
+        }
+      }
       return _dioExceptionHandler(e);
     }
   }

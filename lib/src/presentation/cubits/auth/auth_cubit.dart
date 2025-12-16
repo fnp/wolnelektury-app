@@ -116,6 +116,7 @@ class AuthCubit extends SafeCubit<AuthState> {
     if (state.agreements != null) return;
     emit(state.copyWith(isLoadingAgreements: true));
     final result = await _authRepository.getRegisterAgreements();
+    print('Agreements result: $result');
     result.handle(
       success: (data, _) {
         emit(state.copyWith(agreements: data, isLoadingAgreements: false));

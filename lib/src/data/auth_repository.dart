@@ -182,6 +182,8 @@ class AuthRepositoryImplementation extends AuthRepository {
         'options': options,
       });
 
+      print(response); // --- IGNORE ---
+
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
       }

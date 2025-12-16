@@ -63,8 +63,6 @@ class AppStorageBookmarksService {
               ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
             .get();
 
-    print('here?');
-
     return result.map((e) => e.bookmarkJson).toList();
   }
 
