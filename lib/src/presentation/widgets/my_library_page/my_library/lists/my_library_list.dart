@@ -210,7 +210,7 @@ class _DeleteButton extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomLoader(size: 16, color: CustomColors.white),
+                      CustomLoader(size: 15, color: CustomColors.white),
                     ],
                   ),
                 )

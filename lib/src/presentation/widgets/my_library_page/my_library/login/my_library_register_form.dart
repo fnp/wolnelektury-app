@@ -274,7 +274,7 @@ class _FormState extends State<_Form> {
                           child: state.isLoading
                               ? const CustomLoader(
                                   color: Colors.white,
-                                  size: 18,
+                                  size: 15,
                                   strokeWidth: 2,
                                 )
                               : const Text(

@@ -5,6 +5,7 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/dialog_wrapper.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -92,14 +93,14 @@ class MyLibraryRegisterFlowDialog extends StatelessWidget {
                           duration: const Duration(milliseconds: 200),
                           child: state.isLoading
                               ? const CustomLoader(
-                                  color: Colors.white,
-                                  size: 18,
+                                  color: CustomColors.black,
+                                  size: 15,
                                   strokeWidth: 2,
                                 )
                               : Text(
                                   LocaleKeys.login_register_flow_dialog_button,
                                   style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.onPrimary,
+                                    color: CustomColors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ).tr(),

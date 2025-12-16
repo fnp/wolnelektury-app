@@ -8,6 +8,7 @@ import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_b
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/dialog_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_validation_error.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -138,7 +139,9 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             TextField(
               textInputAction: TextInputAction.next,
               obscureText: true,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: CustomColors.black,
+              ),
               controller: _currentPasswordController,
               decoration: InputDecoration(
                 hintText: LocaleKeys.settings_change_password_current.tr(),
@@ -161,7 +164,9 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             TextField(
               textInputAction: TextInputAction.next,
               obscureText: true,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: CustomColors.black,
+              ),
               controller: _newPasswordController,
               decoration: InputDecoration(
                 hintText: LocaleKeys.settings_change_password_new.tr(),
@@ -184,7 +189,9 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             TextField(
               textInputAction: TextInputAction.done,
               obscureText: true,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: CustomColors.black,
+              ),
               controller: _repeatPasswordController,
               decoration: InputDecoration(
                 hintText: LocaleKeys.settings_change_password_repeat.tr(),
@@ -229,13 +236,14 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                           isChildVisible: !state.isChangingPassword,
                           duration: const Duration(milliseconds: 300),
                           collapsedChild: const CustomLoader(
-                            size: 20,
+                            size: 15,
                             strokeWidth: 2,
+                            color: CustomColors.black,
                           ),
                           child: Text(
                             LocaleKeys.settings_change_password_button.tr(),
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onPrimary,
+                              color: CustomColors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

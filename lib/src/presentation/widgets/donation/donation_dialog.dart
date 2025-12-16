@@ -66,6 +66,7 @@ class DonationDialog extends StatelessWidget {
                                 height: 15,
                                 child: CustomLoader(
                                   strokeWidth: 2,
+                                  size: 15,
                                   color: CustomColors.black,
                                 ),
                               );

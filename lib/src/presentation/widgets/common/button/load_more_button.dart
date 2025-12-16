@@ -44,7 +44,7 @@ class LoadMoreButton extends StatelessWidget {
                 child: AnimatedBoxFade(
                   isChildVisible: !isLoading,
                   duration: const Duration(milliseconds: 200),
-                  collapsedChild: const CustomLoader(),
+                  collapsedChild: const CustomLoader(size: 15, strokeWidth: 2),
                   child: Text(
                     LocaleKeys.catalogue_author_load_more.tr(),
                     textAlign: TextAlign.center,

@@ -8,6 +8,7 @@ import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_b
 import 'package:wolnelektury/src/presentation/widgets/common/animated/animated_box_size.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/dialog_wrapper.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/textfield/text_field_validation_error.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -117,10 +118,12 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
             TextField(
               obscureText: true,
               controller: _currentPasswordController,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: CustomColors.black,
+              ),
               decoration: InputDecoration(
                 hintText: LocaleKeys.settings_change_password_current.tr(),
-                fillColor: theme.colorScheme.surface,
+                fillColor: theme.colorScheme.primaryFixed,
               ),
               onChanged: (value) {
                 if (showCurrentPasswordError) validate();
@@ -149,7 +152,7 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
                   child: Text(
                     LocaleKeys.settings_delete_account_cancel.tr(),
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
+                      color: CustomColors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -172,7 +175,7 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
                           isChildVisible: !state.isDeletingAccount,
                           duration: const Duration(milliseconds: 300),
                           collapsedChild: CustomLoader(
-                            size: 20,
+                            size: 15,
                             strokeWidth: 2,
                             color: theme.colorScheme.onError,
                           ),

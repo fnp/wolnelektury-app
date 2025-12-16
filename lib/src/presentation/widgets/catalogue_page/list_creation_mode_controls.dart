@@ -92,7 +92,10 @@ class ListCreationModeControls extends StatelessWidget {
                                       switchInCurve: defaultCurve,
                                       switchOutCurve: defaultCurve,
                                       child: state.isSavingEditedList
-                                          ? const CustomLoader()
+                                          ? const CustomLoader(
+                                              size: 15,
+                                              strokeWidth: 2,
+                                            )
                                           : Text(
                                               LocaleKeys
                                                   .catalogue_list_creator_save
