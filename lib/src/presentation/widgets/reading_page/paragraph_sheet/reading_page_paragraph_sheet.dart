@@ -17,6 +17,7 @@ import 'package:wolnelektury/src/presentation/widgets/common/button/text_button_
 import 'package:wolnelektury/src/presentation/widgets/common/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPageParagraphSheet extends StatelessWidget {
@@ -131,29 +132,39 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                         // ),
                         // const SizedBox(height: Dimensions.mediumPadding),
                         _BookmarksWrapper(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextButtonWithIcon(
-                                nonActiveText: LocaleKeys
-                                    .reading_sheet_bookmark_add
-                                    .tr(),
-                                nonActiveIcon: Icons.bookmark_add_rounded,
-                                onPressed: () {
-                                  readingPageCubit.toggleIsAddingBookmark();
-                                  final isBookmarked = bookmarkCubit.state
-                                      .isSelectedParagraphBookmarked(
-                                        selectedParagraph?.id,
-                                      );
-                                  bookmarkCubit.setEditingBookmark(
-                                    isBookmarked,
-                                  );
-                                },
-                                activeColor: CustomColors.white,
-                              ),
-                              const SizedBox(height: Dimensions.mediumPadding),
-                            ],
-                          ),
+                          child: (isAuth) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextButtonWithIcon(
+                                  nonActiveText: LocaleKeys
+                                      .reading_sheet_bookmark_add
+                                      .tr(),
+                                  nonActiveIcon: Icons.bookmark_add_rounded,
+                                  onPressed: () {
+                                    if (!isAuth) {
+                                      Navigator.of(context).pop();
+                                      CustomSnackbar.loginRequired(context);
+                                      return;
+                                    }
+
+                                    readingPageCubit.toggleIsAddingBookmark();
+                                    final isBookmarked = bookmarkCubit.state
+                                        .isSelectedParagraphBookmarked(
+                                          selectedParagraph?.id,
+                                        );
+                                    bookmarkCubit.setEditingBookmark(
+                                      isBookmarked,
+                                    );
+                                  },
+                                  activeColor: CustomColors.white,
+                                ),
+                                const SizedBox(
+                                  height: Dimensions.mediumPadding,
+                                ),
+                              ],
+                            );
+                          },
                         ),
                         _ListeningWrapper(
                           child: Column(
@@ -275,7 +286,7 @@ class _ListeningWrapper extends StatelessWidget {
 }
 
 class _BookmarksWrapper extends StatelessWidget {
-  final Widget child;
+  final Widget Function(bool isAuthenticated) child;
   const _BookmarksWrapper({required this.child});
 
   @override
@@ -287,10 +298,7 @@ class _BookmarksWrapper extends StatelessWidget {
         }
         return AuthWrapper(
           child: (isAuthenticated) {
-            if (!isAuthenticated) {
-              return const SizedBox.shrink();
-            }
-            return child;
+            return child(isAuthenticated);
           },
         );
       },
