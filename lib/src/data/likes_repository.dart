@@ -103,6 +103,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
         final response = await _apiService.putRequest(
           '$_likesEndpoint$slug/',
           null,
+          isAnonymous: false,
         );
 
         if (response.error != null) {
@@ -113,6 +114,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
       } else {
         final response = await _apiService.deleteRequest(
           '$_likesEndpoint$slug/',
+          isAnonymous: false,
         );
 
         if (response.error != null) {
@@ -149,6 +151,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
           );
         }).toList(),
         contentType: Headers.jsonContentType,
+        isAnonymous: false,
       );
 
       if (response.hasError) {
@@ -175,6 +178,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
       final response = await _apiService.getRequest(
         _receiveSyncLikesEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
+        isAnonymous: false,
       );
 
       AppLogger.instance.d(

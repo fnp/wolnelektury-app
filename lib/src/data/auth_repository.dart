@@ -56,7 +56,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     try {
       final response = await _apiService.postRequest(_resetPasswordEndpoint, {
         'email': email,
-      });
+      }, isAnonymous: true);
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
       }
@@ -72,7 +72,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     try {
       final response = await _apiService.putRequest(_settingsEndpoint, {
         'notifications': enabled,
-      });
+      }, isAnonymous: false);
 
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
@@ -90,6 +90,7 @@ class AuthRepositoryImplementation extends AuthRepository {
       final response = await _apiService.getRequest(
         _settingsEndpoint,
         useCache: CacheEnum.ignore,
+        isAnonymous: false,
       );
 
       if (response.hasError) {
@@ -109,7 +110,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     try {
       final response = await _apiService.postRequest(_deleteAccountEndpoint, {
         'password': password,
-      });
+      }, isAnonymous: false);
 
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
@@ -130,7 +131,7 @@ class AuthRepositoryImplementation extends AuthRepository {
       final response = await _apiService.postRequest(_changePasswordEndpoint, {
         'new_password': newPassword,
         'old_password': oldPassword,
-      });
+      }, isAnonymous: false);
 
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
@@ -151,7 +152,7 @@ class AuthRepositoryImplementation extends AuthRepository {
       final response = await _apiService.postRequest(_loginEndpoint, {
         'username': username,
         'password': password,
-      });
+      }, isAnonymous: true);
 
       if (response.hasError || response.data?.isEmpty == true) {
         return const DataState.failure(Failure.badResponse());
@@ -180,9 +181,7 @@ class AuthRepositoryImplementation extends AuthRepository {
         'email': username,
         'password': password,
         'options': options,
-      });
-
-      print(response); // --- IGNORE ---
+      }, isAnonymous: true);
 
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
@@ -199,6 +198,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     final response = await _apiService.getRequest(
       '/me',
       useCache: CacheEnum.ignore,
+      isAnonymous: false,
     );
 
     if (response.error != null) {
@@ -215,7 +215,11 @@ class AuthRepositoryImplementation extends AuthRepository {
 
   @override
   Future<DataState<RegisterAgreementModel>> getRegisterAgreements() async {
-    final response = await _apiService.getRequest(_registerEndpoint);
+    final response = await _apiService.getRequest(
+      _registerEndpoint,
+      useCache: CacheEnum.ignore,
+      isAnonymous: true,
+    );
 
     if (response.error != null) {
       return const DataState.failure(Failure.badResponse());
@@ -235,7 +239,7 @@ class AuthRepositoryImplementation extends AuthRepository {
       final token = await NotificationService.getNotificationToken();
       final response = await _apiService.postRequest(_tokenEndpoint, {
         'token': token,
-      });
+      }, isAnonymous: false);
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
       }
@@ -252,7 +256,7 @@ class AuthRepositoryImplementation extends AuthRepository {
       final response = await _apiService.postRequest(_tokenEndpoint, {
         'token': token,
         'deleted': true,
-      });
+      }, isAnonymous: false);
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
       }

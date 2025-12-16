@@ -50,6 +50,7 @@ class ListsRepositoryImplementation extends ListsRepository {
       final response = await _apiService.postRequest(
         _manageListEndpoint(listSlug),
         {'books': bookSlugs},
+        isAnonymous: false,
       );
 
       if (response.hasError) {
@@ -70,7 +71,7 @@ class ListsRepositoryImplementation extends ListsRepository {
       final response = await _apiService.postRequest(_createListEndpoint, {
         'name': listName,
         'books': bookSlugs,
-      });
+      }, isAnonymous: false);
 
       if (response.hasError || !response.hasData) {
         return const DataState.failure(Failure.badResponse());
@@ -89,6 +90,7 @@ class ListsRepositoryImplementation extends ListsRepository {
     try {
       final response = await _apiService.deleteRequest(
         _deleteBookFromListEndpoint(listSlug: listSlug, bookSlug: bookSlug),
+        isAnonymous: false,
       );
 
       if (response.hasError) {
@@ -105,6 +107,7 @@ class ListsRepositoryImplementation extends ListsRepository {
     try {
       final response = await _apiService.deleteRequest(
         _manageListEndpoint(listSlug),
+        isAnonymous: false,
       );
 
       if (response.hasError) {
@@ -122,6 +125,7 @@ class ListsRepositoryImplementation extends ListsRepository {
       final response = await _apiService.getRequest(
         _manageListEndpoint(listSlug),
         useCache: CacheEnum.ignore,
+        isAnonymous: true,
       );
 
       if (!response.hasData) {
@@ -141,6 +145,7 @@ class ListsRepositoryImplementation extends ListsRepository {
       final response = await _apiService.getRequest(
         url ?? _createListEndpoint,
         useCache: CacheEnum.ignore,
+        isAnonymous: false,
       );
       if (!response.hasData) {
         return const DataState.failure(Failure.notFound());

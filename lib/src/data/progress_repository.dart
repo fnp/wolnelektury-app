@@ -63,6 +63,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
       final response = await _apiService.getRequest(
         _receiveSyncProgressEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
+        isAnonymous: false,
       );
 
       AppLogger.instance.d(
@@ -135,6 +136,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
           );
         }).toList(),
         contentType: Headers.jsonContentType,
+        isAnonymous: false,
       );
 
       if (response.hasError) {
@@ -246,6 +248,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
       final response = await _apiService.putRequest(
         _progressAudioEndpoint(slug),
         {'audio_timestamp': position},
+        isAnonymous: false,
       );
 
       if (response.hasError) {
@@ -266,6 +269,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
       final response = await _apiService.putRequest(
         _progressTextEndpoint(slug),
         {'text_anchor': textAnchor},
+        isAnonymous: false,
       );
 
       if (response.hasError) {

@@ -18,6 +18,7 @@ class DonationRepositoryImplementation extends DonationRepository {
     try {
       final response = await _apiService.postRequest(
         _getDonationTokenEndpoint,
+        isAnonymous: false,
         {},
       );
       if (response.hasData) {

@@ -87,6 +87,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
       final response = await _apiService.getRequest(
         '$_bookmarksEndpoint/$uuid/',
         useCache: CacheEnum.use,
+        isAnonymous: true,
       );
       if (response.hasData) {
         return DataState.success(
@@ -335,7 +336,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         'anchor': anchor,
         'book': slug,
         'note': note,
-      });
+      }, isAnonymous: false);
 
       if ((response.data ?? []).isNotEmpty) {
         return DataState.success(
@@ -358,7 +359,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         'audio_timestamp': timestamp,
         'book': slug,
         'note': note,
-      });
+      }, isAnonymous: false);
 
       if ((response.data ?? []).isNotEmpty) {
         return DataState.success(
@@ -381,7 +382,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
             'book': updatedBookmark.slug,
             'anchor': updatedBookmark.anchor,
             'audio_timestamp': updatedBookmark.audioTimestamp,
-          });
+          }, isAnonymous: false);
 
       if (response.hasData) {
         return const DataState.success(data: null);
@@ -394,7 +395,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
 
   Future<DataState<void>> _deleteBookmarkFromDb(String href) async {
     try {
-      await _apiService.deleteRequest(href.removeApiUrl);
+      await _apiService.deleteRequest(href.removeApiUrl, isAnonymous: false);
       return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
@@ -425,6 +426,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
           );
         }).toList(),
         contentType: Headers.jsonContentType,
+        isAnonymous: false,
       );
 
       if (response.hasError) {
@@ -451,6 +453,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
       final response = await _apiService.getRequest(
         _receiveSyncBookmarksEndpoint(lastReceivedTimestamp),
         useCache: CacheEnum.ignore,
+        isAnonymous: false,
       );
 
       AppLogger.instance.d(

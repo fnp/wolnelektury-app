@@ -37,6 +37,7 @@ class SearchRepositoryImplementation extends SearchRepository {
     try {
       final response = await _apiService.getRequest(
         _searchHintsEndpoint(query),
+        isAnonymous: true,
       );
       return DataState.fromApiResponse(
         response: response,
@@ -57,6 +58,7 @@ class SearchRepositoryImplementation extends SearchRepository {
     try {
       final response = await _apiService.getRequest(
         url ?? _searchBooksEndpoint(query),
+        isAnonymous: true,
       );
       return DataState.fromApiResponse(
         response: response,
@@ -77,6 +79,7 @@ class SearchRepositoryImplementation extends SearchRepository {
     try {
       final response = await _apiService.getRequest(
         url ?? _searchTextEndpoint(query),
+        isAnonymous: true,
       );
       return DataState.fromApiResponse(
         response: response,
@@ -100,6 +103,7 @@ class SearchRepositoryImplementation extends SearchRepository {
     try {
       final response = await _apiService.getRequest(
         url ?? _searchGenericEndpoint(query),
+        isAnonymous: true,
       );
       if (response.hasData) {
         final parsed = GenericSearchResultModel.fromJson(response.data!.first);

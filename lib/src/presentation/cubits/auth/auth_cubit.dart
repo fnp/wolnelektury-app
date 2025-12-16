@@ -90,8 +90,10 @@ class AuthCubit extends SafeCubit<AuthState> {
     emit(state.copyWith(isLoading: false));
   }
 
-  Future<void> logout() async {
-    await _authRepository.deleteDeviceToken();
+  Future<void> logout({bool softLogout = false}) async {
+    if (!softLogout) {
+      await _authRepository.deleteDeviceToken();
+    }
     await AppSecureStorageService().clearTokens();
     emit(state.copyWith(user: null));
   }
@@ -116,7 +118,6 @@ class AuthCubit extends SafeCubit<AuthState> {
     if (state.agreements != null) return;
     emit(state.copyWith(isLoadingAgreements: true));
     final result = await _authRepository.getRegisterAgreements();
-    print('Agreements result: $result');
     result.handle(
       success: (data, _) {
         emit(state.copyWith(agreements: data, isLoadingAgreements: false));

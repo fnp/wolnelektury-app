@@ -34,7 +34,10 @@ class AuthorRepositoryImplementation extends AuthorRepository {
     required String slug,
   }) async {
     try {
-      final response = await _apiService.getRequest(_authorEndpoint(slug));
+      final response = await _apiService.getRequest(
+        _authorEndpoint(slug),
+        isAnonymous: true,
+      );
 
       if (response.hasData) {
         return DataState.success(
@@ -60,7 +63,10 @@ class AuthorRepositoryImplementation extends AuthorRepository {
 
       effectiveUrl = ApiUtils.applyLimit(apiUrl: effectiveUrl, limit: 6);
 
-      final response = await _apiService.getRequest(effectiveUrl);
+      final response = await _apiService.getRequest(
+        effectiveUrl,
+        isAnonymous: true,
+      );
 
       return DataState.fromApiResponse(
         response: response,
@@ -84,7 +90,10 @@ class AuthorRepositoryImplementation extends AuthorRepository {
         limit: 6,
       );
 
-      final response = await _apiService.getRequest(effectiveUrl);
+      final response = await _apiService.getRequest(
+        effectiveUrl,
+        isAnonymous: true,
+      );
 
       return DataState.fromApiResponse(
         response: response,

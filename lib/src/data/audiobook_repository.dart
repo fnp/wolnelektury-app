@@ -33,7 +33,10 @@ class AudiobookRepositoryImplementation extends AudiobookRepository {
         return const DataState.failure(Failure.notFound());
       }
 
-      final response = await _apiService.getRequest(_audiobooksEndpoint(slug));
+      final response = await _apiService.getRequest(
+        _audiobooksEndpoint(slug),
+        isAnonymous: true,
+      );
 
       return DataState.fromApiResponse(
         response: response,

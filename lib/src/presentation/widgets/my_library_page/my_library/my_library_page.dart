@@ -5,7 +5,6 @@ import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/bookmarks/bookmarks_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/offline/offline_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
@@ -186,9 +185,6 @@ class _BodyState extends State<_Body> {
                   create: (context) {
                     return BookmarksCubit(get.get())..getMyLibraryBookmarks();
                   },
-                ),
-                BlocProvider.value(
-                  value: context.read<ListCreatorCubit>()..getLists(),
                 ),
               ],
               child: PageView(

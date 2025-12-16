@@ -11,26 +11,54 @@ class ApiService {
   final AppStorageCacheService _cacheStorage;
   ApiService(this._dio, this._cacheStorage);
 
-  Future<String?> get handleAccessToken async {
+  // Token reading and setting
+  // --------------------------------
+  Future<String?> handleAccessToken() async {
     try {
       return await AppSecureStorageService().readAccessToken();
     } catch (_) {
+      await get.get<AuthCubit>().logout(softLogout: true);
+      await AppSecureStorageService().deleteAll();
       return null;
     }
   }
 
-  Future<String?> get handleRefreshToken async {
+  Future<String?> handleRefreshToken() async {
     try {
       return await AppSecureStorageService().readRefreshToken();
     } catch (_) {
+      await get.get<AuthCubit>().logout(softLogout: true);
+      await AppSecureStorageService().deleteAll();
       return null;
     }
   }
+
+  Future<bool> setTokens({required ApiResponse response}) async {
+    final String? accessToken = response.data?[0]['access_token'] as String?;
+    final String? refreshToken = response.data?[0]['refresh_token'] as String?;
+
+    if (accessToken == null || refreshToken == null) {
+      return false;
+    }
+
+    try {
+      await AppSecureStorageService().writeTokens(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      );
+      return true;
+    } catch (_) {
+      await AppSecureStorageService().deleteAll();
+      return false;
+    }
+  }
+  // --------------------------------
 
   Future<ApiResponse> getRequest(
     String endpoint, {
     bool allowRetry = true,
     CacheEnum useCache = CacheEnum.use,
+    required bool isAnonymous,
   }) async {
     if (useCache == CacheEnum.use) {
       final response = await _cacheStorage.readCache(endpoint);
@@ -42,7 +70,10 @@ class ApiService {
       }
     }
 
-    String? accessToken = await handleAccessToken;
+    String? accessToken;
+    if (!isAnonymous) {
+      accessToken = await handleAccessToken();
+    }
 
     try {
       final response = await _dio.get(
@@ -62,7 +93,6 @@ class ApiService {
       if (e.response?.statusCode == 401) {
         // Only retry once
         if (!allowRetry) return _dioExceptionHandler(e);
-
         final refreshSuccess = await _handleTokenRefresh();
         if (refreshSuccess) {
           return await getRequest(
@@ -70,10 +100,12 @@ class ApiService {
             useCache: useCache,
             // Disallow retrying, this is already a retry
             allowRetry: false,
+            isAnonymous: isAnonymous,
           );
         } else {
-          await AppSecureStorageService().deleteAll();
-          get.get<AuthCubit>().logout();
+          if (!refreshSuccess && accessToken != null) {
+            await get.get<AuthCubit>().logout(softLogout: true);
+          }
           return _dioExceptionHandler(e);
         }
       }
@@ -93,8 +125,12 @@ class ApiService {
     dynamic data, {
     String? contentType,
     bool allowRetry = true,
+    required bool isAnonymous,
   }) async {
-    String? accessToken = await handleAccessToken;
+    String? accessToken;
+    if (!isAnonymous) {
+      accessToken = await handleAccessToken();
+    }
     try {
       final response = await _dio.post(
         endpoint,
@@ -107,9 +143,7 @@ class ApiService {
       return ApiResponse.fromApiServiceResponse(response);
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        // Only retry once
         if (!allowRetry) return _dioExceptionHandler(e);
-
         final refreshSuccess = await _handleTokenRefresh();
         if (refreshSuccess) {
           return await postRequest(
@@ -118,10 +152,12 @@ class ApiService {
             contentType: contentType,
             // Disallow retrying, this is already a retry
             allowRetry: false,
+            isAnonymous: isAnonymous,
           );
         } else {
-          await AppSecureStorageService().deleteAll();
-          get.get<AuthCubit>().logout();
+          if (!refreshSuccess && accessToken != null) {
+            await get.get<AuthCubit>().logout(softLogout: true);
+          }
           return _dioExceptionHandler(e);
         }
       }
@@ -133,9 +169,13 @@ class ApiService {
     String endpoint,
     dynamic data, {
     bool allowRetry = true,
+    required bool isAnonymous,
   }) async {
     try {
-      String? accessToken = await handleAccessToken;
+      String? accessToken;
+      if (!isAnonymous) {
+        accessToken = await handleAccessToken();
+      }
 
       final response = await _dio.put(
         endpoint,
@@ -156,10 +196,9 @@ class ApiService {
             data,
             // Disallow retrying, this is already a retry
             allowRetry: false,
+            isAnonymous: isAnonymous,
           );
         } else {
-          await AppSecureStorageService().deleteAll();
-          get.get<AuthCubit>().logout();
           return _dioExceptionHandler(e);
         }
       }
@@ -170,10 +209,14 @@ class ApiService {
   Future<ApiResponse> deleteRequest(
     String endpoint, {
     bool allowRetry = true,
+    required bool isAnonymous,
   }) async {
-    try {
-      String? accessToken = await handleAccessToken;
+    String? accessToken;
+    if (!isAnonymous) {
+      accessToken = await handleAccessToken();
+    }
 
+    try {
       final response = await _dio.delete(
         endpoint,
         options: createOptions(accessToken: accessToken),
@@ -199,10 +242,12 @@ class ApiService {
             endpoint,
             // Disallow retrying, this is already a retry
             allowRetry: false,
+            isAnonymous: isAnonymous,
           );
         } else {
-          await AppSecureStorageService().deleteAll();
-          get.get<AuthCubit>().logout();
+          if (!refreshSuccess && accessToken != null) {
+            await get.get<AuthCubit>().logout(softLogout: true);
+          }
           return _dioExceptionHandler(e);
         }
       }
@@ -211,11 +256,7 @@ class ApiService {
   }
 
   Future<bool> _handleTokenRefresh() async {
-    final refreshToken = await handleRefreshToken;
-
-    if (refreshToken == null) {
-      return false;
-    }
+    final refreshToken = await handleRefreshToken();
 
     try {
       final response = await _dio.post(
@@ -228,22 +269,6 @@ class ApiService {
     } on DioException {
       return false;
     }
-  }
-
-  Future<bool> setTokens({required ApiResponse response}) async {
-    final String? accessToken = response.data?[0]['access_token'] as String?;
-    final String? refreshToken = response.data?[0]['refresh_token'] as String?;
-
-    if (accessToken == null || refreshToken == null) {
-      return false;
-    }
-
-    await AppSecureStorageService().writeTokens(
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-    );
-
-    return true;
   }
 
   ApiResponse _dioExceptionHandler(DioException e) {

@@ -29,7 +29,10 @@ class TagsRepositoryImplementation extends TagsRepository {
         apiUrl: url ?? _tagsEndpoint,
       );
       effectiveUrl = ApiUtils.applySearch(apiUrl: effectiveUrl, search: search);
-      final response = await _apiService.getRequest(effectiveUrl);
+      final response = await _apiService.getRequest(
+        effectiveUrl,
+        isAnonymous: true,
+      );
       return DataState.fromApiResponse(
         response: response,
         converter: (data) {

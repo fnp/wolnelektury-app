@@ -42,7 +42,10 @@ class BooksRepositoryImplementation extends BooksRepository {
     required String slug,
   }) async {
     try {
-      final response = await _apiService.getRequest(_syncEndpoint(slug));
+      final response = await _apiService.getRequest(
+        _syncEndpoint(slug),
+        isAnonymous: true,
+      );
       if (response.hasData) {
         return DataState.fromApiResponse(
           response: response,
@@ -63,7 +66,10 @@ class BooksRepositoryImplementation extends BooksRepository {
   @override
   Future<DataState<BookModel>> getBookBySlug({required String slug}) async {
     try {
-      final response = await _apiService.getRequest('$_booksEndpoint/$slug/');
+      final response = await _apiService.getRequest(
+        '$_booksEndpoint/$slug/',
+        isAnonymous: true,
+      );
 
       if (response.hasData) {
         return DataState.success(
@@ -95,6 +101,7 @@ class BooksRepositoryImplementation extends BooksRepository {
 
       final response = await _apiService.getRequest(
         '$_booksEndpoint/$slug.json',
+        isAnonymous: true,
       );
 
       if (response.hasData) {
@@ -121,7 +128,10 @@ class BooksRepositoryImplementation extends BooksRepository {
       );
       effectiveUrl = ApiUtils.applyTags(tags: tags, apiUrl: effectiveUrl);
 
-      final response = await _apiService.getRequest(effectiveUrl);
+      final response = await _apiService.getRequest(
+        effectiveUrl,
+        isAnonymous: true,
+      );
 
       return DataState.fromApiResponse(
         response: response,
