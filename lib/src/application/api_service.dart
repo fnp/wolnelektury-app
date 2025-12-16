@@ -131,6 +131,7 @@ class ApiService {
     if (!isAnonymous) {
       accessToken = await handleAccessToken();
     }
+
     try {
       final response = await _dio.post(
         endpoint,
@@ -171,12 +172,12 @@ class ApiService {
     bool allowRetry = true,
     required bool isAnonymous,
   }) async {
-    try {
-      String? accessToken;
-      if (!isAnonymous) {
-        accessToken = await handleAccessToken();
-      }
+    String? accessToken;
+    if (!isAnonymous) {
+      accessToken = await handleAccessToken();
+    }
 
+    try {
       final response = await _dio.put(
         endpoint,
         data: data,
@@ -199,6 +200,9 @@ class ApiService {
             isAnonymous: isAnonymous,
           );
         } else {
+          if (!refreshSuccess && accessToken != null) {
+            await get.get<AuthCubit>().logout(softLogout: true);
+          }
           return _dioExceptionHandler(e);
         }
       }
