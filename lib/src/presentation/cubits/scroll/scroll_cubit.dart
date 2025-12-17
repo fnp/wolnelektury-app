@@ -8,12 +8,10 @@ class ScrollCubit extends SafeCubit<ScrollState> {
   ScrollCubit() : super(const ScrollState());
 
   void showAppBar() {
-    if (isClosed) return;
     emit(state.copyWith(showAppBar: true));
   }
 
   void hideAppBar() {
-    if (isClosed) return;
     emit(state.copyWith(showAppBar: false));
   }
 }

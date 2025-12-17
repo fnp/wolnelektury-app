@@ -159,13 +159,14 @@ class DashboardListeners extends StatelessWidget {
             return !p.isConnected && c.isConnected;
           },
           listener: (context, state) {
-            authCubit.tryAutoLogin().then((_) {
-              if (!context.mounted) return;
-
-              if (context.read<AuthCubit>().state.isAuthenticated) {
+            authCubit.tryAutoLogin(
+              onFailure: () {
+                syncCubit.cleanupSyncData();
+              },
+              onSuccess: () {
                 syncAppWithDb(syncCubit, likesCubit);
-              }
-            });
+              },
+            );
           },
         ),
         BlocListener<ConnectivityCubit, ConnectivityState>(

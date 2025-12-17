@@ -133,6 +133,7 @@ class ProgressRepositoryImplementation extends ProgressRepository
           final progress = ProgressModel.fromJson(jsonDecode(e.progressJson));
           return progress.copyWith(
             timestamp: (e.updatedAt.millisecondsSinceEpoch) ~/ 1000,
+            textAnchor: progress.textAnchor ?? '',
           );
         }).toList(),
         contentType: Headers.jsonContentType,

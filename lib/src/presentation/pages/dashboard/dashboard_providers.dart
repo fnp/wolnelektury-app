@@ -9,6 +9,7 @@ import 'package:wolnelektury/src/presentation/cubits/list_creator/list_creator_c
 import 'package:wolnelektury/src/presentation/cubits/minimized_player/minimized_player_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/presentation/cubits/scroll/scroll_cubit.dart';
+import 'package:wolnelektury/src/presentation/cubits/synchronizer/synchronizer_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class DashboardProviders extends StatelessWidget {
@@ -18,6 +19,7 @@ class DashboardProviders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final syncCubit = context.read<SynchronizerCubit>();
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => RouterCubit()),
@@ -53,7 +55,11 @@ class DashboardProviders extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) {
-            return get.get<AuthCubit>()..tryAutoLogin();
+            return get.get<AuthCubit>()..tryAutoLogin(
+              onFailure: () {
+                syncCubit.cleanupSyncData();
+              },
+            );
           },
         ),
       ],

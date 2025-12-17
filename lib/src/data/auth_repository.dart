@@ -12,7 +12,8 @@ abstract class AuthRepository {
     required String password,
   });
 
-  Future<DataState<void>> register({
+  // The bool is value indicating required email verification
+  Future<DataState<bool>> register({
     required String username,
     required String password,
     List<int> options = const [],
@@ -171,7 +172,7 @@ class AuthRepositoryImplementation extends AuthRepository {
   }
 
   @override
-  Future<DataState<void>> register({
+  Future<DataState<bool>> register({
     required String username,
     required String password,
     List<int> options = const [],
@@ -187,7 +188,10 @@ class AuthRepositoryImplementation extends AuthRepository {
         return const DataState.failure(Failure.badResponse());
       }
 
-      return const DataState.success(data: null);
+      final requiresEmailVerification =
+          response.data?.firstOrNull?['emailConfirmationRequired'] ?? false;
+
+      return DataState.success(data: requiresEmailVerification);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
     }

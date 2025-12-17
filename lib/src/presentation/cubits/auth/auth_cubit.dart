@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/application/app_secure_storage_service.dart';
 import 'package:wolnelektury/src/data/auth_repository.dart';
@@ -20,11 +21,14 @@ class AuthCubit extends SafeCubit<AuthState> {
     emit(const AuthState());
   }
 
-  Future<void> tryAutoLogin() async {
+  Future<void> tryAutoLogin({
+    VoidCallback? onFailure,
+    VoidCallback? onSuccess,
+  }) async {
     if (state.user != null) return;
     final token = await AppSecureStorageService().readAccessToken();
     if (token == null) return;
-    await getAndSetUser();
+    await getAndSetUser(onFailure: onFailure, onSuccess: onSuccess);
   }
 
   Future<void> login({
@@ -70,7 +74,13 @@ class AuthCubit extends SafeCubit<AuthState> {
     required String email,
     required String password,
   }) async {
-    emit(state.copyWith(isLoading: true, isRegisterSuccess: null));
+    emit(
+      state.copyWith(
+        isLoading: true,
+        isRegisterSuccess: null,
+        isRegisterEmailVerificationRequired: false,
+      ),
+    );
 
     final result = await _authRepository.register(
       username: email.toLowerCase(),
@@ -79,8 +89,13 @@ class AuthCubit extends SafeCubit<AuthState> {
     );
 
     result.handle(
-      success: (_, _) async {
-        emit(state.copyWith(isRegisterSuccess: true));
+      success: (requiresEmailVerification, _) async {
+        emit(
+          state.copyWith(
+            isRegisterSuccess: true,
+            isRegisterEmailVerificationRequired: requiresEmailVerification,
+          ),
+        );
       },
       failure: (failure) {
         emit(state.copyWith(isRegisterSuccess: false));
@@ -98,16 +113,21 @@ class AuthCubit extends SafeCubit<AuthState> {
     emit(state.copyWith(user: null));
   }
 
-  Future<void> getAndSetUser() async {
+  Future<void> getAndSetUser({
+    VoidCallback? onFailure,
+    VoidCallback? onSuccess,
+  }) async {
     final userResult = await _authRepository.getUser();
-    await _authRepository.sendDeviceToken();
 
     userResult.handle(
-      success: (data, _) {
+      success: (data, _) async {
+        await _authRepository.sendDeviceToken();
+        onSuccess?.call();
         emit(state.copyWith(user: data, isLoginSuccess: true));
       },
       failure: (failure) {
         logout();
+        onFailure?.call();
         emit(state.copyWith(isLoginSuccess: false));
       },
     );

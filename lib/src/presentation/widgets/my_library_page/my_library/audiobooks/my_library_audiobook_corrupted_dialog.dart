@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/presentation/widgets/common/dialog_wrapper.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
@@ -63,7 +64,7 @@ class MyLibraryAudiobookCorruptedDialog extends StatelessWidget {
                     LocaleKeys.my_library_offline_corrupted_audiobook_download
                         .tr(),
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
+                      color: CustomColors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -91,12 +91,24 @@ class _FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authCubit = context.read<AuthCubit>();
     return BlocListener<AuthCubit, AuthState>(
-      listenWhen: (p, c) => p.isRegisterSuccess != c.isRegisterSuccess,
+      listenWhen: (p, c) {
+        return p.isRegisterSuccess != c.isRegisterSuccess ||
+            p.isRegisterEmailVerificationRequired !=
+                c.isRegisterEmailVerificationRequired;
+      },
       listener: (context, state) {
         if (state.isRegisterSuccess == true) {
-          MyLibraryRegisterFlowDialog.show(
-            context: context,
+          if (state.isRegisterEmailVerificationRequired) {
+            MyLibraryRegisterFlowDialog.show(
+              context: context,
+              email: _emailController.text,
+              password: _passwordController.text,
+            );
+            return;
+          }
+          authCubit.login(
             email: _emailController.text,
             password: _passwordController.text,
           );
@@ -260,7 +272,7 @@ class _FormState extends State<_Form> {
                     onPressed: () {
                       _validate(context);
                       if (!isAnyError) {
-                        BlocProvider.of<AuthCubit>(context).register(
+                        authCubit.register(
                           email: _emailController.text,
                           password: _passwordController.text,
                         );

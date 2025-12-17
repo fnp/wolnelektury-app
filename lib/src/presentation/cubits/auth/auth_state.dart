@@ -9,6 +9,7 @@ sealed class AuthState with _$AuthState {
     bool? isLoginSuccess,
     bool? isRegisterSuccess,
     bool? isLoginSuccessFromRegisterFlow,
+    @Default(false) bool isRegisterEmailVerificationRequired,
 
     UserModel? user,
     RegisterAgreementModel? agreements,
