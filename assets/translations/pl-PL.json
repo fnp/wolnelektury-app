@@ -255,7 +255,8 @@
             "like": "Polub",
             "liked": "Polubione",
             "sort": "Sortuj",
-            "filter": "Filtruj"
+            "filter": "Filtruj",
+            "browse": "Przeglądaj"
         },
         "snackbar": {
             "not_logged": "Zaloguj się, aby skorzystać z tej funkcji",

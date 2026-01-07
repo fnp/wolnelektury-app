@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
-import 'package:wolnelektury/src/presentation/widgets/reading_page/reader/reader_bottom_sheet.dart';
+import 'package:wolnelektury/src/features/readers/widgets/reader/reader_bottom_sheet.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_master_level_modifiers.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_tag_level_modifiers.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';

@@ -1,7 +1,7 @@
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
-import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
+import 'package:wolnelektury/src/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';
 

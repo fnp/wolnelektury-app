@@ -7,7 +7,7 @@ import 'package:wolnelektury/src/application/app_storage/services/app_storage_li
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
 import 'package:wolnelektury/src/data/mixin/repository_helper_mixin.dart';
 import 'package:wolnelektury/src/domain/like_sync_model.dart';
-import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
+import 'package:wolnelektury/src/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 abstract class LikesRepository {

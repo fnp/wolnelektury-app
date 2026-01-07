@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BookModel {
 
- String get title; String get url; String get slug; List<EpochModel> get epochs; List<GenreModel> get genres; List<KindModel> get kinds; List<AuthorModel> get authors; List<BookTranslator> get translators;@JsonKey(name: 'content_warnings') List<String> get contentWarnings; List<String> get audiences;@JsonKey(name: 'elevenreader_link') String? get elevenReaderLink;@JsonKey(name: 'fragment_data') BookFragmentData? get fragment;@JsonKey(name: 'simple_thumb') String? get simpleThumb;@JsonKey(name: 'cover_thumb') String? get coverThumb;@JsonKey(name: 'cover_color') String? get coverColor;@JsonKey(name: 'cover') String? get coverUrl;@JsonKey(name: 'simple_cover') String? get simpleCoverUrl;@JsonKey(name: 'isbn_pdf') String? get isbnPdf;@JsonKey(name: 'isbn_epub') String? get isbnEpub;@JsonKey(name: 'isbn_mobi') String? get isbnMobi;@JsonKey(name: 'abstract') String? get description;@JsonKey(name: 'has_mp3_file') bool get hasAudiobook;
+ String get title; String get url; String get slug; List<EpochModel> get epochs; List<GenreModel> get genres; List<KindModel> get kinds; List<AuthorModel> get authors; List<BookTranslator> get translators; List<BookChild> get children;@JsonKey(name: 'content_warnings') List<String> get contentWarnings; List<String> get audiences;@JsonKey(name: 'elevenreader_link') String? get elevenReaderLink;@JsonKey(name: 'fragment_data') BookFragmentData? get fragment;@JsonKey(name: 'simple_thumb') String? get simpleThumb;@JsonKey(name: 'cover_thumb') String? get coverThumb;@JsonKey(name: 'cover_color') String? get coverColor;@JsonKey(name: 'cover') String? get coverUrl;@JsonKey(name: 'simple_cover') String? get simpleCoverUrl;@JsonKey(name: 'isbn_pdf') String? get isbnPdf;@JsonKey(name: 'isbn_epub') String? get isbnEpub;@JsonKey(name: 'isbn_mobi') String? get isbnMobi;@JsonKey(name: 'abstract') String? get description;@JsonKey(name: 'has_mp3_file') bool get hasAudiobook;
 /// Create a copy of BookModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $BookModelCopyWith<BookModel> get copyWith => _$BookModelCopyWithImpl<BookModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookModel&&(identical(other.title, title) || other.title == title)&&(identical(other.url, url) || other.url == url)&&(identical(other.slug, slug) || other.slug == slug)&&const DeepCollectionEquality().equals(other.epochs, epochs)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.kinds, kinds)&&const DeepCollectionEquality().equals(other.authors, authors)&&const DeepCollectionEquality().equals(other.translators, translators)&&const DeepCollectionEquality().equals(other.contentWarnings, contentWarnings)&&const DeepCollectionEquality().equals(other.audiences, audiences)&&(identical(other.elevenReaderLink, elevenReaderLink) || other.elevenReaderLink == elevenReaderLink)&&(identical(other.fragment, fragment) || other.fragment == fragment)&&(identical(other.simpleThumb, simpleThumb) || other.simpleThumb == simpleThumb)&&(identical(other.coverThumb, coverThumb) || other.coverThumb == coverThumb)&&(identical(other.coverColor, coverColor) || other.coverColor == coverColor)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.simpleCoverUrl, simpleCoverUrl) || other.simpleCoverUrl == simpleCoverUrl)&&(identical(other.isbnPdf, isbnPdf) || other.isbnPdf == isbnPdf)&&(identical(other.isbnEpub, isbnEpub) || other.isbnEpub == isbnEpub)&&(identical(other.isbnMobi, isbnMobi) || other.isbnMobi == isbnMobi)&&(identical(other.description, description) || other.description == description)&&(identical(other.hasAudiobook, hasAudiobook) || other.hasAudiobook == hasAudiobook));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookModel&&(identical(other.title, title) || other.title == title)&&(identical(other.url, url) || other.url == url)&&(identical(other.slug, slug) || other.slug == slug)&&const DeepCollectionEquality().equals(other.epochs, epochs)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.kinds, kinds)&&const DeepCollectionEquality().equals(other.authors, authors)&&const DeepCollectionEquality().equals(other.translators, translators)&&const DeepCollectionEquality().equals(other.children, children)&&const DeepCollectionEquality().equals(other.contentWarnings, contentWarnings)&&const DeepCollectionEquality().equals(other.audiences, audiences)&&(identical(other.elevenReaderLink, elevenReaderLink) || other.elevenReaderLink == elevenReaderLink)&&(identical(other.fragment, fragment) || other.fragment == fragment)&&(identical(other.simpleThumb, simpleThumb) || other.simpleThumb == simpleThumb)&&(identical(other.coverThumb, coverThumb) || other.coverThumb == coverThumb)&&(identical(other.coverColor, coverColor) || other.coverColor == coverColor)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.simpleCoverUrl, simpleCoverUrl) || other.simpleCoverUrl == simpleCoverUrl)&&(identical(other.isbnPdf, isbnPdf) || other.isbnPdf == isbnPdf)&&(identical(other.isbnEpub, isbnEpub) || other.isbnEpub == isbnEpub)&&(identical(other.isbnMobi, isbnMobi) || other.isbnMobi == isbnMobi)&&(identical(other.description, description) || other.description == description)&&(identical(other.hasAudiobook, hasAudiobook) || other.hasAudiobook == hasAudiobook));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,title,url,slug,const DeepCollectionEquality().hash(epochs),const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(kinds),const DeepCollectionEquality().hash(authors),const DeepCollectionEquality().hash(translators),const DeepCollectionEquality().hash(contentWarnings),const DeepCollectionEquality().hash(audiences),elevenReaderLink,fragment,simpleThumb,coverThumb,coverColor,coverUrl,simpleCoverUrl,isbnPdf,isbnEpub,isbnMobi,description,hasAudiobook]);
+int get hashCode => Object.hashAll([runtimeType,title,url,slug,const DeepCollectionEquality().hash(epochs),const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(kinds),const DeepCollectionEquality().hash(authors),const DeepCollectionEquality().hash(translators),const DeepCollectionEquality().hash(children),const DeepCollectionEquality().hash(contentWarnings),const DeepCollectionEquality().hash(audiences),elevenReaderLink,fragment,simpleThumb,coverThumb,coverColor,coverUrl,simpleCoverUrl,isbnPdf,isbnEpub,isbnMobi,description,hasAudiobook]);
 
 @override
 String toString() {
-  return 'BookModel(title: $title, url: $url, slug: $slug, epochs: $epochs, genres: $genres, kinds: $kinds, authors: $authors, translators: $translators, contentWarnings: $contentWarnings, audiences: $audiences, elevenReaderLink: $elevenReaderLink, fragment: $fragment, simpleThumb: $simpleThumb, coverThumb: $coverThumb, coverColor: $coverColor, coverUrl: $coverUrl, simpleCoverUrl: $simpleCoverUrl, isbnPdf: $isbnPdf, isbnEpub: $isbnEpub, isbnMobi: $isbnMobi, description: $description, hasAudiobook: $hasAudiobook)';
+  return 'BookModel(title: $title, url: $url, slug: $slug, epochs: $epochs, genres: $genres, kinds: $kinds, authors: $authors, translators: $translators, children: $children, contentWarnings: $contentWarnings, audiences: $audiences, elevenReaderLink: $elevenReaderLink, fragment: $fragment, simpleThumb: $simpleThumb, coverThumb: $coverThumb, coverColor: $coverColor, coverUrl: $coverUrl, simpleCoverUrl: $simpleCoverUrl, isbnPdf: $isbnPdf, isbnEpub: $isbnEpub, isbnMobi: $isbnMobi, description: $description, hasAudiobook: $hasAudiobook)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $BookModelCopyWith<$Res>  {
   factory $BookModelCopyWith(BookModel value, $Res Function(BookModel) _then) = _$BookModelCopyWithImpl;
 @useResult
 $Res call({
- String title, String url, String slug, List<EpochModel> epochs, List<GenreModel> genres, List<KindModel> kinds, List<AuthorModel> authors, List<BookTranslator> translators,@JsonKey(name: 'content_warnings') List<String> contentWarnings, List<String> audiences,@JsonKey(name: 'elevenreader_link') String? elevenReaderLink,@JsonKey(name: 'fragment_data') BookFragmentData? fragment,@JsonKey(name: 'simple_thumb') String? simpleThumb,@JsonKey(name: 'cover_thumb') String? coverThumb,@JsonKey(name: 'cover_color') String? coverColor,@JsonKey(name: 'cover') String? coverUrl,@JsonKey(name: 'simple_cover') String? simpleCoverUrl,@JsonKey(name: 'isbn_pdf') String? isbnPdf,@JsonKey(name: 'isbn_epub') String? isbnEpub,@JsonKey(name: 'isbn_mobi') String? isbnMobi,@JsonKey(name: 'abstract') String? description,@JsonKey(name: 'has_mp3_file') bool hasAudiobook
+ String title, String url, String slug, List<EpochModel> epochs, List<GenreModel> genres, List<KindModel> kinds, List<AuthorModel> authors, List<BookTranslator> translators, List<BookChild> children,@JsonKey(name: 'content_warnings') List<String> contentWarnings, List<String> audiences,@JsonKey(name: 'elevenreader_link') String? elevenReaderLink,@JsonKey(name: 'fragment_data') BookFragmentData? fragment,@JsonKey(name: 'simple_thumb') String? simpleThumb,@JsonKey(name: 'cover_thumb') String? coverThumb,@JsonKey(name: 'cover_color') String? coverColor,@JsonKey(name: 'cover') String? coverUrl,@JsonKey(name: 'simple_cover') String? simpleCoverUrl,@JsonKey(name: 'isbn_pdf') String? isbnPdf,@JsonKey(name: 'isbn_epub') String? isbnEpub,@JsonKey(name: 'isbn_mobi') String? isbnMobi,@JsonKey(name: 'abstract') String? description,@JsonKey(name: 'has_mp3_file') bool hasAudiobook
 });
 
 
@@ -66,7 +66,7 @@ class _$BookModelCopyWithImpl<$Res>
 
 /// Create a copy of BookModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? url = null,Object? slug = null,Object? epochs = null,Object? genres = null,Object? kinds = null,Object? authors = null,Object? translators = null,Object? contentWarnings = null,Object? audiences = null,Object? elevenReaderLink = freezed,Object? fragment = freezed,Object? simpleThumb = freezed,Object? coverThumb = freezed,Object? coverColor = freezed,Object? coverUrl = freezed,Object? simpleCoverUrl = freezed,Object? isbnPdf = freezed,Object? isbnEpub = freezed,Object? isbnMobi = freezed,Object? description = freezed,Object? hasAudiobook = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? url = null,Object? slug = null,Object? epochs = null,Object? genres = null,Object? kinds = null,Object? authors = null,Object? translators = null,Object? children = null,Object? contentWarnings = null,Object? audiences = null,Object? elevenReaderLink = freezed,Object? fragment = freezed,Object? simpleThumb = freezed,Object? coverThumb = freezed,Object? coverColor = freezed,Object? coverUrl = freezed,Object? simpleCoverUrl = freezed,Object? isbnPdf = freezed,Object? isbnEpub = freezed,Object? isbnMobi = freezed,Object? description = freezed,Object? hasAudiobook = null,}) {
   return _then(_self.copyWith(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
@@ -76,7 +76,8 @@ as List<EpochModel>,genres: null == genres ? _self.genres : genres // ignore: ca
 as List<GenreModel>,kinds: null == kinds ? _self.kinds : kinds // ignore: cast_nullable_to_non_nullable
 as List<KindModel>,authors: null == authors ? _self.authors : authors // ignore: cast_nullable_to_non_nullable
 as List<AuthorModel>,translators: null == translators ? _self.translators : translators // ignore: cast_nullable_to_non_nullable
-as List<BookTranslator>,contentWarnings: null == contentWarnings ? _self.contentWarnings : contentWarnings // ignore: cast_nullable_to_non_nullable
+as List<BookTranslator>,children: null == children ? _self.children : children // ignore: cast_nullable_to_non_nullable
+as List<BookChild>,contentWarnings: null == contentWarnings ? _self.contentWarnings : contentWarnings // ignore: cast_nullable_to_non_nullable
 as List<String>,audiences: null == audiences ? _self.audiences : audiences // ignore: cast_nullable_to_non_nullable
 as List<String>,elevenReaderLink: freezed == elevenReaderLink ? _self.elevenReaderLink : elevenReaderLink // ignore: cast_nullable_to_non_nullable
 as String?,fragment: freezed == fragment ? _self.fragment : fragment // ignore: cast_nullable_to_non_nullable
@@ -113,7 +114,7 @@ $BookFragmentDataCopyWith<$Res>? get fragment {
 @JsonSerializable()
 
 class _BookModel implements BookModel {
-  const _BookModel({required this.title, required this.url, required this.slug, final  List<EpochModel> epochs = const [], final  List<GenreModel> genres = const [], final  List<KindModel> kinds = const [], final  List<AuthorModel> authors = const [], final  List<BookTranslator> translators = const [], @JsonKey(name: 'content_warnings') final  List<String> contentWarnings = const [], final  List<String> audiences = const [], @JsonKey(name: 'elevenreader_link') this.elevenReaderLink, @JsonKey(name: 'fragment_data') this.fragment, @JsonKey(name: 'simple_thumb') this.simpleThumb, @JsonKey(name: 'cover_thumb') this.coverThumb, @JsonKey(name: 'cover_color') this.coverColor, @JsonKey(name: 'cover') this.coverUrl, @JsonKey(name: 'simple_cover') this.simpleCoverUrl, @JsonKey(name: 'isbn_pdf') this.isbnPdf, @JsonKey(name: 'isbn_epub') this.isbnEpub, @JsonKey(name: 'isbn_mobi') this.isbnMobi, @JsonKey(name: 'abstract') this.description, @JsonKey(name: 'has_mp3_file') this.hasAudiobook = false}): _epochs = epochs,_genres = genres,_kinds = kinds,_authors = authors,_translators = translators,_contentWarnings = contentWarnings,_audiences = audiences;
+  const _BookModel({required this.title, required this.url, required this.slug, final  List<EpochModel> epochs = const [], final  List<GenreModel> genres = const [], final  List<KindModel> kinds = const [], final  List<AuthorModel> authors = const [], final  List<BookTranslator> translators = const [], final  List<BookChild> children = const [], @JsonKey(name: 'content_warnings') final  List<String> contentWarnings = const [], final  List<String> audiences = const [], @JsonKey(name: 'elevenreader_link') this.elevenReaderLink, @JsonKey(name: 'fragment_data') this.fragment, @JsonKey(name: 'simple_thumb') this.simpleThumb, @JsonKey(name: 'cover_thumb') this.coverThumb, @JsonKey(name: 'cover_color') this.coverColor, @JsonKey(name: 'cover') this.coverUrl, @JsonKey(name: 'simple_cover') this.simpleCoverUrl, @JsonKey(name: 'isbn_pdf') this.isbnPdf, @JsonKey(name: 'isbn_epub') this.isbnEpub, @JsonKey(name: 'isbn_mobi') this.isbnMobi, @JsonKey(name: 'abstract') this.description, @JsonKey(name: 'has_mp3_file') this.hasAudiobook = false}): _epochs = epochs,_genres = genres,_kinds = kinds,_authors = authors,_translators = translators,_children = children,_contentWarnings = contentWarnings,_audiences = audiences;
   factory _BookModel.fromJson(Map<String, dynamic> json) => _$BookModelFromJson(json);
 
 @override final  String title;
@@ -152,6 +153,13 @@ class _BookModel implements BookModel {
   if (_translators is EqualUnmodifiableListView) return _translators;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_translators);
+}
+
+ final  List<BookChild> _children;
+@override@JsonKey() List<BookChild> get children {
+  if (_children is EqualUnmodifiableListView) return _children;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_children);
 }
 
  final  List<String> _contentWarnings;
@@ -194,16 +202,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookModel&&(identical(other.title, title) || other.title == title)&&(identical(other.url, url) || other.url == url)&&(identical(other.slug, slug) || other.slug == slug)&&const DeepCollectionEquality().equals(other._epochs, _epochs)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._kinds, _kinds)&&const DeepCollectionEquality().equals(other._authors, _authors)&&const DeepCollectionEquality().equals(other._translators, _translators)&&const DeepCollectionEquality().equals(other._contentWarnings, _contentWarnings)&&const DeepCollectionEquality().equals(other._audiences, _audiences)&&(identical(other.elevenReaderLink, elevenReaderLink) || other.elevenReaderLink == elevenReaderLink)&&(identical(other.fragment, fragment) || other.fragment == fragment)&&(identical(other.simpleThumb, simpleThumb) || other.simpleThumb == simpleThumb)&&(identical(other.coverThumb, coverThumb) || other.coverThumb == coverThumb)&&(identical(other.coverColor, coverColor) || other.coverColor == coverColor)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.simpleCoverUrl, simpleCoverUrl) || other.simpleCoverUrl == simpleCoverUrl)&&(identical(other.isbnPdf, isbnPdf) || other.isbnPdf == isbnPdf)&&(identical(other.isbnEpub, isbnEpub) || other.isbnEpub == isbnEpub)&&(identical(other.isbnMobi, isbnMobi) || other.isbnMobi == isbnMobi)&&(identical(other.description, description) || other.description == description)&&(identical(other.hasAudiobook, hasAudiobook) || other.hasAudiobook == hasAudiobook));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookModel&&(identical(other.title, title) || other.title == title)&&(identical(other.url, url) || other.url == url)&&(identical(other.slug, slug) || other.slug == slug)&&const DeepCollectionEquality().equals(other._epochs, _epochs)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._kinds, _kinds)&&const DeepCollectionEquality().equals(other._authors, _authors)&&const DeepCollectionEquality().equals(other._translators, _translators)&&const DeepCollectionEquality().equals(other._children, _children)&&const DeepCollectionEquality().equals(other._contentWarnings, _contentWarnings)&&const DeepCollectionEquality().equals(other._audiences, _audiences)&&(identical(other.elevenReaderLink, elevenReaderLink) || other.elevenReaderLink == elevenReaderLink)&&(identical(other.fragment, fragment) || other.fragment == fragment)&&(identical(other.simpleThumb, simpleThumb) || other.simpleThumb == simpleThumb)&&(identical(other.coverThumb, coverThumb) || other.coverThumb == coverThumb)&&(identical(other.coverColor, coverColor) || other.coverColor == coverColor)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.simpleCoverUrl, simpleCoverUrl) || other.simpleCoverUrl == simpleCoverUrl)&&(identical(other.isbnPdf, isbnPdf) || other.isbnPdf == isbnPdf)&&(identical(other.isbnEpub, isbnEpub) || other.isbnEpub == isbnEpub)&&(identical(other.isbnMobi, isbnMobi) || other.isbnMobi == isbnMobi)&&(identical(other.description, description) || other.description == description)&&(identical(other.hasAudiobook, hasAudiobook) || other.hasAudiobook == hasAudiobook));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,title,url,slug,const DeepCollectionEquality().hash(_epochs),const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_kinds),const DeepCollectionEquality().hash(_authors),const DeepCollectionEquality().hash(_translators),const DeepCollectionEquality().hash(_contentWarnings),const DeepCollectionEquality().hash(_audiences),elevenReaderLink,fragment,simpleThumb,coverThumb,coverColor,coverUrl,simpleCoverUrl,isbnPdf,isbnEpub,isbnMobi,description,hasAudiobook]);
+int get hashCode => Object.hashAll([runtimeType,title,url,slug,const DeepCollectionEquality().hash(_epochs),const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_kinds),const DeepCollectionEquality().hash(_authors),const DeepCollectionEquality().hash(_translators),const DeepCollectionEquality().hash(_children),const DeepCollectionEquality().hash(_contentWarnings),const DeepCollectionEquality().hash(_audiences),elevenReaderLink,fragment,simpleThumb,coverThumb,coverColor,coverUrl,simpleCoverUrl,isbnPdf,isbnEpub,isbnMobi,description,hasAudiobook]);
 
 @override
 String toString() {
-  return 'BookModel(title: $title, url: $url, slug: $slug, epochs: $epochs, genres: $genres, kinds: $kinds, authors: $authors, translators: $translators, contentWarnings: $contentWarnings, audiences: $audiences, elevenReaderLink: $elevenReaderLink, fragment: $fragment, simpleThumb: $simpleThumb, coverThumb: $coverThumb, coverColor: $coverColor, coverUrl: $coverUrl, simpleCoverUrl: $simpleCoverUrl, isbnPdf: $isbnPdf, isbnEpub: $isbnEpub, isbnMobi: $isbnMobi, description: $description, hasAudiobook: $hasAudiobook)';
+  return 'BookModel(title: $title, url: $url, slug: $slug, epochs: $epochs, genres: $genres, kinds: $kinds, authors: $authors, translators: $translators, children: $children, contentWarnings: $contentWarnings, audiences: $audiences, elevenReaderLink: $elevenReaderLink, fragment: $fragment, simpleThumb: $simpleThumb, coverThumb: $coverThumb, coverColor: $coverColor, coverUrl: $coverUrl, simpleCoverUrl: $simpleCoverUrl, isbnPdf: $isbnPdf, isbnEpub: $isbnEpub, isbnMobi: $isbnMobi, description: $description, hasAudiobook: $hasAudiobook)';
 }
 
 
@@ -214,7 +222,7 @@ abstract mixin class _$BookModelCopyWith<$Res> implements $BookModelCopyWith<$Re
   factory _$BookModelCopyWith(_BookModel value, $Res Function(_BookModel) _then) = __$BookModelCopyWithImpl;
 @override @useResult
 $Res call({
- String title, String url, String slug, List<EpochModel> epochs, List<GenreModel> genres, List<KindModel> kinds, List<AuthorModel> authors, List<BookTranslator> translators,@JsonKey(name: 'content_warnings') List<String> contentWarnings, List<String> audiences,@JsonKey(name: 'elevenreader_link') String? elevenReaderLink,@JsonKey(name: 'fragment_data') BookFragmentData? fragment,@JsonKey(name: 'simple_thumb') String? simpleThumb,@JsonKey(name: 'cover_thumb') String? coverThumb,@JsonKey(name: 'cover_color') String? coverColor,@JsonKey(name: 'cover') String? coverUrl,@JsonKey(name: 'simple_cover') String? simpleCoverUrl,@JsonKey(name: 'isbn_pdf') String? isbnPdf,@JsonKey(name: 'isbn_epub') String? isbnEpub,@JsonKey(name: 'isbn_mobi') String? isbnMobi,@JsonKey(name: 'abstract') String? description,@JsonKey(name: 'has_mp3_file') bool hasAudiobook
+ String title, String url, String slug, List<EpochModel> epochs, List<GenreModel> genres, List<KindModel> kinds, List<AuthorModel> authors, List<BookTranslator> translators, List<BookChild> children,@JsonKey(name: 'content_warnings') List<String> contentWarnings, List<String> audiences,@JsonKey(name: 'elevenreader_link') String? elevenReaderLink,@JsonKey(name: 'fragment_data') BookFragmentData? fragment,@JsonKey(name: 'simple_thumb') String? simpleThumb,@JsonKey(name: 'cover_thumb') String? coverThumb,@JsonKey(name: 'cover_color') String? coverColor,@JsonKey(name: 'cover') String? coverUrl,@JsonKey(name: 'simple_cover') String? simpleCoverUrl,@JsonKey(name: 'isbn_pdf') String? isbnPdf,@JsonKey(name: 'isbn_epub') String? isbnEpub,@JsonKey(name: 'isbn_mobi') String? isbnMobi,@JsonKey(name: 'abstract') String? description,@JsonKey(name: 'has_mp3_file') bool hasAudiobook
 });
 
 
@@ -231,7 +239,7 @@ class __$BookModelCopyWithImpl<$Res>
 
 /// Create a copy of BookModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? url = null,Object? slug = null,Object? epochs = null,Object? genres = null,Object? kinds = null,Object? authors = null,Object? translators = null,Object? contentWarnings = null,Object? audiences = null,Object? elevenReaderLink = freezed,Object? fragment = freezed,Object? simpleThumb = freezed,Object? coverThumb = freezed,Object? coverColor = freezed,Object? coverUrl = freezed,Object? simpleCoverUrl = freezed,Object? isbnPdf = freezed,Object? isbnEpub = freezed,Object? isbnMobi = freezed,Object? description = freezed,Object? hasAudiobook = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? url = null,Object? slug = null,Object? epochs = null,Object? genres = null,Object? kinds = null,Object? authors = null,Object? translators = null,Object? children = null,Object? contentWarnings = null,Object? audiences = null,Object? elevenReaderLink = freezed,Object? fragment = freezed,Object? simpleThumb = freezed,Object? coverThumb = freezed,Object? coverColor = freezed,Object? coverUrl = freezed,Object? simpleCoverUrl = freezed,Object? isbnPdf = freezed,Object? isbnEpub = freezed,Object? isbnMobi = freezed,Object? description = freezed,Object? hasAudiobook = null,}) {
   return _then(_BookModel(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
@@ -241,7 +249,8 @@ as List<EpochModel>,genres: null == genres ? _self._genres : genres // ignore: c
 as List<GenreModel>,kinds: null == kinds ? _self._kinds : kinds // ignore: cast_nullable_to_non_nullable
 as List<KindModel>,authors: null == authors ? _self._authors : authors // ignore: cast_nullable_to_non_nullable
 as List<AuthorModel>,translators: null == translators ? _self._translators : translators // ignore: cast_nullable_to_non_nullable
-as List<BookTranslator>,contentWarnings: null == contentWarnings ? _self._contentWarnings : contentWarnings // ignore: cast_nullable_to_non_nullable
+as List<BookTranslator>,children: null == children ? _self._children : children // ignore: cast_nullable_to_non_nullable
+as List<BookChild>,contentWarnings: null == contentWarnings ? _self._contentWarnings : contentWarnings // ignore: cast_nullable_to_non_nullable
 as List<String>,audiences: null == audiences ? _self._audiences : audiences // ignore: cast_nullable_to_non_nullable
 as List<String>,elevenReaderLink: freezed == elevenReaderLink ? _self.elevenReaderLink : elevenReaderLink // ignore: cast_nullable_to_non_nullable
 as String?,fragment: freezed == fragment ? _self.fragment : fragment // ignore: cast_nullable_to_non_nullable
@@ -537,6 +546,142 @@ class __$BookTranslatorCopyWithImpl<$Res>
   return _then(_BookTranslator(
 name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$BookChild {
+
+ String get title; String get slug;
+/// Create a copy of BookChild
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$BookChildCopyWith<BookChild> get copyWith => _$BookChildCopyWithImpl<BookChild>(this as BookChild, _$identity);
+
+  /// Serializes this BookChild to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookChild&&(identical(other.title, title) || other.title == title)&&(identical(other.slug, slug) || other.slug == slug));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,title,slug);
+
+@override
+String toString() {
+  return 'BookChild(title: $title, slug: $slug)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $BookChildCopyWith<$Res>  {
+  factory $BookChildCopyWith(BookChild value, $Res Function(BookChild) _then) = _$BookChildCopyWithImpl;
+@useResult
+$Res call({
+ String title, String slug
+});
+
+
+
+
+}
+/// @nodoc
+class _$BookChildCopyWithImpl<$Res>
+    implements $BookChildCopyWith<$Res> {
+  _$BookChildCopyWithImpl(this._self, this._then);
+
+  final BookChild _self;
+  final $Res Function(BookChild) _then;
+
+/// Create a copy of BookChild
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? slug = null,}) {
+  return _then(_self.copyWith(
+title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// @nodoc
+@JsonSerializable()
+
+class _BookChild implements BookChild {
+  const _BookChild({required this.title, required this.slug});
+  factory _BookChild.fromJson(Map<String, dynamic> json) => _$BookChildFromJson(json);
+
+@override final  String title;
+@override final  String slug;
+
+/// Create a copy of BookChild
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$BookChildCopyWith<_BookChild> get copyWith => __$BookChildCopyWithImpl<_BookChild>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$BookChildToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookChild&&(identical(other.title, title) || other.title == title)&&(identical(other.slug, slug) || other.slug == slug));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,title,slug);
+
+@override
+String toString() {
+  return 'BookChild(title: $title, slug: $slug)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$BookChildCopyWith<$Res> implements $BookChildCopyWith<$Res> {
+  factory _$BookChildCopyWith(_BookChild value, $Res Function(_BookChild) _then) = __$BookChildCopyWithImpl;
+@override @useResult
+$Res call({
+ String title, String slug
+});
+
+
+
+
+}
+/// @nodoc
+class __$BookChildCopyWithImpl<$Res>
+    implements _$BookChildCopyWith<$Res> {
+  __$BookChildCopyWithImpl(this._self, this._then);
+
+  final _BookChild _self;
+  final $Res Function(_BookChild) _then;
+
+/// Create a copy of BookChild
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? slug = null,}) {
+  return _then(_BookChild(
+title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

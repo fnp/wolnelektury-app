@@ -3,8 +3,8 @@ import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/app_secure_storage_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_cache_service.dart';
 import 'package:wolnelektury/src/config/getter.dart';
-import 'package:wolnelektury/src/presentation/cubits/auth/auth_cubit.dart';
-import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
+import 'package:wolnelektury/src/enums/cache_enum.dart';
+import 'package:wolnelektury/src/features/common/cubits/auth/auth_cubit.dart';
 
 class ApiService {
   final Dio _dio;

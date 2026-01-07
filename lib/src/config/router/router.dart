@@ -3,23 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
-import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/router/router_cubit.dart';
-import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
-import 'package:wolnelektury/src/presentation/pages/author_page.dart';
-import 'package:wolnelektury/src/presentation/pages/book_page.dart';
-import 'package:wolnelektury/src/presentation/pages/bookmark_page.dart';
-import 'package:wolnelektury/src/presentation/pages/catalogue_page.dart';
-import 'package:wolnelektury/src/presentation/pages/dashboard/dashboard_wrapper.dart';
-import 'package:wolnelektury/src/presentation/pages/filters_page.dart';
-import 'package:wolnelektury/src/presentation/pages/last_read_page.dart';
-import 'package:wolnelektury/src/presentation/pages/list_page.dart';
-import 'package:wolnelektury/src/presentation/pages/not_found_page.dart';
-import 'package:wolnelektury/src/presentation/pages/reading_page.dart';
-import 'package:wolnelektury/src/presentation/pages/search_page.dart';
-import 'package:wolnelektury/src/presentation/pages/settings_page.dart';
-import 'package:wolnelektury/src/presentation/pages/splashscreen.dart';
-import 'package:wolnelektury/src/presentation/widgets/my_library_page/my_library/my_library_page.dart';
+import 'package:wolnelektury/src/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/features/authors/pages/author_page.dart';
+import 'package:wolnelektury/src/features/bookmarks/pages/bookmark_page.dart';
+import 'package:wolnelektury/src/features/books/pages/book_page.dart';
+import 'package:wolnelektury/src/features/books/pages/reading_page.dart';
+import 'package:wolnelektury/src/features/catalogue/pages/catalogue_page.dart';
+import 'package:wolnelektury/src/features/catalogue/pages/filters_page.dart';
+import 'package:wolnelektury/src/features/common/cubits/connectivity/connectivity_cubit.dart';
+import 'package:wolnelektury/src/features/common/cubits/router/router_cubit.dart';
+import 'package:wolnelektury/src/features/dashboard/pages/dashboard_wrapper.dart';
+import 'package:wolnelektury/src/features/dashboard/pages/not_found_page.dart';
+import 'package:wolnelektury/src/features/dashboard/pages/splashscreen_page.dart';
+import 'package:wolnelektury/src/features/last_read/pages/last_read_page.dart';
+import 'package:wolnelektury/src/features/lists/pages/list_page.dart';
+import 'package:wolnelektury/src/features/my_library/pages/my_library_page.dart';
+import 'package:wolnelektury/src/features/search/pages/search_page.dart';
+import 'package:wolnelektury/src/features/settings/pages/settings_page.dart';
 
 extension GoRouterX on GoRouter {
   String get location =>
@@ -57,7 +57,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: splashPageConfig.path,
       builder: (context, state) {
-        return const SplashScreen();
+        return const SplashScreenPage();
       },
     ),
     ShellRoute(

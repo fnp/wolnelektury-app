@@ -3,7 +3,7 @@ import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/application/notification_service/notifications_service.dart';
 import 'package:wolnelektury/src/domain/register_agreement_model.dart';
 import 'package:wolnelektury/src/domain/user_model.dart';
-import 'package:wolnelektury/src/presentation/enums/cache_enum.dart';
+import 'package:wolnelektury/src/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
 abstract class AuthRepository {

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wolnelektury/src/presentation/enums/hint_type_enum.dart';
+import 'package:wolnelektury/src/enums/hint_type_enum.dart';
 
 part 'hint_model.freezed.dart';
 part 'hint_model.g.dart';

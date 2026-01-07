@@ -1,5 +1,5 @@
 import 'package:wolnelektury/src/domain/tag_model.dart';
-import 'package:wolnelektury/src/presentation/enums/sort_enum.dart';
+import 'package:wolnelektury/src/enums/sort_enum.dart';
 
 class ApiUtils {
   static String applySorting({required SortEnum sort, required String apiUrl}) {

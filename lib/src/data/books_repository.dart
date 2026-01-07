@@ -5,7 +5,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/book_text_audio_sync_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/domain/tag_model.dart';
-import 'package:wolnelektury/src/presentation/enums/sort_enum.dart';
+import 'package:wolnelektury/src/enums/sort_enum.dart';
 import 'package:wolnelektury/src/utils/api/api_utils.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';

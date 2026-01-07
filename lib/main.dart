@@ -14,13 +14,13 @@ import 'package:wolnelektury/src/config/initializers/repository_initializer.dart
 import 'package:wolnelektury/src/config/initializers/service_initializer.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
-import 'package:wolnelektury/src/presentation/cubits/app_mode/app_mode_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/connectivity/connectivity_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/filtering/filtering_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/notification/cubit/notification_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/settings/settings_cubit.dart';
-import 'package:wolnelektury/src/presentation/cubits/synchronizer/synchronizer_cubit.dart';
-import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
+import 'package:wolnelektury/src/enums/app_theme_enum.dart';
+import 'package:wolnelektury/src/features/catalogue/cubits/filtering/filtering_cubit.dart';
+import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.dart';
+import 'package:wolnelektury/src/features/common/cubits/connectivity/connectivity_cubit.dart';
+import 'package:wolnelektury/src/features/common/cubits/notification/cubit/notification_cubit.dart';
+import 'package:wolnelektury/src/features/my_library/cubits/synchronizer/synchronizer_cubit.dart';
+import 'package:wolnelektury/src/features/settings/cubits/settings/settings_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 
 void main() async {

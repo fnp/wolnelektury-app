@@ -219,6 +219,7 @@ abstract class  LocaleKeys {
   static const common_icon_button_liked = 'common.icon_button.liked';
   static const common_icon_button_sort = 'common.icon_button.sort';
   static const common_icon_button_filter = 'common.icon_button.filter';
+  static const common_icon_button_browse = 'common.icon_button.browse';
   static const common_icon_button = 'common.icon_button';
   static const common_snackbar_not_logged = 'common.snackbar.not_logged';
   static const common_snackbar_revert = 'common.snackbar.revert';

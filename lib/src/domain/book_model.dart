@@ -19,6 +19,7 @@ sealed class BookModel with _$BookModel {
     @Default([]) List<KindModel> kinds,
     @Default([]) List<AuthorModel> authors,
     @Default([]) List<BookTranslator> translators,
+    @Default([]) List<BookChild> children,
     @JsonKey(name: 'content_warnings')
     @Default([])
     List<String> contentWarnings,
@@ -68,4 +69,13 @@ sealed class BookTranslator with _$BookTranslator {
 
   factory BookTranslator.fromJson(Map<String, dynamic> json) =>
       _$BookTranslatorFromJson(json);
+}
+
+@freezed
+sealed class BookChild with _$BookChild {
+  const factory BookChild({required String title, required String slug}) =
+      _BookChild;
+
+  factory BookChild.fromJson(Map<String, dynamic> json) =>
+      _$BookChildFromJson(json);
 }

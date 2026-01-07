@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
-import 'package:wolnelektury/src/presentation/enums/my_library_enum.dart';
+import 'package:wolnelektury/src/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';

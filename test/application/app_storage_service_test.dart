@@ -2,7 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_settings_service.dart';
-import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
+import 'package:wolnelektury/src/enums/app_theme_enum.dart';
 
 void main() {
   late AppStorage appStorage;

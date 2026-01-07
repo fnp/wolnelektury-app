@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
-import 'package:wolnelektury/src/presentation/enums/app_theme_enum.dart';
-import 'package:wolnelektury/src/presentation/enums/reader_font_type.dart';
+import 'package:wolnelektury/src/enums/app_theme_enum.dart';
+import 'package:wolnelektury/src/enums/reader_font_type.dart';
 
 class AppStorageSettingsService {
   static const int appSettingsId = 1;
