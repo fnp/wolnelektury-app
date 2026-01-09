@@ -46,7 +46,6 @@ class FiltersPage extends StatelessWidget {
                 children: [
                   SearchBar(
                     key: ValueKey(state.selectedTags.length),
-                    initialValue: state.query,
                     onChanged: (value) {
                       cubit.changeQuery(value);
                     },

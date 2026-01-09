@@ -19,8 +19,9 @@ class MyLibraryListsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final listCubit = context.read<ListCreatorCubit>();
     return BlocProvider.value(
-      value: context.read<ListCreatorCubit>()..getLists(),
+      value: listCubit..getLists(),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: Dimensions.mediumPadding,
@@ -29,7 +30,10 @@ class MyLibraryListsSection extends StatelessWidget {
           listenWhen: (p, c) {
             return p.isAddingFailure != c.isAddingFailure ||
                 p.isDeleteFailure != c.isDeleteFailure ||
-                p.isRemovingBookFailure != c.isRemovingBookFailure;
+                p.isRemovingBookFailure != c.isRemovingBookFailure ||
+                (p.deletingSlug != null &&
+                    c.deletingSlug == null &&
+                    !c.isDeleteFailure);
           },
           listener: (context, state) {
             if (state.isAddingFailure) {
@@ -53,6 +57,10 @@ class MyLibraryListsSection extends StatelessWidget {
               );
               return;
             }
+            // Refresh lists after successful deletion
+            if (state.deletingSlug == null) {
+              listCubit.getLists(force: true);
+            }
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,21 +69,17 @@ class MyLibraryListsSection extends StatelessWidget {
               PageSubtitle(subtitle: MyLibraryEnum.lists.title),
               AddNewListElement(
                 onSave: (text) {
-                  BlocProvider.of<ListCreatorCubit>(
-                    context,
-                  ).addEmptyList(name: text);
+                  listCubit.addEmptyList(name: text);
                 },
               ),
               const SizedBox(height: Dimensions.spacer),
               Expanded(
                 child: CustomScrollPage(
                   onRefresh: () {
-                    return BlocProvider.of<ListCreatorCubit>(
-                      context,
-                    ).getLists();
+                    return listCubit.getLists(force: true);
                   },
                   onLoadMore: () {
-                    BlocProvider.of<ListCreatorCubit>(context).getMoreLists();
+                    listCubit.getMoreLists();
                   },
                   builder: (scrollController) {
                     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
@@ -97,9 +101,7 @@ class MyLibraryListsSection extends StatelessWidget {
                             image: Images.empty,
                             message: LocaleKeys.common_empty_lists_title.tr(),
                             onRefresh: () {
-                              BlocProvider.of<ListCreatorCubit>(
-                                context,
-                              ).getLists();
+                              listCubit.getLists(force: true);
                             },
                           );
                         }

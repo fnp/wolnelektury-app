@@ -1,6 +1,6 @@
 part of 'list_creator_cubit.dart';
 
-typedef BookToRemove = (String listSlug, String listName, String bookSlug);
+typedef BookToRemove = (String listSlug, String bookSlug);
 
 @freezed
 sealed class ListCreatorState with _$ListCreatorState {
@@ -40,17 +40,17 @@ sealed class ListCreatorState with _$ListCreatorState {
 }
 
 extension ListCreatorStateX on ListCreatorState {
-  bool doesLocalListExistsAlready(String listName) {
-    return allLists.any((element) => element.name == listName) ||
-        pendingList?.name == listName;
+  bool doesLocalListExistsAlready(String listSlug) {
+    return allLists.any((element) => element.slug == listSlug) ||
+        pendingList?.slug == listSlug;
   }
 
-  bool isBookInList(String listName, String bookSlug) {
-    if (fetchedSingleList != null && fetchedSingleList!.name == listName) {
+  bool isBookInList(String listSlug, String bookSlug) {
+    if (fetchedSingleList != null && fetchedSingleList!.slug == listSlug) {
       return fetchedSingleList!.books.contains(bookSlug);
     }
     return (allLists
-                .firstWhereOrNull((element) => element.name == listName)
+                .firstWhereOrNull((element) => element.slug == listSlug)
                 ?.books ??
             [])
         .contains(bookSlug);

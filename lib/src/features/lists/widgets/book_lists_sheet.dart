@@ -229,14 +229,26 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: greenElevatedButton,
-      onPressed: onPressed,
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.center,
-        child: Text(LocaleKeys.book_lists_sheet_save.tr()),
-      ),
+    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+      buildWhen: (p, c) {
+        return p.isAdding != c.isAdding;
+      },
+      builder: (context, state) {
+        return AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          curve: defaultCurve,
+          opacity: state.isAdding ? 0.5 : 1.0,
+          child: ElevatedButton(
+            style: greenElevatedButton,
+            onPressed: state.isAdding ? null : onPressed,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.center,
+              child: Text(LocaleKeys.book_lists_sheet_save.tr()),
+            ),
+          ),
+        );
+      },
     );
   }
 }

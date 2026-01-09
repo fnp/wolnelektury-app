@@ -54,19 +54,21 @@ class BookListsSheetExistingLists extends StatelessWidget {
                           );
                         },
                         itemBuilder: (context, index) {
+                          final listSlug = effectiveList[index].slug;
                           final listName = effectiveList[index].name;
                           return _Element(
+                            listSlug: listSlug,
                             listName: listName,
                             bookSlug: currentlyWorkingOnBookSlug,
                             onAdd: () {
                               creatorCubit.addBookToListWithQueue(
-                                listName,
+                                listSlug,
                                 currentlyWorkingOnBookSlug,
                               );
                             },
                             onRemove: () {
                               creatorCubit.removeBookFromListWithQueue(
-                                listName,
+                                listSlug,
                                 currentlyWorkingOnBookSlug,
                               );
                             },
@@ -81,11 +83,13 @@ class BookListsSheetExistingLists extends StatelessWidget {
 }
 
 class _Element extends StatelessWidget {
+  final String listSlug;
   final String listName;
   final String bookSlug;
   final VoidCallback onAdd;
   final VoidCallback onRemove;
   const _Element({
+    required this.listSlug,
     required this.listName,
     required this.onAdd,
     required this.onRemove,
@@ -97,12 +101,12 @@ class _Element extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
       buildWhen: (p, c) {
-        return p.isBookInList(listName, bookSlug) !=
-                c.isBookInList(listName, bookSlug) ||
+        return p.isBookInList(listSlug, bookSlug) !=
+                c.isBookInList(listSlug, bookSlug) ||
             p.allLists != c.allLists;
       },
       builder: (context, state) {
-        final isBookInList = state.isBookInList(listName, bookSlug);
+        final isBookInList = state.isBookInList(listSlug, bookSlug);
         return SizedBox(
           height: Dimensions.elementHeight,
           child: DecoratedBox(

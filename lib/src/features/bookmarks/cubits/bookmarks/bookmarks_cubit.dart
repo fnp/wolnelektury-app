@@ -35,7 +35,14 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
         emit(state.copyWith(bookmarks: deduplicated, isLoading: false));
       },
       failure: (error) {
-        emit(state.copyWith(isLoading: false));
+        error.handle(
+          notFound: () {
+            emit(state.copyWith(bookmarks: [], isLoading: false));
+          },
+          orElse: () {
+            emit(state.copyWith(isLoading: false));
+          },
+        );
       },
     );
   }
@@ -88,7 +95,14 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
         emit(state.copyWith(isLoading: false, bookmarks: deduplicated));
       },
       failure: (error) {
-        emit(state.copyWith(isLoading: false));
+        error.handle(
+          notFound: () {
+            emit(state.copyWith(bookmarks: [], isLoading: false));
+          },
+          orElse: () {
+            emit(state.copyWith(isLoading: false));
+          },
+        );
       },
     );
   }

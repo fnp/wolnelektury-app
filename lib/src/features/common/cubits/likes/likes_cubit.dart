@@ -25,8 +25,15 @@ class LikesCubit extends SafeCubit<LikesState> {
       success: (favourites, _) {
         emit(state.copyWith(favourites: favourites, isLoading: false));
       },
-      failure: (failure) {
-        emit(state.copyWith(favourites: [], isLoading: false));
+      failure: (error) {
+        error.handle(
+          notFound: () {
+            emit(state.copyWith(favourites: [], isLoading: false));
+          },
+          orElse: () {
+            emit(state.copyWith(isLoading: false));
+          },
+        );
       },
     );
   }

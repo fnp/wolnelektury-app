@@ -42,12 +42,12 @@ class MyLibraryListBook extends StatelessWidget {
           return BlocBuilder<ListCreatorCubit, ListCreatorState>(
             buildWhen: (p, c) {
               return p.bookToRemoveFromList != c.bookToRemoveFromList ||
-                  p.isBookInList(listName, bookSlug) !=
-                      c.isBookInList(listName, bookSlug);
+                  p.isBookInList(listSlug, bookSlug) !=
+                      c.isBookInList(listSlug, bookSlug);
             },
             builder: (context, innerState) {
               final shouldHide =
-                  !innerState.isBookInList(listName, bookSlug) ||
+                  !innerState.isBookInList(listSlug, bookSlug) ||
                   (innerState.bookToRemoveFromList?.$1 == listSlug &&
                       innerState.bookToRemoveFromList?.$2 == bookSlug);
               return AnimatedSize(
