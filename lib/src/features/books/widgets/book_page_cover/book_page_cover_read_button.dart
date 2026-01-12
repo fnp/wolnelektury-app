@@ -7,7 +7,7 @@ import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_cubit.dart';
-import 'package:wolnelektury/src/features/books/widgets/book_page_cover_download_button.dart';
+import 'package:wolnelektury/src/features/books/widgets/book_page_cover/book_page_cover_download_button.dart';
 import 'package:wolnelektury/src/features/common/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';

@@ -148,6 +148,7 @@ abstract class  LocaleKeys {
   static const book_available_in = 'book.available_in';
   static const book_content_warning = 'book.content_warning';
   static const book_content_audiences = 'book.content_audiences';
+  static const book_read_more = 'book.read_more';
   static const book = 'book';
   static const book_lists_sheet_title = 'book_lists.sheet.title';
   static const book_lists_sheet_add = 'book_lists.sheet.add';

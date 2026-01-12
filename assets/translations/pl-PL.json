@@ -172,7 +172,8 @@
         "genre": "Gatunek",
         "available_in": "Dostępne w",
         "content_warning": "Uwaga, tekst zawiera {warnings}.",
-        "content_audiences": "Idealne dla: {audiences}."
+        "content_audiences": "Idealne dla: {audiences}.",
+        "read_more": "Czytaj także"
     },
     "book_lists": {
         "sheet": {

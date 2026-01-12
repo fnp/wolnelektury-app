@@ -7,5 +7,9 @@ sealed class SingleBookState with _$SingleBookState {
     @Default(false) bool isAudiobookDownloaded,
     @Default(false) bool isReaderDownloaded,
     BookModel? book,
+
+    // Book recommendations
+    @Default(false) bool isLoadingRecommendations,
+    @Default([]) List<BookModel> recommendedBooks,
   }) = _SingleBookState;
 }

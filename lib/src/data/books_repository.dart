@@ -27,10 +27,16 @@ abstract class BooksRepository {
   Future<DataState<List<BookTextAudioSyncModel>>> getBookTextAudioSync({
     required String slug,
   });
+
+  Future<DataState<List<BookModel>>> getRecommendedBooks({
+    required String slug,
+  });
 }
 
 class BooksRepositoryImplementation extends BooksRepository {
   static const String _booksEndpoint = '/books';
+  static String _recommendationsEndpoint(String slug) =>
+      '$_booksEndpoint/$slug/recommended';
   static String _syncEndpoint(String slug) => '$_booksEndpoint/$slug/sync';
 
   final ApiService _apiService;
@@ -131,6 +137,27 @@ class BooksRepositoryImplementation extends BooksRepository {
       final response = await _apiService.getRequest(
         effectiveUrl,
         isAnonymous: true,
+      );
+
+      return DataState.fromApiResponse(
+        response: response,
+        converter: (data) {
+          return serializer(data: data, serializer: BookModel.fromJson);
+        },
+      );
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<List<BookModel>>> getRecommendedBooks({
+    required String slug,
+  }) async {
+    try {
+      final response = await _apiService.getRequest(
+        _recommendationsEndpoint(slug),
+        isAnonymous: false,
       );
 
       return DataState.fromApiResponse(

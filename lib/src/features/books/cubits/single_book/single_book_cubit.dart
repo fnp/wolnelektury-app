@@ -55,6 +55,26 @@ class SingleBookCubit extends SafeCubit<SingleBookState> {
     emit(state.copyWith(isLoading: false));
   }
 
+  Future<void> getRecommendedBooks({required String slug}) async {
+    emit(state.copyWith(isLoadingRecommendations: true));
+    final recommendedBooks = await _booksRepository.getRecommendedBooks(
+      slug: slug,
+    );
+    recommendedBooks.handle(
+      success: (books, _) {
+        emit(
+          state.copyWith(
+            recommendedBooks: books,
+            isLoadingRecommendations: false,
+          ),
+        );
+      },
+      failure: (failure) {
+        emit(state.copyWith(isLoadingRecommendations: false));
+      },
+    );
+  }
+
   void markReaderAsDownloaded() {
     emit(state.copyWith(isReaderDownloaded: true));
   }

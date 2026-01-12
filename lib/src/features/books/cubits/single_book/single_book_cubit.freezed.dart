@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SingleBookState {
 
- bool get isLoading; bool get isAudiobookDownloaded; bool get isReaderDownloaded; BookModel? get book;
+ bool get isLoading; bool get isAudiobookDownloaded; bool get isReaderDownloaded; BookModel? get book;// Book recommendations
+ bool get isLoadingRecommendations; List<BookModel> get recommendedBooks;
 /// Create a copy of SingleBookState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +27,16 @@ $SingleBookStateCopyWith<SingleBookState> get copyWith => _$SingleBookStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SingleBookState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isAudiobookDownloaded, isAudiobookDownloaded) || other.isAudiobookDownloaded == isAudiobookDownloaded)&&(identical(other.isReaderDownloaded, isReaderDownloaded) || other.isReaderDownloaded == isReaderDownloaded)&&(identical(other.book, book) || other.book == book));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SingleBookState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isAudiobookDownloaded, isAudiobookDownloaded) || other.isAudiobookDownloaded == isAudiobookDownloaded)&&(identical(other.isReaderDownloaded, isReaderDownloaded) || other.isReaderDownloaded == isReaderDownloaded)&&(identical(other.book, book) || other.book == book)&&(identical(other.isLoadingRecommendations, isLoadingRecommendations) || other.isLoadingRecommendations == isLoadingRecommendations)&&const DeepCollectionEquality().equals(other.recommendedBooks, recommendedBooks));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isAudiobookDownloaded,isReaderDownloaded,book);
+int get hashCode => Object.hash(runtimeType,isLoading,isAudiobookDownloaded,isReaderDownloaded,book,isLoadingRecommendations,const DeepCollectionEquality().hash(recommendedBooks));
 
 @override
 String toString() {
-  return 'SingleBookState(isLoading: $isLoading, isAudiobookDownloaded: $isAudiobookDownloaded, isReaderDownloaded: $isReaderDownloaded, book: $book)';
+  return 'SingleBookState(isLoading: $isLoading, isAudiobookDownloaded: $isAudiobookDownloaded, isReaderDownloaded: $isReaderDownloaded, book: $book, isLoadingRecommendations: $isLoadingRecommendations, recommendedBooks: $recommendedBooks)';
 }
 
 
@@ -46,7 +47,7 @@ abstract mixin class $SingleBookStateCopyWith<$Res>  {
   factory $SingleBookStateCopyWith(SingleBookState value, $Res Function(SingleBookState) _then) = _$SingleBookStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, bool isAudiobookDownloaded, bool isReaderDownloaded, BookModel? book
+ bool isLoading, bool isAudiobookDownloaded, bool isReaderDownloaded, BookModel? book, bool isLoadingRecommendations, List<BookModel> recommendedBooks
 });
 
 
@@ -63,13 +64,15 @@ class _$SingleBookStateCopyWithImpl<$Res>
 
 /// Create a copy of SingleBookState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isAudiobookDownloaded = null,Object? isReaderDownloaded = null,Object? book = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? isAudiobookDownloaded = null,Object? isReaderDownloaded = null,Object? book = freezed,Object? isLoadingRecommendations = null,Object? recommendedBooks = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isAudiobookDownloaded: null == isAudiobookDownloaded ? _self.isAudiobookDownloaded : isAudiobookDownloaded // ignore: cast_nullable_to_non_nullable
 as bool,isReaderDownloaded: null == isReaderDownloaded ? _self.isReaderDownloaded : isReaderDownloaded // ignore: cast_nullable_to_non_nullable
 as bool,book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
-as BookModel?,
+as BookModel?,isLoadingRecommendations: null == isLoadingRecommendations ? _self.isLoadingRecommendations : isLoadingRecommendations // ignore: cast_nullable_to_non_nullable
+as bool,recommendedBooks: null == recommendedBooks ? _self.recommendedBooks : recommendedBooks // ignore: cast_nullable_to_non_nullable
+as List<BookModel>,
   ));
 }
 /// Create a copy of SingleBookState
@@ -92,13 +95,22 @@ $BookModelCopyWith<$Res>? get book {
 
 
 class _SingleBookState implements SingleBookState {
-  const _SingleBookState({this.isLoading = false, this.isAudiobookDownloaded = false, this.isReaderDownloaded = false, this.book});
+  const _SingleBookState({this.isLoading = false, this.isAudiobookDownloaded = false, this.isReaderDownloaded = false, this.book, this.isLoadingRecommendations = false, final  List<BookModel> recommendedBooks = const []}): _recommendedBooks = recommendedBooks;
   
 
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  bool isAudiobookDownloaded;
 @override@JsonKey() final  bool isReaderDownloaded;
 @override final  BookModel? book;
+// Book recommendations
+@override@JsonKey() final  bool isLoadingRecommendations;
+ final  List<BookModel> _recommendedBooks;
+@override@JsonKey() List<BookModel> get recommendedBooks {
+  if (_recommendedBooks is EqualUnmodifiableListView) return _recommendedBooks;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_recommendedBooks);
+}
+
 
 /// Create a copy of SingleBookState
 /// with the given fields replaced by the non-null parameter values.
@@ -110,16 +122,16 @@ _$SingleBookStateCopyWith<_SingleBookState> get copyWith => __$SingleBookStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SingleBookState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isAudiobookDownloaded, isAudiobookDownloaded) || other.isAudiobookDownloaded == isAudiobookDownloaded)&&(identical(other.isReaderDownloaded, isReaderDownloaded) || other.isReaderDownloaded == isReaderDownloaded)&&(identical(other.book, book) || other.book == book));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SingleBookState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isAudiobookDownloaded, isAudiobookDownloaded) || other.isAudiobookDownloaded == isAudiobookDownloaded)&&(identical(other.isReaderDownloaded, isReaderDownloaded) || other.isReaderDownloaded == isReaderDownloaded)&&(identical(other.book, book) || other.book == book)&&(identical(other.isLoadingRecommendations, isLoadingRecommendations) || other.isLoadingRecommendations == isLoadingRecommendations)&&const DeepCollectionEquality().equals(other._recommendedBooks, _recommendedBooks));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,isAudiobookDownloaded,isReaderDownloaded,book);
+int get hashCode => Object.hash(runtimeType,isLoading,isAudiobookDownloaded,isReaderDownloaded,book,isLoadingRecommendations,const DeepCollectionEquality().hash(_recommendedBooks));
 
 @override
 String toString() {
-  return 'SingleBookState(isLoading: $isLoading, isAudiobookDownloaded: $isAudiobookDownloaded, isReaderDownloaded: $isReaderDownloaded, book: $book)';
+  return 'SingleBookState(isLoading: $isLoading, isAudiobookDownloaded: $isAudiobookDownloaded, isReaderDownloaded: $isReaderDownloaded, book: $book, isLoadingRecommendations: $isLoadingRecommendations, recommendedBooks: $recommendedBooks)';
 }
 
 
@@ -130,7 +142,7 @@ abstract mixin class _$SingleBookStateCopyWith<$Res> implements $SingleBookState
   factory _$SingleBookStateCopyWith(_SingleBookState value, $Res Function(_SingleBookState) _then) = __$SingleBookStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, bool isAudiobookDownloaded, bool isReaderDownloaded, BookModel? book
+ bool isLoading, bool isAudiobookDownloaded, bool isReaderDownloaded, BookModel? book, bool isLoadingRecommendations, List<BookModel> recommendedBooks
 });
 
 
@@ -147,13 +159,15 @@ class __$SingleBookStateCopyWithImpl<$Res>
 
 /// Create a copy of SingleBookState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isAudiobookDownloaded = null,Object? isReaderDownloaded = null,Object? book = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? isAudiobookDownloaded = null,Object? isReaderDownloaded = null,Object? book = freezed,Object? isLoadingRecommendations = null,Object? recommendedBooks = null,}) {
   return _then(_SingleBookState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isAudiobookDownloaded: null == isAudiobookDownloaded ? _self.isAudiobookDownloaded : isAudiobookDownloaded // ignore: cast_nullable_to_non_nullable
 as bool,isReaderDownloaded: null == isReaderDownloaded ? _self.isReaderDownloaded : isReaderDownloaded // ignore: cast_nullable_to_non_nullable
 as bool,book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
-as BookModel?,
+as BookModel?,isLoadingRecommendations: null == isLoadingRecommendations ? _self.isLoadingRecommendations : isLoadingRecommendations // ignore: cast_nullable_to_non_nullable
+as bool,recommendedBooks: null == recommendedBooks ? _self._recommendedBooks : recommendedBooks // ignore: cast_nullable_to_non_nullable
+as List<BookModel>,
   ));
 }
 
