@@ -27,6 +27,8 @@ class CustomButton extends StatelessWidget {
     return Semantics(
       button: true,
       label: semanticLabel,
+      onTap: onPressed,
+      enabled: onPressed != null,
       child: Material(
         type: MaterialType.transparency,
         child: SizedBox.square(

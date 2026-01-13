@@ -177,7 +177,7 @@
     },
     "book_lists": {
         "sheet": {
-            "title": "Dodaj książkę\ndo Listy",
+            "title": "Dodaj książkę\ndo listy",
             "add": "dodaj nową listę",
             "save": "dodaj",
             "success": "Książki zostały zapisane",
@@ -303,7 +303,11 @@
             "delete_list": "Usuń listę {listName}",
             "share_book_list": "Udostępnij listę książek",
             "remove_from_edited_list": "Usuń książkę z edytowanej listy",
-            "add_to_edited_list": "Dodaj książkę do edytowanej listy"
+            "add_to_edited_list": "Dodaj książkę do edytowanej listy",
+            "add_to_list": "Dodaj do listy",
+            "add_to_favorites": "Dodaj do ulubionych",
+            "reference": "Otwórz referencję",
+            "footnote": "Otwórz przypis"
         }
     }
 }

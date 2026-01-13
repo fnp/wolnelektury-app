@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/features/catalogue/widgets/buttons/book_overview_widget_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/auth_wrapper.dart';
@@ -25,6 +27,7 @@ class BookOverviewWidgetCreateListButton extends StatelessWidget {
     return AuthWrapper(
       child: (isAuthenticated) {
         return BookOverviewWidgetButton(
+          semanticLabel: LocaleKeys.common_semantic_add_to_list.tr(),
           size: size,
           iconSize: iconSize,
           onTap: () {

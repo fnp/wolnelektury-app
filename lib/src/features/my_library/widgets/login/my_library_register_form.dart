@@ -140,16 +140,22 @@ class _FormState extends State<_Form> {
                 ),
               ],
             ),
-            TextField(
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-              controller: _emailController,
-              onChanged: (_) {
-                if (showEmailError) {
-                  _validate(context);
-                }
-              },
+            Semantics(
+              label: LocaleKeys.login_email.tr(),
+              textField: true,
+              child: TextField(
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.emailAddress,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.black,
+                ),
+                controller: _emailController,
+                onChanged: (_) {
+                  if (showEmailError) {
+                    _validate(context);
+                  }
+                },
+              ),
             ),
             const SizedBox(height: Dimensions.mediumPadding),
             Row(
@@ -168,18 +174,24 @@ class _FormState extends State<_Form> {
                 ),
               ],
             ),
-            TextField(
-              textInputAction: TextInputAction.go,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-              controller: _passwordController,
-              onChanged: (_) {
-                if (showPasswordError) {
-                  _validate(context);
-                }
-              },
+            Semantics(
+              label: LocaleKeys.login_password.tr(),
+              textField: true,
+              child: TextField(
+                textInputAction: TextInputAction.go,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.black,
+                ),
+                controller: _passwordController,
+                onChanged: (_) {
+                  if (showPasswordError) {
+                    _validate(context);
+                  }
+                },
+              ),
             ),
             const SizedBox(height: Dimensions.mediumPadding),
             Row(
@@ -200,18 +212,24 @@ class _FormState extends State<_Form> {
                 ),
               ],
             ),
-            TextField(
-              textInputAction: TextInputAction.go,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-              controller: _confirmPasswordController,
-              onChanged: (_) {
-                if (showConfirmPasswordError) {
-                  _validate(context);
-                }
-              },
+            Semantics(
+              label: LocaleKeys.login_repeat_password.tr(),
+              textField: true,
+              child: TextField(
+                textInputAction: TextInputAction.go,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.black,
+                ),
+                controller: _confirmPasswordController,
+                onChanged: (_) {
+                  if (showConfirmPasswordError) {
+                    _validate(context);
+                  }
+                },
+              ),
             ),
             const SizedBox(height: Dimensions.mediumPadding),
             BlocBuilder<AuthCubit, AuthState>(

@@ -8,6 +8,7 @@ class BookOverviewWidgetButton extends StatelessWidget {
     required this.nonActiveBackgroundColor,
     required this.nonActiveIcon,
     required this.onTap,
+    required this.semanticLabel,
     this.isActive = false,
     this.activeIcon,
     this.activeBackgroundColor,
@@ -29,23 +30,31 @@ class BookOverviewWidgetButton extends StatelessWidget {
   final double size;
   final double iconSize;
 
+  final String semanticLabel;
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox.square(
-        dimension: size,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: defaultCurve,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isActive ? activeBackgroundColor : nonActiveBackgroundColor,
-          ),
-          child: Icon(
-            isActive ? activeIcon ?? nonActiveIcon : nonActiveIcon,
-            color: CustomColors.black,
-            size: iconSize,
+    return Semantics(
+      label: semanticLabel,
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: SizedBox.square(
+          dimension: size,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: defaultCurve,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isActive
+                  ? activeBackgroundColor
+                  : nonActiveBackgroundColor,
+            ),
+            child: Icon(
+              isActive ? activeIcon ?? nonActiveIcon : nonActiveIcon,
+              color: CustomColors.black,
+              size: iconSize,
+            ),
           ),
         ),
       ),

@@ -70,16 +70,20 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
               ),
             ],
           ),
-          TextField(
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.text,
-            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-            controller: _usernameController,
-            onChanged: (_) {
-              if (showUsernameError) {
-                _validate();
-              }
-            },
+          Semantics(
+            label: LocaleKeys.login_user_name.tr(),
+            textField: true,
+            child: TextField(
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+              controller: _usernameController,
+              onChanged: (_) {
+                if (showUsernameError) {
+                  _validate();
+                }
+              },
+            ),
           ),
           const SizedBox(height: Dimensions.mediumPadding),
           Row(
@@ -98,50 +102,62 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
               ),
             ],
           ),
-          TextField(
-            textInputAction: TextInputAction.go,
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-            controller: _passwordController,
-            onSubmitted: (value) {
-              _validate();
-              if (!isAnyError) {
-                BlocProvider.of<AuthCubit>(context).login(
-                  email: _usernameController.text,
-                  password: _passwordController.text,
-                );
-              }
-            },
-            onChanged: (_) {
-              if (showPasswordError) {
+          Semantics(
+            label: LocaleKeys.login_password.tr(),
+            textField: true,
+            child: TextField(
+              textInputAction: TextInputAction.go,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+              controller: _passwordController,
+              onSubmitted: (value) {
                 _validate();
-              }
-            },
-            decoration: InputDecoration(
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  MyLibraryForgotPasswordDialog.show(context: context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    right: Dimensions.veryLargePadding,
-                    left: Dimensions.mediumPadding,
-                  ),
-                  child: SizedBox(
-                    width: 110,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        LocaleKeys.login_forgot,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          decoration: TextDecoration.underline,
-                          color: CustomColors.black,
-                          fontWeight: FontWeight.w500,
+                if (!isAnyError) {
+                  BlocProvider.of<AuthCubit>(context).login(
+                    email: _usernameController.text,
+                    password: _passwordController.text,
+                  );
+                }
+              },
+              onChanged: (_) {
+                if (showPasswordError) {
+                  _validate();
+                }
+              },
+              decoration: InputDecoration(
+                suffixIcon: Semantics(
+                  label: LocaleKeys.login_forgot.tr(),
+                  button: true,
+                  enabled: true,
+                  onTap: () {
+                    MyLibraryForgotPasswordDialog.show(context: context);
+                  },
+                  child: GestureDetector(
+                    onTap: () {
+                      MyLibraryForgotPasswordDialog.show(context: context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: Dimensions.veryLargePadding,
+                        left: Dimensions.mediumPadding,
+                      ),
+                      child: SizedBox(
+                        width: 110,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            LocaleKeys.login_forgot,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              decoration: TextDecoration.underline,
+                              color: CustomColors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ).tr(),
                         ),
-                      ).tr(),
+                      ),
                     ),
                   ),
                 ),

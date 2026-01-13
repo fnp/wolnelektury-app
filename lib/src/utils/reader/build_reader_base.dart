@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_bottom_sheet.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_master_level_modifiers.dart';
@@ -214,34 +216,53 @@ InlineSpan _handleLinkTags({
   };
 
   final className = linkContent.attr?['class'];
-  final iconData = icons[className.toString().split(' ').first];
+  final classNameFirstWord = className.toString().split(' ').first;
+  final iconData = icons[classNameFirstWord];
 
   if (iconData == null) {
     return const TextSpan(text: ''); // zamiast pustego WidgetSpan
   }
+
+  final semanticLabel = classNameFirstWord == footnoteString
+      ? LocaleKeys.common_semantic_footnote.tr()
+      : LocaleKeys.common_semantic_reference.tr();
 
   return TextSpan(
     children: [
       WidgetSpan(
         alignment: PlaceholderAlignment.middle,
         baseline: TextBaseline.alphabetic,
-        child: GestureDetector(
+        child: Semantics(
+          label: semanticLabel,
+          button: true,
+          enabled: true,
           onTap: () => ReaderBottomSheet.show(
             element: element,
             linkContent: linkContent,
             fontFamily: fontFamily,
             fontSize: fontSize,
-            type: className == footnoteString
+            type: classNameFirstWord == footnoteString
                 ? ReaderBottomSheetType.footnote
                 : ReaderBottomSheetType.reference,
           ),
-          behavior: HitTestBehavior.opaque,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 2),
-            child: Icon(
-              iconData.$1,
-              size: fontSize + fontSize * 0.2,
-              color: iconData.$2,
+          child: GestureDetector(
+            onTap: () => ReaderBottomSheet.show(
+              element: element,
+              linkContent: linkContent,
+              fontFamily: fontFamily,
+              fontSize: fontSize,
+              type: classNameFirstWord == footnoteString
+                  ? ReaderBottomSheetType.footnote
+                  : ReaderBottomSheetType.reference,
+            ),
+            behavior: HitTestBehavior.opaque,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 2),
+              child: Icon(
+                iconData.$1,
+                size: fontSize + fontSize * 0.2,
+                color: iconData.$2,
+              ),
             ),
           ),
         ),
