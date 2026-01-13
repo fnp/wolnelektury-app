@@ -5,6 +5,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/book_text_audio_sync_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/domain/tag_model.dart';
+import 'package:wolnelektury/src/enums/cache_enum.dart';
 import 'package:wolnelektury/src/enums/sort_enum.dart';
 import 'package:wolnelektury/src/utils/api/api_utils.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
@@ -158,6 +159,7 @@ class BooksRepositoryImplementation extends BooksRepository {
       final response = await _apiService.getRequest(
         _recommendationsEndpoint(slug),
         isAnonymous: false,
+        useCache: CacheEnum.ignore,
       );
 
       return DataState.fromApiResponse(
