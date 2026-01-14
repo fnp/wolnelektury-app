@@ -39,6 +39,7 @@ class CustomButton extends StatelessWidget {
               color: backgroundColor,
             ),
             child: InkWell(
+              excludeFromSemantics: true,
               borderRadius: BorderRadius.circular(
                 Dimensions.borderRadiusOfCircle,
               ),

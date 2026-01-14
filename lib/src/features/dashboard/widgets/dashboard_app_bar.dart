@@ -138,16 +138,11 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                     Expanded(
-                      child: Semantics(
-                        label: LocaleKeys.common_semantic_app_name.tr(),
-                        button: false,
-                        enabled: true,
-                        child: SvgPicture.asset(
-                          Images.logo,
-                          width: 165,
-                          semanticsLabel: LocaleKeys.common_semantic_app_name
-                              .tr(),
-                        ),
+                      child: SvgPicture.asset(
+                        Images.logo,
+                        width: 165,
+                        semanticsLabel: LocaleKeys.common_semantic_app_name
+                            .tr(),
                       ),
                     ),
                     SizedBox(

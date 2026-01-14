@@ -87,29 +87,35 @@ class _Element extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioCubit = BlocProvider.of<AudioCubit>(context);
-    return GestureDetector(
-      onTap: () {
-        if (isSelected) return;
-        audioCubit.changeSpeed(speed);
-      },
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: isSelected
-              ? CustomColors.black
-              : CustomColors.primaryYellowColor,
-          shape: BoxShape.circle,
-        ),
-        child: AnimatedContainer(
-          curve: defaultCurve,
-          duration: const Duration(milliseconds: 150),
-          width: isSelected ? 30 : 20,
-          height: isSelected ? 30 : 20,
-          child: Center(
-            child: AnimatedBoxFade(
-              isChildVisible: isSelected,
-              child: const Icon(
-                CustomIcons.avg_pace,
-                color: CustomColors.white,
+    return Semantics(
+      button: true,
+      label: LocaleKeys.audio_dialog_settings_speed_option.tr(
+        namedArgs: {'speed': speed.name},
+      ),
+      child: GestureDetector(
+        onTap: () {
+          if (isSelected) return;
+          audioCubit.changeSpeed(speed);
+        },
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: isSelected
+                ? CustomColors.black
+                : CustomColors.primaryYellowColor,
+            shape: BoxShape.circle,
+          ),
+          child: AnimatedContainer(
+            curve: defaultCurve,
+            duration: const Duration(milliseconds: 150),
+            width: isSelected ? 30 : 20,
+            height: isSelected ? 30 : 20,
+            child: Center(
+              child: AnimatedBoxFade(
+                isChildVisible: isSelected,
+                child: const Icon(
+                  CustomIcons.avg_pace,
+                  color: CustomColors.white,
+                ),
               ),
             ),
           ),

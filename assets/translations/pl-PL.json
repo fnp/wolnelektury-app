@@ -125,6 +125,7 @@
         "settings": {
             "sleep_timer": "wyłącz za {time} minut",
             "speed_selector": "prędkość odtwarzania {speed}",
+            "speed_option": "prędkość {speed}",
             "part_selector": "odtwarzaj do końca",
             "part_selector_specific": "rozdziału {part}",
             "read_here_title": "czytaj od bieżącej pozycji",
@@ -269,6 +270,7 @@
             "delete_book": "Usuń książkę",
             "close_audio": "Zamknij audio",
             "close_audio_dialog": "Zamknij okno dialogowe audio",
+            "close_audio_settings": "Zamknij ustawienia audio",
             "add_audio_bookmark": "Dodaj zakładkę do audio",
             "rewind_15s": "Cofnij 15 sekund",
             "play_pause": "Odtwórz / Pauza",

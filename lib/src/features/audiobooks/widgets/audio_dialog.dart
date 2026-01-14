@@ -71,19 +71,21 @@ class AudioDialog extends StatelessWidget {
                                     c.isPreparingPlaylist ||
                                 p.isBookmarksOpened != c.isBookmarksOpened,
                             builder: (context, state) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (state.isSettingsOpened) {
-                                    audioCubit.toggleSettings(false);
-                                    return;
-                                  }
-                                  if (state.isBookmarksOpened) {
-                                    audioCubit.toggleBookmarks(false);
-                                    return;
-                                  }
+                              return ExcludeSemantics(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (state.isSettingsOpened) {
+                                      audioCubit.toggleSettings(false);
+                                      return;
+                                    }
+                                    if (state.isBookmarksOpened) {
+                                      audioCubit.toggleBookmarks(false);
+                                      return;
+                                    }
 
-                                  Navigator.of(context).pop();
-                                },
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
                               );
                             },
                           ),
@@ -274,21 +276,26 @@ class _GrayCover extends StatelessWidget {
           p.isBookmarksOpened != c.isBookmarksOpened,
       builder: (context, state) {
         return Positioned.fill(
-          child: GestureDetector(
-            onTap: () {
-              audioCubit.toggleSettings(false);
-              audioCubit.toggleBookmarks(false);
-            },
-            child: AnimatedBoxFade(
-              isChildVisible: state.isSettingsOpened || state.isBookmarksOpened,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: CustomColors.darkGrey.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(
-                    Dimensions.modalsBorderRadius,
+          child: Semantics(
+            label: LocaleKeys.common_semantic_close_audio_settings.tr(),
+            enabled: state.isSettingsOpened || state.isBookmarksOpened,
+            child: GestureDetector(
+              onTap: () {
+                audioCubit.toggleSettings(false);
+                audioCubit.toggleBookmarks(false);
+              },
+              child: AnimatedBoxFade(
+                isChildVisible:
+                    state.isSettingsOpened || state.isBookmarksOpened,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: CustomColors.darkGrey.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.modalsBorderRadius,
+                    ),
                   ),
+                  child: const SizedBox.expand(),
                 ),
-                child: const SizedBox.expand(),
               ),
             ),
           ),

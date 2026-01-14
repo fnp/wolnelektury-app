@@ -37,39 +37,41 @@ class AudioDialogTopBar extends StatelessWidget {
           },
         ),
         const Spacer(),
-        BlocBuilder<AudioCubit, AudioState>(
-          buildWhen: (p, c) =>
-              p.audiobook != c.audiobook ||
-              p.currentlyPlayingPart != c.currentlyPlayingPart,
-          builder: (context, state) {
-            return SizedBox(
-              width: 200,
-              child: CustomDropdown<int>(
-                maxElements: 5,
-                highlightButton: false,
+        ExcludeSemantics(
+          child: BlocBuilder<AudioCubit, AudioState>(
+            buildWhen: (p, c) =>
+                p.audiobook != c.audiobook ||
+                p.currentlyPlayingPart != c.currentlyPlayingPart,
+            builder: (context, state) {
+              return SizedBox(
                 width: 200,
-                items:
-                    state.audiobook?.parts.mapIndexed((index, part) {
-                      return CustomDropdownElement(
-                        title: LocaleKeys.audio_dialog_part.tr(
-                          namedArgs: {'part': (index + 1).toString()},
-                        ),
-                        element: index,
-                      );
-                    }).toList() ??
-                    [],
-                onSelected: (selected) {
-                  BlocProvider.of<AudioCubit>(context).selectPart(selected);
-                },
-                icon: const Icon(Icons.keyboard_arrow_down),
-                label: LocaleKeys.audio_dialog_part.tr(
-                  namedArgs: {
-                    'part': (state.currentlyPlayingPart + 1).toString(),
+                child: CustomDropdown<int>(
+                  maxElements: 5,
+                  highlightButton: false,
+                  width: 200,
+                  items:
+                      state.audiobook?.parts.mapIndexed((index, part) {
+                        return CustomDropdownElement(
+                          title: LocaleKeys.audio_dialog_part.tr(
+                            namedArgs: {'part': (index + 1).toString()},
+                          ),
+                          element: index,
+                        );
+                      }).toList() ??
+                      [],
+                  onSelected: (selected) {
+                    BlocProvider.of<AudioCubit>(context).selectPart(selected);
                   },
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  label: LocaleKeys.audio_dialog_part.tr(
+                    namedArgs: {
+                      'part': (state.currentlyPlayingPart + 1).toString(),
+                    },
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
         const Spacer(),
         CustomButton(

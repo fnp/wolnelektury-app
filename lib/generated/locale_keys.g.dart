@@ -108,6 +108,7 @@ abstract class  LocaleKeys {
   static const audio_dialog_delete_paragraph = 'audio_dialog.delete_paragraph';
   static const audio_dialog_settings_sleep_timer = 'audio_dialog.settings.sleep_timer';
   static const audio_dialog_settings_speed_selector = 'audio_dialog.settings.speed_selector';
+  static const audio_dialog_settings_speed_option = 'audio_dialog.settings.speed_option';
   static const audio_dialog_settings_part_selector = 'audio_dialog.settings.part_selector';
   static const audio_dialog_settings_part_selector_specific = 'audio_dialog.settings.part_selector_specific';
   static const audio_dialog_settings_read_here_title = 'audio_dialog.settings.read_here_title';
@@ -230,6 +231,7 @@ abstract class  LocaleKeys {
   static const common_semantic_delete_book = 'common.semantic.delete_book';
   static const common_semantic_close_audio = 'common.semantic.close_audio';
   static const common_semantic_close_audio_dialog = 'common.semantic.close_audio_dialog';
+  static const common_semantic_close_audio_settings = 'common.semantic.close_audio_settings';
   static const common_semantic_add_audio_bookmark = 'common.semantic.add_audio_bookmark';
   static const common_semantic_rewind_15s = 'common.semantic.rewind_15s';
   static const common_semantic_play_pause = 'common.semantic.play_pause';
