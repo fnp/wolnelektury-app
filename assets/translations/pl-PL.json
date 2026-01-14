@@ -294,7 +294,6 @@
             "close_dialog": "Zamknij dialog",
             "share_author": "Udostępnij autora",
             "close_author_dialog": "Zamknij okno dialogowe autora",
-            "go_back": "Cofnij",
             "syncing_data": "Synchronizuję dane",
             "no_internet_connection": "Brak połączenia z internetem",
             "search": "Szukaj",
@@ -307,7 +306,9 @@
             "add_to_list": "Dodaj do listy",
             "add_to_favorites": "Dodaj do ulubionych",
             "reference": "Otwórz referencję",
-            "footnote": "Otwórz przypis"
+            "footnote": "Otwórz przypis",
+            "app_name": "Wolne Lektury",
+            "go_back": "Wróć"
         }
     }
 }

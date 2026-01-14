@@ -255,7 +255,6 @@ abstract class  LocaleKeys {
   static const common_semantic_close_dialog = 'common.semantic.close_dialog';
   static const common_semantic_share_author = 'common.semantic.share_author';
   static const common_semantic_close_author_dialog = 'common.semantic.close_author_dialog';
-  static const common_semantic_go_back = 'common.semantic.go_back';
   static const common_semantic_syncing_data = 'common.semantic.syncing_data';
   static const common_semantic_no_internet_connection = 'common.semantic.no_internet_connection';
   static const common_semantic_search = 'common.semantic.search';
@@ -269,6 +268,8 @@ abstract class  LocaleKeys {
   static const common_semantic_add_to_favorites = 'common.semantic.add_to_favorites';
   static const common_semantic_reference = 'common.semantic.reference';
   static const common_semantic_footnote = 'common.semantic.footnote';
+  static const common_semantic_app_name = 'common.semantic.app_name';
+  static const common_semantic_go_back = 'common.semantic.go_back';
   static const common_semantic = 'common.semantic';
   static const common = 'common';
 
