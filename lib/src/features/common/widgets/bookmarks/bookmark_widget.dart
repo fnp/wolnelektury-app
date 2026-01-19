@@ -19,14 +19,30 @@ import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookmarkWidget extends StatelessWidget {
+  // The book related to the bookmark
   final BookModel book;
+
+  // The bookmark to display
   final BookmarkModel bookmark;
+
+  // Flag to indicate if the bookmark is loading (being deleted)
   final bool isLoading;
+
+  // Background color of the bookmark card
   final Color backgroundColor;
+
+  // Key for showing Snackbars
   final GlobalKey<ScaffoldMessengerState>? messengerKey;
+
+  // Callback when the buttons are pressed
   final Function(int? timestamp, bool isPlaying)? onListen;
+  final VoidCallback? onEdit;
+
+  // Flags to indicate offline availability
   final bool isReaderAvailableOffline;
   final bool isAudioAvailableOffline;
+
+  // Flag to indicate if the bookmark can be deleted
   final bool isDeletable;
   const BookmarkWidget({
     super.key,
@@ -39,6 +55,7 @@ class BookmarkWidget extends StatelessWidget {
     this.isDeletable = true,
     this.onListen,
     this.messengerKey,
+    this.onEdit,
   });
 
   @override
@@ -65,6 +82,7 @@ class BookmarkWidget extends StatelessWidget {
                   backgroundColor: backgroundColor,
                   messengerKey: messengerKey,
                   onListen: onListen,
+                  onEdit: onEdit,
                   isAudioAvailableOffline: isAudioAvailableOffline,
                   isReaderAvailableOffline: isReaderAvailableOffline,
                   isDeletable: isDeletable,
@@ -81,6 +99,7 @@ class _Body extends StatelessWidget {
   final Color backgroundColor;
   final GlobalKey<ScaffoldMessengerState>? messengerKey;
   final Function(int? timestamp, bool isPlaying)? onListen;
+  final VoidCallback? onEdit;
   final bool isReaderAvailableOffline;
   final bool isAudioAvailableOffline;
   final bool isDeletable;
@@ -93,6 +112,7 @@ class _Body extends StatelessWidget {
     this.isDeletable = true,
     this.messengerKey,
     this.onListen,
+    this.onEdit,
   });
 
   @override
@@ -226,7 +246,9 @@ class _Body extends StatelessWidget {
                       right: Dimensions.mediumPadding,
                       left: Dimensions.veryLargePadding,
                     ),
-                    child: ExcludeSemantics(child: _Note(note: bookmark.note)),
+                    child: ExcludeSemantics(
+                      child: _Note(note: bookmark.note, onEdit: onEdit),
+                    ),
                   ),
                 ),
               ),
@@ -339,8 +361,9 @@ class _Body extends StatelessWidget {
 }
 
 class _Note extends StatefulWidget {
+  final VoidCallback? onEdit;
   final String note;
-  const _Note({required this.note});
+  const _Note({required this.note, this.onEdit});
 
   @override
   State<_Note> createState() => _NoteState();
@@ -363,11 +386,13 @@ class _NoteState extends State<_Note> {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        Icon(
-          CustomIcons.stylus_note,
-          color: theme.colorScheme.onPrimary,
-          size: 22,
-        ),
+        if (widget.onEdit != null)
+          CustomButton(
+            icon: CustomIcons.stylus_note,
+            backgroundColor: Colors.transparent,
+            semanticLabel: LocaleKeys.common_semantic_edit_bookmark.tr(),
+            onPressed: widget.onEdit,
+          ),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
@@ -8,9 +9,10 @@ import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.da
 import 'package:wolnelektury/src/features/audiobooks/widgets/audio_dialog.dart';
 import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/bookmarks/bookmark_widget.dart';
+import 'package:wolnelektury/src/features/my_library/widgets/bookmarks/my_library_bookmarks_edit_sheet.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
-class MyLibraryBookmarkBook extends StatelessWidget {
+class MyLibraryBookmarkBook extends HookWidget {
   final BookmarkModel bookmark;
   final bool isLoading;
   const MyLibraryBookmarkBook({
@@ -50,6 +52,13 @@ class MyLibraryBookmarkBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveBookmark = useState<BookmarkModel>(bookmark);
+
+    useEffect(() {
+      effectiveBookmark.value = bookmark;
+      return null;
+    }, [bookmark]);
+
     return BlocProvider(
       key: ValueKey(isLoading.hashCode),
       create: (context) {
@@ -79,7 +88,7 @@ class MyLibraryBookmarkBook extends StatelessWidget {
             enabled: effectiveLoading,
             containersColor: CustomColors.lightGrey,
             child: BookmarkWidget(
-              bookmark: bookmark,
+              bookmark: effectiveBookmark.value,
               book: effectiveLoading ? skeletonizedBook : state.book!,
               isLoading: effectiveLoading,
               backgroundColor: CustomColors.primaryYellowColor,
@@ -88,6 +97,15 @@ class MyLibraryBookmarkBook extends StatelessWidget {
                   timestamp: timestamp,
                   isPlaying: isPlaying,
                   context: context,
+                );
+              },
+              onEdit: () {
+                MyLibraryBookmarksEditSheet.show(
+                  context: context,
+                  bookmark: effectiveBookmark.value,
+                  onEditSuccess: (bookmark) {
+                    effectiveBookmark.value = bookmark;
+                  },
                 );
               },
               isAudioAvailableOffline: state.isAudiobookDownloaded,

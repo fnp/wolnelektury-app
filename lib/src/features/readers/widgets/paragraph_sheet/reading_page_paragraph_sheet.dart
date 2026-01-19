@@ -100,8 +100,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
         child: BlocListener<BookmarksCubit, BookmarksState>(
           listenWhen: (p, c) => p.isBookmarkSuccess != c.isBookmarkSuccess,
           listener: (context, state) {
-            if (state.isBookmarkSuccess != null &&
-                state.isBookmarkSuccess!.$2 == true) {
+            if (state.isBookmarkSuccess?.$2 == true) {
               readingPageCubit.toggleIsAddingBookmark();
               readingPageCubit.selectParagraph();
               bookmarkCubit.setEditingBookmark(null);

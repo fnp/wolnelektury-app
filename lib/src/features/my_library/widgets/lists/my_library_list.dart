@@ -10,6 +10,7 @@ import 'package:wolnelektury/src/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
+import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_book.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_delete_confirmation_dialog.dart';
@@ -18,6 +19,7 @@ import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/images.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class MyLibraryList extends StatelessWidget {
@@ -54,6 +56,11 @@ class MyLibraryList extends StatelessWidget {
                       if (bookList.books.isNotEmpty && !isCompact) ...[
                         _List(bookList: bookList),
                       ],
+                      if (bookList.books.isEmpty && !isCompact)
+                        const Padding(
+                          padding: EdgeInsets.only(top: Dimensions.spacer),
+                          child: _EmptyWidget(),
+                        ),
                     ],
                   ),
                 )
@@ -291,6 +298,22 @@ class _ShareButton extends StatelessWidget {
         ShareUtils.shareBookList(slug);
       },
       backgroundColor: CustomColors.white,
+    );
+  }
+}
+
+class _EmptyWidget extends StatelessWidget {
+  const _EmptyWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return EmptyWidget(
+      image: Images.empty,
+      message: LocaleKeys.common_empty_lists_content_title.tr(),
+      onTap: () {
+        router.pushNamed(cataloguePageConfig.name);
+      },
+      buttonText: LocaleKeys.common_empty_search_in_catalogue.tr(),
     );
   }
 }

@@ -262,6 +262,7 @@ abstract class  LocaleKeys {
   static const common_semantic_search = 'common.semantic.search';
   static const common_semantic_settings = 'common.semantic.settings';
   static const common_semantic_edit_list = 'common.semantic.edit_list';
+  static const common_semantic_edit_bookmark = 'common.semantic.edit_bookmark';
   static const common_semantic_delete_list = 'common.semantic.delete_list';
   static const common_semantic_share_book_list = 'common.semantic.share_book_list';
   static const common_semantic_remove_from_edited_list = 'common.semantic.remove_from_edited_list';

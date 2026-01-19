@@ -92,17 +92,17 @@ class _Bookmark extends StatelessWidget {
     return BlocBuilder<BookmarksCubit, BookmarksState>(
       buildWhen: (p, c) => p.bookmarks != c.bookmarks,
       builder: (context, state) {
-        final isBookmarked = state.bookmarks.firstWhereOrNull(
+        final bookmark = state.bookmarks.firstWhereOrNull(
           (element) => element.anchor == paragraphId,
         );
-        if (isBookmarked == null) {
+        if (bookmark == null) {
           return const SizedBox.shrink();
         }
         final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
         final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
         return GestureDetector(
           onTap: () {
-            bookmarkCubit.setEditingBookmark(isBookmarked);
+            bookmarkCubit.setEditingBookmark(bookmark);
             readingPageCubit.toggleIsAddingBookmark();
             ReadingPageParagraphSheet.show(
               context: context,

@@ -24,6 +24,12 @@ extension BookmarksStateX on BookmarksState {
     );
   }
 
+  BookmarkModel? getBookmarkByLocation(String location) {
+    return bookmarks.firstWhereOrNull(
+      (element) => element.location == location,
+    );
+  }
+
   bool bookmarkExists(String slug, String location) {
     return bookmarks.any(
       (element) => element.location == location && element.slug == slug,

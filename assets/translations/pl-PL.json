@@ -301,6 +301,7 @@
             "search": "Szukaj",
             "settings": "Ustawienia",
             "edit_list": "Edytuj listę {listName}",
+            "edit_bookmark": "Edytuj zakładkę",
             "delete_list": "Usuń listę {listName}",
             "share_book_list": "Udostępnij listę książek",
             "remove_from_edited_list": "Usuń książkę z edytowanej listy",

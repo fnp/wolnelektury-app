@@ -5,10 +5,10 @@ import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/features/audiobooks/widgets/audio_dialog.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
+import 'package:wolnelektury/src/features/bookmarks/widgets/bookmark_listener.dart';
 import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/features/common/widgets/bookmarks/bookmark_widget.dart';
 import 'package:wolnelektury/src/features/common/widgets/bookmarks/create_bookmark_widget.dart';
-import 'package:wolnelektury/src/features/readers/widgets/reader/reader_bookmark_listener.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
