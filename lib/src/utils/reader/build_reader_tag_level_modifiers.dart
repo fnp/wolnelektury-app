@@ -103,7 +103,7 @@ class BuildReaderTagLevelModifiers {
         spans.add(
           BuildReaderClassLevelModifiers.build(
             shouldApplyIndent
-                ? '${BuildReaderIndent.applyIndent(text, prevSibling)}$text'
+                ? BuildReaderIndent.applyIndent(text, prevSibling)
                 : text,
             baseStyle,
             fontFamily,
