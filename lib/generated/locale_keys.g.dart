@@ -47,6 +47,15 @@ abstract class  LocaleKeys {
   static const my_library_lists_delete_dialog_cancel = 'my_library.lists.delete_dialog.cancel';
   static const my_library_lists_delete_dialog_delete = 'my_library.lists.delete_dialog.delete';
   static const my_library_lists_delete_dialog = 'my_library.lists.delete_dialog';
+  static const my_library_lists_rename_dialog_title = 'my_library.lists.rename_dialog.title';
+  static const my_library_lists_rename_dialog_name_hint = 'my_library.lists.rename_dialog.name_hint';
+  static const my_library_lists_rename_dialog_name_validation = 'my_library.lists.rename_dialog.name_validation';
+  static const my_library_lists_rename_dialog_cancel = 'my_library.lists.rename_dialog.cancel';
+  static const my_library_lists_rename_dialog_save = 'my_library.lists.rename_dialog.save';
+  static const my_library_lists_rename_dialog_error = 'my_library.lists.rename_dialog.error';
+  static const my_library_lists_rename_dialog_duplicate_error = 'my_library.lists.rename_dialog.duplicate_error';
+  static const my_library_lists_rename_dialog_success = 'my_library.lists.rename_dialog.success';
+  static const my_library_lists_rename_dialog = 'my_library.lists.rename_dialog';
   static const my_library_lists = 'my_library.lists';
   static const my_library_offline_corrupted_audiobook_title = 'my_library.offline.corrupted_audiobook.title';
   static const my_library_offline_corrupted_audiobook_content = 'my_library.offline.corrupted_audiobook.content';
@@ -134,6 +143,8 @@ abstract class  LocaleKeys {
   static const catalogue = 'catalogue';
   static const last_read_title = 'last_read.title';
   static const last_read = 'last_read';
+  static const reader_progress_left = 'reader.progress.left';
+  static const reader_progress = 'reader.progress';
   static const reader_settings_sans = 'reader.settings.sans';
   static const reader_settings_serif = 'reader.settings.serif';
   static const reader_settings_dark_mode = 'reader.settings.dark_mode';

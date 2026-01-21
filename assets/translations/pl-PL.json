@@ -52,6 +52,16 @@
                 "content": "Czy na pewno chcesz usunąć tę listę wraz z jej zawartością?",
                 "cancel": "Anuluj",
                 "delete": "Usuń"
+            },
+            "rename_dialog": {
+                "title": "Zmień nazwę listy",
+                "name_hint": "Nazwa listy",
+                "name_validation": "Nazwa listy nie może być pusta",
+                "cancel": "Anuluj",
+                "save": "Zapisz",
+                "error": "Nie udało się zmienić nazwy listy",
+                "duplicate_error": "Lista o tej nazwie już istnieje",
+                "success": "Lista została przemianowana"
             }
         },
         "offline": {
@@ -157,6 +167,9 @@
         "title": "Ostatnio czytane"
     },
     "reader": {
+        "progress": {
+            "left": "Pozostało ok. {minutes} min"
+        },
         "settings": {
             "sans": "krój bezszeryfowy",
             "serif": "krój szeryfowy",

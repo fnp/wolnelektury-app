@@ -87,6 +87,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
             fontType: readerFontTypeFromString(settings.readingFontType),
             isJsonLoading: false,
             book: data,
+            readTimeInSeconds: book.readTime ?? 0,
           ),
         );
         await _getAndSetProgress(
@@ -323,7 +324,16 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     final maxLength = state.book?.contents.length ?? 1;
     final progress = (index / maxLength * 100).clamp(0, 100).floor();
     if (progress == state.visualProgress) return;
-    emit(state.copyWith(visualProgress: progress));
+    emit(
+      state.copyWith(
+        visualProgress: progress,
+        isVisualProgressIncreasing: progress > state.visualProgress,
+      ),
+    );
+  }
+
+  void showFullVisualProgressBar() {
+    emit(state.copyWith(isVisualProgressIncreasing: false));
   }
 
   // ------------------------------------------

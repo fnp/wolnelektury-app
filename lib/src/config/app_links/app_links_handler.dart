@@ -83,7 +83,12 @@ class _AppLinksHandlerState extends State<AppLinksHandler>
         );
       } else if (stringUri.contains('lista')) {
         // Navigate to list
-        router.pushNamed(listPageConfig.name, pathParameters: {'slug': slug});
+        router.pushNamed(
+          listPageConfig.name,
+          pathParameters: {'slug': slug},
+          // Can edit flag
+          extra: false,
+        );
       } else if (stringUri.contains('czytnik')) {
         // Navigate to paragraph in reader
         final paragraphId = nonEmptySegments.last;

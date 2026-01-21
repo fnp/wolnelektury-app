@@ -32,6 +32,11 @@ sealed class ListCreatorState with _$ListCreatorState {
     String? deletingSlug,
     @Default(false) bool isDeleteFailure,
 
+    // Renaming list
+    @Default(false) bool isRenaming,
+    @Default(false) bool isRenamingFailure,
+    @Default(false) bool isRenamingDuplicateFailure,
+
     // Deleting book from list
     // List slug, book slug
     (String, String)? bookToRemoveFromList,

@@ -23,6 +23,11 @@ abstract class ListsRepository {
     required List<String> bookSlugs,
   });
 
+  Future<DataState<void>> renameList({
+    required String listSlug,
+    required String newName,
+  });
+
   Future<DataState<BookListModel>> getList({required String listSlug});
 
   Future<DataState<List<BookListModel>>> getLists({String? url});
@@ -39,6 +44,26 @@ class ListsRepositoryImplementation extends ListsRepository {
     required String bookSlug,
   }) {
     return '/lists/$listSlug/$bookSlug/';
+  }
+
+  @override
+  Future<DataState<void>> renameList({
+    required String listSlug,
+    required String newName,
+  }) async {
+    try {
+      final response = await _apiService.postRequest(
+        _manageListEndpoint(listSlug),
+        {'name': newName},
+        isAnonymous: false,
+      );
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
   }
 
   @override

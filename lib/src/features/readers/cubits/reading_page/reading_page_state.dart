@@ -24,7 +24,9 @@ sealed class ReadingPageState with _$ReadingPageState {
     ProgressModel? progress,
 
     // Visual progress in %
+    @Default(0) int readTimeInSeconds,
     @Default(0) int visualProgress,
+    @Default(false) bool isVisualProgressIncreasing,
   }) = _ReadingPageState;
 }
 
@@ -53,4 +55,11 @@ extension ReadingPageStateX on ReadingPageState {
   double getFontSize(ThemeData theme) =>
       theme.textTheme.bodyMedium!.fontSize! * textSizeFactor +
       ReadingPageCubit._fontSizeMultiplier;
+
+  int get remainingTimeInMinutes {
+    final readTimeInMinutes = (readTimeInSeconds / 60).floor();
+    final estimatedRemainingTime =
+        ((100 - visualProgress) / 100 * readTimeInMinutes).ceil();
+    return estimatedRemainingTime;
+  }
 }

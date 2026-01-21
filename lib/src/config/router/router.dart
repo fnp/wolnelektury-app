@@ -124,8 +124,11 @@ final GoRouter router = GoRouter(
           name: listPageConfig.name,
           pageBuilder: (context, state) {
             final slug = state.pathParameters['slug'];
+            final bool canEdit = state.extra as bool? ?? false;
             return MaterialPage(
-              child: _ColoredBackground(child: ListPage(slug: slug)),
+              child: _ColoredBackground(
+                child: ListPage(slug: slug, canEdit: canEdit),
+              ),
             );
           },
         ),

@@ -533,6 +533,33 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     emit(state.copyWith(pendingList: null));
   }
 
+  Future<void> renameList({
+    required String listSlug,
+    required String newName,
+  }) async {
+    emit(state.copyWith(isRenamingDuplicateFailure: false));
+    if (state.listNameIsDuplicate(newName)) {
+      emit(state.copyWith(isRenamingDuplicateFailure: true));
+      return;
+    }
+    emit(state.copyWith(isRenaming: true, isRenamingFailure: false));
+    final result = await _listsRepository.renameList(
+      listSlug: listSlug,
+      newName: newName,
+    );
+    result.handle(
+      success: (_, __) {
+        final updatedLists = _updateListInAllLists(
+          _findList(slug: listSlug)!.copyWith(name: newName),
+        );
+        emit(state.copyWith(isRenaming: false, allLists: updatedLists));
+      },
+      failure: (failure) {
+        emit(state.copyWith(isRenaming: false, isRenamingFailure: true));
+      },
+    );
+  }
+
   // --------------------------
   // --------------------------
   // --------------------------

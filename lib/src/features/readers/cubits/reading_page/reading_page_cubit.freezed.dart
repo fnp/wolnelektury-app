@@ -19,7 +19,7 @@ mixin _$ReadingPageState {
  List<BookTextAudioSyncModel> get audioSyncPairs;// ParagraphSheet
  int? get selectedIndex; int? get highlightedIndex; bool get isEnabledHighlighting; ReaderBookModelContent? get selectedParagraph; bool get isAddingBookmark;// Progress
  ProgressModel? get progress;// Visual progress in %
- int get visualProgress;
+ int get readTimeInSeconds; int get visualProgress; bool get isVisualProgressIncreasing;
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +30,16 @@ $ReadingPageStateCopyWith<ReadingPageState> get copyWith => _$ReadingPageStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.isJsonLoadingError, isJsonLoadingError) || other.isJsonLoadingError == isJsonLoadingError)&&(identical(other.book, book) || other.book == book)&&const DeepCollectionEquality().equals(other.audioSyncPairs, audioSyncPairs)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.highlightedIndex, highlightedIndex) || other.highlightedIndex == highlightedIndex)&&(identical(other.isEnabledHighlighting, isEnabledHighlighting) || other.isEnabledHighlighting == isEnabledHighlighting)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.visualProgress, visualProgress) || other.visualProgress == visualProgress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.isJsonLoadingError, isJsonLoadingError) || other.isJsonLoadingError == isJsonLoadingError)&&(identical(other.book, book) || other.book == book)&&const DeepCollectionEquality().equals(other.audioSyncPairs, audioSyncPairs)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.highlightedIndex, highlightedIndex) || other.highlightedIndex == highlightedIndex)&&(identical(other.isEnabledHighlighting, isEnabledHighlighting) || other.isEnabledHighlighting == isEnabledHighlighting)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.readTimeInSeconds, readTimeInSeconds) || other.readTimeInSeconds == readTimeInSeconds)&&(identical(other.visualProgress, visualProgress) || other.visualProgress == visualProgress)&&(identical(other.isVisualProgressIncreasing, isVisualProgressIncreasing) || other.isVisualProgressIncreasing == isVisualProgressIncreasing));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,isJsonLoadingError,book,const DeepCollectionEquality().hash(audioSyncPairs),selectedIndex,highlightedIndex,isEnabledHighlighting,selectedParagraph,isAddingBookmark,progress,visualProgress);
+int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,isJsonLoadingError,book,const DeepCollectionEquality().hash(audioSyncPairs),selectedIndex,highlightedIndex,isEnabledHighlighting,selectedParagraph,isAddingBookmark,progress,readTimeInSeconds,visualProgress,isVisualProgressIncreasing);
 
 @override
 String toString() {
-  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, isJsonLoadingError: $isJsonLoadingError, book: $book, audioSyncPairs: $audioSyncPairs, selectedIndex: $selectedIndex, highlightedIndex: $highlightedIndex, isEnabledHighlighting: $isEnabledHighlighting, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress, visualProgress: $visualProgress)';
+  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, isJsonLoadingError: $isJsonLoadingError, book: $book, audioSyncPairs: $audioSyncPairs, selectedIndex: $selectedIndex, highlightedIndex: $highlightedIndex, isEnabledHighlighting: $isEnabledHighlighting, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress, readTimeInSeconds: $readTimeInSeconds, visualProgress: $visualProgress, isVisualProgressIncreasing: $isVisualProgressIncreasing)';
 }
 
 
@@ -50,7 +50,7 @@ abstract mixin class $ReadingPageStateCopyWith<$Res>  {
   factory $ReadingPageStateCopyWith(ReadingPageState value, $Res Function(ReadingPageState) _then) = _$ReadingPageStateCopyWithImpl;
 @useResult
 $Res call({
- String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, bool isJsonLoadingError, ReaderBookModel? book, List<BookTextAudioSyncModel> audioSyncPairs, int? selectedIndex, int? highlightedIndex, bool isEnabledHighlighting, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress, int visualProgress
+ String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, bool isJsonLoadingError, ReaderBookModel? book, List<BookTextAudioSyncModel> audioSyncPairs, int? selectedIndex, int? highlightedIndex, bool isEnabledHighlighting, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress, int readTimeInSeconds, int visualProgress, bool isVisualProgressIncreasing
 });
 
 
@@ -67,7 +67,7 @@ class _$ReadingPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? isJsonLoadingError = null,Object? book = freezed,Object? audioSyncPairs = null,Object? selectedIndex = freezed,Object? highlightedIndex = freezed,Object? isEnabledHighlighting = null,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,Object? visualProgress = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? isJsonLoadingError = null,Object? book = freezed,Object? audioSyncPairs = null,Object? selectedIndex = freezed,Object? highlightedIndex = freezed,Object? isEnabledHighlighting = null,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,Object? readTimeInSeconds = null,Object? visualProgress = null,Object? isVisualProgressIncreasing = null,}) {
   return _then(_self.copyWith(
 currentSlug: freezed == currentSlug ? _self.currentSlug : currentSlug // ignore: cast_nullable_to_non_nullable
 as String?,textSizeFactor: null == textSizeFactor ? _self.textSizeFactor : textSizeFactor // ignore: cast_nullable_to_non_nullable
@@ -82,8 +82,10 @@ as int?,isEnabledHighlighting: null == isEnabledHighlighting ? _self.isEnabledHi
 as bool,selectedParagraph: freezed == selectedParagraph ? _self.selectedParagraph : selectedParagraph // ignore: cast_nullable_to_non_nullable
 as ReaderBookModelContent?,isAddingBookmark: null == isAddingBookmark ? _self.isAddingBookmark : isAddingBookmark // ignore: cast_nullable_to_non_nullable
 as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as ProgressModel?,visualProgress: null == visualProgress ? _self.visualProgress : visualProgress // ignore: cast_nullable_to_non_nullable
-as int,
+as ProgressModel?,readTimeInSeconds: null == readTimeInSeconds ? _self.readTimeInSeconds : readTimeInSeconds // ignore: cast_nullable_to_non_nullable
+as int,visualProgress: null == visualProgress ? _self.visualProgress : visualProgress // ignore: cast_nullable_to_non_nullable
+as int,isVisualProgressIncreasing: null == isVisualProgressIncreasing ? _self.isVisualProgressIncreasing : isVisualProgressIncreasing // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 /// Create a copy of ReadingPageState
@@ -106,7 +108,7 @@ $ProgressModelCopyWith<$Res>? get progress {
 
 
 class _ReadingPageState implements ReadingPageState {
-  const _ReadingPageState({this.currentSlug, this.textSizeFactor = 0.5, this.fontType = ReaderFontType.sans, this.isJsonLoading = false, this.isJsonLoadingError = false, this.book, final  List<BookTextAudioSyncModel> audioSyncPairs = const [], this.selectedIndex, this.highlightedIndex, this.isEnabledHighlighting = false, this.selectedParagraph, this.isAddingBookmark = false, this.progress, this.visualProgress = 0}): _audioSyncPairs = audioSyncPairs;
+  const _ReadingPageState({this.currentSlug, this.textSizeFactor = 0.5, this.fontType = ReaderFontType.sans, this.isJsonLoading = false, this.isJsonLoadingError = false, this.book, final  List<BookTextAudioSyncModel> audioSyncPairs = const [], this.selectedIndex, this.highlightedIndex, this.isEnabledHighlighting = false, this.selectedParagraph, this.isAddingBookmark = false, this.progress, this.readTimeInSeconds = 0, this.visualProgress = 0, this.isVisualProgressIncreasing = false}): _audioSyncPairs = audioSyncPairs;
   
 
 @override final  String? currentSlug;
@@ -133,7 +135,9 @@ class _ReadingPageState implements ReadingPageState {
 // Progress
 @override final  ProgressModel? progress;
 // Visual progress in %
+@override@JsonKey() final  int readTimeInSeconds;
 @override@JsonKey() final  int visualProgress;
+@override@JsonKey() final  bool isVisualProgressIncreasing;
 
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
@@ -145,16 +149,16 @@ _$ReadingPageStateCopyWith<_ReadingPageState> get copyWith => __$ReadingPageStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.isJsonLoadingError, isJsonLoadingError) || other.isJsonLoadingError == isJsonLoadingError)&&(identical(other.book, book) || other.book == book)&&const DeepCollectionEquality().equals(other._audioSyncPairs, _audioSyncPairs)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.highlightedIndex, highlightedIndex) || other.highlightedIndex == highlightedIndex)&&(identical(other.isEnabledHighlighting, isEnabledHighlighting) || other.isEnabledHighlighting == isEnabledHighlighting)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.visualProgress, visualProgress) || other.visualProgress == visualProgress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReadingPageState&&(identical(other.currentSlug, currentSlug) || other.currentSlug == currentSlug)&&(identical(other.textSizeFactor, textSizeFactor) || other.textSizeFactor == textSizeFactor)&&(identical(other.fontType, fontType) || other.fontType == fontType)&&(identical(other.isJsonLoading, isJsonLoading) || other.isJsonLoading == isJsonLoading)&&(identical(other.isJsonLoadingError, isJsonLoadingError) || other.isJsonLoadingError == isJsonLoadingError)&&(identical(other.book, book) || other.book == book)&&const DeepCollectionEquality().equals(other._audioSyncPairs, _audioSyncPairs)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.highlightedIndex, highlightedIndex) || other.highlightedIndex == highlightedIndex)&&(identical(other.isEnabledHighlighting, isEnabledHighlighting) || other.isEnabledHighlighting == isEnabledHighlighting)&&(identical(other.selectedParagraph, selectedParagraph) || other.selectedParagraph == selectedParagraph)&&(identical(other.isAddingBookmark, isAddingBookmark) || other.isAddingBookmark == isAddingBookmark)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.readTimeInSeconds, readTimeInSeconds) || other.readTimeInSeconds == readTimeInSeconds)&&(identical(other.visualProgress, visualProgress) || other.visualProgress == visualProgress)&&(identical(other.isVisualProgressIncreasing, isVisualProgressIncreasing) || other.isVisualProgressIncreasing == isVisualProgressIncreasing));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,isJsonLoadingError,book,const DeepCollectionEquality().hash(_audioSyncPairs),selectedIndex,highlightedIndex,isEnabledHighlighting,selectedParagraph,isAddingBookmark,progress,visualProgress);
+int get hashCode => Object.hash(runtimeType,currentSlug,textSizeFactor,fontType,isJsonLoading,isJsonLoadingError,book,const DeepCollectionEquality().hash(_audioSyncPairs),selectedIndex,highlightedIndex,isEnabledHighlighting,selectedParagraph,isAddingBookmark,progress,readTimeInSeconds,visualProgress,isVisualProgressIncreasing);
 
 @override
 String toString() {
-  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, isJsonLoadingError: $isJsonLoadingError, book: $book, audioSyncPairs: $audioSyncPairs, selectedIndex: $selectedIndex, highlightedIndex: $highlightedIndex, isEnabledHighlighting: $isEnabledHighlighting, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress, visualProgress: $visualProgress)';
+  return 'ReadingPageState(currentSlug: $currentSlug, textSizeFactor: $textSizeFactor, fontType: $fontType, isJsonLoading: $isJsonLoading, isJsonLoadingError: $isJsonLoadingError, book: $book, audioSyncPairs: $audioSyncPairs, selectedIndex: $selectedIndex, highlightedIndex: $highlightedIndex, isEnabledHighlighting: $isEnabledHighlighting, selectedParagraph: $selectedParagraph, isAddingBookmark: $isAddingBookmark, progress: $progress, readTimeInSeconds: $readTimeInSeconds, visualProgress: $visualProgress, isVisualProgressIncreasing: $isVisualProgressIncreasing)';
 }
 
 
@@ -165,7 +169,7 @@ abstract mixin class _$ReadingPageStateCopyWith<$Res> implements $ReadingPageSta
   factory _$ReadingPageStateCopyWith(_ReadingPageState value, $Res Function(_ReadingPageState) _then) = __$ReadingPageStateCopyWithImpl;
 @override @useResult
 $Res call({
- String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, bool isJsonLoadingError, ReaderBookModel? book, List<BookTextAudioSyncModel> audioSyncPairs, int? selectedIndex, int? highlightedIndex, bool isEnabledHighlighting, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress, int visualProgress
+ String? currentSlug, double textSizeFactor, ReaderFontType fontType, bool isJsonLoading, bool isJsonLoadingError, ReaderBookModel? book, List<BookTextAudioSyncModel> audioSyncPairs, int? selectedIndex, int? highlightedIndex, bool isEnabledHighlighting, ReaderBookModelContent? selectedParagraph, bool isAddingBookmark, ProgressModel? progress, int readTimeInSeconds, int visualProgress, bool isVisualProgressIncreasing
 });
 
 
@@ -182,7 +186,7 @@ class __$ReadingPageStateCopyWithImpl<$Res>
 
 /// Create a copy of ReadingPageState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? isJsonLoadingError = null,Object? book = freezed,Object? audioSyncPairs = null,Object? selectedIndex = freezed,Object? highlightedIndex = freezed,Object? isEnabledHighlighting = null,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,Object? visualProgress = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentSlug = freezed,Object? textSizeFactor = null,Object? fontType = null,Object? isJsonLoading = null,Object? isJsonLoadingError = null,Object? book = freezed,Object? audioSyncPairs = null,Object? selectedIndex = freezed,Object? highlightedIndex = freezed,Object? isEnabledHighlighting = null,Object? selectedParagraph = freezed,Object? isAddingBookmark = null,Object? progress = freezed,Object? readTimeInSeconds = null,Object? visualProgress = null,Object? isVisualProgressIncreasing = null,}) {
   return _then(_ReadingPageState(
 currentSlug: freezed == currentSlug ? _self.currentSlug : currentSlug // ignore: cast_nullable_to_non_nullable
 as String?,textSizeFactor: null == textSizeFactor ? _self.textSizeFactor : textSizeFactor // ignore: cast_nullable_to_non_nullable
@@ -197,8 +201,10 @@ as int?,isEnabledHighlighting: null == isEnabledHighlighting ? _self.isEnabledHi
 as bool,selectedParagraph: freezed == selectedParagraph ? _self.selectedParagraph : selectedParagraph // ignore: cast_nullable_to_non_nullable
 as ReaderBookModelContent?,isAddingBookmark: null == isAddingBookmark ? _self.isAddingBookmark : isAddingBookmark // ignore: cast_nullable_to_non_nullable
 as bool,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as ProgressModel?,visualProgress: null == visualProgress ? _self.visualProgress : visualProgress // ignore: cast_nullable_to_non_nullable
-as int,
+as ProgressModel?,readTimeInSeconds: null == readTimeInSeconds ? _self.readTimeInSeconds : readTimeInSeconds // ignore: cast_nullable_to_non_nullable
+as int,visualProgress: null == visualProgress ? _self.visualProgress : visualProgress // ignore: cast_nullable_to_non_nullable
+as int,isVisualProgressIncreasing: null == isVisualProgressIncreasing ? _self.isVisualProgressIncreasing : isVisualProgressIncreasing // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

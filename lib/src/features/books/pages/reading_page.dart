@@ -5,6 +5,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
@@ -117,23 +118,35 @@ class _Body extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
-                buildWhen: (p, c) => c.shouldRebuild(p),
-                builder: (context, state) {
-                  return AnimatedBoxFade(
-                    duration: const Duration(milliseconds: 400),
-                    isChildVisible: !state.isJsonLoading,
-                    collapsedChild: const _SkeletonPlaceholder(),
-                    child: state.book == null
-                        ? const SizedBox.shrink()
-                        : _HighlightedParagraphListener(
-                            bookSlug: state.currentSlug,
-                            itemScrollController: itemScrollController,
-                            child: ReaderListViewBuilder(
-                              state: state,
-                              itemScrollController: itemScrollController,
-                            ),
-                          ),
+              child: BlocSelector<ReadingPageCubit, ReadingPageState, bool>(
+                selector: (state) {
+                  return state.isVisualProgressIncreasing;
+                },
+                builder: (context, expanded) {
+                  return AnimatedPadding(
+                    duration: const Duration(milliseconds: 300),
+                    curve: defaultCurve,
+                    padding: EdgeInsets.only(top: !expanded ? 25 : 5),
+                    child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
+                      buildWhen: (p, c) => c.shouldRebuild(p),
+                      builder: (context, state) {
+                        return AnimatedBoxFade(
+                          duration: const Duration(milliseconds: 400),
+                          isChildVisible: !state.isJsonLoading,
+                          collapsedChild: const _SkeletonPlaceholder(),
+                          child: state.book == null
+                              ? const SizedBox.shrink()
+                              : _HighlightedParagraphListener(
+                                  bookSlug: state.currentSlug,
+                                  itemScrollController: itemScrollController,
+                                  child: ReaderListViewBuilder(
+                                    state: state,
+                                    itemScrollController: itemScrollController,
+                                  ),
+                                ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),

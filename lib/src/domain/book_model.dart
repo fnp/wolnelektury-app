@@ -35,6 +35,7 @@ sealed class BookModel with _$BookModel {
     @JsonKey(name: 'isbn_epub') String? isbnEpub,
     @JsonKey(name: 'isbn_mobi') String? isbnMobi,
     @JsonKey(name: 'abstract') String? description,
+    @JsonKey(name: 'read_time') int? readTime,
     @JsonKey(name: 'has_mp3_file') @Default(false) bool hasAudiobook,
   }) = _BookModel;
 

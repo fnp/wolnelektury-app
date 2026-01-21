@@ -16,11 +16,13 @@ class MyLibraryListBook extends StatelessWidget {
   final String bookSlug;
   final String listSlug;
   final String listName;
+  final bool canEdit;
   const MyLibraryListBook({
     super.key,
     required this.bookSlug,
     required this.listSlug,
     required this.listName,
+    required this.canEdit,
   });
 
   @override
@@ -62,19 +64,21 @@ class MyLibraryListBook extends StatelessWidget {
                           enabled: state.isLoading,
                           child: BookPageCoverWithButtons(
                             key: ValueKey(bookSlug),
-                            onDelete: () {
-                              cubit.removeBookFromList(
-                                listSlug: listSlug,
-                                bookSlug: bookSlug,
-                              );
-                              CustomSnackbar.success(
-                                context,
-                                LocaleKeys.book_lists_sheet_delete.tr(),
-                                onRevert: () {
-                                  cubit.undoRemoveBookFromList();
-                                },
-                              );
-                            },
+                            onDelete: canEdit
+                                ? () {
+                                    cubit.removeBookFromList(
+                                      listSlug: listSlug,
+                                      bookSlug: bookSlug,
+                                    );
+                                    CustomSnackbar.success(
+                                      context,
+                                      LocaleKeys.book_lists_sheet_delete.tr(),
+                                      onRevert: () {
+                                        cubit.undoRemoveBookFromList();
+                                      },
+                                    );
+                                  }
+                                : null,
                             book: state.isLoading
                                 ? BookModel.empty()
                                 : state.book!,

@@ -12,6 +12,7 @@ import 'package:wolnelektury/src/features/common/cubits/router/router_cubit.dart
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/widgets/list_page_rename_dialog.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_book.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_delete_confirmation_dialog.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
@@ -25,10 +26,12 @@ import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 class MyLibraryList extends StatelessWidget {
   final BookListModel bookList;
   final bool isCompact;
+  final bool canEdit;
   const MyLibraryList({
     super.key,
     required this.bookList,
     required this.isCompact,
+    this.canEdit = true,
   });
 
   @override
@@ -52,9 +55,13 @@ class MyLibraryList extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _Header(bookList: bookList, includeShare: !isCompact),
+                      _Header(
+                        bookList: bookList,
+                        includeShare: !isCompact,
+                        canEdit: canEdit,
+                      ),
                       if (bookList.books.isNotEmpty && !isCompact) ...[
-                        _List(bookList: bookList),
+                        _List(bookList: bookList, canEdit: canEdit),
                       ],
                       if (bookList.books.isEmpty && !isCompact)
                         const Padding(
@@ -73,7 +80,8 @@ class MyLibraryList extends StatelessWidget {
 
 class _List extends StatelessWidget {
   final BookListModel bookList;
-  const _List({required this.bookList});
+  final bool canEdit;
+  const _List({required this.bookList, required this.canEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +94,7 @@ class _List extends StatelessWidget {
           bookSlug: bookList.books[index],
           listSlug: bookList.slug,
           listName: bookList.name,
+          canEdit: canEdit,
         );
       },
       itemCount: bookList.books.length,
@@ -96,13 +105,19 @@ class _List extends StatelessWidget {
 class _Header extends StatelessWidget {
   final BookListModel bookList;
   final bool includeShare;
-  const _Header({required this.bookList, required this.includeShare});
+  final bool canEdit;
+  const _Header({
+    required this.bookList,
+    required this.includeShare,
+    required this.canEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final listCubit = BlocProvider.of<ListCreatorCubit>(context);
     final modeCubit = BlocProvider.of<AppModeCubit>(context);
+    final routerPath = context.read<RouterCubit>().state.location;
     return Stack(
       children: [
         SizedBox(
@@ -122,9 +137,21 @@ class _Header extends StatelessWidget {
                       Dimensions.borderRadiusOfCircle,
                     ),
                     onTap: () {
+                      if (routerPath.contains(listPageConfig.name)) {
+                        if (!canEdit) {
+                          return;
+                        }
+                        ListPageRenameDialog.show(
+                          context: context,
+                          listSlug: bookList.slug,
+                          currentName: bookList.name,
+                        );
+                        return;
+                      }
                       router.pushNamed(
                         listPageConfig.name,
                         pathParameters: {'slug': bookList.slug},
+                        extra: true,
                       );
                     },
                     child: Row(
@@ -152,38 +179,46 @@ class _Header extends StatelessWidget {
                         SizedBox(
                           width: Dimensions.elementHeight * 2,
                           height: Dimensions.elementHeight,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: CustomColors.red,
-                              borderRadius: BorderRadius.circular(
-                                Dimensions.borderRadiusOfCircle,
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                _DeleteButton(
-                                  slug: bookList.slug,
-                                  name: bookList.name,
-                                ),
-                                CustomButton(
-                                  semanticLabel: LocaleKeys
-                                      .common_semantic_edit_list
-                                      .tr(
-                                        namedArgs: {'listName': bookList.name},
+                          child: canEdit
+                              ? DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    color: CustomColors.red,
+                                    borderRadius: BorderRadius.circular(
+                                      Dimensions.borderRadiusOfCircle,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      _DeleteButton(
+                                        slug: bookList.slug,
+                                        name: bookList.name,
                                       ),
-                                  icon: CustomIcons.add,
-                                  onPressed: () {
-                                    listCubit.setListAsEdited(bookList.slug);
-                                    modeCubit.changeMode(
-                                      AppModeEnum.listCreationMode,
-                                    );
-                                    router.pushNamed(cataloguePageConfig.name);
-                                  },
-                                  backgroundColor: CustomColors.white,
-                                ),
-                              ],
-                            ),
-                          ),
+                                      CustomButton(
+                                        semanticLabel: LocaleKeys
+                                            .common_semantic_edit_list
+                                            .tr(
+                                              namedArgs: {
+                                                'listName': bookList.name,
+                                              },
+                                            ),
+                                        icon: CustomIcons.add,
+                                        onPressed: () {
+                                          listCubit.setListAsEdited(
+                                            bookList.slug,
+                                          );
+                                          modeCubit.changeMode(
+                                            AppModeEnum.listCreationMode,
+                                          );
+                                          router.pushNamed(
+                                            cataloguePageConfig.name,
+                                          );
+                                        },
+                                        backgroundColor: CustomColors.white,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
                         ),
                       ],
                     ),

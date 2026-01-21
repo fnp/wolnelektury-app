@@ -14,27 +14,29 @@ import 'package:wolnelektury/src/utils/ui/images.dart';
 
 class ListPage extends StatelessWidget {
   final String? slug;
-  const ListPage({super.key, required this.slug});
+  final bool canEdit;
+  const ListPage({super.key, required this.slug, this.canEdit = true});
 
   @override
   Widget build(BuildContext context) {
     if (slug != null) {
-      return _FetchedListWidget(slug: slug!);
+      return Content(slug: slug!, canEdit: canEdit);
     } else {
       return const _EmptyWidget();
     }
   }
 }
 
-class _FetchedListWidget extends StatefulWidget {
+class Content extends StatefulWidget {
   final String slug;
-  const _FetchedListWidget({required this.slug});
+  final bool canEdit;
+  const Content({super.key, required this.slug, required this.canEdit});
 
   @override
-  State<_FetchedListWidget> createState() => _FetchedListWidgetState();
+  State<Content> createState() => ContentState();
 }
 
-class _FetchedListWidgetState extends State<_FetchedListWidget> {
+class ContentState extends State<Content> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -58,6 +60,7 @@ class _FetchedListWidgetState extends State<_FetchedListWidget> {
               child: _Body(
                 bookList: list ?? BookListModel.empty(),
                 key: ValueKey(list?.slug ?? 'empty'),
+                canEdit: widget.canEdit,
               ),
             ),
           );
@@ -69,7 +72,8 @@ class _FetchedListWidgetState extends State<_FetchedListWidget> {
 
 class _Body extends StatelessWidget {
   final BookListModel bookList;
-  const _Body({required this.bookList, super.key});
+  final bool canEdit;
+  const _Body({required this.bookList, required this.canEdit, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +85,11 @@ class _Body extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: Dimensions.largePadding),
-            MyLibraryList(bookList: bookList, isCompact: false),
+            MyLibraryList(
+              bookList: bookList,
+              isCompact: false,
+              canEdit: canEdit,
+            ),
             const SizedBox(height: Dimensions.spacer),
           ],
         ),

@@ -63,6 +63,7 @@ _BookModel _$BookModelFromJson(Map<String, dynamic> json) => _BookModel(
   isbnEpub: json['isbn_epub'] as String?,
   isbnMobi: json['isbn_mobi'] as String?,
   description: json['abstract'] as String?,
+  readTime: (json['read_time'] as num?)?.toInt(),
   hasAudiobook: json['has_mp3_file'] as bool? ?? false,
 );
 
@@ -90,6 +91,7 @@ Map<String, dynamic> _$BookModelToJson(_BookModel instance) =>
       'isbn_epub': instance.isbnEpub,
       'isbn_mobi': instance.isbnMobi,
       'abstract': instance.description,
+      'read_time': instance.readTime,
       'has_mp3_file': instance.hasAudiobook,
     };
 
