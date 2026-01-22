@@ -6,6 +6,8 @@ sealed class ReadingPageState with _$ReadingPageState {
     String? currentSlug,
     @Default(0.5) double textSizeFactor,
     @Default(ReaderFontType.sans) ReaderFontType fontType,
+    @Default(0) double fontHeightMultiplier,
+
     @Default(false) bool isJsonLoading,
     @Default(false) bool isJsonLoadingError,
     ReaderBookModel? book,
@@ -49,12 +51,20 @@ extension ReadingPageStateX on ReadingPageState {
     return textSizeFactor != state.textSizeFactor ||
         book != state.book ||
         fontType != state.fontType ||
+        fontHeightMultiplier != state.fontHeightMultiplier ||
         isJsonLoading != state.isJsonLoading;
   }
 
   double getFontSize(ThemeData theme) =>
       theme.textTheme.bodyMedium!.fontSize! * textSizeFactor +
       ReadingPageCubit._fontSizeMultiplier;
+
+  double getLineHeight() {
+    double effectiveFontHeight =
+        ReadingPageCubit._baseFontHeight +
+        (fontHeightMultiplier - ReadingPageSettingsFontHeight.minThreshold) / 2;
+    return effectiveFontHeight;
+  }
 
   int get remainingTimeInMinutes {
     final readTimeInMinutes = (readTimeInSeconds / 60).floor();

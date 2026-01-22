@@ -13,13 +13,13 @@ class ReaderSpansWrapper extends StatelessWidget {
   final ReaderBookModelContent element;
   final String fontFamily;
   final double fontSize;
-  final bool debugPrint;
+  final double fontHeight;
   const ReaderSpansWrapper({
-    super.key,
     required this.element,
     required this.fontFamily,
     required this.fontSize,
-    required this.debugPrint,
+    required this.fontHeight,
+    super.key,
   });
 
   @override
@@ -56,6 +56,7 @@ class ReaderSpansWrapper extends StatelessWidget {
                     parent: element,
                     fontFamily: fontFamily,
                     fontSize: fontSize,
+                    fontHeight: fontHeight,
                   ),
                 ],
               ),

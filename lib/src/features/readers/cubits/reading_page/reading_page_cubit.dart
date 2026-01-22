@@ -14,6 +14,7 @@ import 'package:wolnelektury/src/domain/book_text_audio_sync_model.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/enums/reader_font_type.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_font_height.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
@@ -30,6 +31,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
 
   /// Font size multiplier based on device scale
   static double _fontSizeMultiplier = 9;
+  static const double _baseFontHeight = 1.45;
 
   /// Timestamp of last progress sent (for debouncing)
   DateTime? _lastProgressSent;
@@ -85,6 +87,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
             currentSlug: book.slug,
             textSizeFactor: settings.readingFontSize,
             fontType: readerFontTypeFromString(settings.readingFontType),
+            fontHeightMultiplier: settings.readingFontHeight,
             isJsonLoading: false,
             book: data,
             readTimeInSeconds: book.readTime ?? 0,
@@ -262,6 +265,11 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     emit(state.copyWith(textSizeFactor: textSizeFactor));
   }
 
+  /// Changes the line height in the reader.
+  void changeFontHeight(double multiplier) {
+    emit(state.copyWith(fontHeightMultiplier: multiplier));
+  }
+
   /// Changes the font type in the reader.
   void changeFontType(ReaderFontType fontType) {
     emit(state.copyWith(fontType: fontType));
@@ -272,6 +280,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     await _settingsStorage.setReadingSettings(
       textSizeFactor: state.textSizeFactor,
       fontType: state.fontType,
+      fontHeight: state.fontHeightMultiplier,
     );
   }
 

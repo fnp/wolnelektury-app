@@ -10,6 +10,7 @@ class BuildReaderTagLevelModifiers {
     ReaderBookModelContent? parent,
     required String fontFamily,
     required double fontSize,
+    required double fontHeight,
     required ThemeData theme,
     required bool isRecursive,
     dynamic nextSibling,
@@ -29,6 +30,7 @@ class BuildReaderTagLevelModifiers {
     TextStyle baseStyle = theme.textTheme.bodyMedium!.copyWith(
       fontFamily: fontFamily,
       fontSize: fontSize,
+      height: fontHeight,
     );
 
     switch (element.tag) {
@@ -38,8 +40,6 @@ class BuildReaderTagLevelModifiers {
           BuildReaderClassLevelModifiers.build(
             text,
             baseStyle.copyWith(fontWeight: FontWeight.bold),
-            fontFamily,
-            fontSize,
             className,
             parentClassName,
             nextSibling,
@@ -55,8 +55,6 @@ class BuildReaderTagLevelModifiers {
           BuildReaderClassLevelModifiers.build(
             text,
             baseStyle.copyWith(fontWeight: FontWeight.bold),
-            fontFamily,
-            fontSize,
             className,
             parentClassName,
             nextSibling,
@@ -72,8 +70,6 @@ class BuildReaderTagLevelModifiers {
           BuildReaderClassLevelModifiers.build(
             text,
             baseStyle.copyWith(fontWeight: FontWeight.bold),
-            fontFamily,
-            fontSize,
             className,
             parentClassName,
             nextSibling,
@@ -88,8 +84,6 @@ class BuildReaderTagLevelModifiers {
           BuildReaderClassLevelModifiers.build(
             text,
             baseStyle.copyWith(fontWeight: FontWeight.bold),
-            fontFamily,
-            fontSize,
             className,
             parentClassName,
             nextSibling,
@@ -106,8 +100,6 @@ class BuildReaderTagLevelModifiers {
                 ? BuildReaderIndent.applyIndent(text, prevSibling)
                 : text,
             baseStyle,
-            fontFamily,
-            fontSize,
             className,
             parentClassName,
             nextSibling,
@@ -123,8 +115,6 @@ class BuildReaderTagLevelModifiers {
           BuildReaderClassLevelModifiers.build(
             text,
             baseStyle,
-            fontFamily,
-            fontSize,
             className,
             parentClassName,
             nextSibling,
@@ -138,8 +128,6 @@ class BuildReaderTagLevelModifiers {
           BuildReaderClassLevelModifiers.build(
             text,
             baseStyle.copyWith(fontStyle: FontStyle.italic),
-            fontFamily,
-            fontSize,
             className,
             parentClassName,
             nextSibling,

@@ -23,6 +23,7 @@ List<InlineSpan> buildReaderBase({
   ReaderBookModelContent? parent,
   required String fontFamily,
   required double fontSize,
+  required double fontHeight,
   required ThemeData theme,
   bool isRecursive = false,
 }) {
@@ -41,6 +42,7 @@ List<InlineSpan> buildReaderBase({
       prevSibling: prevSibling,
       fontFamily: fontFamily,
       fontSize: fontSize,
+      fontHeight: fontHeight,
       theme: theme,
       isRecursive: isRecursive,
     );
@@ -135,6 +137,7 @@ List<InlineSpan> _getSpans({
   dynamic prevSibling,
   required String fontFamily,
   required double fontSize,
+  required double fontHeight,
   required ThemeData theme,
   required bool isRecursive,
 }) {
@@ -147,6 +150,7 @@ List<InlineSpan> _getSpans({
           linkContent: item,
           fontFamily: fontFamily,
           fontSize: fontSize,
+          fontHeight: fontHeight,
           hasSomeContentAfter: nextSibling != null,
         ),
       ];
@@ -158,6 +162,7 @@ List<InlineSpan> _getSpans({
       parent: element,
       fontFamily: fontFamily,
       fontSize: fontSize,
+      fontHeight: fontHeight,
       theme: theme,
       isRecursive: true,
     );
@@ -171,6 +176,7 @@ List<InlineSpan> _getSpans({
       parent: parent,
       fontFamily: fontFamily,
       fontSize: fontSize,
+      fontHeight: fontHeight,
       theme: theme,
       isRecursive: isRecursive,
       nextSibling: nextSibling,
@@ -186,6 +192,7 @@ List<InlineSpan> _getSpans({
       parent: parent,
       fontFamily: fontFamily,
       fontSize: fontSize,
+      fontHeight: fontHeight,
       theme: theme,
       isRecursive: isRecursive,
       nextSibling: nextSibling,
@@ -202,6 +209,7 @@ InlineSpan _handleLinkTags({
   required ReaderBookModelContent linkContent,
   required String fontFamily,
   required double fontSize,
+  required double fontHeight,
   required bool
   hasSomeContentAfter, // true jeśli po tym elemencie są jeszcze treści
 }) {
@@ -241,6 +249,7 @@ InlineSpan _handleLinkTags({
             linkContent: linkContent,
             fontFamily: fontFamily,
             fontSize: fontSize,
+            fontHeight: fontHeight,
             type: classNameFirstWord == footnoteString
                 ? ReaderBottomSheetType.footnote
                 : ReaderBottomSheetType.reference,
@@ -251,6 +260,7 @@ InlineSpan _handleLinkTags({
               linkContent: linkContent,
               fontFamily: fontFamily,
               fontSize: fontSize,
+              fontHeight: fontHeight,
               type: classNameFirstWord == footnoteString
                   ? ReaderBottomSheetType.footnote
                   : ReaderBottomSheetType.reference,

@@ -488,6 +488,19 @@ class $ReaderSettingsTable extends ReaderSettings
     requiredDuringInsert: false,
     defaultValue: const Constant(0.5),
   );
+  static const VerificationMeta _readingFontHeightMeta = const VerificationMeta(
+    'readingFontHeight',
+  );
+  @override
+  late final GeneratedColumn<double> readingFontHeight =
+      GeneratedColumn<double>(
+        'reading_font_height',
+        aliasedName,
+        false,
+        type: DriftSqlType.double,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(0),
+      );
   static const VerificationMeta _readingFontTypeMeta = const VerificationMeta(
     'readingFontType',
   );
@@ -501,7 +514,12 @@ class $ReaderSettingsTable extends ReaderSettings
     defaultValue: const Constant('sans'),
   );
   @override
-  List<GeneratedColumn> get $columns => [id, readingFontSize, readingFontType];
+  List<GeneratedColumn> get $columns => [
+    id,
+    readingFontSize,
+    readingFontHeight,
+    readingFontType,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -523,6 +541,15 @@ class $ReaderSettingsTable extends ReaderSettings
         readingFontSize.isAcceptableOrUnknown(
           data['reading_font_size']!,
           _readingFontSizeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reading_font_height')) {
+      context.handle(
+        _readingFontHeightMeta,
+        readingFontHeight.isAcceptableOrUnknown(
+          data['reading_font_height']!,
+          _readingFontHeightMeta,
         ),
       );
     }
@@ -552,6 +579,10 @@ class $ReaderSettingsTable extends ReaderSettings
         DriftSqlType.double,
         data['${effectivePrefix}reading_font_size'],
       )!,
+      readingFontHeight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}reading_font_height'],
+      )!,
       readingFontType: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}reading_font_type'],
@@ -568,10 +599,12 @@ class $ReaderSettingsTable extends ReaderSettings
 class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
   final int id;
   final double readingFontSize;
+  final double readingFontHeight;
   final String readingFontType;
   const ReaderSetting({
     required this.id,
     required this.readingFontSize,
+    required this.readingFontHeight,
     required this.readingFontType,
   });
   @override
@@ -579,6 +612,7 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['reading_font_size'] = Variable<double>(readingFontSize);
+    map['reading_font_height'] = Variable<double>(readingFontHeight);
     map['reading_font_type'] = Variable<String>(readingFontType);
     return map;
   }
@@ -587,6 +621,7 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
     return ReaderSettingsCompanion(
       id: Value(id),
       readingFontSize: Value(readingFontSize),
+      readingFontHeight: Value(readingFontHeight),
       readingFontType: Value(readingFontType),
     );
   }
@@ -599,6 +634,7 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
     return ReaderSetting(
       id: serializer.fromJson<int>(json['id']),
       readingFontSize: serializer.fromJson<double>(json['readingFontSize']),
+      readingFontHeight: serializer.fromJson<double>(json['readingFontHeight']),
       readingFontType: serializer.fromJson<String>(json['readingFontType']),
     );
   }
@@ -608,6 +644,7 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'readingFontSize': serializer.toJson<double>(readingFontSize),
+      'readingFontHeight': serializer.toJson<double>(readingFontHeight),
       'readingFontType': serializer.toJson<String>(readingFontType),
     };
   }
@@ -615,10 +652,12 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
   ReaderSetting copyWith({
     int? id,
     double? readingFontSize,
+    double? readingFontHeight,
     String? readingFontType,
   }) => ReaderSetting(
     id: id ?? this.id,
     readingFontSize: readingFontSize ?? this.readingFontSize,
+    readingFontHeight: readingFontHeight ?? this.readingFontHeight,
     readingFontType: readingFontType ?? this.readingFontType,
   );
   ReaderSetting copyWithCompanion(ReaderSettingsCompanion data) {
@@ -627,6 +666,9 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
       readingFontSize: data.readingFontSize.present
           ? data.readingFontSize.value
           : this.readingFontSize,
+      readingFontHeight: data.readingFontHeight.present
+          ? data.readingFontHeight.value
+          : this.readingFontHeight,
       readingFontType: data.readingFontType.present
           ? data.readingFontType.value
           : this.readingFontType,
@@ -638,44 +680,52 @@ class ReaderSetting extends DataClass implements Insertable<ReaderSetting> {
     return (StringBuffer('ReaderSetting(')
           ..write('id: $id, ')
           ..write('readingFontSize: $readingFontSize, ')
+          ..write('readingFontHeight: $readingFontHeight, ')
           ..write('readingFontType: $readingFontType')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, readingFontSize, readingFontType);
+  int get hashCode =>
+      Object.hash(id, readingFontSize, readingFontHeight, readingFontType);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ReaderSetting &&
           other.id == this.id &&
           other.readingFontSize == this.readingFontSize &&
+          other.readingFontHeight == this.readingFontHeight &&
           other.readingFontType == this.readingFontType);
 }
 
 class ReaderSettingsCompanion extends UpdateCompanion<ReaderSetting> {
   final Value<int> id;
   final Value<double> readingFontSize;
+  final Value<double> readingFontHeight;
   final Value<String> readingFontType;
   const ReaderSettingsCompanion({
     this.id = const Value.absent(),
     this.readingFontSize = const Value.absent(),
+    this.readingFontHeight = const Value.absent(),
     this.readingFontType = const Value.absent(),
   });
   ReaderSettingsCompanion.insert({
     this.id = const Value.absent(),
     this.readingFontSize = const Value.absent(),
+    this.readingFontHeight = const Value.absent(),
     this.readingFontType = const Value.absent(),
   });
   static Insertable<ReaderSetting> custom({
     Expression<int>? id,
     Expression<double>? readingFontSize,
+    Expression<double>? readingFontHeight,
     Expression<String>? readingFontType,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (readingFontSize != null) 'reading_font_size': readingFontSize,
+      if (readingFontHeight != null) 'reading_font_height': readingFontHeight,
       if (readingFontType != null) 'reading_font_type': readingFontType,
     });
   }
@@ -683,11 +733,13 @@ class ReaderSettingsCompanion extends UpdateCompanion<ReaderSetting> {
   ReaderSettingsCompanion copyWith({
     Value<int>? id,
     Value<double>? readingFontSize,
+    Value<double>? readingFontHeight,
     Value<String>? readingFontType,
   }) {
     return ReaderSettingsCompanion(
       id: id ?? this.id,
       readingFontSize: readingFontSize ?? this.readingFontSize,
+      readingFontHeight: readingFontHeight ?? this.readingFontHeight,
       readingFontType: readingFontType ?? this.readingFontType,
     );
   }
@@ -701,6 +753,9 @@ class ReaderSettingsCompanion extends UpdateCompanion<ReaderSetting> {
     if (readingFontSize.present) {
       map['reading_font_size'] = Variable<double>(readingFontSize.value);
     }
+    if (readingFontHeight.present) {
+      map['reading_font_height'] = Variable<double>(readingFontHeight.value);
+    }
     if (readingFontType.present) {
       map['reading_font_type'] = Variable<String>(readingFontType.value);
     }
@@ -712,6 +767,7 @@ class ReaderSettingsCompanion extends UpdateCompanion<ReaderSetting> {
     return (StringBuffer('ReaderSettingsCompanion(')
           ..write('id: $id, ')
           ..write('readingFontSize: $readingFontSize, ')
+          ..write('readingFontHeight: $readingFontHeight, ')
           ..write('readingFontType: $readingFontType')
           ..write(')'))
         .toString();
@@ -2925,12 +2981,14 @@ typedef $$ReaderSettingsTableCreateCompanionBuilder =
     ReaderSettingsCompanion Function({
       Value<int> id,
       Value<double> readingFontSize,
+      Value<double> readingFontHeight,
       Value<String> readingFontType,
     });
 typedef $$ReaderSettingsTableUpdateCompanionBuilder =
     ReaderSettingsCompanion Function({
       Value<int> id,
       Value<double> readingFontSize,
+      Value<double> readingFontHeight,
       Value<String> readingFontType,
     });
 
@@ -2950,6 +3008,11 @@ class $$ReaderSettingsTableFilterComposer
 
   ColumnFilters<double> get readingFontSize => $composableBuilder(
     column: $table.readingFontSize,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get readingFontHeight => $composableBuilder(
+    column: $table.readingFontHeight,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2978,6 +3041,11 @@ class $$ReaderSettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get readingFontHeight => $composableBuilder(
+    column: $table.readingFontHeight,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get readingFontType => $composableBuilder(
     column: $table.readingFontType,
     builder: (column) => ColumnOrderings(column),
@@ -2998,6 +3066,11 @@ class $$ReaderSettingsTableAnnotationComposer
 
   GeneratedColumn<double> get readingFontSize => $composableBuilder(
     column: $table.readingFontSize,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get readingFontHeight => $composableBuilder(
+    column: $table.readingFontHeight,
     builder: (column) => column,
   );
 
@@ -3040,20 +3113,24 @@ class $$ReaderSettingsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<double> readingFontSize = const Value.absent(),
+                Value<double> readingFontHeight = const Value.absent(),
                 Value<String> readingFontType = const Value.absent(),
               }) => ReaderSettingsCompanion(
                 id: id,
                 readingFontSize: readingFontSize,
+                readingFontHeight: readingFontHeight,
                 readingFontType: readingFontType,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 Value<double> readingFontSize = const Value.absent(),
+                Value<double> readingFontHeight = const Value.absent(),
                 Value<String> readingFontType = const Value.absent(),
               }) => ReaderSettingsCompanion.insert(
                 id: id,
                 readingFontSize: readingFontSize,
+                readingFontHeight: readingFontHeight,
                 readingFontType: readingFontType,
               ),
           withReferenceMapper: (p0) => p0

@@ -14,6 +14,7 @@ class ReaderBottomSheet extends StatefulWidget {
   final ReaderBookModelContent linkContent;
   final String fontFamily;
   final double fontSize;
+  final double fontHeight;
   final ReaderBottomSheetType type;
 
   const ReaderBottomSheet({
@@ -23,6 +24,7 @@ class ReaderBottomSheet extends StatefulWidget {
     required this.fontFamily,
     required this.fontSize,
     required this.type,
+    required this.fontHeight,
   });
 
   static void show({
@@ -30,6 +32,7 @@ class ReaderBottomSheet extends StatefulWidget {
     required ReaderBookModelContent linkContent,
     required String fontFamily,
     required double fontSize,
+    required double fontHeight,
     required ReaderBottomSheetType type,
   }) {
     showModalBottomSheet(
@@ -43,6 +46,7 @@ class ReaderBottomSheet extends StatefulWidget {
           linkContent: linkContent,
           fontFamily: fontFamily,
           fontSize: fontSize,
+          fontHeight: fontHeight,
           type: type,
         );
       },
@@ -146,6 +150,7 @@ class _ReaderBottomSheetState extends State<ReaderBottomSheet> {
                           parent: widget.element,
                           fontFamily: widget.fontFamily,
                           fontSize: widget.fontSize,
+                          fontHeight: widget.fontHeight,
                         ),
                       ),
                     ),

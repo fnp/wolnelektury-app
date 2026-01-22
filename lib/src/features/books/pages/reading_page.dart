@@ -164,7 +164,7 @@ class _Body extends StatelessWidget {
                 semanticLabel: LocaleKeys.reader_settings_open_reading_settings
                     .tr(),
                 size: Dimensions.elementHeight,
-                backgroundColor: CustomColors.white,
+                backgroundColor: CustomColors.primaryYellowColor,
                 icon: Icons.tune,
                 onPressed: () {
                   ReadingPageSettingsSheet.show(

@@ -15,12 +15,14 @@ class AppStorageSettingsService {
 
   Future<ReaderSetting> setReadingSettings({
     required double textSizeFactor,
+    required double fontHeight,
     required ReaderFontType fontType,
   }) async {
     final currentSettings = await _getReaderSettings();
 
     if (currentSettings.readingFontSize == textSizeFactor &&
-        currentSettings.readingFontType == fontType.name) {
+        currentSettings.readingFontType == fontType.name &&
+        currentSettings.readingFontHeight == fontHeight) {
       return currentSettings;
     }
 
@@ -31,6 +33,7 @@ class AppStorageSettingsService {
             id: const Value(appSettingsId),
             readingFontSize: Value(textSizeFactor),
             readingFontType: Value(fontType.name),
+            readingFontHeight: Value(fontHeight),
           ),
         );
 
@@ -52,6 +55,7 @@ class AppStorageSettingsService {
               id: const Value(appSettingsId),
               readingFontSize: const Value(0.5),
               readingFontType: Value(ReaderFontType.sans.name),
+              readingFontHeight: const Value(0),
             ),
           );
     }

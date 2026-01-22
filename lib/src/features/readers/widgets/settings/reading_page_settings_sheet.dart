@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_font_height.dart';
 import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_font_size.dart';
 import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_font_style.dart';
 import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_highlighting.dart';
@@ -10,7 +11,7 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class ReadingPageSettingsSheet extends StatelessWidget {
   final String slug;
-  static const double _height = 250;
+  static const double _height = 320;
   const ReadingPageSettingsSheet({super.key, required this.slug});
 
   static void show({
@@ -52,6 +53,7 @@ class ReadingPageSettingsSheet extends StatelessWidget {
           child: Column(
             spacing: Dimensions.mediumPadding,
             children: [
+              const ReadingPageSettingsFontHeight(),
               const ReadingPageSettingsSheetFontSize(),
               const ReadingPageSettingsSheetFontStyle(),
               const ReadingPageSettingsSheetTheme(),

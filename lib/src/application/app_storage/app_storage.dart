@@ -17,7 +17,10 @@ class LastSearched extends Table {
 
 class ReaderSettings extends Table {
   IntColumn get id => integer().autoIncrement()();
+  // This is multiplier, actual fontSize is calculated in ReadingPageState
   RealColumn get readingFontSize => real().withDefault(const Constant(0.5))();
+  // This is multiplier, actual fontHeight is calculated in ReadingPageState
+  RealColumn get readingFontHeight => real().withDefault(const Constant(0))();
   TextColumn get readingFontType =>
       text().withDefault(const Constant('sans'))();
 }
@@ -102,13 +105,13 @@ class AppStorage extends _$AppStorage {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onUpgrade: (m, from, to) async {
       if (from < 2) {
-        // Migration here
+        await m.addColumn(readerSettings, readerSettings.readingFontHeight);
       }
     },
   );
