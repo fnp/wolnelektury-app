@@ -24,7 +24,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     emit(const ListCreatorState());
   }
 
-  /// Creates a copy of the all lists with the specified list updated
+  /// Updates a list locally in the state
   List<BookListModel> _updateListLocally(BookListModel updatedList) {
     final currentLists = List<BookListModel>.from(state.allLists);
     final index = currentLists.indexWhere(
