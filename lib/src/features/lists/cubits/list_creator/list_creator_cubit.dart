@@ -25,7 +25,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   }
 
   /// Creates a copy of the all lists with the specified list updated
-  List<BookListModel> _updateListInAllLists(BookListModel updatedList) {
+  List<BookListModel> _updateListLocally(BookListModel updatedList) {
     final currentLists = List<BookListModel>.from(state.allLists);
     final index = currentLists.indexWhere(
       (list) =>
@@ -284,7 +284,9 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   // ------ Bottom Sheet ------
   // --------------------------
   void newList(String listName, {List<String> bookSlugs = const []}) {
+    emit(state.copyWith(isDuplicateFailure: false));
     if (state.listNameIsDuplicate(listName)) {
+      emit(state.copyWith(isDuplicateFailure: true));
       return;
     }
 
@@ -503,7 +505,9 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   }
 
   Future<void> addEmptyList({required String name}) async {
+    emit(state.copyWith(isDuplicateFailure: false));
     if (state.listNameIsDuplicate(name)) {
+      emit(state.copyWith(isDuplicateFailure: true));
       return;
     }
     emit(state.copyWith(isAdding: true, isAddingFailure: false));
@@ -537,9 +541,9 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     required String listSlug,
     required String newName,
   }) async {
-    emit(state.copyWith(isRenamingDuplicateFailure: false));
+    emit(state.copyWith(isDuplicateFailure: false));
     if (state.listNameIsDuplicate(newName)) {
-      emit(state.copyWith(isRenamingDuplicateFailure: true));
+      emit(state.copyWith(isDuplicateFailure: true));
       return;
     }
     emit(state.copyWith(isRenaming: true, isRenamingFailure: false));
@@ -549,7 +553,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     );
     result.handle(
       success: (_, __) {
-        final updatedLists = _updateListInAllLists(
+        final updatedLists = _updateListLocally(
           _findList(slug: listSlug)!.copyWith(name: newName),
         );
         emit(state.copyWith(isRenaming: false, allLists: updatedLists));
@@ -612,7 +616,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
         removeResults.every((result) => result.isSuccess);
 
     if (allSuccessful) {
-      final updatedLists = _updateListInAllLists(state.editedListToSave!);
+      final updatedLists = _updateListLocally(state.editedListToSave!);
       final updatedSingleList = updatedLists.firstWhereOrNull(
         (list) => list.slug == state.fetchedSingleList?.slug,
       );
@@ -629,6 +633,33 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     } else {
       emit(state.copyWith(isSavingEditedList: false, isSavingFailure: true));
     }
+  }
+
+  /// Saves a shared list by creating a local copy with the same books
+  Future<void> saveSharedList(BookListModel sharedList) async {
+    emit(state.copyWith(isSavingEditedList: true, isSavingFailure: false));
+
+    final result = await _listsRepository.createList(
+      listName: sharedList.name,
+      bookSlugs: sharedList.books,
+    );
+
+    result.handle(
+      success: (newListSlug, _) {
+        final newList = BookListModel(
+          name: sharedList.name,
+          books: sharedList.books,
+          slug: newListSlug,
+        );
+        final updatedLists = List<BookListModel>.from(state.allLists);
+        updatedLists.insert(0, newList);
+
+        emit(state.copyWith(allLists: updatedLists, isSavingEditedList: false));
+      },
+      failure: (failure) {
+        emit(state.copyWith(isSavingEditedList: false, isSavingFailure: true));
+      },
+    );
   }
 
   // --------------------------

@@ -140,6 +140,8 @@ abstract class  LocaleKeys {
   static const catalogue_author_translations = 'catalogue.author.translations';
   static const catalogue_author_error = 'catalogue.author.error';
   static const catalogue_author = 'catalogue.author';
+  static const catalogue_child_selection_dialog_title = 'catalogue.child_selection_dialog.title';
+  static const catalogue_child_selection_dialog = 'catalogue.child_selection_dialog';
   static const catalogue = 'catalogue';
   static const last_read_title = 'last_read.title';
   static const last_read = 'last_read';
@@ -276,6 +278,7 @@ abstract class  LocaleKeys {
   static const common_semantic_edit_bookmark = 'common.semantic.edit_bookmark';
   static const common_semantic_delete_list = 'common.semantic.delete_list';
   static const common_semantic_share_book_list = 'common.semantic.share_book_list';
+  static const common_semantic_save_book_list = 'common.semantic.save_book_list';
   static const common_semantic_remove_from_edited_list = 'common.semantic.remove_from_edited_list';
   static const common_semantic_add_to_edited_list = 'common.semantic.add_to_edited_list';
   static const common_semantic_add_to_list = 'common.semantic.add_to_list';

@@ -35,7 +35,7 @@ sealed class ListCreatorState with _$ListCreatorState {
     // Renaming list
     @Default(false) bool isRenaming,
     @Default(false) bool isRenamingFailure,
-    @Default(false) bool isRenamingDuplicateFailure,
+    @Default(false) bool isDuplicateFailure,
 
     // Deleting book from list
     // List slug, book slug

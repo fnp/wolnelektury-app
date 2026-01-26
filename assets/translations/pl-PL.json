@@ -161,6 +161,9 @@
             "load_more": "Wczytaj więcej",
             "translations": "Tłumaczenia",
             "error": "Nie udało się załadować danych autora 🙁"
+        },
+        "child_selection_dialog": {
+            "title": "Wybierz część"
         }
     },
     "last_read": {
@@ -317,6 +320,7 @@
             "edit_bookmark": "Edytuj zakładkę",
             "delete_list": "Usuń listę {listName}",
             "share_book_list": "Udostępnij listę książek",
+            "save_book_list": "Zapisz listę książek",
             "remove_from_edited_list": "Usuń książkę z edytowanej listy",
             "add_to_edited_list": "Dodaj książkę do edytowanej listy",
             "add_to_list": "Dodaj do listy",

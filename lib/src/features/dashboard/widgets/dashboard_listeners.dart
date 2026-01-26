@@ -39,6 +39,7 @@ class DashboardListeners extends StatelessWidget {
     final listCreatorCubit = context.read<ListCreatorCubit>();
     return MultiBlocListener(
       listeners: [
+        // Login listener
         BlocListener<AuthCubit, AuthState>(
           listenWhen: (p, c) {
             return p.isLoginSuccess != c.isLoginSuccess;
@@ -64,6 +65,7 @@ class DashboardListeners extends StatelessWidget {
             syncCubit.cleanupSyncData();
           },
         ),
+        // Location listener for location-related actions
         BlocListener<RouterCubit, RouterState>(
           listenWhen: (p, c) => p.location != c.location,
           listener: (context, state) {
@@ -85,6 +87,7 @@ class DashboardListeners extends StatelessWidget {
             }
           },
         ),
+        // Global list creation success/failure listener
         BlocListener<ListCreatorCubit, ListCreatorState>(
           listenWhen: (p, c) => p.isSuccess != c.isSuccess,
           listener: (context, state) {
@@ -101,6 +104,7 @@ class DashboardListeners extends StatelessWidget {
             }
           },
         ),
+        // Download listeners to notify about progress no matter the page
         BlocListener<DownloadCubit, DownloadState>(
           listenWhen: (p, c) => p.progress != 1 && c.progress == 1,
           listener: (context, state) {
@@ -112,6 +116,7 @@ class DashboardListeners extends StatelessWidget {
             );
           },
         ),
+        // Download listeners to notify about starting no matter the page
         BlocListener<DownloadCubit, DownloadState>(
           listenWhen: (p, c) {
             return p.downloadingBookAudiobookSlug == null &&
@@ -125,6 +130,7 @@ class DashboardListeners extends StatelessWidget {
             );
           },
         ),
+        // Download listeners to notify about errors no matter the page
         BlocListener<DownloadCubit, DownloadState>(
           listenWhen: (p, c) {
             return p.isAlreadyDownloadingAudiobookError !=
@@ -141,6 +147,7 @@ class DashboardListeners extends StatelessWidget {
             }
           },
         ),
+        // Download listeners to notify about generic errors no matter the page
         BlocListener<DownloadCubit, DownloadState>(
           listenWhen: (p, c) {
             return p.isGenericAudiobookError != c.isGenericAudiobookError;
@@ -154,6 +161,7 @@ class DashboardListeners extends StatelessWidget {
             }
           },
         ),
+        // Connectivity listeners to handle auto-login on connection restore
         BlocListener<ConnectivityCubit, ConnectivityState>(
           listenWhen: (p, c) {
             return !p.isConnected && c.isConnected;
@@ -169,6 +177,7 @@ class DashboardListeners extends StatelessWidget {
             );
           },
         ),
+        // Connectivity listeners to handle clearing sensitive data on connection loss
         BlocListener<ConnectivityCubit, ConnectivityState>(
           listenWhen: (p, c) {
             return p.isConnected && !c.isConnected;

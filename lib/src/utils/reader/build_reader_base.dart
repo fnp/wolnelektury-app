@@ -228,7 +228,7 @@ InlineSpan _handleLinkTags({
   final iconData = icons[classNameFirstWord];
 
   if (iconData == null) {
-    return const TextSpan(text: ''); // zamiast pustego WidgetSpan
+    return const TextSpan(text: '');
   }
 
   final semanticLabel = classNameFirstWord == footnoteString

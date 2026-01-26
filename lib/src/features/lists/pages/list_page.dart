@@ -14,13 +14,13 @@ import 'package:wolnelektury/src/utils/ui/images.dart';
 
 class ListPage extends StatelessWidget {
   final String? slug;
-  final bool canEdit;
-  const ListPage({super.key, required this.slug, this.canEdit = true});
+  final bool isListOwner;
+  const ListPage({super.key, required this.slug, this.isListOwner = true});
 
   @override
   Widget build(BuildContext context) {
     if (slug != null) {
-      return Content(slug: slug!, canEdit: canEdit);
+      return Content(slug: slug!, isListOwner: isListOwner);
     } else {
       return const _EmptyWidget();
     }
@@ -29,8 +29,8 @@ class ListPage extends StatelessWidget {
 
 class Content extends StatefulWidget {
   final String slug;
-  final bool canEdit;
-  const Content({super.key, required this.slug, required this.canEdit});
+  final bool isListOwner;
+  const Content({super.key, required this.slug, required this.isListOwner});
 
   @override
   State<Content> createState() => ContentState();
@@ -60,7 +60,7 @@ class ContentState extends State<Content> {
               child: _Body(
                 bookList: list ?? BookListModel.empty(),
                 key: ValueKey(list?.slug ?? 'empty'),
-                canEdit: widget.canEdit,
+                isListOwner: widget.isListOwner,
               ),
             ),
           );
@@ -72,8 +72,8 @@ class ContentState extends State<Content> {
 
 class _Body extends StatelessWidget {
   final BookListModel bookList;
-  final bool canEdit;
-  const _Body({required this.bookList, required this.canEdit, super.key});
+  final bool isListOwner;
+  const _Body({required this.bookList, required this.isListOwner, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class _Body extends StatelessWidget {
             MyLibraryList(
               bookList: bookList,
               isCompact: false,
-              canEdit: canEdit,
+              isListOwner: isListOwner,
             ),
             const SizedBox(height: Dimensions.spacer),
           ],

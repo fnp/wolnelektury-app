@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
@@ -25,7 +27,7 @@ class CataloguePageSelectChildDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return DialogWrapper(
       icon: CustomIcons.book_5,
-      title: 'Wybierz część',
+      title: LocaleKeys.catalogue_child_selection_dialog_title.tr(),
       child: SingleChildScrollView(
         child: Row(
           children: [

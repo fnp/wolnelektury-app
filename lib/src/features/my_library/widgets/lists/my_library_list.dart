@@ -9,6 +9,7 @@ import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/router/router_cubit.dart';
+import 'package:wolnelektury/src/features/common/widgets/auth_wrapper.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
@@ -19,6 +20,7 @@ import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
+import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
@@ -26,12 +28,12 @@ import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 class MyLibraryList extends StatelessWidget {
   final BookListModel bookList;
   final bool isCompact;
-  final bool canEdit;
+  final bool isListOwner;
   const MyLibraryList({
     super.key,
     required this.bookList,
     required this.isCompact,
-    this.canEdit = true,
+    this.isListOwner = true,
   });
 
   @override
@@ -57,11 +59,11 @@ class MyLibraryList extends StatelessWidget {
                     children: [
                       _Header(
                         bookList: bookList,
-                        includeShare: !isCompact,
-                        canEdit: canEdit,
+                        includeShare: !isCompact && isListOwner,
+                        isListOwner: isListOwner,
                       ),
                       if (bookList.books.isNotEmpty && !isCompact) ...[
-                        _List(bookList: bookList, canEdit: canEdit),
+                        _List(bookList: bookList, isListOwner: isListOwner),
                       ],
                       if (bookList.books.isEmpty && !isCompact)
                         const Padding(
@@ -80,8 +82,8 @@ class MyLibraryList extends StatelessWidget {
 
 class _List extends StatelessWidget {
   final BookListModel bookList;
-  final bool canEdit;
-  const _List({required this.bookList, required this.canEdit});
+  final bool isListOwner;
+  const _List({required this.bookList, required this.isListOwner});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +96,7 @@ class _List extends StatelessWidget {
           bookSlug: bookList.books[index],
           listSlug: bookList.slug,
           listName: bookList.name,
-          canEdit: canEdit,
+          isListOwner: isListOwner,
         );
       },
       itemCount: bookList.books.length,
@@ -105,11 +107,11 @@ class _List extends StatelessWidget {
 class _Header extends StatelessWidget {
   final BookListModel bookList;
   final bool includeShare;
-  final bool canEdit;
+  final bool isListOwner;
   const _Header({
     required this.bookList,
     required this.includeShare,
-    required this.canEdit,
+    required this.isListOwner,
   });
 
   @override
@@ -138,7 +140,7 @@ class _Header extends StatelessWidget {
                     ),
                     onTap: () {
                       if (routerPath.contains(listPageConfig.name)) {
-                        if (!canEdit) {
+                        if (!isListOwner) {
                           return;
                         }
                         ListPageRenameDialog.show(
@@ -179,7 +181,7 @@ class _Header extends StatelessWidget {
                         SizedBox(
                           width: Dimensions.elementHeight * 2,
                           height: Dimensions.elementHeight,
-                          child: canEdit
+                          child: isListOwner
                               ? DecoratedBox(
                                   decoration: BoxDecoration(
                                     color: CustomColors.red,
@@ -228,6 +230,9 @@ class _Header extends StatelessWidget {
               if (includeShare) ...[
                 const SizedBox(width: Dimensions.mediumPadding),
                 _ShareButton(slug: bookList.slug),
+              ] else if (!isListOwner) ...[
+                const SizedBox(width: Dimensions.mediumPadding),
+                _SaveButton(bookList: bookList),
               ],
             ],
           ),
@@ -333,6 +338,69 @@ class _ShareButton extends StatelessWidget {
         ShareUtils.shareBookList(slug);
       },
       backgroundColor: CustomColors.white,
+    );
+  }
+}
+
+class _SaveButton extends StatelessWidget {
+  final BookListModel bookList;
+  const _SaveButton({required this.bookList});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ListCreatorCubit, ListCreatorState>(
+      listenWhen: (p, c) {
+        return p.isSavingFailure != c.isSavingFailure ||
+            p.isSavingEditedList != c.isSavingEditedList;
+      },
+      listener: (context, state) {
+        if (!state.isSavingFailure && !state.isSavingEditedList) {
+          CustomSnackbar.success(
+            context,
+            LocaleKeys.catalogue_list_creator_success.tr(),
+          );
+          return;
+        }
+        if (state.isSavingFailure) {
+          CustomSnackbar.error(
+            context,
+            LocaleKeys.catalogue_list_creator_failure.tr(),
+          );
+        }
+      },
+      buildWhen: (p, c) {
+        return p.isSavingEditedList != c.isSavingEditedList;
+      },
+      builder: (context, state) {
+        return AuthWrapper(
+          child: (isAuthenticated) {
+            return Stack(
+              children: [
+                CustomButton(
+                  semanticLabel: LocaleKeys.common_semantic_save_book_list.tr(),
+                  icon: Icons.file_download_outlined,
+                  onPressed: () {
+                    if (!isAuthenticated) {
+                      CustomSnackbar.loginRequired(context);
+                      return;
+                    }
+                    final listCreatorCubit = context.read<ListCreatorCubit>();
+                    listCreatorCubit.saveSharedList(bookList);
+                  },
+                  backgroundColor: CustomColors.white,
+                ),
+                if (state.isSavingEditedList)
+                  const Positioned.fill(
+                    child: CustomLoader(
+                      strokeWidth: 2,
+                      color: CustomColors.primaryYellowColor,
+                    ),
+                  ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

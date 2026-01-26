@@ -8,9 +8,9 @@ import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/common/widgets/page_subtitle.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
-import 'package:wolnelektury/src/features/lists/widgets/book_lists_sheet.dart';
+import 'package:wolnelektury/src/features/lists/widgets/book_lists_create_widget.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list.dart';
-import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
+import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_lists_section_listener.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 
@@ -26,48 +26,13 @@ class MyLibraryListsSection extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
           horizontal: Dimensions.mediumPadding,
         ),
-        child: BlocListener<ListCreatorCubit, ListCreatorState>(
-          listenWhen: (p, c) {
-            return p.isAddingFailure != c.isAddingFailure ||
-                p.isDeleteFailure != c.isDeleteFailure ||
-                p.isRemovingBookFailure != c.isRemovingBookFailure ||
-                (p.deletingSlug != null &&
-                    c.deletingSlug == null &&
-                    !c.isDeleteFailure);
-          },
-          listener: (context, state) {
-            if (state.isAddingFailure) {
-              CustomSnackbar.error(
-                context,
-                LocaleKeys.my_library_lists_creation_failure.tr(),
-              );
-              return;
-            }
-            if (state.isDeleteFailure) {
-              CustomSnackbar.error(
-                context,
-                LocaleKeys.my_library_lists_deletion_failure.tr(),
-              );
-              return;
-            }
-            if (state.isRemovingBookFailure) {
-              CustomSnackbar.error(
-                context,
-                LocaleKeys.my_library_lists_book_removal_failure.tr(),
-              );
-              return;
-            }
-            // Refresh lists after successful deletion
-            if (state.deletingSlug == null) {
-              listCubit.getLists(force: true);
-            }
-          },
+        child: MyLibraryListsSectionListener(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               PageSubtitle(subtitle: MyLibraryEnum.lists.title),
-              AddNewListElement(
+              BookListsCreateWidget(
                 onSave: (text) {
                   listCubit.addEmptyList(name: text);
                 },

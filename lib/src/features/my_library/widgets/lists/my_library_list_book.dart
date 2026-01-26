@@ -16,13 +16,13 @@ class MyLibraryListBook extends StatelessWidget {
   final String bookSlug;
   final String listSlug;
   final String listName;
-  final bool canEdit;
+  final bool isListOwner;
   const MyLibraryListBook({
     super.key,
     required this.bookSlug,
     required this.listSlug,
     required this.listName,
-    required this.canEdit,
+    required this.isListOwner,
   });
 
   @override
@@ -64,7 +64,7 @@ class MyLibraryListBook extends StatelessWidget {
                           enabled: state.isLoading,
                           child: BookPageCoverWithButtons(
                             key: ValueKey(bookSlug),
-                            onDelete: canEdit
+                            onDelete: isListOwner
                                 ? () {
                                     cubit.removeBookFromList(
                                       listSlug: listSlug,

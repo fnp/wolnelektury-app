@@ -45,7 +45,7 @@ class ListPageRenameDialog extends StatefulWidget {
                 listener: (context, state) {
                   if (!state.isRenaming &&
                       !state.isRenamingFailure &&
-                      !state.isRenamingDuplicateFailure) {
+                      !state.isDuplicateFailure) {
                     Navigator.of(context).pop();
                     CustomSnackbar.success(
                       context,
@@ -154,8 +154,7 @@ class _ListPageRenameDialogState extends State<ListPageRenameDialog> {
                   child: BlocConsumer<ListCreatorCubit, ListCreatorState>(
                     listenWhen: (p, c) {
                       return p.isRenamingFailure != c.isRenamingFailure ||
-                          p.isRenamingDuplicateFailure !=
-                              c.isRenamingDuplicateFailure;
+                          p.isDuplicateFailure != c.isDuplicateFailure;
                     },
                     listener: (context, state) {
                       if (state.isRenamingFailure) {
@@ -165,7 +164,7 @@ class _ListPageRenameDialogState extends State<ListPageRenameDialog> {
                         );
                         return;
                       }
-                      if (state.isRenamingDuplicateFailure) {
+                      if (state.isDuplicateFailure) {
                         CustomSnackbar.error(
                           context,
                           LocaleKeys
