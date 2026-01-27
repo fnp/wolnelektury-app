@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
-import 'package:wolnelektury/src/features/common/widgets/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/common/widgets/page_subtitle.dart';
@@ -35,52 +35,59 @@ class MyLibraryBookmarksSection extends StatelessWidget {
                     p.bookmarks.isEmpty && c.bookmarks.isNotEmpty;
               },
               builder: (context, state) {
-                if (!state.isLoading && state.bookmarks.isEmpty) {
-                  return ConnectivityWrapper(
-                    builder: (context, hasConnection) {
-                      return EmptyWidget(
-                        image: Images.empty,
-                        hasConnection: hasConnection,
-                        message: LocaleKeys.common_empty_bookmarks_title.tr(),
-                        buttonText: LocaleKeys.common_empty_search_in_catalogue
-                            .tr(),
-                        onTap: () {
-                          router.goNamed(cataloguePageConfig.name);
-                        },
-                        onRefresh: () {
-                          cubit.getMyLibraryBookmarks();
-                        },
-                      );
-                    },
-                  );
-                }
-
-                return CustomScrollPage(
-                  onRefresh: () {
-                    return cubit.getMyLibraryBookmarks();
-                  },
-                  onLoadMore: () {
-                    cubit.getMoreMyLibraryBookmarks();
-                  },
-                  builder: (scrollController) {
-                    return ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      controller: scrollController,
-                      itemBuilder: (context, index) {
-                        return MyLibraryBookmarkBook(
-                          bookmark: state.bookmarks[index],
-                          isLoading: state.isLoading,
-                        );
-                      },
-                      itemCount: state.bookmarks.length,
-                    );
-                  },
+                return AnimatedSwitcher(
+                  switchInCurve: defaultCurve,
+                  switchOutCurve: defaultCurve,
+                  duration: const Duration(milliseconds: 300),
+                  child: !state.isLoading && state.bookmarks.isEmpty
+                      ? const _EmptyWidget()
+                      : CustomScrollPage(
+                          onRefresh: () {
+                            return cubit.getMyLibraryBookmarks();
+                          },
+                          onLoadMore: () {
+                            cubit.getMoreMyLibraryBookmarks();
+                          },
+                          builder: (scrollController) {
+                            return ListView.builder(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              controller: scrollController,
+                              itemBuilder: (context, index) {
+                                return MyLibraryBookmarkBook(
+                                  bookmark: state.bookmarks[index],
+                                  isLoading: state.isLoading,
+                                );
+                              },
+                              itemCount: state.bookmarks.length,
+                            );
+                          },
+                        ),
                 );
               },
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _EmptyWidget extends StatelessWidget {
+  const _EmptyWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<BookmarksCubit>();
+    return EmptyWidget(
+      image: Images.empty,
+      message: LocaleKeys.common_empty_bookmarks_title.tr(),
+      buttonText: LocaleKeys.common_empty_search_in_catalogue.tr(),
+      onTap: () {
+        router.goNamed(cataloguePageConfig.name);
+      },
+      onRefresh: () {
+        cubit.getMyLibraryBookmarks();
+      },
     );
   }
 }

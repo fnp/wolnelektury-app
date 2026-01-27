@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/features/common/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
@@ -33,46 +34,59 @@ class MyLibraryLikedSection extends StatelessWidget {
                     p.isLoading != c.isLoading;
               },
               builder: (context, state) {
-                if (state.favourites.isEmpty && !state.isLoading) {
-                  return EmptyWidget(
-                    image: Images.empty,
-                    message: LocaleKeys.common_empty_liked_title.tr(),
-                    buttonText: LocaleKeys.common_empty_search_in_catalogue
-                        .tr(),
-                    onTap: () {
-                      router.goNamed(cataloguePageConfig.name);
-                    },
-                    onRefresh: () {
-                      context.read<LikesCubit>().init();
-                    },
-                  );
-                }
-                return CustomScrollPage(
-                  onRefresh: () {
-                    return context.read<LikesCubit>().init();
-                  },
-                  onLoadMore: () {
-                    context.read<LikesCubit>().increaseItemsPerPage();
-                  },
-                  builder: (scrollController) {
-                    return ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      controller: scrollController,
-                      itemBuilder: (context, index) {
-                        return MyLibraryLikedBook(
-                          key: ValueKey(state.favourites[index]),
-                          bookSlug: state.favourites[index],
-                        );
-                      },
-                      itemCount: state.effectiveLength,
-                    );
-                  },
+                return AnimatedSwitcher(
+                  switchInCurve: defaultCurve,
+                  switchOutCurve: defaultCurve,
+                  duration: const Duration(milliseconds: 300),
+                  child: state.favourites.isEmpty && !state.isLoading
+                      ? const _EmptyWidget()
+                      : CustomScrollPage(
+                          onRefresh: () {
+                            return context.read<LikesCubit>().init();
+                          },
+                          onLoadMore: () {
+                            context.read<LikesCubit>().increaseItemsPerPage();
+                          },
+                          builder: (scrollController) {
+                            return ListView.builder(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              controller: scrollController,
+                              itemBuilder: (context, index) {
+                                final bookSlug = state.favourites[index];
+                                return MyLibraryLikedBook(
+                                  key: ValueKey(bookSlug),
+                                  bookSlug: bookSlug,
+                                );
+                              },
+                              itemCount: state.effectiveLength,
+                            );
+                          },
+                        ),
                 );
               },
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _EmptyWidget extends StatelessWidget {
+  const _EmptyWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return EmptyWidget(
+      image: Images.empty,
+      message: LocaleKeys.common_empty_liked_title.tr(),
+      buttonText: LocaleKeys.common_empty_search_in_catalogue.tr(),
+      onTap: () {
+        router.goNamed(cataloguePageConfig.name);
+      },
+      onRefresh: () {
+        context.read<LikesCubit>().init();
+      },
     );
   }
 }

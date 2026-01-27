@@ -23,44 +23,42 @@ class EmptyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.sizeOf(context);
-    final child = SingleChildScrollView(
-      physics: onRefresh != null ? const AlwaysScrollableScrollPhysics() : null,
-      child: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.width * 0.2),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  theme.colorScheme.onPrimary.withValues(alpha: .7),
-                  BlendMode.srcIn,
-                ),
-                child: Image.asset(image, height: 100),
-              ),
+
+    final sliverChild = SliverFillRemaining(
+      hasScrollBody: false,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: size.width * 0.2),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(image, width: size.width * 0.33),
+            const SizedBox(height: Dimensions.largePadding),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium,
+            ),
+            if (buttonText != null && onTap != null && hasConnection) ...[
               const SizedBox(height: Dimensions.largePadding),
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
-              ),
-              if (buttonText != null && onTap != null && hasConnection) ...[
-                const SizedBox(height: Dimensions.largePadding),
-                ElevatedButton(
-                  onPressed: onTap,
-                  style: blueElevatedButton,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.center,
-                    child: Text(buttonText!),
-                  ),
+              ElevatedButton(
+                onPressed: onTap,
+                style: blueElevatedButton,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.center,
+                  child: Text(buttonText!),
                 ),
-              ],
+              ),
             ],
-          ),
+            const SizedBox(height: Dimensions.spacer * 2),
+          ],
         ),
       ),
+    );
+
+    final child = CustomScrollView(
+      physics: onRefresh != null ? const AlwaysScrollableScrollPhysics() : null,
+      slivers: [sliverChild],
     );
 
     if (onRefresh != null) {

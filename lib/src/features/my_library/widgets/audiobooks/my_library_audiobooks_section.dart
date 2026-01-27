@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/features/common/cubits/download/download_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/offline/offline_cubit.dart';
@@ -48,43 +49,30 @@ class MyLibraryAudiobooksSection extends StatelessWidget {
                           p.audiobooks.isNotEmpty && c.audiobooks.isEmpty;
                     },
                     builder: (context, state) {
-                      if (!state.isLoading && state.audiobooks.isEmpty) {
-                        return ConnectivityWrapper(
-                          builder: (context, hasConnection) {
-                            return EmptyWidget(
-                              image: Images.empty,
-                              message: LocaleKeys.common_empty_audiobooks_title
-                                  .tr(),
-                              buttonText: LocaleKeys
-                                  .common_empty_search_in_catalogue
-                                  .tr(),
-                              onTap: () {
-                                router.goNamed(cataloguePageConfig.name);
-                              },
-                              hasConnection: hasConnection,
-                              onRefresh: () {
-                                offlineCubit.loadOfflineBooks();
-                              },
-                            );
-                          },
-                        );
-                      }
-                      return CustomScrollPage(
-                        onRefresh: () {
-                          return offlineCubit.loadOfflineBooks();
-                        },
-                        builder: (scrollController) {
-                          return ListView.builder(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            controller: scrollController,
-                            itemBuilder: (context, index) {
-                              return MyLibraryAudiobook(
-                                offlineBook: state.audiobooks[index],
-                              );
-                            },
-                            itemCount: state.audiobooks.length,
-                          );
-                        },
+                      return AnimatedSwitcher(
+                        switchInCurve: defaultCurve,
+                        switchOutCurve: defaultCurve,
+                        duration: const Duration(milliseconds: 300),
+                        child: !state.isLoading && state.audiobooks.isEmpty
+                            ? const _EmptyWidget()
+                            : CustomScrollPage(
+                                onRefresh: () {
+                                  return offlineCubit.loadOfflineBooks();
+                                },
+                                builder: (scrollController) {
+                                  return ListView.builder(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    controller: scrollController,
+                                    itemBuilder: (context, index) {
+                                      return MyLibraryAudiobook(
+                                        offlineBook: state.audiobooks[index],
+                                      );
+                                    },
+                                    itemCount: state.audiobooks.length,
+                                  );
+                                },
+                              ),
                       );
                     },
                   ),
@@ -92,6 +80,31 @@ class MyLibraryAudiobooksSection extends StatelessWidget {
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+}
+
+class _EmptyWidget extends StatelessWidget {
+  const _EmptyWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    final offlineCubit = context.read<OfflineCubit>();
+    return ConnectivityWrapper(
+      builder: (context, hasConnection) {
+        return EmptyWidget(
+          image: Images.empty,
+          message: LocaleKeys.common_empty_audiobooks_title.tr(),
+          buttonText: LocaleKeys.common_empty_search_in_catalogue.tr(),
+          onTap: () {
+            router.goNamed(cataloguePageConfig.name);
+          },
+          hasConnection: hasConnection,
+          onRefresh: () {
+            offlineCubit.loadOfflineBooks();
+          },
         );
       },
     );

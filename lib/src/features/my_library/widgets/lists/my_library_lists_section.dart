@@ -82,6 +82,7 @@ class MyLibraryListsSection extends StatelessWidget {
                                 curve: defaultCurve,
                                 child: isPending
                                     ? MyLibraryList(
+                                        key: ValueKey(state.pendingList!.slug),
                                         bookList: state.pendingList!,
                                         isCompact: true,
                                       )
@@ -90,10 +91,11 @@ class MyLibraryListsSection extends StatelessWidget {
                             }
 
                             final effIndex = state.isAdding ? index - 1 : index;
+                            final list = state.allLists[effIndex];
 
                             return MyLibraryList(
-                              key: ValueKey(state.allLists[effIndex].slug),
-                              bookList: state.allLists[effIndex],
+                              key: ValueKey(list.slug),
+                              bookList: list,
                               isCompact: true,
                             );
                           },

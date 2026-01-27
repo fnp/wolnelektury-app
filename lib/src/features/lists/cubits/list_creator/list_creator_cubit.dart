@@ -357,6 +357,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     );
 
     // Reinitialize the state to fetch the latest lists
+    print('Does it happen?');
     getLists(force: true);
   }
 

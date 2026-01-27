@@ -77,6 +77,9 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (bookList.books.isEmpty) {
+      return const _EmptyWidget();
+    }
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(

@@ -11,7 +11,6 @@ class MyLibraryListsSectionListener extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final listCubit = context.read<ListCreatorCubit>();
     return MultiBlocListener(
       listeners: [
         BlocListener<ListCreatorCubit, ListCreatorState>(
@@ -58,10 +57,6 @@ class MyLibraryListsSectionListener extends StatelessWidget {
                 LocaleKeys.my_library_lists_book_removal_failure.tr(),
               );
               return;
-            }
-            // Refresh lists after successful deletion
-            if (state.deletingSlug == null) {
-              listCubit.getLists(force: true);
             }
           },
         ),

@@ -60,7 +60,6 @@ class CustomSnackbar {
                 Expanded(
                   child: Text(
                     message,
-                    textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: isSuccess
                           ? CustomColors.black
