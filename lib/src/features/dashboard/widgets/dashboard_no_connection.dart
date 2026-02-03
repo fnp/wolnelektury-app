@@ -27,9 +27,16 @@ class _DashboardConnectionWrapperState
       isShrunk = true;
     });
     await Future.delayed(const Duration(milliseconds: 600));
-    setState(() {
-      isDisposed = true;
-    });
+    if (mounted) {
+      setState(() {
+        isDisposed = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

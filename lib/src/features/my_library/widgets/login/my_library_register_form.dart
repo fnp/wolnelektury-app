@@ -144,6 +144,9 @@ class _FormState extends State<_Form> {
               label: LocaleKeys.login_email.tr(),
               textField: true,
               child: TextField(
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -178,6 +181,9 @@ class _FormState extends State<_Form> {
               label: LocaleKeys.login_password.tr(),
               textField: true,
               child: TextField(
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
                 textInputAction: TextInputAction.go,
                 obscureText: true,
                 enableSuggestions: false,
@@ -216,6 +222,9 @@ class _FormState extends State<_Form> {
               label: LocaleKeys.login_repeat_password.tr(),
               textField: true,
               child: TextField(
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
                 textInputAction: TextInputAction.go,
                 obscureText: true,
                 enableSuggestions: false,

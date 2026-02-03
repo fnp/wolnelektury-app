@@ -27,64 +27,66 @@ class DonationDialog extends StatelessWidget {
           return DialogWrapper(
             title: LocaleKeys.donation_title.tr().toUpperCase(),
             icon: Icons.savings,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  LocaleKeys.donation_content_1,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ).tr(),
-                const SizedBox(height: Dimensions.mediumPadding),
-                Text(
-                  LocaleKeys.donation_content_2,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ).tr(),
-                const SizedBox(height: Dimensions.spacer),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: yellowElevatedButton,
-                        onPressed: () {
-                          BlocProvider.of<DonationCubit>(
-                            context,
-                          ).makeDonation();
-                        },
-                        child: BlocBuilder<DonationCubit, DonationState>(
-                          buildWhen: (p, c) {
-                            return p.isLoading != c.isLoading;
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    LocaleKeys.donation_content_1,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ).tr(),
+                  const SizedBox(height: Dimensions.mediumPadding),
+                  Text(
+                    LocaleKeys.donation_content_2,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ).tr(),
+                  const SizedBox(height: Dimensions.spacer),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: yellowElevatedButton,
+                          onPressed: () {
+                            BlocProvider.of<DonationCubit>(
+                              context,
+                            ).makeDonation();
                           },
-                          builder: (context, state) {
-                            if (state.isLoading) {
-                              return const SizedBox(
-                                width: 15,
-                                height: 15,
-                                child: CustomLoader(
-                                  strokeWidth: 2,
-                                  size: 15,
+                          child: BlocBuilder<DonationCubit, DonationState>(
+                            buildWhen: (p, c) {
+                              return p.isLoading != c.isLoading;
+                            },
+                            builder: (context, state) {
+                              if (state.isLoading) {
+                                return const SizedBox(
+                                  width: 15,
+                                  height: 15,
+                                  child: CustomLoader(
+                                    strokeWidth: 2,
+                                    size: 15,
+                                    color: CustomColors.black,
+                                  ),
+                                );
+                              }
+                              return Text(
+                                LocaleKeys.donation_button.tr(),
+                                style: theme.textTheme.bodyMedium?.copyWith(
                                   color: CustomColors.black,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               );
-                            }
-                            return Text(
-                              LocaleKeys.donation_button.tr(),
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: CustomColors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          },
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },

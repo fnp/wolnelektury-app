@@ -178,17 +178,16 @@ class _ListPageRenameDialogState extends State<ListPageRenameDialog> {
                     builder: (context, state) {
                       return ElevatedButton(
                         style: yellowElevatedButton,
-                        onPressed: state.isRenaming
-                            ? null
-                            : () {
-                                validate();
-                                if (!showListNameError) {
-                                  context.read<ListCreatorCubit>().renameList(
-                                    listSlug: widget.listSlug,
-                                    newName: _listNameController.text.trim(),
-                                  );
-                                }
-                              },
+                        onPressed: () {
+                          if (state.isRenaming) return;
+                          validate();
+                          if (!showListNameError) {
+                            context.read<ListCreatorCubit>().renameList(
+                              listSlug: widget.listSlug,
+                              newName: _listNameController.text.trim(),
+                            );
+                          }
+                        },
                         child: AnimatedBoxFade(
                           isChildVisible: !state.isRenaming,
                           duration: const Duration(milliseconds: 300),

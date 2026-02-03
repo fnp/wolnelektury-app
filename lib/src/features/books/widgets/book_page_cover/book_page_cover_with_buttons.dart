@@ -146,6 +146,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
                         semanticLabel: LocaleKeys.common_semantic_share_book
                             .tr(),
                         icon: CustomIcons.ios_share,
+                        iconSize: 20,
                         onPressed: () {
                           ShareUtils.shareBook(book.slug);
                         },

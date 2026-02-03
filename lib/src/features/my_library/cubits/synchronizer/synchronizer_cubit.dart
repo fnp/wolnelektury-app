@@ -31,37 +31,55 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
   }
 
   Future<void> triggerAllSyncs({VoidCallback? onFinish}) async {
-    emit(state.copyWith(isWorking: true));
+    emit(state.copyWith(isWorking: true, isLoading: true, isError: false));
     final likesCompleter = Completer<void>();
     final progressCompleter = Completer<void>();
     final bookmarksCompleter = Completer<void>();
 
-    sendOutLikesSync(completer: likesCompleter);
-    sentOutProgressSync(completer: progressCompleter);
-    sendOutBookmarksSync(completer: bookmarksCompleter);
+    sendOutLikesSync(completer: likesCompleter, emitState: false);
+    sentOutProgressSync(completer: progressCompleter, emitState: false);
+    sendOutBookmarksSync(completer: bookmarksCompleter, emitState: false);
 
-    await Future.wait([
-      likesCompleter.future,
-      progressCompleter.future,
-      bookmarksCompleter.future,
-    ]);
+    try {
+      await Future.wait([
+        likesCompleter.future,
+        progressCompleter.future,
+        bookmarksCompleter.future,
+      ], eagerError: true).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw TimeoutException('Synchronization timeout');
+        },
+      );
+      emit(state.copyWith(isWorking: false, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isWorking: false, isLoading: false, isError: true));
+    }
 
     onFinish?.call();
-    emit(state.copyWith(isWorking: false));
   }
 
   // This is called once user is logged in or the internet connection is restored.
-  Future<void> sentOutProgressSync({Completer<void>? completer}) async {
-    emit(state.copyWith(isLoading: true, isError: false));
+  Future<void> sentOutProgressSync({
+    Completer<void>? completer,
+    bool emitState = true,
+  }) async {
+    if (emitState) {
+      emit(state.copyWith(isLoading: true, isError: false));
+    }
     final result = await _progressRepository.sendOutProgressSync();
     result.handle(
       success: (data, _) async {
-        await _receiveInProgressSync();
-        emit(state.copyWith(isLoading: false));
+        await _receiveInProgressSync(emitState: emitState);
+        if (emitState) {
+          emit(state.copyWith(isLoading: false));
+        }
         completer?.complete();
       },
       failure: (failure) {
-        emit(state.copyWith(isLoading: false, isError: true));
+        if (emitState) {
+          emit(state.copyWith(isLoading: false, isError: true));
+        }
         completer?.complete();
       },
     );
@@ -69,68 +87,104 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
 
   // This gets called after we synced the app to the DB
   // Only when success to not overwrite
-  Future<void> _receiveInProgressSync() async {
+  Future<void> _receiveInProgressSync({bool emitState = true}) async {
     final result = await _progressRepository.receiveInProgressSync();
     result.handle(
-      success: (_, _) {},
+      success: (_, _) {
+        if (emitState) {
+          emit(state.copyWith(isLoading: false));
+        }
+      },
       failure: (failure) {
-        emit(state.copyWith(isError: true));
+        if (emitState) {
+          emit(state.copyWith(isLoading: false, isError: true));
+        }
       },
     );
   }
 
   // This is called once user is logged in or the internet connection is restored.
   // It sends out likes to the server.
-  Future<void> sendOutLikesSync({Completer<void>? completer}) async {
-    emit(state.copyWith(isLoading: true, isError: false));
+  Future<void> sendOutLikesSync({
+    Completer<void>? completer,
+    bool emitState = true,
+  }) async {
+    if (emitState) {
+      emit(state.copyWith(isLoading: true, isError: false));
+    }
     final result = await _likesRepository.sendOutLikesSync();
 
     result.handle(
       success: (data, _) async {
-        await _receiveInLikesSync();
-        emit(state.copyWith(isLoading: false));
+        await _receiveInLikesSync(emitState: emitState);
+        if (emitState) {
+          emit(state.copyWith(isLoading: false));
+        }
         completer?.complete();
       },
       failure: (failure) {
-        emit(state.copyWith(isLoading: false, isError: true));
+        if (emitState) {
+          emit(state.copyWith(isLoading: false, isError: true));
+        }
         completer?.complete();
       },
     );
   }
 
   // This gets called after we synced the app to the DB
-  Future<void> _receiveInLikesSync() async {
+  Future<void> _receiveInLikesSync({bool emitState = true}) async {
     final result = await _likesRepository.receiveInLikesSync();
     result.handle(
-      success: (_, _) {},
+      success: (_, _) {
+        if (emitState) {
+          emit(state.copyWith(isLoading: false));
+        }
+      },
       failure: (failure) {
-        emit(state.copyWith(isError: true));
+        if (emitState) {
+          emit(state.copyWith(isLoading: false, isError: true));
+        }
       },
     );
   }
 
-  Future<void> sendOutBookmarksSync({Completer<void>? completer}) async {
-    emit(state.copyWith(isLoading: true, isError: false));
+  Future<void> sendOutBookmarksSync({
+    Completer<void>? completer,
+    bool emitState = true,
+  }) async {
+    if (emitState) {
+      emit(state.copyWith(isLoading: true, isError: false));
+    }
     final result = await _bookmarksRepository.sendOutBookmarksSync();
     result.handle(
       success: (data, _) async {
-        await _receiveInBookmarksSync();
-        emit(state.copyWith(isLoading: false));
+        await _receiveInBookmarksSync(emitState: emitState);
+        if (emitState) {
+          emit(state.copyWith(isLoading: false));
+        }
         completer?.complete();
       },
       failure: (failure) {
-        emit(state.copyWith(isLoading: false, isError: true));
+        if (emitState) {
+          emit(state.copyWith(isLoading: false, isError: true));
+        }
         completer?.complete();
       },
     );
   }
 
-  Future<void> _receiveInBookmarksSync() async {
+  Future<void> _receiveInBookmarksSync({bool emitState = true}) async {
     final result = await _bookmarksRepository.receiveInBookmarksSync();
     result.handle(
-      success: (_, _) {},
+      success: (_, _) {
+        if (emitState) {
+          emit(state.copyWith(isLoading: false));
+        }
+      },
       failure: (failure) {
-        emit(state.copyWith(isError: true));
+        if (emitState) {
+          emit(state.copyWith(isLoading: false, isError: true));
+        }
       },
     );
   }

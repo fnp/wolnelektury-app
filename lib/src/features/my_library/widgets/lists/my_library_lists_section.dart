@@ -37,7 +37,7 @@ class MyLibraryListsSection extends StatelessWidget {
                   listCubit.addEmptyList(name: text);
                 },
               ),
-              const SizedBox(height: Dimensions.spacer),
+              const SizedBox(height: Dimensions.largePadding),
               Expanded(
                 child: CustomScrollPage(
                   onRefresh: () {

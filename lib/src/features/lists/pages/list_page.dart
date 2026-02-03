@@ -5,7 +5,6 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
-import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list.dart';
@@ -20,7 +19,11 @@ class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (slug != null) {
-      return Content(slug: slug!, isListOwner: isListOwner);
+      return Content(
+        slug: slug!,
+        isListOwner: isListOwner,
+        key: ValueKey(slug!),
+      );
     } else {
       return const _EmptyWidget();
     }
@@ -52,16 +55,12 @@ class ContentState extends State<Content> {
             return const _EmptyWidget();
           }
 
-          return AnimatedBoxFade(
-            isChildVisible: !state.isLoading,
-            collapsedChild: const Center(child: CircularProgressIndicator()),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: _Body(
-                bookList: list ?? BookListModel.empty(),
-                key: ValueKey(list?.slug ?? 'empty'),
-                isListOwner: widget.isListOwner,
-              ),
+          return Align(
+            alignment: Alignment.topCenter,
+            child: _Body(
+              bookList: list ?? BookListModel.empty(),
+              key: ValueKey(list?.slug ?? 'empty'),
+              isListOwner: widget.isListOwner,
             ),
           );
         },

@@ -55,6 +55,9 @@ class BookListsCreateWidgetState extends State<BookListsCreateWidget> {
                   ),
                 ),
                 child: TextField(
+                  onTapOutside: (event) {
+                    FocusScope.of(context).unfocus();
+                  },
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     suffixIcon: isReadyToSave

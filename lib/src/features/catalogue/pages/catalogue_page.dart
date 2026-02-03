@@ -20,21 +20,20 @@ class CataloguePage extends StatelessWidget {
     return BlocBuilder<AppModeCubit, AppModeState>(
       buildWhen: (p, c) => p.mode != c.mode,
       builder: (context, state) {
-        // If the app is in list creation mode, we show the controls at the bottom in Stack
-        if (state.isListCreation) {
-          return const Stack(
-            children: [
-              _Body(),
-              Positioned(
-                left: Dimensions.mediumPadding,
-                right: Dimensions.mediumPadding,
-                bottom: Dimensions.modalsPadding,
+        return Stack(
+          children: [
+            const _Body(),
+
+            // If the app is in list creation mode, we show the controls at the bottom in Stack
+            if (state.isListCreation)
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
                 child: ListCreationModeControls(),
               ),
-            ],
-          );
-        }
-        return const _Body();
+          ],
+        );
       },
     );
   }
@@ -49,8 +48,11 @@ class _Body extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => BooksCubit(get.get())
-            ..getBooks(tags: context.read<FilteringCubit>().state.selectedTags),
+          create: (_) {
+            return BooksCubit(get.get())..getBooks(
+              tags: context.read<FilteringCubit>().state.selectedTags,
+            );
+          },
         ),
         BlocProvider.value(value: context.read<FilteringCubit>()..getTags()),
       ],
@@ -92,7 +94,6 @@ class _Body extends StatelessWidget {
                         },
                         builder: (controller) {
                           return CustomScrollView(
-                            // physics: const AlwaysScrollableScrollPhysics(),
                             controller: controller,
                             slivers: const [_BooksList()],
                           );

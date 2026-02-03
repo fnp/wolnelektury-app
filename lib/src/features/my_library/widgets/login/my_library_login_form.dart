@@ -74,6 +74,9 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
             label: LocaleKeys.login_user_name.tr(),
             textField: true,
             child: TextField(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
               style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
@@ -106,6 +109,9 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
             label: LocaleKeys.login_password.tr(),
             textField: true,
             child: TextField(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
               textInputAction: TextInputAction.go,
               obscureText: true,
               enableSuggestions: false,

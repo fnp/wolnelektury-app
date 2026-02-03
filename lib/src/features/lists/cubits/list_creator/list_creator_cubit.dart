@@ -24,6 +24,10 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     emit(const ListCreatorState());
   }
 
+  void restoreListToItsPreviousState() {
+    emit(state.copyWith(editedListToSave: state.editedList));
+  }
+
   /// Updates a list locally in the state
   List<BookListModel> _updateListLocally(BookListModel updatedList) {
     final currentLists = List<BookListModel>.from(state.allLists);
@@ -357,7 +361,6 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     );
 
     // Reinitialize the state to fetch the latest lists
-    print('Does it happen?');
     getLists(force: true);
   }
 

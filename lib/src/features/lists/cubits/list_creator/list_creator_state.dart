@@ -72,10 +72,14 @@ extension ListCreatorStateX on ListCreatorState {
         ?.slug;
   }
 
-  bool get anyChangesInEditesList => !(const ListEquality().equals(
-    editedList?.books,
-    editedListToSave?.books,
-  ));
+  int get numberOfChangesInEditedList {
+    final editedBooks = editedList?.books ?? [];
+    final editedToSaveBooks = editedListToSave?.books ?? [];
+    return editedBooks
+            .where((book) => !editedToSaveBooks.contains(book))
+            .length +
+        editedToSaveBooks.where((book) => !editedBooks.contains(book)).length;
+  }
 
   bool isBookInEditedList(String bookSlug) {
     return (editedListToSave?.books.contains(bookSlug) ?? false) &&
