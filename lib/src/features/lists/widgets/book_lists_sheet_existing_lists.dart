@@ -130,17 +130,19 @@ class _Element extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: Dimensions.veryLargePadding,
-                    ),
-                    child: FittedBox(
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: Dimensions.veryLargePadding,
+                      ),
                       child: Text(
                         listName,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: CustomColors.black,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),

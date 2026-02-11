@@ -52,8 +52,14 @@ extension ListCreatorStateX on ListCreatorState {
 
   bool isBookInList(String listSlug, String bookSlug) {
     if (fetchedSingleList != null && fetchedSingleList!.slug == listSlug) {
+      print(
+        'Checking if book is in fetched single list: ${fetchedSingleList!.books.contains(bookSlug)}',
+      );
       return fetchedSingleList!.books.contains(bookSlug);
     }
+    print(
+      'Checking if book is in local list: ${allLists.firstWhereOrNull((element) => element.slug == listSlug)?.books.contains(bookSlug) ?? false}',
+    );
     return (allLists
                 .firstWhereOrNull((element) => element.slug == listSlug)
                 ?.books ??

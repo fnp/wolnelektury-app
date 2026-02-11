@@ -25,6 +25,12 @@ class MyLibraryListBook extends StatelessWidget {
     required this.isListOwner,
   });
 
+  bool determineVisibility(ListCreatorState state) {
+    return !state.isBookInList(listSlug, bookSlug) ||
+        (state.bookToRemoveFromList?.$1 == listSlug &&
+            state.bookToRemoveFromList?.$2 == bookSlug);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -48,10 +54,8 @@ class MyLibraryListBook extends StatelessWidget {
                       c.isBookInList(listSlug, bookSlug);
             },
             builder: (context, innerState) {
-              final shouldHide =
-                  !innerState.isBookInList(listSlug, bookSlug) ||
-                  (innerState.bookToRemoveFromList?.$1 == listSlug &&
-                      innerState.bookToRemoveFromList?.$2 == bookSlug);
+              final shouldHide = determineVisibility(innerState);
+
               return AnimatedSize(
                 duration: const Duration(milliseconds: 300),
                 curve: defaultCurve,

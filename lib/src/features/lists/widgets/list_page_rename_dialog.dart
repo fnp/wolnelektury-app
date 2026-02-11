@@ -133,6 +133,8 @@ class _ListPageRenameDialogState extends State<ListPageRenameDialog> {
               onChanged: (value) {
                 if (showListNameError) validate();
               },
+              minLines: 1,
+              maxLines: 5,
             ),
             AnimatedBoxSize(
               isChildVisible: showListNameError,

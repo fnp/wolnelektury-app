@@ -20,10 +20,12 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   // ---- Helper Methods ------
   // --------------------------
 
+  // Resets the state to its initial values, clearing all lists and any ongoing operations
   void resetState() {
     emit(const ListCreatorState());
   }
 
+  // Restores the edited list to its previous state, discarding any unsaved changes
   void restoreListToItsPreviousState() {
     emit(state.copyWith(editedListToSave: state.editedList));
   }
@@ -97,18 +99,24 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     required bool add,
   }) {
     final currentLists = List<BookListModel>.from(state.allLists);
+    // Find the list in the current state
     final index = currentLists.indexWhere((list) => list.slug == listSlug);
     if (index != -1) {
+      // Get the list and its current books
       final list = currentLists[index];
       final books = List<String>.from(list.books);
+      // Add or remove the book based on the 'add' parameter, ensuring no duplicates when adding
       if (add && !books.contains(bookSlug)) {
         books.add(bookSlug);
         currentLists[index] = list.copyWith(books: books);
-      } else if (!add && books.contains(bookSlug)) {
+      }
+      // When removing, ensure the book is currently in the list to avoid unnecessary state updates
+      else if (!add && books.contains(bookSlug)) {
         books.remove(bookSlug);
         currentLists[index] = list.copyWith(books: books);
       }
     }
+    
     return currentLists;
   }
 
@@ -455,19 +463,25 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     required String listSlug,
     required String bookSlug,
   }) async {
+    // If there's already a book pending removal, remove it immediately without waiting for the timeout,
+    //to avoid multiple books pending removal at the same time which would be confusing for the user
     if (state.bookToRemoveFromList != null) {
-      _deleteBookFromList(
+      await _deleteBookFromList(
         listSlug: state.bookToRemoveFromList!.$1,
         bookSlug: state.bookToRemoveFromList!.$2,
         shouldHandle: false,
       );
     }
+    // Set the book pending removal in the state
     emit(state.copyWith(bookToRemoveFromList: (listSlug, bookSlug)));
+    // Wait for 3 seconds before actually removing the book, giving the user a chance to undo the action
     await Future.delayed(const Duration(seconds: 3));
+    // If the book pending removal is not the same as the one we set before, it means the user has undone the action, so we do nothing
     if (state.bookToRemoveFromList?.$1 != listSlug ||
         state.bookToRemoveFromList?.$2 != bookSlug) {
-      return; // Book was reverted from the deletion, do nothing
+      return;
     }
+    // Otherwise, we proceed to remove the book from the list
     _deleteBookFromList(listSlug: listSlug, bookSlug: bookSlug);
   }
 
@@ -480,14 +494,24 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     final index = previousLists.indexWhere((e) => e.slug == listSlug);
     if (index == -1) return;
 
+    // Optimistically update the state by removing the book from the list
     final updatedList = previousLists[index].copyWith(
       books: List<String>.from(previousLists[index].books)..remove(bookSlug),
     );
 
+    // Update the lists in the state with the optimistically updated list
     final updatedLists = List<BookListModel>.from(previousLists)
       ..[index] = updatedList;
 
+    // Emit the updated state with the optimistically updated list
     emit(state.copyWith(allLists: updatedLists));
+
+    // If the currently fetched single list is the one being updated, update it as well
+    if (state.fetchedSingleList?.slug == listSlug) {
+      emit(state.copyWith(fetchedSingleList: updatedList));
+    }
+
+    // Make the API call to delete the book from the list
     final response = await _listsRepository.deleteBookFromList(
       listSlug: listSlug,
       bookSlug: bookSlug,
@@ -510,31 +534,45 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
 
   Future<void> addEmptyList({required String name}) async {
     emit(state.copyWith(isDuplicateFailure: false));
+    // Check for duplicate name before making API call
     if (state.listNameIsDuplicate(name)) {
+      // Emit duplicate failure state and return early to avoid unnecessary API call
       emit(state.copyWith(isDuplicateFailure: true));
       return;
     }
+    // Emit adding state before making API call
     emit(state.copyWith(isAdding: true, isAddingFailure: false));
     await Future.delayed(const Duration(milliseconds: 1));
+    // Optimistically add the new list to the state with an empty slug until we get the real slug from the API
     emit(
       state.copyWith(
         pendingList: BookListModel(name: name, slug: '', books: []),
       ),
     );
+    // Make API call to create the list
     final result = await _listsRepository.createList(
       listName: name,
       bookSlugs: [],
     );
     // Wait for animation
     await Future.delayed(const Duration(milliseconds: 300));
+    // Handle API response and update state accordingly
     result.handle(
       success: (data, _) {
+        // On success, replace the optimistically added list with the real one from the API (with the correct slug)
         final newState = List<BookListModel>.from(state.allLists);
         newState.insert(0, BookListModel(name: name, books: [], slug: data));
         emit(state.copyWith(isAdding: false, allLists: newState));
       },
       failure: (failure) {
-        emit(state.copyWith(isAdding: false, isAddingFailure: true));
+        // On failure, remove the optimistically added list and emit failure state
+        emit(
+          state.copyWith(
+            isAdding: false,
+            isAddingFailure: true,
+            pendingList: null,
+          ),
+        );
       },
     );
 
@@ -546,6 +584,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     required String newName,
   }) async {
     emit(state.copyWith(isDuplicateFailure: false));
+    // Check for duplicate name before making API call
     if (state.listNameIsDuplicate(newName)) {
       emit(state.copyWith(isDuplicateFailure: true));
       return;
@@ -557,6 +596,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
     );
     result.handle(
       success: (_, __) {
+        // On success, update the list name in the state
         final updatedLists = _updateListLocally(
           _findList(slug: listSlug)!.copyWith(name: newName),
         );

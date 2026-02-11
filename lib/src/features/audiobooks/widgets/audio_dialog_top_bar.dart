@@ -39,9 +39,10 @@ class AudioDialogTopBar extends StatelessWidget {
         const Spacer(),
         ExcludeSemantics(
           child: BlocBuilder<AudioCubit, AudioState>(
-            buildWhen: (p, c) =>
-                p.audiobook != c.audiobook ||
-                p.currentlyPlayingPart != c.currentlyPlayingPart,
+            buildWhen: (p, c) {
+              return p.audiobook != c.audiobook ||
+                  p.currentlyPlayingPart != c.currentlyPlayingPart;
+            },
             builder: (context, state) {
               return SizedBox(
                 width: 200,

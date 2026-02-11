@@ -73,85 +73,83 @@ class BookListsSheet extends StatelessWidget {
     return SafeArea(
       bottom: true,
       top: false,
-      child: Padding(
-        padding: MediaQuery.viewInsetsOf(context),
-        child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
-          buildWhen: (p, c) {
-            return p.allLists != c.allLists;
-          },
-          builder: (context, state) {
-            return ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: availableHeight,
-                minWidth: double.infinity,
+      child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
+        buildWhen: (p, c) {
+          return p.allLists != c.allLists;
+        },
+        builder: (context, state) {
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: availableHeight,
+              minWidth: double.infinity,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.modalsPadding,
+                vertical: Dimensions.mediumPadding,
               ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(Dimensions.modalsPadding),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: Dimensions.spacer),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              LocaleKeys.book_lists_sheet_title
-                                  .tr()
-                                  .toUpperCase(),
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.w900,
-                                height: 1.14,
-                              ),
-                            ),
-                          ),
-                          BlocBuilder<ListCreatorCubit, ListCreatorState>(
-                            buildWhen: (p, c) {
-                              return p.booksToAdd != c.booksToAdd ||
-                                  p.booksToRemove != c.booksToRemove;
-                            },
-                            builder: (context, state) {
-                              final showCheck =
-                                  state.booksToAdd.isNotEmpty ||
-                                  state.booksToRemove.isNotEmpty;
-                              return CustomButton(
-                                semanticLabel: LocaleKeys
-                                    .common_semantic_close_book_lists
-                                    .tr(),
-                                backgroundColor: showCheck
-                                    ? CustomColors.green
-                                    : CustomColors.white,
-                                icon: showCheck ? Icons.check : Icons.close,
-                                onPressed: () => Navigator.of(context).pop(),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: Dimensions.spacer),
-                      Flexible(
-                        child: AnimatedSize(
-                          duration: const Duration(milliseconds: 300),
-                          curve: defaultCurve,
-                          child: BookListsSheetExistingLists(
-                            currentlyWorkingOnBookSlug: bookSlug,
-                            effectiveList: state.allLists,
+                      Expanded(
+                        child: Text(
+                          LocaleKeys.book_lists_sheet_title.tr().toUpperCase(),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w900,
+                            height: 1.14,
                           ),
                         ),
                       ),
-                      const SizedBox(height: Dimensions.mediumPadding),
-                      BookListsCreateWidget(
-                        onSave: (String text) {
-                          cubit.newList(text, bookSlugs: [bookSlug]);
+                      BlocBuilder<ListCreatorCubit, ListCreatorState>(
+                        buildWhen: (p, c) {
+                          return p.booksToAdd != c.booksToAdd ||
+                              p.booksToRemove != c.booksToRemove;
+                        },
+                        builder: (context, state) {
+                          final showCheck =
+                              state.booksToAdd.isNotEmpty ||
+                              state.booksToRemove.isNotEmpty;
+                          return CustomButton(
+                            semanticLabel: LocaleKeys
+                                .common_semantic_close_book_lists
+                                .tr(),
+                            backgroundColor: showCheck
+                                ? CustomColors.green
+                                : CustomColors.white,
+                            icon: showCheck ? Icons.check : Icons.close,
+                            onPressed: () => Navigator.of(context).pop(),
+                          );
                         },
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: Dimensions.mediumPadding),
+                  Flexible(
+                    child: AnimatedSize(
+                      duration: const Duration(milliseconds: 300),
+                      curve: defaultCurve,
+                      child: BookListsSheetExistingLists(
+                        currentlyWorkingOnBookSlug: bookSlug,
+                        effectiveList: state.allLists,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: Dimensions.mediumPadding),
+                  BookListsCreateWidget(
+                    onSave: (String text) {
+                      cubit.newList(text, bookSlugs: [bookSlug]);
+                    },
+                  ),
+                  const SizedBox(height: Dimensions.spacer),
+                ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

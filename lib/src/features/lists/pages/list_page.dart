@@ -11,6 +11,13 @@ import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_li
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 
+/// Whole list is rebuilt ONLY when isLoading changes.
+/// Every book in lists rebuilds separately based on whether it's in the list or not,
+/// so adding/removing book from list doesn't cause whole list to rebuild,
+/// only the specific book that is added/removed.
+/// This is achieved by using BlocBuilder with buildWhen that checks
+/// if the list slug matches and if the book is in the list, so only the specific
+/// book widget rebuilds when it's added/removed from the list.
 class ListPage extends StatelessWidget {
   final String? slug;
   final bool isListOwner;
@@ -46,8 +53,7 @@ class ContentState extends State<Content> {
       value: context.read<ListCreatorCubit>()..getListBySlug(widget.slug),
       child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
         buildWhen: (p, c) {
-          return p.fetchedSingleList != c.fetchedSingleList ||
-              p.isLoading != c.isLoading;
+          return p.isLoading != c.isLoading;
         },
         builder: (context, state) {
           final list = state.fetchedSingleList;
@@ -86,7 +92,7 @@ class _Body extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const SizedBox(height: Dimensions.largePadding),
+            const SizedBox(height: Dimensions.spacer / 2),
             MyLibraryList(
               bookList: bookList,
               isCompact: false,

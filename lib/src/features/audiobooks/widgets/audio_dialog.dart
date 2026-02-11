@@ -13,6 +13,7 @@ import 'package:wolnelektury/src/features/audiobooks/widgets/audio_dialog_slider
 import 'package:wolnelektury/src/features/audiobooks/widgets/audio_dialog_top_bar.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/auth/auth_cubit.dart';
+import 'package:wolnelektury/src/features/common/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -34,6 +35,7 @@ class AudioDialog extends StatelessWidget {
           providers: [
             BlocProvider.value(value: context.read<ScrollCubit>()),
             BlocProvider.value(value: context.read<AuthCubit>()),
+            BlocProvider.value(value: context.read<RouterCubit>()),
             BlocProvider.value(
               value: context.read<AudioCubit>()..toggleBookmarks(false),
             ),
