@@ -95,6 +95,7 @@ class _Body extends StatelessWidget {
                         semanticLabel: LocaleKeys.common_semantic_share_author
                             .tr(),
                         icon: CustomIcons.ios_share,
+                        iconSize: 20,
                         onPressed: () {
                           ShareUtils.shareAuthor(author.slug);
                         },

@@ -344,6 +344,7 @@ class _Body extends StatelessWidget {
                               ShareUtils.shareBookmark(bookmark);
                             },
                             icon: CustomIcons.ios_share,
+                            iconSize: 20,
                             iconColor: CustomColors.black,
                           ),
                         ),

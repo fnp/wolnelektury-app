@@ -334,6 +334,7 @@ class _ShareButton extends StatelessWidget {
     return CustomButton(
       semanticLabel: LocaleKeys.common_semantic_share_book_list.tr(),
       icon: CustomIcons.ios_share,
+      iconSize: 20,
       onPressed: () {
         ShareUtils.shareBookList(slug);
       },
