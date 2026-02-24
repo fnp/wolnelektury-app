@@ -66,7 +66,7 @@ class _AppLinksHandlerState extends State<AppLinksHandler>
         return; // Otwórz aplikację na ekranie głównym
       }
 
-      final slug = nonEmptySegments.last;
+      final slug = nonEmptySegments.last..replaceAll('.html', '');
 
       final String stringUri = uri.toString();
       if (stringUri.contains('autor')) {

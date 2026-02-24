@@ -47,121 +47,129 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Form(
-      autovalidateMode: isAnyError
-          ? AutovalidateMode.always
-          : AutovalidateMode.disabled,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: TextFieldLabel(label: LocaleKeys.login_user_name.tr()),
-              ),
-              Expanded(
-                child: AnimatedBoxFade(
-                  isChildVisible: showUsernameError,
-                  child: TextFieldValidationError(
-                    message: LocaleKeys.login_user_name_validation.tr(),
+    return AutofillGroup(
+      child: Form(
+        autovalidateMode: isAnyError
+            ? AutovalidateMode.always
+            : AutovalidateMode.disabled,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: TextFieldLabel(label: LocaleKeys.login_user_name.tr()),
+                ),
+                Expanded(
+                  child: AnimatedBoxFade(
+                    isChildVisible: showUsernameError,
+                    child: TextFieldValidationError(
+                      message: LocaleKeys.login_user_name_validation.tr(),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Semantics(
-            label: LocaleKeys.login_user_name.tr(),
-            textField: true,
-            child: TextField(
-              onTapOutside: (event) {
-                FocusScope.of(context).unfocus();
-              },
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-              controller: _usernameController,
-              onChanged: (_) {
-                if (showUsernameError) {
-                  _validate();
-                }
-              },
+              ],
             ),
-          ),
-          const SizedBox(height: Dimensions.mediumPadding),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: TextFieldLabel(label: LocaleKeys.login_password.tr()),
+            Semantics(
+              label: LocaleKeys.login_user_name.tr(),
+              textField: true,
+              child: TextField(
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.emailAddress,
+                autofillHints: const [AutofillHints.email],
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.black,
+                ),
+                controller: _usernameController,
+                onChanged: (_) {
+                  if (showUsernameError) {
+                    _validate();
+                  }
+                },
               ),
-              Expanded(
-                child: AnimatedBoxFade(
-                  isChildVisible: showPasswordError,
-                  child: TextFieldValidationError(
-                    message: LocaleKeys.login_password_validation_empty.tr(),
+            ),
+            const SizedBox(height: Dimensions.mediumPadding),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: TextFieldLabel(label: LocaleKeys.login_password.tr()),
+                ),
+                Expanded(
+                  child: AnimatedBoxFade(
+                    isChildVisible: showPasswordError,
+                    child: TextFieldValidationError(
+                      message: LocaleKeys.login_password_validation_empty.tr(),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Semantics(
-            label: LocaleKeys.login_password.tr(),
-            textField: true,
-            child: TextField(
-              onTapOutside: (event) {
-                FocusScope.of(context).unfocus();
-              },
-              textInputAction: TextInputAction.go,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-              controller: _passwordController,
-              onSubmitted: (value) {
-                _validate();
-                if (!isAnyError) {
-                  BlocProvider.of<AuthCubit>(context).login(
-                    email: _usernameController.text,
-                    password: _passwordController.text,
-                  );
-                }
-              },
-              onChanged: (_) {
-                if (showPasswordError) {
+              ],
+            ),
+            Semantics(
+              label: LocaleKeys.login_password.tr(),
+              textField: true,
+              child: TextField(
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
+                textInputAction: TextInputAction.go,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                autofillHints: const [AutofillHints.password],
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.black,
+                ),
+                controller: _passwordController,
+                onSubmitted: (value) {
                   _validate();
-                }
-              },
-              decoration: InputDecoration(
-                suffixIcon: Semantics(
-                  label: LocaleKeys.login_forgot.tr(),
-                  button: true,
-                  enabled: true,
-                  onTap: () {
-                    MyLibraryForgotPasswordDialog.show(context: context);
-                  },
-                  child: GestureDetector(
+                  if (!isAnyError) {
+                    BlocProvider.of<AuthCubit>(context).login(
+                      email: _usernameController.text,
+                      password: _passwordController.text,
+                    );
+                  }
+                },
+                onChanged: (_) {
+                  if (showPasswordError) {
+                    _validate();
+                  }
+                },
+                decoration: InputDecoration(
+                  suffixIcon: Semantics(
+                    label: LocaleKeys.login_forgot.tr(),
+                    button: true,
+                    enabled: true,
                     onTap: () {
                       MyLibraryForgotPasswordDialog.show(context: context);
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: Dimensions.veryLargePadding,
-                        left: Dimensions.mediumPadding,
-                      ),
-                      child: SizedBox(
-                        width: 110,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            LocaleKeys.login_forgot,
-                            textAlign: TextAlign.center,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              decoration: TextDecoration.underline,
-                              color: CustomColors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ).tr(),
+                    child: GestureDetector(
+                      onTap: () {
+                        MyLibraryForgotPasswordDialog.show(context: context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          right: Dimensions.veryLargePadding,
+                          left: Dimensions.mediumPadding,
+                        ),
+                        child: SizedBox(
+                          width: 110,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              LocaleKeys.login_forgot,
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                decoration: TextDecoration.underline,
+                                color: CustomColors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ).tr(),
+                          ),
                         ),
                       ),
                     ),
@@ -169,78 +177,78 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 32),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: Dimensions.mediumPadding,
-                  ),
-                  child: GestureDetector(
-                    onTap: widget.onRegister,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          LocaleKeys.login_no_account,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ).tr(),
-                        const SizedBox(width: Dimensions.smallPadding),
-                        Text(
-                          LocaleKeys.login_register,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            decoration: TextDecoration.underline,
-                            color: CustomColors.secondaryBlueColor,
-                            fontWeight: FontWeight.w500,
-                            decorationColor: CustomColors.secondaryBlueColor,
-                          ),
-                        ).tr(),
-                      ],
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: Dimensions.mediumPadding,
+                    ),
+                    child: GestureDetector(
+                      onTap: widget.onRegister,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            LocaleKeys.login_no_account,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ).tr(),
+                          const SizedBox(width: Dimensions.smallPadding),
+                          Text(
+                            LocaleKeys.login_register,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              decoration: TextDecoration.underline,
+                              color: CustomColors.secondaryBlueColor,
+                              fontWeight: FontWeight.w500,
+                              decorationColor: CustomColors.secondaryBlueColor,
+                            ),
+                          ).tr(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              BlocBuilder<AuthCubit, AuthState>(
-                buildWhen: (p, c) => p.isLoading != c.isLoading,
-                builder: (context, state) {
-                  return Expanded(
-                    child: ElevatedButton(
-                      style: greenElevatedButton,
-                      onPressed: () {
-                        _validate();
-                        if (!isAnyError) {
-                          BlocProvider.of<AuthCubit>(context).login(
-                            email: _usernameController.text,
-                            password: _passwordController.text,
-                          );
-                        }
-                      },
-                      child: AnimatedSwitcher(
-                        switchInCurve: defaultCurve,
-                        switchOutCurve: defaultCurve,
-                        duration: const Duration(milliseconds: 200),
-                        child: state.isLoading
-                            ? const CustomLoader(
-                                color: Colors.white,
-                                size: 15,
-                                strokeWidth: 2,
-                              )
-                            : const Text(
-                                LocaleKeys.login_login,
-                                textAlign: TextAlign.center,
-                              ).tr(),
+                BlocBuilder<AuthCubit, AuthState>(
+                  buildWhen: (p, c) => p.isLoading != c.isLoading,
+                  builder: (context, state) {
+                    return Expanded(
+                      child: ElevatedButton(
+                        style: greenElevatedButton,
+                        onPressed: () {
+                          _validate();
+                          if (!isAnyError) {
+                            BlocProvider.of<AuthCubit>(context).login(
+                              email: _usernameController.text,
+                              password: _passwordController.text,
+                            );
+                          }
+                        },
+                        child: AnimatedSwitcher(
+                          switchInCurve: defaultCurve,
+                          switchOutCurve: defaultCurve,
+                          duration: const Duration(milliseconds: 200),
+                          child: state.isLoading
+                              ? const CustomLoader(
+                                  color: Colors.white,
+                                  size: 15,
+                                  strokeWidth: 2,
+                                )
+                              : const Text(
+                                  LocaleKeys.login_login,
+                                  textAlign: TextAlign.center,
+                                ).tr(),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
