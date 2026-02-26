@@ -116,7 +116,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
         currentLists[index] = list.copyWith(books: books);
       }
     }
-    
+
     return currentLists;
   }
 
@@ -601,6 +601,15 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
           _findList(slug: listSlug)!.copyWith(name: newName),
         );
         emit(state.copyWith(isRenaming: false, allLists: updatedLists));
+        if (state.fetchedSingleList?.slug == listSlug) {
+          emit(
+            state.copyWith(
+              fetchedSingleList: state.fetchedSingleList!.copyWith(
+                name: newName,
+              ),
+            ),
+          );
+        }
       },
       failure: (failure) {
         emit(state.copyWith(isRenaming: false, isRenamingFailure: true));

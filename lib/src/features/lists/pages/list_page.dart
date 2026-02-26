@@ -53,7 +53,8 @@ class ContentState extends State<Content> {
       value: context.read<ListCreatorCubit>()..getListBySlug(widget.slug),
       child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
         buildWhen: (p, c) {
-          return p.isLoading != c.isLoading;
+          return p.isLoading != c.isLoading ||
+              p.fetchedSingleList != c.fetchedSingleList;
         },
         builder: (context, state) {
           final list = state.fetchedSingleList;

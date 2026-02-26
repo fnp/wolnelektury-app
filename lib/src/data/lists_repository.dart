@@ -52,7 +52,7 @@ class ListsRepositoryImplementation extends ListsRepository {
     required String newName,
   }) async {
     try {
-      final response = await _apiService.postRequest(
+      final response = await _apiService.patchRequest(
         _manageListEndpoint(listSlug),
         {'name': newName},
         isAnonymous: false,

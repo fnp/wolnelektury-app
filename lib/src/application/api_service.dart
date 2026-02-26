@@ -210,6 +210,50 @@ class ApiService {
     }
   }
 
+  Future<ApiResponse> patchRequest(
+    String endpoint,
+    dynamic data, {
+    bool allowRetry = true,
+    required bool isAnonymous,
+  }) async {
+    String? accessToken;
+    if (!isAnonymous) {
+      accessToken = await handleAccessToken();
+    }
+
+    try {
+      final response = await _dio.patch(
+        endpoint,
+        data: data,
+        options: createOptions(accessToken: accessToken),
+      );
+
+      return ApiResponse.fromApiServiceResponse(response);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        // Only retry once
+        if (!allowRetry) return _dioExceptionHandler(e);
+
+        final refreshSuccess = await _handleTokenRefresh();
+        if (refreshSuccess) {
+          return await patchRequest(
+            endpoint,
+            data,
+            // Disallow retrying, this is already a retry
+            allowRetry: false,
+            isAnonymous: isAnonymous,
+          );
+        } else {
+          if (!refreshSuccess && accessToken != null) {
+            await get.get<AuthCubit>().logout(softLogout: true);
+          }
+          return _dioExceptionHandler(e);
+        }
+      }
+      return _dioExceptionHandler(e);
+    }
+  }
+
   Future<ApiResponse> deleteRequest(
     String endpoint, {
     bool allowRetry = true,
