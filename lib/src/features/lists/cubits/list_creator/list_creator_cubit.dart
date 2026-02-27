@@ -277,7 +277,7 @@ class ListCreatorCubit extends SafeCubit<ListCreatorState> {
   }
 
   Future<void> getListBySlug(String listSlug) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, fetchedSingleList: null));
     final response = await _listsRepository.getList(listSlug: listSlug);
     response.handle(
       success: (list, _) {

@@ -8,7 +8,6 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_list_model.dart';
 import 'package:wolnelektury/src/enums/app_mode_enum.dart';
 import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.dart';
-import 'package:wolnelektury/src/features/common/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/auth_wrapper.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
@@ -27,18 +26,16 @@ class MyLibraryListHeader extends StatelessWidget {
   final BookListModel bookList;
   final bool isListOwner;
   final bool isCompact;
+  final bool isOnListPage;
   const MyLibraryListHeader({
     super.key,
     required this.bookList,
     required this.isListOwner,
     required this.isCompact,
+    required this.isOnListPage,
   });
 
-  void _onDeletePressed(
-    BuildContext context, {
-    required String slug,
-    required String location,
-  }) {
+  void _onDeletePressed(BuildContext context, {required String slug}) {
     final cubit = context.read<ListCreatorCubit>();
     MyLibraryListDeleteConfirmationDialog.show(
       context: context,
@@ -46,7 +43,7 @@ class MyLibraryListHeader extends StatelessWidget {
         cubit.deleteList(
           slug,
           onSuccess: () {
-            if (location.contains(listPageConfig.name)) {
+            if (isOnListPage) {
               if (router.canPop()) {
                 router.pop();
                 cubit.getLists(force: true);
@@ -69,7 +66,6 @@ class MyLibraryListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final routerPath = context.read<RouterCubit>().state.location;
     return Stack(
       children: [
         ConstrainedBox(
@@ -98,7 +94,7 @@ class MyLibraryListHeader extends StatelessWidget {
                             Dimensions.borderRadiusOfCircle,
                           ),
                           onTap: () {
-                            if (routerPath.contains(listPageConfig.name)) {
+                            if (isOnListPage) {
                               if (!isListOwner) {
                                 return;
                               }
@@ -161,7 +157,6 @@ class MyLibraryListHeader extends StatelessWidget {
                                             _onDeletePressed(
                                               context,
                                               slug: bookList.slug,
-                                              location: routerPath,
                                             );
                                           },
                                         ),
@@ -207,11 +202,7 @@ class MyLibraryListHeader extends StatelessWidget {
                             nonActiveIcon: CustomIcons.delete_forever,
                             isActive: false,
                             onPressed: () {
-                              _onDeletePressed(
-                                context,
-                                slug: bookList.slug,
-                                location: routerPath,
-                              );
+                              _onDeletePressed(context, slug: bookList.slug);
                             },
                           ),
                         ),

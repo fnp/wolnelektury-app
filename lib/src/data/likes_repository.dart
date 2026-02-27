@@ -39,7 +39,7 @@ class FavouritesRepositoryImplementation extends LikesRepository
   static const String _likesEndpoint = '/like/';
   static const String _sendSyncLikesEndpoint = '/sync/userlistitem/';
   static String _receiveSyncLikesEndpoint(String ts) =>
-      '/sync/userlistitem?favourites=true&ts=$ts';
+      '/sync/userlistitem?favorites=true&ts=$ts';
 
   @override
   Future<DataState<void>> reset() async {

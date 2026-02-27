@@ -11,12 +11,14 @@ class MyLibraryList extends StatelessWidget {
   final BookListModel bookList;
   final bool isCompact;
   final bool isListOwner;
+  final bool isOnListPage;
+
   const MyLibraryList({
     super.key,
     required this.bookList,
     required this.isCompact,
     this.isListOwner = true,
-  });
+  }) : isOnListPage = !isCompact;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class MyLibraryList extends StatelessWidget {
                         bookList: bookList,
                         isListOwner: isListOwner,
                         isCompact: isCompact,
+                        isOnListPage: isOnListPage,
                       ),
                       if (bookList.books.isNotEmpty && !isCompact) ...[
                         _List(bookList: bookList, isListOwner: isListOwner),
