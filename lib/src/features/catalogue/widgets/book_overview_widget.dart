@@ -37,7 +37,7 @@ class BookOverviewWidget extends StatelessWidget {
           onTap: () {
             if (state.isListCreation) {
               final creationCubit = BlocProvider.of<ListCreatorCubit>(context);
-              if (creationCubit.state.isItemInEditedList(book.slug)) {
+              if (creationCubit.state.isBookInEditedList(book.slug)) {
                 creationCubit.removeBookFromEditedList(book.slug);
                 return;
               }
@@ -215,12 +215,12 @@ class _ImageWithFilter extends StatelessWidget {
 
     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
       buildWhen: (p, c) {
-        return p.isItemInEditedList(book.slug) !=
-            c.isItemInEditedList(book.slug);
+        return p.isBookInEditedList(book.slug) !=
+            c.isBookInEditedList(book.slug);
       },
       builder: (context, state) {
         final effShouldFilter =
-            state.isItemInEditedList(book.slug) && shouldFilter;
+            state.isBookInEditedList(book.slug) && shouldFilter;
 
         final child = CachedNetworkImage(
           imageUrl: book.coverUrl!,

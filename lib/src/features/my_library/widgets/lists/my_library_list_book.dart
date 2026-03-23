@@ -6,6 +6,7 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/features/books/widgets/book_page_cover/book_page_cover_with_buttons.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
@@ -13,30 +14,31 @@ import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class MyLibraryListBook extends StatelessWidget {
-  final String bookSlug;
-  final String listSlug;
+  final ListItemModel item;
   final String listName;
   final bool isListOwner;
   const MyLibraryListBook({
     super.key,
-    required this.bookSlug,
-    required this.listSlug,
+    required this.item,
     required this.listName,
     required this.isListOwner,
   });
 
   bool determineVisibility(ListCreatorState state) {
-    return !state.isItemInList(listSlug, bookSlug) ||
-        (state.itemToRemoveFromList?.$1 == listSlug &&
-            state.itemToRemoveFromList?.$2 == bookSlug);
+    return !state.isBookInList(item.listSlug, item.bookSlug!) ||
+        (state.itemToRemoveFromList?.uuid == item.uuid &&
+            state.itemToRemoveFromList?.listSlug == item.listSlug);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (item.bookSlug == null) {
+      return const SizedBox.shrink();
+    }
     return BlocProvider(
       create: (context) {
         return SingleBookCubit(get.get(), get.get())
-          ..getBookData(slug: bookSlug);
+          ..getBookData(slug: item.bookSlug!);
       },
       child: BlocBuilder<SingleBookCubit, SingleBookState>(
         buildWhen: (p, c) {
@@ -50,8 +52,8 @@ class MyLibraryListBook extends StatelessWidget {
           return BlocBuilder<ListCreatorCubit, ListCreatorState>(
             buildWhen: (p, c) {
               return p.itemToRemoveFromList != c.itemToRemoveFromList ||
-                  p.isItemInList(listSlug, bookSlug) !=
-                      c.isItemInList(listSlug, bookSlug);
+                  p.isBookInList(item.listSlug, item.bookSlug!) !=
+                      c.isBookInList(item.listSlug, item.bookSlug!);
             },
             builder: (context, innerState) {
               final shouldHide = determineVisibility(innerState);
@@ -69,13 +71,10 @@ class MyLibraryListBook extends StatelessWidget {
                           enableSwitchAnimation: true,
                           enabled: state.isLoading,
                           child: BookPageCoverWithButtons(
-                            key: ValueKey(bookSlug),
+                            key: ValueKey(item.bookSlug),
                             onDelete: isListOwner
                                 ? () {
-                                    cubit.removeItemFromList(
-                                      listSlug: listSlug,
-                                      itemSlug: bookSlug,
-                                    );
+                                    cubit.removeItemFromList(item: item);
                                     CustomSnackbar.success(
                                       context,
                                       LocaleKeys.book_lists_sheet_delete.tr(),

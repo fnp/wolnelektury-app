@@ -148,7 +148,7 @@ class _HintElement extends StatelessWidget {
         if (hint.slug == null) return;
         if (isInAddMode) {
           final c = context.read<ListCreatorCubit>();
-          if (c.state.isItemInEditedList(hint.slug!)) {
+          if (c.state.isBookInEditedList(hint.slug!)) {
             c.removeBookFromEditedList(hint.slug!);
             return;
           }

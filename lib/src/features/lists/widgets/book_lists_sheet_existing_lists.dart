@@ -32,52 +32,51 @@ class BookListsSheetExistingLists extends StatelessWidget {
       onLoadMore: () {
         creatorCubit.getMoreLists();
       },
-      builder: (scrollController) =>
-          BlocBuilder<ListCreatorCubit, ListCreatorState>(
-            buildWhen: (p, c) => p.isLoading != c.isLoading,
-            builder: (context, state) {
-              return AnimatedBoxFade(
-                collapsedChild: const Padding(
-                  padding: EdgeInsets.only(bottom: Dimensions.spacer),
-                  child: CustomLoader(),
-                ),
-                isChildVisible: state.isLoading == false,
-                child: state.isLoading
-                    ? const SizedBox.shrink()
-                    : ListView.separated(
-                        controller: scrollController,
-                        shrinkWrap: true,
-                        itemCount: effectiveList.length,
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: Dimensions.mediumPadding,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          final listSlug = effectiveList[index].slug;
-                          final listName = effectiveList[index].name;
-                          return _Element(
-                            listSlug: listSlug,
-                            listName: listName,
-                            bookSlug: currentlyWorkingOnBookSlug,
-                            onAdd: () {
-                              creatorCubit.addItemToListWithQueue(
-                                listSlug,
-                                currentlyWorkingOnBookSlug,
-                              );
-                            },
-                            onRemove: () {
-                              creatorCubit.removeItemFromListWithQueue(
-                                listSlug,
-                                currentlyWorkingOnBookSlug,
-                              );
-                            },
-                          );
-                        },
-                      ),
-              );
-            },
-          ),
+      builder: (scrollController) {
+        return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+          buildWhen: (p, c) => p.isLoading != c.isLoading,
+          builder: (context, state) {
+            return AnimatedBoxFade(
+              collapsedChild: const Padding(
+                padding: EdgeInsets.only(bottom: Dimensions.spacer),
+                child: CustomLoader(),
+              ),
+              isChildVisible: state.isLoading == false,
+              child: state.isLoading
+                  ? const SizedBox.shrink()
+                  : ListView.separated(
+                      controller: scrollController,
+                      shrinkWrap: true,
+                      itemCount: effectiveList.length,
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(height: Dimensions.mediumPadding);
+                      },
+                      itemBuilder: (context, index) {
+                        final listSlug = effectiveList[index].slug;
+                        final listName = effectiveList[index].name;
+                        return _Element(
+                          listSlug: listSlug,
+                          listName: listName,
+                          bookSlug: currentlyWorkingOnBookSlug,
+                          onAdd: () {
+                            creatorCubit.addItemToListWithQueue(
+                              listSlug,
+                              currentlyWorkingOnBookSlug,
+                            );
+                          },
+                          onRemove: () {
+                            creatorCubit.removeItemFromListWithQueue(
+                              listSlug,
+                              currentlyWorkingOnBookSlug,
+                            );
+                          },
+                        );
+                      },
+                    ),
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -101,12 +100,12 @@ class _Element extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
       buildWhen: (p, c) {
-        return p.isItemInList(listSlug, bookSlug) !=
-                c.isItemInList(listSlug, bookSlug) ||
+        return p.isBookInList(listSlug, bookSlug) !=
+                c.isBookInList(listSlug, bookSlug) ||
             p.allLists != c.allLists;
       },
       builder: (context, state) {
-        final isItemInList = state.isItemInList(listSlug, bookSlug);
+        final isBookInList = state.isBookInList(listSlug, bookSlug);
         return SizedBox(
           height: Dimensions.elementHeight,
           child: DecoratedBox(
@@ -114,14 +113,14 @@ class _Element extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 Dimensions.borderRadiusOfCircle,
               ),
-              color: isItemInList ? CustomColors.green : CustomColors.white,
+              color: isBookInList ? CustomColors.green : CustomColors.white,
             ),
             child: InkWellWrapper(
               borderRadius: BorderRadius.circular(
                 Dimensions.borderRadiusOfCircle,
               ),
               onTap: () {
-                if (isItemInList) {
+                if (isBookInList) {
                   onRemove();
                 } else {
                   onAdd();
@@ -150,7 +149,7 @@ class _Element extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     switchInCurve: defaultCurve,
                     switchOutCurve: defaultCurve,
-                    child: isItemInList
+                    child: isBookInList
                         ? CustomButton(
                             semanticLabel: LocaleKeys
                                 .common_semantic_remove_book_from_list

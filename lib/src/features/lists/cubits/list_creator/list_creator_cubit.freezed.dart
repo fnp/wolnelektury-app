@@ -24,7 +24,7 @@ mixin _$ListCreatorState {
  String? get deletingSlug; bool get isDeleteFailure;// Renaming list
  bool get isRenaming; bool get isRenamingFailure; bool get isDuplicateFailure;// Deleting item from list
 // List slug, item slug
- (String, String)? get itemToRemoveFromList; bool get isRemovingItemFailure;
+ ListItemModel? get itemToRemoveFromList; bool get isRemovingItemFailure;
 /// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -55,11 +55,11 @@ abstract mixin class $ListCreatorStateCopyWith<$Res>  {
   factory $ListCreatorStateCopyWith(ListCreatorState value, $Res Function(ListCreatorState) _then) = _$ListCreatorStateCopyWithImpl;
 @useResult
 $Res call({
- List<ListModel> itemsToAdd, List<ItemToRemove> itemsToRemove, bool? isSuccess, bool isLoading, bool isLoadingMore, List<ListModel> allLists, ListModel? fetchedSingleList, ApiResponsePagination pagination, ApiResponsePagination itemsPagination, bool isLoadingMoreItems, ListModel? editedList, ListModel? editedListToSave, bool isSavingEditedList, bool isSavingFailure, bool isAdding, bool isAddingFailure, ListModel? pendingList, String? deletingSlug, bool isDeleteFailure, bool isRenaming, bool isRenamingFailure, bool isDuplicateFailure, (String, String)? itemToRemoveFromList, bool isRemovingItemFailure
+ List<ListModel> itemsToAdd, List<ItemToRemove> itemsToRemove, bool? isSuccess, bool isLoading, bool isLoadingMore, List<ListModel> allLists, ListModel? fetchedSingleList, ApiResponsePagination pagination, ApiResponsePagination itemsPagination, bool isLoadingMoreItems, ListModel? editedList, ListModel? editedListToSave, bool isSavingEditedList, bool isSavingFailure, bool isAdding, bool isAddingFailure, ListModel? pendingList, String? deletingSlug, bool isDeleteFailure, bool isRenaming, bool isRenamingFailure, bool isDuplicateFailure, ListItemModel? itemToRemoveFromList, bool isRemovingItemFailure
 });
 
 
-$ListModelCopyWith<$Res>? get fetchedSingleList;$ApiResponsePaginationCopyWith<$Res> get pagination;$ApiResponsePaginationCopyWith<$Res> get itemsPagination;$ListModelCopyWith<$Res>? get editedList;$ListModelCopyWith<$Res>? get editedListToSave;$ListModelCopyWith<$Res>? get pendingList;
+$ListModelCopyWith<$Res>? get fetchedSingleList;$ApiResponsePaginationCopyWith<$Res> get pagination;$ApiResponsePaginationCopyWith<$Res> get itemsPagination;$ListModelCopyWith<$Res>? get editedList;$ListModelCopyWith<$Res>? get editedListToSave;$ListModelCopyWith<$Res>? get pendingList;$ListItemModelCopyWith<$Res>? get itemToRemoveFromList;
 
 }
 /// @nodoc
@@ -97,7 +97,7 @@ as bool,isRenaming: null == isRenaming ? _self.isRenaming : isRenaming // ignore
 as bool,isRenamingFailure: null == isRenamingFailure ? _self.isRenamingFailure : isRenamingFailure // ignore: cast_nullable_to_non_nullable
 as bool,isDuplicateFailure: null == isDuplicateFailure ? _self.isDuplicateFailure : isDuplicateFailure // ignore: cast_nullable_to_non_nullable
 as bool,itemToRemoveFromList: freezed == itemToRemoveFromList ? _self.itemToRemoveFromList : itemToRemoveFromList // ignore: cast_nullable_to_non_nullable
-as (String, String)?,isRemovingItemFailure: null == isRemovingItemFailure ? _self.isRemovingItemFailure : isRemovingItemFailure // ignore: cast_nullable_to_non_nullable
+as ListItemModel?,isRemovingItemFailure: null == isRemovingItemFailure ? _self.isRemovingItemFailure : isRemovingItemFailure // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -166,6 +166,18 @@ $ListModelCopyWith<$Res>? get pendingList {
 
   return $ListModelCopyWith<$Res>(_self.pendingList!, (value) {
     return _then(_self.copyWith(pendingList: value));
+  });
+}/// Create a copy of ListCreatorState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ListItemModelCopyWith<$Res>? get itemToRemoveFromList {
+    if (_self.itemToRemoveFromList == null) {
+    return null;
+  }
+
+  return $ListItemModelCopyWith<$Res>(_self.itemToRemoveFromList!, (value) {
+    return _then(_self.copyWith(itemToRemoveFromList: value));
   });
 }
 }
@@ -228,7 +240,7 @@ class _ListCreatorState implements ListCreatorState {
 @override@JsonKey() final  bool isDuplicateFailure;
 // Deleting item from list
 // List slug, item slug
-@override final  (String, String)? itemToRemoveFromList;
+@override final  ListItemModel? itemToRemoveFromList;
 @override@JsonKey() final  bool isRemovingItemFailure;
 
 /// Create a copy of ListCreatorState
@@ -261,11 +273,11 @@ abstract mixin class _$ListCreatorStateCopyWith<$Res> implements $ListCreatorSta
   factory _$ListCreatorStateCopyWith(_ListCreatorState value, $Res Function(_ListCreatorState) _then) = __$ListCreatorStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<ListModel> itemsToAdd, List<ItemToRemove> itemsToRemove, bool? isSuccess, bool isLoading, bool isLoadingMore, List<ListModel> allLists, ListModel? fetchedSingleList, ApiResponsePagination pagination, ApiResponsePagination itemsPagination, bool isLoadingMoreItems, ListModel? editedList, ListModel? editedListToSave, bool isSavingEditedList, bool isSavingFailure, bool isAdding, bool isAddingFailure, ListModel? pendingList, String? deletingSlug, bool isDeleteFailure, bool isRenaming, bool isRenamingFailure, bool isDuplicateFailure, (String, String)? itemToRemoveFromList, bool isRemovingItemFailure
+ List<ListModel> itemsToAdd, List<ItemToRemove> itemsToRemove, bool? isSuccess, bool isLoading, bool isLoadingMore, List<ListModel> allLists, ListModel? fetchedSingleList, ApiResponsePagination pagination, ApiResponsePagination itemsPagination, bool isLoadingMoreItems, ListModel? editedList, ListModel? editedListToSave, bool isSavingEditedList, bool isSavingFailure, bool isAdding, bool isAddingFailure, ListModel? pendingList, String? deletingSlug, bool isDeleteFailure, bool isRenaming, bool isRenamingFailure, bool isDuplicateFailure, ListItemModel? itemToRemoveFromList, bool isRemovingItemFailure
 });
 
 
-@override $ListModelCopyWith<$Res>? get fetchedSingleList;@override $ApiResponsePaginationCopyWith<$Res> get pagination;@override $ApiResponsePaginationCopyWith<$Res> get itemsPagination;@override $ListModelCopyWith<$Res>? get editedList;@override $ListModelCopyWith<$Res>? get editedListToSave;@override $ListModelCopyWith<$Res>? get pendingList;
+@override $ListModelCopyWith<$Res>? get fetchedSingleList;@override $ApiResponsePaginationCopyWith<$Res> get pagination;@override $ApiResponsePaginationCopyWith<$Res> get itemsPagination;@override $ListModelCopyWith<$Res>? get editedList;@override $ListModelCopyWith<$Res>? get editedListToSave;@override $ListModelCopyWith<$Res>? get pendingList;@override $ListItemModelCopyWith<$Res>? get itemToRemoveFromList;
 
 }
 /// @nodoc
@@ -303,7 +315,7 @@ as bool,isRenaming: null == isRenaming ? _self.isRenaming : isRenaming // ignore
 as bool,isRenamingFailure: null == isRenamingFailure ? _self.isRenamingFailure : isRenamingFailure // ignore: cast_nullable_to_non_nullable
 as bool,isDuplicateFailure: null == isDuplicateFailure ? _self.isDuplicateFailure : isDuplicateFailure // ignore: cast_nullable_to_non_nullable
 as bool,itemToRemoveFromList: freezed == itemToRemoveFromList ? _self.itemToRemoveFromList : itemToRemoveFromList // ignore: cast_nullable_to_non_nullable
-as (String, String)?,isRemovingItemFailure: null == isRemovingItemFailure ? _self.isRemovingItemFailure : isRemovingItemFailure // ignore: cast_nullable_to_non_nullable
+as ListItemModel?,isRemovingItemFailure: null == isRemovingItemFailure ? _self.isRemovingItemFailure : isRemovingItemFailure // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -373,6 +385,18 @@ $ListModelCopyWith<$Res>? get pendingList {
 
   return $ListModelCopyWith<$Res>(_self.pendingList!, (value) {
     return _then(_self.copyWith(pendingList: value));
+  });
+}/// Create a copy of ListCreatorState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ListItemModelCopyWith<$Res>? get itemToRemoveFromList {
+    if (_self.itemToRemoveFromList == null) {
+    return null;
+  }
+
+  return $ListItemModelCopyWith<$Res>(_self.itemToRemoveFromList!, (value) {
+    return _then(_self.copyWith(itemToRemoveFromList: value));
   });
 }
 }

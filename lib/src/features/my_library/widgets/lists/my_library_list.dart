@@ -85,7 +85,7 @@ class _HeaderByType extends StatelessWidget {
           delegate: SliverChildBuilderDelegate((context, index) {
             return MyLibraryListBookmark(
               key: ValueKey(itemList.bookmarks[index]),
-              bookmarkId: itemList.bookmarks[index],
+              bookmarkId: itemList.bookmarks[index].uuid ?? '',
               listSlug: itemList.slug,
               listName: itemList.name,
               isListOwner: isListOwner,
@@ -153,8 +153,7 @@ class _ListByType extends StatelessWidget {
           delegate: SliverChildBuilderDelegate((context, index) {
             return MyLibraryListBook(
               key: ValueKey(itemList.books[index]),
-              bookSlug: itemList.books[index],
-              listSlug: itemList.slug,
+              item: itemList.items[index],
               listName: itemList.name,
               isListOwner: isListOwner,
             );
@@ -165,7 +164,7 @@ class _ListByType extends StatelessWidget {
           delegate: SliverChildBuilderDelegate((context, index) {
             return MyLibraryListBookmark(
               key: ValueKey(itemList.bookmarks[index]),
-              bookmarkId: itemList.bookmarks[index],
+              bookmarkId: itemList.bookmarks[index].uuid ?? '',
               listSlug: itemList.slug,
               listName: itemList.name,
               isListOwner: isListOwner,

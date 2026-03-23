@@ -54,11 +54,11 @@ extension ListItemModelX on ListItemModel {
 }
 
 extension ListModelX on ListModel {
-  List<String> get books =>
-      items.where((e) => e.bookSlug != null).map((e) => e.bookSlug!).toList();
+  List<ListItemModel> get books =>
+      items.where((e) => e.bookSlug != null).map((e) => e).toList();
 
-  List<String> get bookmarks =>
-      items.where((e) => e.bookmark != null).map((e) => e.bookmark!).toList();
+  List<ListItemModel> get bookmarks =>
+      items.where((e) => e.bookmark != null).map((e) => e).toList();
 
   ListType get listType {
     if (items.isEmpty) return ListType.books;

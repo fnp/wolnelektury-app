@@ -43,7 +43,7 @@ sealed class ListCreatorState with _$ListCreatorState {
 
     // Deleting item from list
     // List slug, item slug
-    (String, String)? itemToRemoveFromList,
+    ListItemModel? itemToRemoveFromList,
     @Default(false) bool isRemovingItemFailure,
   }) = _ListCreatorState;
 }
@@ -54,7 +54,7 @@ extension ListCreatorStateX on ListCreatorState {
         pendingList?.slug == listSlug;
   }
 
-  bool isItemInList(String listSlug, String itemSlug) {
+  bool isBookInList(String listSlug, String itemSlug) {
     if (fetchedSingleList != null && fetchedSingleList!.slug == listSlug) {
       return fetchedSingleList!.items.any((item) => item.bookSlug == itemSlug);
     }
@@ -94,7 +94,7 @@ extension ListCreatorStateX on ListCreatorState {
         editedToSaveBookSlugs.difference(editedBookSlugs).length;
   }
 
-  bool isItemInEditedList(String itemSlug) {
+  bool isBookInEditedList(String itemSlug) {
     return (editedListToSave?.items.any((item) => item.bookSlug == itemSlug) ??
             false) &&
         deletingSlug != itemSlug;

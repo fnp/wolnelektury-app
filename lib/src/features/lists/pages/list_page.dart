@@ -56,7 +56,7 @@ class ContentState extends State<Content> {
       child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
         buildWhen: (p, c) {
           return p.isLoading != c.isLoading ||
-              p.fetchedSingleList != c.fetchedSingleList;
+              p.fetchedSingleList?.name != c.fetchedSingleList?.name;
         },
         builder: (context, state) {
           final list = state.fetchedSingleList;
@@ -64,7 +64,6 @@ class ContentState extends State<Content> {
             duration: const Duration(milliseconds: 300),
             switchInCurve: defaultCurve,
             switchOutCurve: defaultCurve,
-
             child: list == null
                 ? const _EmptyWidget()
                 : Align(
