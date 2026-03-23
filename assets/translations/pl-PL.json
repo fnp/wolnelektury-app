@@ -44,6 +44,8 @@
             "button": "Pobierz"
         },
         "lists": {
+            "delete_list": "Usuń listę",
+            "add_books": "Dodaj książki",
             "creation_failure": "Nie udało się utworzyć listy, spróbuj ponownie",
             "deletion_failure": "Nie udało się usunąć listy, spróbuj ponownie",
             "book_removal_failure": "Nie udało się usunąć książki z listy, spróbuj ponownie",

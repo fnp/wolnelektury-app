@@ -201,7 +201,9 @@ class MyLibraryBookListHeader extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextButtonWithIcon(
-                              nonActiveText: 'Usuń listę',
+                              nonActiveText: LocaleKeys
+                                  .my_library_lists_delete_list
+                                  .tr(),
                               nonActiveIcon: CustomIcons.delete_forever,
                               isActive: false,
                               onPressed: () {
@@ -211,7 +213,9 @@ class MyLibraryBookListHeader extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextButtonWithIcon(
-                              nonActiveText: 'Dodaj książki',
+                              nonActiveText: LocaleKeys
+                                  .my_library_lists_add_books
+                                  .tr(),
                               nonActiveIcon: CustomIcons.add,
                               isActive: false,
                               onPressed: () {
@@ -242,7 +246,7 @@ class MyLibraryBookListHeader extends StatelessWidget {
                     child: CustomLoader(
                       size: 15,
                       strokeWidth: 2,
-                      color: CustomColors.white,
+                      color: CustomColors.primaryYellowColor,
                     ),
                   ),
                 );
