@@ -213,6 +213,7 @@ abstract class  LocaleKeys {
   static const settings_logout = 'settings.logout';
   static const settings = 'settings';
   static const common_bookmark_page_error = 'common.bookmark_page_error';
+  static const common_bookmark_page_title = 'common.bookmark_page_title';
   static const common_empty_page = 'common.empty_page';
   static const common_empty_search_in_catalogue = 'common.empty.search_in_catalogue';
   static const common_empty_last_read_title = 'common.empty.last_read_title';

@@ -15,15 +15,16 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ListCreatorState {
 
- List<BookListModel> get booksToAdd;// (List slug, book slug)
- List<BookToRemove> get booksToRemove; bool? get isSuccess;// Existing lists from the db
- bool get isLoading; bool get isLoadingMore; List<BookListModel> get allLists; BookListModel? get fetchedSingleList; ApiResponsePagination get pagination;// Editing list
- BookListModel? get editedList; BookListModel? get editedListToSave; bool get isSavingEditedList; bool get isSavingFailure;// Adding list
- bool get isAdding; bool get isAddingFailure; BookListModel? get pendingList;// Deleting list
+ List<ListModel> get itemsToAdd;// (List slug, item slug)
+ List<ItemToRemove> get itemsToRemove; bool? get isSuccess;// Existing lists from the db
+ bool get isLoading; bool get isLoadingMore; List<ListModel> get allLists; ListModel? get fetchedSingleList; ApiResponsePagination get pagination;// Pagination for items within a single list
+ ApiResponsePagination get itemsPagination; bool get isLoadingMoreItems;// Editing list
+ ListModel? get editedList; ListModel? get editedListToSave; bool get isSavingEditedList; bool get isSavingFailure;// Adding list
+ bool get isAdding; bool get isAddingFailure; ListModel? get pendingList;// Deleting list
  String? get deletingSlug; bool get isDeleteFailure;// Renaming list
- bool get isRenaming; bool get isRenamingFailure; bool get isDuplicateFailure;// Deleting book from list
-// List slug, book slug
- (String, String)? get bookToRemoveFromList; bool get isRemovingBookFailure;
+ bool get isRenaming; bool get isRenamingFailure; bool get isDuplicateFailure;// Deleting item from list
+// List slug, item slug
+ (String, String)? get itemToRemoveFromList; bool get isRemovingItemFailure;
 /// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -34,16 +35,16 @@ $ListCreatorStateCopyWith<ListCreatorState> get copyWith => _$ListCreatorStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListCreatorState&&const DeepCollectionEquality().equals(other.booksToAdd, booksToAdd)&&const DeepCollectionEquality().equals(other.booksToRemove, booksToRemove)&&(identical(other.isSuccess, isSuccess) || other.isSuccess == isSuccess)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.allLists, allLists)&&(identical(other.fetchedSingleList, fetchedSingleList) || other.fetchedSingleList == fetchedSingleList)&&(identical(other.pagination, pagination) || other.pagination == pagination)&&(identical(other.editedList, editedList) || other.editedList == editedList)&&(identical(other.editedListToSave, editedListToSave) || other.editedListToSave == editedListToSave)&&(identical(other.isSavingEditedList, isSavingEditedList) || other.isSavingEditedList == isSavingEditedList)&&(identical(other.isSavingFailure, isSavingFailure) || other.isSavingFailure == isSavingFailure)&&(identical(other.isAdding, isAdding) || other.isAdding == isAdding)&&(identical(other.isAddingFailure, isAddingFailure) || other.isAddingFailure == isAddingFailure)&&(identical(other.pendingList, pendingList) || other.pendingList == pendingList)&&(identical(other.deletingSlug, deletingSlug) || other.deletingSlug == deletingSlug)&&(identical(other.isDeleteFailure, isDeleteFailure) || other.isDeleteFailure == isDeleteFailure)&&(identical(other.isRenaming, isRenaming) || other.isRenaming == isRenaming)&&(identical(other.isRenamingFailure, isRenamingFailure) || other.isRenamingFailure == isRenamingFailure)&&(identical(other.isDuplicateFailure, isDuplicateFailure) || other.isDuplicateFailure == isDuplicateFailure)&&(identical(other.bookToRemoveFromList, bookToRemoveFromList) || other.bookToRemoveFromList == bookToRemoveFromList)&&(identical(other.isRemovingBookFailure, isRemovingBookFailure) || other.isRemovingBookFailure == isRemovingBookFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListCreatorState&&const DeepCollectionEquality().equals(other.itemsToAdd, itemsToAdd)&&const DeepCollectionEquality().equals(other.itemsToRemove, itemsToRemove)&&(identical(other.isSuccess, isSuccess) || other.isSuccess == isSuccess)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.allLists, allLists)&&(identical(other.fetchedSingleList, fetchedSingleList) || other.fetchedSingleList == fetchedSingleList)&&(identical(other.pagination, pagination) || other.pagination == pagination)&&(identical(other.itemsPagination, itemsPagination) || other.itemsPagination == itemsPagination)&&(identical(other.isLoadingMoreItems, isLoadingMoreItems) || other.isLoadingMoreItems == isLoadingMoreItems)&&(identical(other.editedList, editedList) || other.editedList == editedList)&&(identical(other.editedListToSave, editedListToSave) || other.editedListToSave == editedListToSave)&&(identical(other.isSavingEditedList, isSavingEditedList) || other.isSavingEditedList == isSavingEditedList)&&(identical(other.isSavingFailure, isSavingFailure) || other.isSavingFailure == isSavingFailure)&&(identical(other.isAdding, isAdding) || other.isAdding == isAdding)&&(identical(other.isAddingFailure, isAddingFailure) || other.isAddingFailure == isAddingFailure)&&(identical(other.pendingList, pendingList) || other.pendingList == pendingList)&&(identical(other.deletingSlug, deletingSlug) || other.deletingSlug == deletingSlug)&&(identical(other.isDeleteFailure, isDeleteFailure) || other.isDeleteFailure == isDeleteFailure)&&(identical(other.isRenaming, isRenaming) || other.isRenaming == isRenaming)&&(identical(other.isRenamingFailure, isRenamingFailure) || other.isRenamingFailure == isRenamingFailure)&&(identical(other.isDuplicateFailure, isDuplicateFailure) || other.isDuplicateFailure == isDuplicateFailure)&&(identical(other.itemToRemoveFromList, itemToRemoveFromList) || other.itemToRemoveFromList == itemToRemoveFromList)&&(identical(other.isRemovingItemFailure, isRemovingItemFailure) || other.isRemovingItemFailure == isRemovingItemFailure));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,const DeepCollectionEquality().hash(booksToAdd),const DeepCollectionEquality().hash(booksToRemove),isSuccess,isLoading,isLoadingMore,const DeepCollectionEquality().hash(allLists),fetchedSingleList,pagination,editedList,editedListToSave,isSavingEditedList,isSavingFailure,isAdding,isAddingFailure,pendingList,deletingSlug,isDeleteFailure,isRenaming,isRenamingFailure,isDuplicateFailure,bookToRemoveFromList,isRemovingBookFailure]);
+int get hashCode => Object.hashAll([runtimeType,const DeepCollectionEquality().hash(itemsToAdd),const DeepCollectionEquality().hash(itemsToRemove),isSuccess,isLoading,isLoadingMore,const DeepCollectionEquality().hash(allLists),fetchedSingleList,pagination,itemsPagination,isLoadingMoreItems,editedList,editedListToSave,isSavingEditedList,isSavingFailure,isAdding,isAddingFailure,pendingList,deletingSlug,isDeleteFailure,isRenaming,isRenamingFailure,isDuplicateFailure,itemToRemoveFromList,isRemovingItemFailure]);
 
 @override
 String toString() {
-  return 'ListCreatorState(booksToAdd: $booksToAdd, booksToRemove: $booksToRemove, isSuccess: $isSuccess, isLoading: $isLoading, isLoadingMore: $isLoadingMore, allLists: $allLists, fetchedSingleList: $fetchedSingleList, pagination: $pagination, editedList: $editedList, editedListToSave: $editedListToSave, isSavingEditedList: $isSavingEditedList, isSavingFailure: $isSavingFailure, isAdding: $isAdding, isAddingFailure: $isAddingFailure, pendingList: $pendingList, deletingSlug: $deletingSlug, isDeleteFailure: $isDeleteFailure, isRenaming: $isRenaming, isRenamingFailure: $isRenamingFailure, isDuplicateFailure: $isDuplicateFailure, bookToRemoveFromList: $bookToRemoveFromList, isRemovingBookFailure: $isRemovingBookFailure)';
+  return 'ListCreatorState(itemsToAdd: $itemsToAdd, itemsToRemove: $itemsToRemove, isSuccess: $isSuccess, isLoading: $isLoading, isLoadingMore: $isLoadingMore, allLists: $allLists, fetchedSingleList: $fetchedSingleList, pagination: $pagination, itemsPagination: $itemsPagination, isLoadingMoreItems: $isLoadingMoreItems, editedList: $editedList, editedListToSave: $editedListToSave, isSavingEditedList: $isSavingEditedList, isSavingFailure: $isSavingFailure, isAdding: $isAdding, isAddingFailure: $isAddingFailure, pendingList: $pendingList, deletingSlug: $deletingSlug, isDeleteFailure: $isDeleteFailure, isRenaming: $isRenaming, isRenamingFailure: $isRenamingFailure, isDuplicateFailure: $isDuplicateFailure, itemToRemoveFromList: $itemToRemoveFromList, isRemovingItemFailure: $isRemovingItemFailure)';
 }
 
 
@@ -54,11 +55,11 @@ abstract mixin class $ListCreatorStateCopyWith<$Res>  {
   factory $ListCreatorStateCopyWith(ListCreatorState value, $Res Function(ListCreatorState) _then) = _$ListCreatorStateCopyWithImpl;
 @useResult
 $Res call({
- List<BookListModel> booksToAdd, List<BookToRemove> booksToRemove, bool? isSuccess, bool isLoading, bool isLoadingMore, List<BookListModel> allLists, BookListModel? fetchedSingleList, ApiResponsePagination pagination, BookListModel? editedList, BookListModel? editedListToSave, bool isSavingEditedList, bool isSavingFailure, bool isAdding, bool isAddingFailure, BookListModel? pendingList, String? deletingSlug, bool isDeleteFailure, bool isRenaming, bool isRenamingFailure, bool isDuplicateFailure, (String, String)? bookToRemoveFromList, bool isRemovingBookFailure
+ List<ListModel> itemsToAdd, List<ItemToRemove> itemsToRemove, bool? isSuccess, bool isLoading, bool isLoadingMore, List<ListModel> allLists, ListModel? fetchedSingleList, ApiResponsePagination pagination, ApiResponsePagination itemsPagination, bool isLoadingMoreItems, ListModel? editedList, ListModel? editedListToSave, bool isSavingEditedList, bool isSavingFailure, bool isAdding, bool isAddingFailure, ListModel? pendingList, String? deletingSlug, bool isDeleteFailure, bool isRenaming, bool isRenamingFailure, bool isDuplicateFailure, (String, String)? itemToRemoveFromList, bool isRemovingItemFailure
 });
 
 
-$BookListModelCopyWith<$Res>? get fetchedSingleList;$ApiResponsePaginationCopyWith<$Res> get pagination;$BookListModelCopyWith<$Res>? get editedList;$BookListModelCopyWith<$Res>? get editedListToSave;$BookListModelCopyWith<$Res>? get pendingList;
+$ListModelCopyWith<$Res>? get fetchedSingleList;$ApiResponsePaginationCopyWith<$Res> get pagination;$ApiResponsePaginationCopyWith<$Res> get itemsPagination;$ListModelCopyWith<$Res>? get editedList;$ListModelCopyWith<$Res>? get editedListToSave;$ListModelCopyWith<$Res>? get pendingList;
 
 }
 /// @nodoc
@@ -71,30 +72,32 @@ class _$ListCreatorStateCopyWithImpl<$Res>
 
 /// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? booksToAdd = null,Object? booksToRemove = null,Object? isSuccess = freezed,Object? isLoading = null,Object? isLoadingMore = null,Object? allLists = null,Object? fetchedSingleList = freezed,Object? pagination = null,Object? editedList = freezed,Object? editedListToSave = freezed,Object? isSavingEditedList = null,Object? isSavingFailure = null,Object? isAdding = null,Object? isAddingFailure = null,Object? pendingList = freezed,Object? deletingSlug = freezed,Object? isDeleteFailure = null,Object? isRenaming = null,Object? isRenamingFailure = null,Object? isDuplicateFailure = null,Object? bookToRemoveFromList = freezed,Object? isRemovingBookFailure = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? itemsToAdd = null,Object? itemsToRemove = null,Object? isSuccess = freezed,Object? isLoading = null,Object? isLoadingMore = null,Object? allLists = null,Object? fetchedSingleList = freezed,Object? pagination = null,Object? itemsPagination = null,Object? isLoadingMoreItems = null,Object? editedList = freezed,Object? editedListToSave = freezed,Object? isSavingEditedList = null,Object? isSavingFailure = null,Object? isAdding = null,Object? isAddingFailure = null,Object? pendingList = freezed,Object? deletingSlug = freezed,Object? isDeleteFailure = null,Object? isRenaming = null,Object? isRenamingFailure = null,Object? isDuplicateFailure = null,Object? itemToRemoveFromList = freezed,Object? isRemovingItemFailure = null,}) {
   return _then(_self.copyWith(
-booksToAdd: null == booksToAdd ? _self.booksToAdd : booksToAdd // ignore: cast_nullable_to_non_nullable
-as List<BookListModel>,booksToRemove: null == booksToRemove ? _self.booksToRemove : booksToRemove // ignore: cast_nullable_to_non_nullable
-as List<BookToRemove>,isSuccess: freezed == isSuccess ? _self.isSuccess : isSuccess // ignore: cast_nullable_to_non_nullable
+itemsToAdd: null == itemsToAdd ? _self.itemsToAdd : itemsToAdd // ignore: cast_nullable_to_non_nullable
+as List<ListModel>,itemsToRemove: null == itemsToRemove ? _self.itemsToRemove : itemsToRemove // ignore: cast_nullable_to_non_nullable
+as List<ItemToRemove>,isSuccess: freezed == isSuccess ? _self.isSuccess : isSuccess // ignore: cast_nullable_to_non_nullable
 as bool?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,allLists: null == allLists ? _self.allLists : allLists // ignore: cast_nullable_to_non_nullable
-as List<BookListModel>,fetchedSingleList: freezed == fetchedSingleList ? _self.fetchedSingleList : fetchedSingleList // ignore: cast_nullable_to_non_nullable
-as BookListModel?,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
-as ApiResponsePagination,editedList: freezed == editedList ? _self.editedList : editedList // ignore: cast_nullable_to_non_nullable
-as BookListModel?,editedListToSave: freezed == editedListToSave ? _self.editedListToSave : editedListToSave // ignore: cast_nullable_to_non_nullable
-as BookListModel?,isSavingEditedList: null == isSavingEditedList ? _self.isSavingEditedList : isSavingEditedList // ignore: cast_nullable_to_non_nullable
+as List<ListModel>,fetchedSingleList: freezed == fetchedSingleList ? _self.fetchedSingleList : fetchedSingleList // ignore: cast_nullable_to_non_nullable
+as ListModel?,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
+as ApiResponsePagination,itemsPagination: null == itemsPagination ? _self.itemsPagination : itemsPagination // ignore: cast_nullable_to_non_nullable
+as ApiResponsePagination,isLoadingMoreItems: null == isLoadingMoreItems ? _self.isLoadingMoreItems : isLoadingMoreItems // ignore: cast_nullable_to_non_nullable
+as bool,editedList: freezed == editedList ? _self.editedList : editedList // ignore: cast_nullable_to_non_nullable
+as ListModel?,editedListToSave: freezed == editedListToSave ? _self.editedListToSave : editedListToSave // ignore: cast_nullable_to_non_nullable
+as ListModel?,isSavingEditedList: null == isSavingEditedList ? _self.isSavingEditedList : isSavingEditedList // ignore: cast_nullable_to_non_nullable
 as bool,isSavingFailure: null == isSavingFailure ? _self.isSavingFailure : isSavingFailure // ignore: cast_nullable_to_non_nullable
 as bool,isAdding: null == isAdding ? _self.isAdding : isAdding // ignore: cast_nullable_to_non_nullable
 as bool,isAddingFailure: null == isAddingFailure ? _self.isAddingFailure : isAddingFailure // ignore: cast_nullable_to_non_nullable
 as bool,pendingList: freezed == pendingList ? _self.pendingList : pendingList // ignore: cast_nullable_to_non_nullable
-as BookListModel?,deletingSlug: freezed == deletingSlug ? _self.deletingSlug : deletingSlug // ignore: cast_nullable_to_non_nullable
+as ListModel?,deletingSlug: freezed == deletingSlug ? _self.deletingSlug : deletingSlug // ignore: cast_nullable_to_non_nullable
 as String?,isDeleteFailure: null == isDeleteFailure ? _self.isDeleteFailure : isDeleteFailure // ignore: cast_nullable_to_non_nullable
 as bool,isRenaming: null == isRenaming ? _self.isRenaming : isRenaming // ignore: cast_nullable_to_non_nullable
 as bool,isRenamingFailure: null == isRenamingFailure ? _self.isRenamingFailure : isRenamingFailure // ignore: cast_nullable_to_non_nullable
 as bool,isDuplicateFailure: null == isDuplicateFailure ? _self.isDuplicateFailure : isDuplicateFailure // ignore: cast_nullable_to_non_nullable
-as bool,bookToRemoveFromList: freezed == bookToRemoveFromList ? _self.bookToRemoveFromList : bookToRemoveFromList // ignore: cast_nullable_to_non_nullable
-as (String, String)?,isRemovingBookFailure: null == isRemovingBookFailure ? _self.isRemovingBookFailure : isRemovingBookFailure // ignore: cast_nullable_to_non_nullable
+as bool,itemToRemoveFromList: freezed == itemToRemoveFromList ? _self.itemToRemoveFromList : itemToRemoveFromList // ignore: cast_nullable_to_non_nullable
+as (String, String)?,isRemovingItemFailure: null == isRemovingItemFailure ? _self.isRemovingItemFailure : isRemovingItemFailure // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -102,12 +105,12 @@ as bool,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookListModelCopyWith<$Res>? get fetchedSingleList {
+$ListModelCopyWith<$Res>? get fetchedSingleList {
     if (_self.fetchedSingleList == null) {
     return null;
   }
 
-  return $BookListModelCopyWith<$Res>(_self.fetchedSingleList!, (value) {
+  return $ListModelCopyWith<$Res>(_self.fetchedSingleList!, (value) {
     return _then(_self.copyWith(fetchedSingleList: value));
   });
 }/// Create a copy of ListCreatorState
@@ -123,36 +126,45 @@ $ApiResponsePaginationCopyWith<$Res> get pagination {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookListModelCopyWith<$Res>? get editedList {
+$ApiResponsePaginationCopyWith<$Res> get itemsPagination {
+  
+  return $ApiResponsePaginationCopyWith<$Res>(_self.itemsPagination, (value) {
+    return _then(_self.copyWith(itemsPagination: value));
+  });
+}/// Create a copy of ListCreatorState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ListModelCopyWith<$Res>? get editedList {
     if (_self.editedList == null) {
     return null;
   }
 
-  return $BookListModelCopyWith<$Res>(_self.editedList!, (value) {
+  return $ListModelCopyWith<$Res>(_self.editedList!, (value) {
     return _then(_self.copyWith(editedList: value));
   });
 }/// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookListModelCopyWith<$Res>? get editedListToSave {
+$ListModelCopyWith<$Res>? get editedListToSave {
     if (_self.editedListToSave == null) {
     return null;
   }
 
-  return $BookListModelCopyWith<$Res>(_self.editedListToSave!, (value) {
+  return $ListModelCopyWith<$Res>(_self.editedListToSave!, (value) {
     return _then(_self.copyWith(editedListToSave: value));
   });
 }/// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookListModelCopyWith<$Res>? get pendingList {
+$ListModelCopyWith<$Res>? get pendingList {
     if (_self.pendingList == null) {
     return null;
   }
 
-  return $BookListModelCopyWith<$Res>(_self.pendingList!, (value) {
+  return $ListModelCopyWith<$Res>(_self.pendingList!, (value) {
     return _then(_self.copyWith(pendingList: value));
   });
 }
@@ -163,47 +175,50 @@ $BookListModelCopyWith<$Res>? get pendingList {
 
 
 class _ListCreatorState implements ListCreatorState {
-  const _ListCreatorState({final  List<BookListModel> booksToAdd = const [], final  List<BookToRemove> booksToRemove = const [], this.isSuccess, this.isLoading = false, this.isLoadingMore = false, final  List<BookListModel> allLists = const [], this.fetchedSingleList, this.pagination = const ApiResponsePagination(), this.editedList, this.editedListToSave, this.isSavingEditedList = false, this.isSavingFailure = false, this.isAdding = false, this.isAddingFailure = false, this.pendingList, this.deletingSlug, this.isDeleteFailure = false, this.isRenaming = false, this.isRenamingFailure = false, this.isDuplicateFailure = false, this.bookToRemoveFromList, this.isRemovingBookFailure = false}): _booksToAdd = booksToAdd,_booksToRemove = booksToRemove,_allLists = allLists;
+  const _ListCreatorState({final  List<ListModel> itemsToAdd = const [], final  List<ItemToRemove> itemsToRemove = const [], this.isSuccess, this.isLoading = false, this.isLoadingMore = false, final  List<ListModel> allLists = const [], this.fetchedSingleList, this.pagination = const ApiResponsePagination(), this.itemsPagination = const ApiResponsePagination(), this.isLoadingMoreItems = false, this.editedList, this.editedListToSave, this.isSavingEditedList = false, this.isSavingFailure = false, this.isAdding = false, this.isAddingFailure = false, this.pendingList, this.deletingSlug, this.isDeleteFailure = false, this.isRenaming = false, this.isRenamingFailure = false, this.isDuplicateFailure = false, this.itemToRemoveFromList, this.isRemovingItemFailure = false}): _itemsToAdd = itemsToAdd,_itemsToRemove = itemsToRemove,_allLists = allLists;
   
 
- final  List<BookListModel> _booksToAdd;
-@override@JsonKey() List<BookListModel> get booksToAdd {
-  if (_booksToAdd is EqualUnmodifiableListView) return _booksToAdd;
+ final  List<ListModel> _itemsToAdd;
+@override@JsonKey() List<ListModel> get itemsToAdd {
+  if (_itemsToAdd is EqualUnmodifiableListView) return _itemsToAdd;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_booksToAdd);
+  return EqualUnmodifiableListView(_itemsToAdd);
 }
 
-// (List slug, book slug)
- final  List<BookToRemove> _booksToRemove;
-// (List slug, book slug)
-@override@JsonKey() List<BookToRemove> get booksToRemove {
-  if (_booksToRemove is EqualUnmodifiableListView) return _booksToRemove;
+// (List slug, item slug)
+ final  List<ItemToRemove> _itemsToRemove;
+// (List slug, item slug)
+@override@JsonKey() List<ItemToRemove> get itemsToRemove {
+  if (_itemsToRemove is EqualUnmodifiableListView) return _itemsToRemove;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_booksToRemove);
+  return EqualUnmodifiableListView(_itemsToRemove);
 }
 
 @override final  bool? isSuccess;
 // Existing lists from the db
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  bool isLoadingMore;
- final  List<BookListModel> _allLists;
-@override@JsonKey() List<BookListModel> get allLists {
+ final  List<ListModel> _allLists;
+@override@JsonKey() List<ListModel> get allLists {
   if (_allLists is EqualUnmodifiableListView) return _allLists;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_allLists);
 }
 
-@override final  BookListModel? fetchedSingleList;
+@override final  ListModel? fetchedSingleList;
 @override@JsonKey() final  ApiResponsePagination pagination;
+// Pagination for items within a single list
+@override@JsonKey() final  ApiResponsePagination itemsPagination;
+@override@JsonKey() final  bool isLoadingMoreItems;
 // Editing list
-@override final  BookListModel? editedList;
-@override final  BookListModel? editedListToSave;
+@override final  ListModel? editedList;
+@override final  ListModel? editedListToSave;
 @override@JsonKey() final  bool isSavingEditedList;
 @override@JsonKey() final  bool isSavingFailure;
 // Adding list
 @override@JsonKey() final  bool isAdding;
 @override@JsonKey() final  bool isAddingFailure;
-@override final  BookListModel? pendingList;
+@override final  ListModel? pendingList;
 // Deleting list
 @override final  String? deletingSlug;
 @override@JsonKey() final  bool isDeleteFailure;
@@ -211,10 +226,10 @@ class _ListCreatorState implements ListCreatorState {
 @override@JsonKey() final  bool isRenaming;
 @override@JsonKey() final  bool isRenamingFailure;
 @override@JsonKey() final  bool isDuplicateFailure;
-// Deleting book from list
-// List slug, book slug
-@override final  (String, String)? bookToRemoveFromList;
-@override@JsonKey() final  bool isRemovingBookFailure;
+// Deleting item from list
+// List slug, item slug
+@override final  (String, String)? itemToRemoveFromList;
+@override@JsonKey() final  bool isRemovingItemFailure;
 
 /// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
@@ -226,16 +241,16 @@ _$ListCreatorStateCopyWith<_ListCreatorState> get copyWith => __$ListCreatorStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListCreatorState&&const DeepCollectionEquality().equals(other._booksToAdd, _booksToAdd)&&const DeepCollectionEquality().equals(other._booksToRemove, _booksToRemove)&&(identical(other.isSuccess, isSuccess) || other.isSuccess == isSuccess)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other._allLists, _allLists)&&(identical(other.fetchedSingleList, fetchedSingleList) || other.fetchedSingleList == fetchedSingleList)&&(identical(other.pagination, pagination) || other.pagination == pagination)&&(identical(other.editedList, editedList) || other.editedList == editedList)&&(identical(other.editedListToSave, editedListToSave) || other.editedListToSave == editedListToSave)&&(identical(other.isSavingEditedList, isSavingEditedList) || other.isSavingEditedList == isSavingEditedList)&&(identical(other.isSavingFailure, isSavingFailure) || other.isSavingFailure == isSavingFailure)&&(identical(other.isAdding, isAdding) || other.isAdding == isAdding)&&(identical(other.isAddingFailure, isAddingFailure) || other.isAddingFailure == isAddingFailure)&&(identical(other.pendingList, pendingList) || other.pendingList == pendingList)&&(identical(other.deletingSlug, deletingSlug) || other.deletingSlug == deletingSlug)&&(identical(other.isDeleteFailure, isDeleteFailure) || other.isDeleteFailure == isDeleteFailure)&&(identical(other.isRenaming, isRenaming) || other.isRenaming == isRenaming)&&(identical(other.isRenamingFailure, isRenamingFailure) || other.isRenamingFailure == isRenamingFailure)&&(identical(other.isDuplicateFailure, isDuplicateFailure) || other.isDuplicateFailure == isDuplicateFailure)&&(identical(other.bookToRemoveFromList, bookToRemoveFromList) || other.bookToRemoveFromList == bookToRemoveFromList)&&(identical(other.isRemovingBookFailure, isRemovingBookFailure) || other.isRemovingBookFailure == isRemovingBookFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListCreatorState&&const DeepCollectionEquality().equals(other._itemsToAdd, _itemsToAdd)&&const DeepCollectionEquality().equals(other._itemsToRemove, _itemsToRemove)&&(identical(other.isSuccess, isSuccess) || other.isSuccess == isSuccess)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other._allLists, _allLists)&&(identical(other.fetchedSingleList, fetchedSingleList) || other.fetchedSingleList == fetchedSingleList)&&(identical(other.pagination, pagination) || other.pagination == pagination)&&(identical(other.itemsPagination, itemsPagination) || other.itemsPagination == itemsPagination)&&(identical(other.isLoadingMoreItems, isLoadingMoreItems) || other.isLoadingMoreItems == isLoadingMoreItems)&&(identical(other.editedList, editedList) || other.editedList == editedList)&&(identical(other.editedListToSave, editedListToSave) || other.editedListToSave == editedListToSave)&&(identical(other.isSavingEditedList, isSavingEditedList) || other.isSavingEditedList == isSavingEditedList)&&(identical(other.isSavingFailure, isSavingFailure) || other.isSavingFailure == isSavingFailure)&&(identical(other.isAdding, isAdding) || other.isAdding == isAdding)&&(identical(other.isAddingFailure, isAddingFailure) || other.isAddingFailure == isAddingFailure)&&(identical(other.pendingList, pendingList) || other.pendingList == pendingList)&&(identical(other.deletingSlug, deletingSlug) || other.deletingSlug == deletingSlug)&&(identical(other.isDeleteFailure, isDeleteFailure) || other.isDeleteFailure == isDeleteFailure)&&(identical(other.isRenaming, isRenaming) || other.isRenaming == isRenaming)&&(identical(other.isRenamingFailure, isRenamingFailure) || other.isRenamingFailure == isRenamingFailure)&&(identical(other.isDuplicateFailure, isDuplicateFailure) || other.isDuplicateFailure == isDuplicateFailure)&&(identical(other.itemToRemoveFromList, itemToRemoveFromList) || other.itemToRemoveFromList == itemToRemoveFromList)&&(identical(other.isRemovingItemFailure, isRemovingItemFailure) || other.isRemovingItemFailure == isRemovingItemFailure));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,const DeepCollectionEquality().hash(_booksToAdd),const DeepCollectionEquality().hash(_booksToRemove),isSuccess,isLoading,isLoadingMore,const DeepCollectionEquality().hash(_allLists),fetchedSingleList,pagination,editedList,editedListToSave,isSavingEditedList,isSavingFailure,isAdding,isAddingFailure,pendingList,deletingSlug,isDeleteFailure,isRenaming,isRenamingFailure,isDuplicateFailure,bookToRemoveFromList,isRemovingBookFailure]);
+int get hashCode => Object.hashAll([runtimeType,const DeepCollectionEquality().hash(_itemsToAdd),const DeepCollectionEquality().hash(_itemsToRemove),isSuccess,isLoading,isLoadingMore,const DeepCollectionEquality().hash(_allLists),fetchedSingleList,pagination,itemsPagination,isLoadingMoreItems,editedList,editedListToSave,isSavingEditedList,isSavingFailure,isAdding,isAddingFailure,pendingList,deletingSlug,isDeleteFailure,isRenaming,isRenamingFailure,isDuplicateFailure,itemToRemoveFromList,isRemovingItemFailure]);
 
 @override
 String toString() {
-  return 'ListCreatorState(booksToAdd: $booksToAdd, booksToRemove: $booksToRemove, isSuccess: $isSuccess, isLoading: $isLoading, isLoadingMore: $isLoadingMore, allLists: $allLists, fetchedSingleList: $fetchedSingleList, pagination: $pagination, editedList: $editedList, editedListToSave: $editedListToSave, isSavingEditedList: $isSavingEditedList, isSavingFailure: $isSavingFailure, isAdding: $isAdding, isAddingFailure: $isAddingFailure, pendingList: $pendingList, deletingSlug: $deletingSlug, isDeleteFailure: $isDeleteFailure, isRenaming: $isRenaming, isRenamingFailure: $isRenamingFailure, isDuplicateFailure: $isDuplicateFailure, bookToRemoveFromList: $bookToRemoveFromList, isRemovingBookFailure: $isRemovingBookFailure)';
+  return 'ListCreatorState(itemsToAdd: $itemsToAdd, itemsToRemove: $itemsToRemove, isSuccess: $isSuccess, isLoading: $isLoading, isLoadingMore: $isLoadingMore, allLists: $allLists, fetchedSingleList: $fetchedSingleList, pagination: $pagination, itemsPagination: $itemsPagination, isLoadingMoreItems: $isLoadingMoreItems, editedList: $editedList, editedListToSave: $editedListToSave, isSavingEditedList: $isSavingEditedList, isSavingFailure: $isSavingFailure, isAdding: $isAdding, isAddingFailure: $isAddingFailure, pendingList: $pendingList, deletingSlug: $deletingSlug, isDeleteFailure: $isDeleteFailure, isRenaming: $isRenaming, isRenamingFailure: $isRenamingFailure, isDuplicateFailure: $isDuplicateFailure, itemToRemoveFromList: $itemToRemoveFromList, isRemovingItemFailure: $isRemovingItemFailure)';
 }
 
 
@@ -246,11 +261,11 @@ abstract mixin class _$ListCreatorStateCopyWith<$Res> implements $ListCreatorSta
   factory _$ListCreatorStateCopyWith(_ListCreatorState value, $Res Function(_ListCreatorState) _then) = __$ListCreatorStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<BookListModel> booksToAdd, List<BookToRemove> booksToRemove, bool? isSuccess, bool isLoading, bool isLoadingMore, List<BookListModel> allLists, BookListModel? fetchedSingleList, ApiResponsePagination pagination, BookListModel? editedList, BookListModel? editedListToSave, bool isSavingEditedList, bool isSavingFailure, bool isAdding, bool isAddingFailure, BookListModel? pendingList, String? deletingSlug, bool isDeleteFailure, bool isRenaming, bool isRenamingFailure, bool isDuplicateFailure, (String, String)? bookToRemoveFromList, bool isRemovingBookFailure
+ List<ListModel> itemsToAdd, List<ItemToRemove> itemsToRemove, bool? isSuccess, bool isLoading, bool isLoadingMore, List<ListModel> allLists, ListModel? fetchedSingleList, ApiResponsePagination pagination, ApiResponsePagination itemsPagination, bool isLoadingMoreItems, ListModel? editedList, ListModel? editedListToSave, bool isSavingEditedList, bool isSavingFailure, bool isAdding, bool isAddingFailure, ListModel? pendingList, String? deletingSlug, bool isDeleteFailure, bool isRenaming, bool isRenamingFailure, bool isDuplicateFailure, (String, String)? itemToRemoveFromList, bool isRemovingItemFailure
 });
 
 
-@override $BookListModelCopyWith<$Res>? get fetchedSingleList;@override $ApiResponsePaginationCopyWith<$Res> get pagination;@override $BookListModelCopyWith<$Res>? get editedList;@override $BookListModelCopyWith<$Res>? get editedListToSave;@override $BookListModelCopyWith<$Res>? get pendingList;
+@override $ListModelCopyWith<$Res>? get fetchedSingleList;@override $ApiResponsePaginationCopyWith<$Res> get pagination;@override $ApiResponsePaginationCopyWith<$Res> get itemsPagination;@override $ListModelCopyWith<$Res>? get editedList;@override $ListModelCopyWith<$Res>? get editedListToSave;@override $ListModelCopyWith<$Res>? get pendingList;
 
 }
 /// @nodoc
@@ -263,30 +278,32 @@ class __$ListCreatorStateCopyWithImpl<$Res>
 
 /// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? booksToAdd = null,Object? booksToRemove = null,Object? isSuccess = freezed,Object? isLoading = null,Object? isLoadingMore = null,Object? allLists = null,Object? fetchedSingleList = freezed,Object? pagination = null,Object? editedList = freezed,Object? editedListToSave = freezed,Object? isSavingEditedList = null,Object? isSavingFailure = null,Object? isAdding = null,Object? isAddingFailure = null,Object? pendingList = freezed,Object? deletingSlug = freezed,Object? isDeleteFailure = null,Object? isRenaming = null,Object? isRenamingFailure = null,Object? isDuplicateFailure = null,Object? bookToRemoveFromList = freezed,Object? isRemovingBookFailure = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? itemsToAdd = null,Object? itemsToRemove = null,Object? isSuccess = freezed,Object? isLoading = null,Object? isLoadingMore = null,Object? allLists = null,Object? fetchedSingleList = freezed,Object? pagination = null,Object? itemsPagination = null,Object? isLoadingMoreItems = null,Object? editedList = freezed,Object? editedListToSave = freezed,Object? isSavingEditedList = null,Object? isSavingFailure = null,Object? isAdding = null,Object? isAddingFailure = null,Object? pendingList = freezed,Object? deletingSlug = freezed,Object? isDeleteFailure = null,Object? isRenaming = null,Object? isRenamingFailure = null,Object? isDuplicateFailure = null,Object? itemToRemoveFromList = freezed,Object? isRemovingItemFailure = null,}) {
   return _then(_ListCreatorState(
-booksToAdd: null == booksToAdd ? _self._booksToAdd : booksToAdd // ignore: cast_nullable_to_non_nullable
-as List<BookListModel>,booksToRemove: null == booksToRemove ? _self._booksToRemove : booksToRemove // ignore: cast_nullable_to_non_nullable
-as List<BookToRemove>,isSuccess: freezed == isSuccess ? _self.isSuccess : isSuccess // ignore: cast_nullable_to_non_nullable
+itemsToAdd: null == itemsToAdd ? _self._itemsToAdd : itemsToAdd // ignore: cast_nullable_to_non_nullable
+as List<ListModel>,itemsToRemove: null == itemsToRemove ? _self._itemsToRemove : itemsToRemove // ignore: cast_nullable_to_non_nullable
+as List<ItemToRemove>,isSuccess: freezed == isSuccess ? _self.isSuccess : isSuccess // ignore: cast_nullable_to_non_nullable
 as bool?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,allLists: null == allLists ? _self._allLists : allLists // ignore: cast_nullable_to_non_nullable
-as List<BookListModel>,fetchedSingleList: freezed == fetchedSingleList ? _self.fetchedSingleList : fetchedSingleList // ignore: cast_nullable_to_non_nullable
-as BookListModel?,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
-as ApiResponsePagination,editedList: freezed == editedList ? _self.editedList : editedList // ignore: cast_nullable_to_non_nullable
-as BookListModel?,editedListToSave: freezed == editedListToSave ? _self.editedListToSave : editedListToSave // ignore: cast_nullable_to_non_nullable
-as BookListModel?,isSavingEditedList: null == isSavingEditedList ? _self.isSavingEditedList : isSavingEditedList // ignore: cast_nullable_to_non_nullable
+as List<ListModel>,fetchedSingleList: freezed == fetchedSingleList ? _self.fetchedSingleList : fetchedSingleList // ignore: cast_nullable_to_non_nullable
+as ListModel?,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
+as ApiResponsePagination,itemsPagination: null == itemsPagination ? _self.itemsPagination : itemsPagination // ignore: cast_nullable_to_non_nullable
+as ApiResponsePagination,isLoadingMoreItems: null == isLoadingMoreItems ? _self.isLoadingMoreItems : isLoadingMoreItems // ignore: cast_nullable_to_non_nullable
+as bool,editedList: freezed == editedList ? _self.editedList : editedList // ignore: cast_nullable_to_non_nullable
+as ListModel?,editedListToSave: freezed == editedListToSave ? _self.editedListToSave : editedListToSave // ignore: cast_nullable_to_non_nullable
+as ListModel?,isSavingEditedList: null == isSavingEditedList ? _self.isSavingEditedList : isSavingEditedList // ignore: cast_nullable_to_non_nullable
 as bool,isSavingFailure: null == isSavingFailure ? _self.isSavingFailure : isSavingFailure // ignore: cast_nullable_to_non_nullable
 as bool,isAdding: null == isAdding ? _self.isAdding : isAdding // ignore: cast_nullable_to_non_nullable
 as bool,isAddingFailure: null == isAddingFailure ? _self.isAddingFailure : isAddingFailure // ignore: cast_nullable_to_non_nullable
 as bool,pendingList: freezed == pendingList ? _self.pendingList : pendingList // ignore: cast_nullable_to_non_nullable
-as BookListModel?,deletingSlug: freezed == deletingSlug ? _self.deletingSlug : deletingSlug // ignore: cast_nullable_to_non_nullable
+as ListModel?,deletingSlug: freezed == deletingSlug ? _self.deletingSlug : deletingSlug // ignore: cast_nullable_to_non_nullable
 as String?,isDeleteFailure: null == isDeleteFailure ? _self.isDeleteFailure : isDeleteFailure // ignore: cast_nullable_to_non_nullable
 as bool,isRenaming: null == isRenaming ? _self.isRenaming : isRenaming // ignore: cast_nullable_to_non_nullable
 as bool,isRenamingFailure: null == isRenamingFailure ? _self.isRenamingFailure : isRenamingFailure // ignore: cast_nullable_to_non_nullable
 as bool,isDuplicateFailure: null == isDuplicateFailure ? _self.isDuplicateFailure : isDuplicateFailure // ignore: cast_nullable_to_non_nullable
-as bool,bookToRemoveFromList: freezed == bookToRemoveFromList ? _self.bookToRemoveFromList : bookToRemoveFromList // ignore: cast_nullable_to_non_nullable
-as (String, String)?,isRemovingBookFailure: null == isRemovingBookFailure ? _self.isRemovingBookFailure : isRemovingBookFailure // ignore: cast_nullable_to_non_nullable
+as bool,itemToRemoveFromList: freezed == itemToRemoveFromList ? _self.itemToRemoveFromList : itemToRemoveFromList // ignore: cast_nullable_to_non_nullable
+as (String, String)?,isRemovingItemFailure: null == isRemovingItemFailure ? _self.isRemovingItemFailure : isRemovingItemFailure // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -295,12 +312,12 @@ as bool,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookListModelCopyWith<$Res>? get fetchedSingleList {
+$ListModelCopyWith<$Res>? get fetchedSingleList {
     if (_self.fetchedSingleList == null) {
     return null;
   }
 
-  return $BookListModelCopyWith<$Res>(_self.fetchedSingleList!, (value) {
+  return $ListModelCopyWith<$Res>(_self.fetchedSingleList!, (value) {
     return _then(_self.copyWith(fetchedSingleList: value));
   });
 }/// Create a copy of ListCreatorState
@@ -316,36 +333,45 @@ $ApiResponsePaginationCopyWith<$Res> get pagination {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookListModelCopyWith<$Res>? get editedList {
+$ApiResponsePaginationCopyWith<$Res> get itemsPagination {
+  
+  return $ApiResponsePaginationCopyWith<$Res>(_self.itemsPagination, (value) {
+    return _then(_self.copyWith(itemsPagination: value));
+  });
+}/// Create a copy of ListCreatorState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ListModelCopyWith<$Res>? get editedList {
     if (_self.editedList == null) {
     return null;
   }
 
-  return $BookListModelCopyWith<$Res>(_self.editedList!, (value) {
+  return $ListModelCopyWith<$Res>(_self.editedList!, (value) {
     return _then(_self.copyWith(editedList: value));
   });
 }/// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookListModelCopyWith<$Res>? get editedListToSave {
+$ListModelCopyWith<$Res>? get editedListToSave {
     if (_self.editedListToSave == null) {
     return null;
   }
 
-  return $BookListModelCopyWith<$Res>(_self.editedListToSave!, (value) {
+  return $ListModelCopyWith<$Res>(_self.editedListToSave!, (value) {
     return _then(_self.copyWith(editedListToSave: value));
   });
 }/// Create a copy of ListCreatorState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookListModelCopyWith<$Res>? get pendingList {
+$ListModelCopyWith<$Res>? get pendingList {
     if (_self.pendingList == null) {
     return null;
   }
 
-  return $BookListModelCopyWith<$Res>(_self.pendingList!, (value) {
+  return $ListModelCopyWith<$Res>(_self.pendingList!, (value) {
     return _then(_self.copyWith(pendingList: value));
   });
 }

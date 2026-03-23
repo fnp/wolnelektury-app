@@ -26,9 +26,9 @@ class MyLibraryListBook extends StatelessWidget {
   });
 
   bool determineVisibility(ListCreatorState state) {
-    return !state.isBookInList(listSlug, bookSlug) ||
-        (state.bookToRemoveFromList?.$1 == listSlug &&
-            state.bookToRemoveFromList?.$2 == bookSlug);
+    return !state.isItemInList(listSlug, bookSlug) ||
+        (state.itemToRemoveFromList?.$1 == listSlug &&
+            state.itemToRemoveFromList?.$2 == bookSlug);
   }
 
   @override
@@ -49,9 +49,9 @@ class MyLibraryListBook extends StatelessWidget {
           final cubit = BlocProvider.of<ListCreatorCubit>(context);
           return BlocBuilder<ListCreatorCubit, ListCreatorState>(
             buildWhen: (p, c) {
-              return p.bookToRemoveFromList != c.bookToRemoveFromList ||
-                  p.isBookInList(listSlug, bookSlug) !=
-                      c.isBookInList(listSlug, bookSlug);
+              return p.itemToRemoveFromList != c.itemToRemoveFromList ||
+                  p.isItemInList(listSlug, bookSlug) !=
+                      c.isItemInList(listSlug, bookSlug);
             },
             builder: (context, innerState) {
               final shouldHide = determineVisibility(innerState);
@@ -62,7 +62,9 @@ class MyLibraryListBook extends StatelessWidget {
                 child: shouldHide
                     ? const SizedBox(width: double.infinity)
                     : Padding(
-                        padding: const EdgeInsets.only(top: Dimensions.spacer),
+                        padding: const EdgeInsets.only(
+                          bottom: Dimensions.spacer,
+                        ),
                         child: Skeletonizer(
                           enableSwitchAnimation: true,
                           enabled: state.isLoading,
@@ -70,15 +72,15 @@ class MyLibraryListBook extends StatelessWidget {
                             key: ValueKey(bookSlug),
                             onDelete: isListOwner
                                 ? () {
-                                    cubit.removeBookFromList(
+                                    cubit.removeItemFromList(
                                       listSlug: listSlug,
-                                      bookSlug: bookSlug,
+                                      itemSlug: bookSlug,
                                     );
                                     CustomSnackbar.success(
                                       context,
                                       LocaleKeys.book_lists_sheet_delete.tr(),
                                       onRevert: () {
-                                        cubit.undoRemoveBookFromList();
+                                        cubit.undoRemoveItemFromList();
                                       },
                                     );
                                   }

@@ -87,7 +87,9 @@ class BookmarkPage extends StatelessWidget {
                   }
                   return Column(
                     children: [
-                      const PageSubtitle(subtitle: 'Udostępniona zakładka'),
+                      PageSubtitle(
+                        subtitle: LocaleKeys.common_bookmark_page_title.tr(),
+                      ),
                       BookmarkWidget(
                         isDeletable: false,
                         bookmark: bookmark,

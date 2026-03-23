@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
-import 'package:wolnelektury/src/domain/book_list_model.dart';
+import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
@@ -16,7 +16,7 @@ import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class BookListsSheetExistingLists extends StatelessWidget {
   final String currentlyWorkingOnBookSlug;
-  final List<BookListModel> effectiveList;
+  final List<ListModel> effectiveList;
   const BookListsSheetExistingLists({
     super.key,
     required this.currentlyWorkingOnBookSlug,
@@ -61,13 +61,13 @@ class BookListsSheetExistingLists extends StatelessWidget {
                             listName: listName,
                             bookSlug: currentlyWorkingOnBookSlug,
                             onAdd: () {
-                              creatorCubit.addBookToListWithQueue(
+                              creatorCubit.addItemToListWithQueue(
                                 listSlug,
                                 currentlyWorkingOnBookSlug,
                               );
                             },
                             onRemove: () {
-                              creatorCubit.removeBookFromListWithQueue(
+                              creatorCubit.removeItemFromListWithQueue(
                                 listSlug,
                                 currentlyWorkingOnBookSlug,
                               );
@@ -101,12 +101,12 @@ class _Element extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
       buildWhen: (p, c) {
-        return p.isBookInList(listSlug, bookSlug) !=
-                c.isBookInList(listSlug, bookSlug) ||
+        return p.isItemInList(listSlug, bookSlug) !=
+                c.isItemInList(listSlug, bookSlug) ||
             p.allLists != c.allLists;
       },
       builder: (context, state) {
-        final isBookInList = state.isBookInList(listSlug, bookSlug);
+        final isItemInList = state.isItemInList(listSlug, bookSlug);
         return SizedBox(
           height: Dimensions.elementHeight,
           child: DecoratedBox(
@@ -114,14 +114,14 @@ class _Element extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 Dimensions.borderRadiusOfCircle,
               ),
-              color: isBookInList ? CustomColors.green : CustomColors.white,
+              color: isItemInList ? CustomColors.green : CustomColors.white,
             ),
             child: InkWellWrapper(
               borderRadius: BorderRadius.circular(
                 Dimensions.borderRadiusOfCircle,
               ),
               onTap: () {
-                if (isBookInList) {
+                if (isItemInList) {
                   onRemove();
                 } else {
                   onAdd();
@@ -150,7 +150,7 @@ class _Element extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     switchInCurve: defaultCurve,
                     switchOutCurve: defaultCurve,
-                    child: isBookInList
+                    child: isItemInList
                         ? CustomButton(
                             semanticLabel: LocaleKeys
                                 .common_semantic_remove_book_from_list

@@ -1,36 +1,42 @@
 import 'package:wolnelektury/src/application/api_response/api_response.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
-import 'package:wolnelektury/src/domain/book_list_model.dart';
+import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 import 'package:wolnelektury/src/utils/serializer/serializer.dart';
 
 abstract class ListsRepository {
+  // Create
   Future<DataState<String>> createList({
     required String listName,
-    required List<String> bookSlugs,
+    required List<ListItemModel> items,
   });
-
-  Future<DataState<void>> deleteList({required String listSlug});
-
-  Future<DataState<void>> deleteBookFromList({
+  Future<DataState<List<ListItemModel>>> addItemsToList({
     required String listSlug,
-    required String bookSlug,
+    required List<ListItemModel> items,
   });
 
-  Future<DataState<void>> addBooksToList({
+  // Read
+  Future<DataState<List<ListModel>>> getLists({String? url});
+  Future<DataState<ListModel>> getListBySlug({required String slug});
+  Future<DataState<List<ListItemModel>>> getListItems({
     required String listSlug,
-    required List<String> bookSlugs,
+    String? url,
   });
 
+  // Update
+  Future<DataState<ListItemModel>> updateListItem({
+    required String itemUuid,
+    required Map<String, dynamic> updates,
+  });
   Future<DataState<void>> renameList({
     required String listSlug,
     required String newName,
   });
 
-  Future<DataState<BookListModel>> getList({required String listSlug});
-
-  Future<DataState<List<BookListModel>>> getLists({String? url});
+  // Delete
+  Future<DataState<void>> deleteList({required String listSlug});
+  Future<DataState<void>> deleteListItem({required String itemUuid});
 }
 
 class ListsRepositoryImplementation extends ListsRepository {
@@ -39,11 +45,33 @@ class ListsRepositoryImplementation extends ListsRepository {
 
   static const String _createListEndpoint = '/lists/';
   static String _manageListEndpoint(String listSlug) => '/lists/$listSlug/';
-  static String _deleteBookFromListEndpoint({
-    required String listSlug,
-    required String bookSlug,
-  }) {
-    return '/lists/$listSlug/$bookSlug/';
+  static String _listItemsEndpoint(String listSlug) =>
+      '/lists/$listSlug/items/';
+  static String _manageListItemEndpoint(String itemUuid) =>
+      '/list-items/$itemUuid/';
+
+  @override
+  Future<DataState<ListModel>> getListBySlug({required String slug}) async {
+    try {
+      final response = await _apiService.getRequest(
+        _manageListEndpoint(slug),
+        useCache: CacheEnum.ignore,
+        isAnonymous: true,
+      );
+
+      if (!response.hasData) {
+        return const DataState.failure(Failure.notFound());
+      }
+
+      return DataState.fromApiResponse(
+        response: response,
+        converter: (data) {
+          return ListModel.fromJson(data.first);
+        },
+      );
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
   }
 
   @override
@@ -67,21 +95,52 @@ class ListsRepositoryImplementation extends ListsRepository {
   }
 
   @override
-  Future<DataState<void>> addBooksToList({
+  Future<DataState<List<ListItemModel>>> addItemsToList({
     required String listSlug,
-    required List<String> bookSlugs,
+    required List<ListItemModel> items,
   }) async {
     try {
+      final itemsData = items.map((item) => item.toCleanJson()).toList();
+
       final response = await _apiService.postRequest(
-        _manageListEndpoint(listSlug),
-        {'books': bookSlugs},
+        _listItemsEndpoint(listSlug),
+        itemsData,
         isAnonymous: false,
       );
 
-      if (response.hasError) {
+      if (response.hasError || !response.hasData) {
         return const DataState.failure(Failure.badResponse());
       }
-      return const DataState.success(data: null);
+
+      final createdItems = (response.data as List)
+          .map((item) => ListItemModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      return DataState.success(data: createdItems);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<ListItemModel>> updateListItem({
+    required String itemUuid,
+    required Map<String, dynamic> updates,
+  }) async {
+    try {
+      final response = await _apiService.patchRequest(
+        _manageListItemEndpoint(itemUuid),
+        updates,
+        isAnonymous: false,
+      );
+
+      if (response.hasError || !response.hasData) {
+        return const DataState.failure(Failure.badResponse());
+      }
+
+      return DataState.success(
+        data: ListItemModel.fromJson(response.data!.first),
+      );
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
     }
@@ -90,12 +149,14 @@ class ListsRepositoryImplementation extends ListsRepository {
   @override
   Future<DataState<String>> createList({
     required String listName,
-    required List<String> bookSlugs,
+    required List<ListItemModel> items,
   }) async {
     try {
+      final itemsData = items.map((item) => item.toCleanJson()).toList();
+
       final response = await _apiService.postRequest(_createListEndpoint, {
         'name': listName,
-        'books': bookSlugs,
+        'items': itemsData,
       }, isAnonymous: false);
 
       if (response.hasError || !response.hasData) {
@@ -108,13 +169,10 @@ class ListsRepositoryImplementation extends ListsRepository {
   }
 
   @override
-  Future<DataState<void>> deleteBookFromList({
-    required String listSlug,
-    required String bookSlug,
-  }) async {
+  Future<DataState<void>> deleteListItem({required String itemUuid}) async {
     try {
       final response = await _apiService.deleteRequest(
-        _deleteBookFromListEndpoint(listSlug: listSlug, bookSlug: bookSlug),
+        _manageListItemEndpoint(itemUuid),
         isAnonymous: false,
       );
 
@@ -145,19 +203,25 @@ class ListsRepositoryImplementation extends ListsRepository {
   }
 
   @override
-  Future<DataState<BookListModel>> getList({required String listSlug}) async {
+  Future<DataState<List<ListItemModel>>> getListItems({
+    required String listSlug,
+    String? url,
+  }) async {
     try {
       final response = await _apiService.getRequest(
-        _manageListEndpoint(listSlug),
+        url ?? _listItemsEndpoint(listSlug),
         useCache: CacheEnum.ignore,
-        isAnonymous: true,
+        isAnonymous: false,
       );
 
       if (!response.hasData) {
         return const DataState.failure(Failure.notFound());
       }
-      return DataState.success(
-        data: BookListModel.fromJson(response.data!.first),
+      return DataState.fromApiResponse(
+        response: response,
+        converter: (data) {
+          return serializer(data: data, serializer: ListItemModel.fromJson);
+        },
       );
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
@@ -165,7 +229,7 @@ class ListsRepositoryImplementation extends ListsRepository {
   }
 
   @override
-  Future<DataState<List<BookListModel>>> getLists({String? url}) async {
+  Future<DataState<List<ListModel>>> getLists({String? url}) async {
     try {
       final response = await _apiService.getRequest(
         url ?? _createListEndpoint,
@@ -178,7 +242,7 @@ class ListsRepositoryImplementation extends ListsRepository {
       return DataState.fromApiResponse(
         response: response,
         converter: (data) {
-          return serializer(data: data, serializer: BookListModel.fromJson);
+          return serializer(data: data, serializer: ListModel.fromJson);
         },
       );
     } catch (e) {

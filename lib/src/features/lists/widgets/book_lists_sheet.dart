@@ -106,13 +106,13 @@ class BookListsSheet extends StatelessWidget {
                       ),
                       BlocBuilder<ListCreatorCubit, ListCreatorState>(
                         buildWhen: (p, c) {
-                          return p.booksToAdd != c.booksToAdd ||
-                              p.booksToRemove != c.booksToRemove;
+                          return p.itemsToAdd != c.itemsToAdd ||
+                              p.itemsToRemove != c.itemsToRemove;
                         },
                         builder: (context, state) {
                           final showCheck =
-                              state.booksToAdd.isNotEmpty ||
-                              state.booksToRemove.isNotEmpty;
+                              state.itemsToAdd.isNotEmpty ||
+                              state.itemsToRemove.isNotEmpty;
                           return CustomButton(
                             semanticLabel: LocaleKeys
                                 .common_semantic_close_book_lists
@@ -141,7 +141,7 @@ class BookListsSheet extends StatelessWidget {
                   const SizedBox(height: Dimensions.mediumPadding),
                   BookListsCreateWidget(
                     onSave: (String text) {
-                      cubit.newList(text, bookSlugs: [bookSlug]);
+                      cubit.newList(text, itemSlugs: [bookSlug]);
                     },
                   ),
                   const SizedBox(height: Dimensions.spacer),

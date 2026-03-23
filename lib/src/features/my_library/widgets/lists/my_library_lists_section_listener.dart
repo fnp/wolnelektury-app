@@ -31,7 +31,7 @@ class MyLibraryListsSectionListener extends StatelessWidget {
           listenWhen: (p, c) {
             return p.isAddingFailure != c.isAddingFailure ||
                 p.isDeleteFailure != c.isDeleteFailure ||
-                p.isRemovingBookFailure != c.isRemovingBookFailure ||
+                p.isRemovingItemFailure != c.isRemovingItemFailure ||
                 (p.deletingSlug != null &&
                     c.deletingSlug == null &&
                     !c.isDeleteFailure);
@@ -51,7 +51,7 @@ class MyLibraryListsSectionListener extends StatelessWidget {
               );
               return;
             }
-            if (state.isRemovingBookFailure) {
+            if (state.isRemovingItemFailure) {
               CustomSnackbar.error(
                 context,
                 LocaleKeys.my_library_lists_book_removal_failure.tr(),

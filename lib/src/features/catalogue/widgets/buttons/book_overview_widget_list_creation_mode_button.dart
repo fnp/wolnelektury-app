@@ -17,9 +17,9 @@ class BookOverviewWidgetListCreationModeButton extends StatelessWidget {
     final cubit = BlocProvider.of<ListCreatorCubit>(context);
     return BlocBuilder<ListCreatorCubit, ListCreatorState>(
       buildWhen: (p, c) =>
-          p.isBookInEditedList(slug) != c.isBookInEditedList(slug),
+          p.isItemInEditedList(slug) != c.isItemInEditedList(slug),
       builder: (context, state) {
-        final isBookInEditedList = state.isBookInEditedList(slug);
+        final isItemInEditedList = state.isItemInEditedList(slug);
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           switchOutCurve: defaultCurve,
@@ -27,17 +27,17 @@ class BookOverviewWidgetListCreationModeButton extends StatelessWidget {
           transitionBuilder: (child, animation) =>
               ScaleTransition(scale: animation, child: child),
           child: CustomButton(
-            semanticLabel: isBookInEditedList
+            semanticLabel: isItemInEditedList
                 ? LocaleKeys.common_semantic_remove_from_edited_list.tr()
                 : LocaleKeys.common_semantic_add_to_edited_list.tr(),
-            key: ValueKey(isBookInEditedList),
-            icon: isBookInEditedList ? Icons.check : CustomIcons.add,
-            backgroundColor: isBookInEditedList
+            key: ValueKey(isItemInEditedList),
+            icon: isItemInEditedList ? Icons.check : CustomIcons.add,
+            backgroundColor: isItemInEditedList
                 ? CustomColors.green
                 : CustomColors.white,
             iconColor: CustomColors.black,
             onPressed: () {
-              if (isBookInEditedList) {
+              if (isItemInEditedList) {
                 cubit.removeBookFromEditedList(slug);
                 return;
               }

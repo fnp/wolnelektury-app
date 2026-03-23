@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
-import 'package:wolnelektury/src/domain/book_list_model.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
+import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list.dart';
+import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/images.dart';
 
@@ -58,17 +60,21 @@ class ContentState extends State<Content> {
         },
         builder: (context, state) {
           final list = state.fetchedSingleList;
-          if (list == null && !state.isLoading) {
-            return const _EmptyWidget();
-          }
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            switchInCurve: defaultCurve,
+            switchOutCurve: defaultCurve,
 
-          return Align(
-            alignment: Alignment.topCenter,
-            child: _Body(
-              bookList: list ?? BookListModel.empty(),
-              key: ValueKey(list?.slug ?? 'empty'),
-              isListOwner: widget.isListOwner,
-            ),
+            child: list == null
+                ? const _EmptyWidget()
+                : Align(
+                    alignment: Alignment.topCenter,
+                    child: _Body(
+                      itemList: list,
+                      key: ValueKey(list.slug),
+                      isListOwner: widget.isListOwner,
+                    ),
+                  ),
           );
         },
       ),
@@ -77,32 +83,28 @@ class ContentState extends State<Content> {
 }
 
 class _Body extends StatelessWidget {
-  final BookListModel bookList;
+  final ListModel itemList;
   final bool isListOwner;
-  const _Body({required this.bookList, required this.isListOwner, super.key});
+  const _Body({required this.itemList, required this.isListOwner, super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (bookList.books.isEmpty) {
-      return const _EmptyWidget();
-    }
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.mediumPadding,
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: Dimensions.spacer / 2),
-            MyLibraryList(
-              bookList: bookList,
-              isCompact: false,
-              isListOwner: isListOwner,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      switchInCurve: defaultCurve,
+      switchOutCurve: defaultCurve,
+      child: itemList.items.isEmpty
+          ? const _EmptyWidget()
+          : Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.mediumPadding,
+              ),
+              child: MyLibraryList(
+                itemList: itemList,
+                isCompact: false,
+                isListOwner: isListOwner,
+              ),
             ),
-            const SizedBox(height: Dimensions.spacer),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -112,13 +114,27 @@ class _EmptyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EmptyWidget(
-      image: Images.empty,
-      message: LocaleKeys.common_empty_lists_content_title.tr(),
-      onTap: () {
-        router.pushNamed(cataloguePageConfig.name);
+    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+      buildWhen: (p, c) {
+        return p.isLoading != c.isLoading;
       },
-      buttonText: LocaleKeys.common_empty_search_in_catalogue.tr(),
+      builder: (context, state) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          switchInCurve: defaultCurve,
+          switchOutCurve: defaultCurve,
+          child: state.isLoading
+              ? const CustomLoader()
+              : EmptyWidget(
+                  image: Images.empty,
+                  message: LocaleKeys.common_empty_lists_content_title.tr(),
+                  onTap: () {
+                    router.pushNamed(cataloguePageConfig.name);
+                  },
+                  buttonText: LocaleKeys.common_empty_search_in_catalogue.tr(),
+                ),
+        );
+      },
     );
   }
 }

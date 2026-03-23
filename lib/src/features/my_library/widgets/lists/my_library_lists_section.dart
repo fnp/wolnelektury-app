@@ -83,7 +83,7 @@ class MyLibraryListsSection extends StatelessWidget {
                                 child: isPending
                                     ? MyLibraryList(
                                         key: ValueKey(state.pendingList!.slug),
-                                        bookList: state.pendingList!,
+                                        itemList: state.pendingList!,
                                         isCompact: true,
                                       )
                                     : const SizedBox(),
@@ -95,7 +95,7 @@ class MyLibraryListsSection extends StatelessWidget {
 
                             return MyLibraryList(
                               key: ValueKey(list.slug),
-                              bookList: list,
+                              itemList: list,
                               isCompact: true,
                             );
                           },

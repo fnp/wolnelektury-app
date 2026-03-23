@@ -1,32 +1,36 @@
 part of 'list_creator_cubit.dart';
 
-typedef BookToRemove = (String listSlug, String bookSlug);
+typedef ItemToRemove = (String listSlug, String itemSlug);
 
 @freezed
 sealed class ListCreatorState with _$ListCreatorState {
   const factory ListCreatorState({
-    @Default([]) List<BookListModel> booksToAdd,
-    // (List slug, book slug)
-    @Default([]) List<BookToRemove> booksToRemove,
+    @Default([]) List<ListModel> itemsToAdd,
+    // (List slug, item slug)
+    @Default([]) List<ItemToRemove> itemsToRemove,
     bool? isSuccess,
 
     // Existing lists from the db
     @Default(false) bool isLoading,
     @Default(false) bool isLoadingMore,
-    @Default([]) List<BookListModel> allLists,
-    BookListModel? fetchedSingleList,
+    @Default([]) List<ListModel> allLists,
+    ListModel? fetchedSingleList,
     @Default(ApiResponsePagination()) ApiResponsePagination pagination,
 
+    // Pagination for items within a single list
+    @Default(ApiResponsePagination()) ApiResponsePagination itemsPagination,
+    @Default(false) bool isLoadingMoreItems,
+
     // Editing list
-    BookListModel? editedList,
-    BookListModel? editedListToSave,
+    ListModel? editedList,
+    ListModel? editedListToSave,
     @Default(false) bool isSavingEditedList,
     @Default(false) bool isSavingFailure,
 
     // Adding list
     @Default(false) bool isAdding,
     @Default(false) bool isAddingFailure,
-    BookListModel? pendingList,
+    ListModel? pendingList,
 
     // Deleting list
     String? deletingSlug,
@@ -37,10 +41,10 @@ sealed class ListCreatorState with _$ListCreatorState {
     @Default(false) bool isRenamingFailure,
     @Default(false) bool isDuplicateFailure,
 
-    // Deleting book from list
-    // List slug, book slug
-    (String, String)? bookToRemoveFromList,
-    @Default(false) bool isRemovingBookFailure,
+    // Deleting item from list
+    // List slug, item slug
+    (String, String)? itemToRemoveFromList,
+    @Default(false) bool isRemovingItemFailure,
   }) = _ListCreatorState;
 }
 
@@ -50,25 +54,19 @@ extension ListCreatorStateX on ListCreatorState {
         pendingList?.slug == listSlug;
   }
 
-  bool isBookInList(String listSlug, String bookSlug) {
+  bool isItemInList(String listSlug, String itemSlug) {
     if (fetchedSingleList != null && fetchedSingleList!.slug == listSlug) {
-      print(
-        'Checking if book is in fetched single list: ${fetchedSingleList!.books.contains(bookSlug)}',
-      );
-      return fetchedSingleList!.books.contains(bookSlug);
+      return fetchedSingleList!.items.any((item) => item.bookSlug == itemSlug);
     }
-    print(
-      'Checking if book is in local list: ${allLists.firstWhereOrNull((element) => element.slug == listSlug)?.books.contains(bookSlug) ?? false}',
-    );
     return (allLists
                 .firstWhereOrNull((element) => element.slug == listSlug)
-                ?.books ??
+                ?.items ??
             [])
-        .contains(bookSlug);
+        .any((item) => item.bookSlug == itemSlug);
   }
 
   bool listNameIsDuplicate(String listName) {
-    return booksToAdd.any((element) => element.name == listName) ||
+    return itemsToAdd.any((element) => element.name == listName) ||
         allLists.any((element) => element.name == listName);
   }
 
@@ -79,16 +77,26 @@ extension ListCreatorStateX on ListCreatorState {
   }
 
   int get numberOfChangesInEditedList {
-    final editedBooks = editedList?.books ?? [];
-    final editedToSaveBooks = editedListToSave?.books ?? [];
-    return editedBooks
-            .where((book) => !editedToSaveBooks.contains(book))
-            .length +
-        editedToSaveBooks.where((book) => !editedBooks.contains(book)).length;
+    final editedBookSlugs =
+        editedList?.items
+            .where((item) => item.bookSlug != null)
+            .map((item) => item.bookSlug!)
+            .toSet() ??
+        {};
+    final editedToSaveBookSlugs =
+        editedListToSave?.items
+            .where((item) => item.bookSlug != null)
+            .map((item) => item.bookSlug!)
+            .toSet() ??
+        {};
+
+    return editedBookSlugs.difference(editedToSaveBookSlugs).length +
+        editedToSaveBookSlugs.difference(editedBookSlugs).length;
   }
 
-  bool isBookInEditedList(String bookSlug) {
-    return (editedListToSave?.books.contains(bookSlug) ?? false) &&
-        deletingSlug != bookSlug;
+  bool isItemInEditedList(String itemSlug) {
+    return (editedListToSave?.items.any((item) => item.bookSlug == itemSlug) ??
+            false) &&
+        deletingSlug != itemSlug;
   }
 }
