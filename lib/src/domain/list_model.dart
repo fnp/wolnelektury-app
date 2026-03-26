@@ -42,6 +42,9 @@ sealed class ListItemModel with _$ListItemModel {
 enum ListType { books, bookmarks }
 
 extension ListItemModelX on ListItemModel {
+  bool get isBook => bookSlug != null;
+  bool get isBookmark => bookmark != null;
+
   Map<String, dynamic> toCleanJson() {
     return toJson()
       ..remove('uuid')
@@ -50,24 +53,5 @@ extension ListItemModelX on ListItemModel {
       ..remove('timestamp')
       ..remove('order')
       ..remove('deleted');
-  }
-}
-
-extension ListModelX on ListModel {
-  List<ListItemModel> get books =>
-      items.where((e) => e.bookSlug != null).map((e) => e).toList();
-
-  List<ListItemModel> get bookmarks =>
-      items.where((e) => e.bookmark != null).map((e) => e).toList();
-
-  ListType get listType {
-    if (items.isEmpty) return ListType.books;
-
-    final hasBooks = items.any((e) => e.bookSlug != null);
-    if (hasBooks) {
-      return ListType.books;
-    }
-    // final hasBookmarks = items.any((e) => e.bookmark != null);
-    return ListType.bookmarks;
   }
 }

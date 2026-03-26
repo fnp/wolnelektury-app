@@ -40,10 +40,14 @@ abstract class  LocaleKeys {
   static const my_library_wifi_dialog_button = 'my_library.wifi_dialog.button';
   static const my_library_wifi_dialog = 'my_library.wifi_dialog';
   static const my_library_lists_delete_list = 'my_library.lists.delete_list';
-  static const my_library_lists_add_books = 'my_library.lists.add_books';
+  static const my_library_lists_add = 'my_library.lists.add';
   static const my_library_lists_creation_failure = 'my_library.lists.creation_failure';
   static const my_library_lists_deletion_failure = 'my_library.lists.deletion_failure';
   static const my_library_lists_book_removal_failure = 'my_library.lists.book_removal_failure';
+  static const my_library_lists_add_dialog_title = 'my_library.lists.add_dialog.title';
+  static const my_library_lists_add_dialog_books = 'my_library.lists.add_dialog.books';
+  static const my_library_lists_add_dialog_bookmarks = 'my_library.lists.add_dialog.bookmarks';
+  static const my_library_lists_add_dialog = 'my_library.lists.add_dialog';
   static const my_library_lists_delete_dialog_title = 'my_library.lists.delete_dialog.title';
   static const my_library_lists_delete_dialog_content = 'my_library.lists.delete_dialog.content';
   static const my_library_lists_delete_dialog_cancel = 'my_library.lists.delete_dialog.cancel';

@@ -9,7 +9,10 @@ import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/audiobook_model.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
+import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/features/audiobooks/widgets/audio_dialog.dart';
 import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/features/books/widgets/book_page_cover/book_page_cover_browse_button.dart';
 import 'package:wolnelektury/src/features/books/widgets/book_page_cover/book_page_cover_favourite_button.dart';
@@ -47,6 +50,21 @@ class BookPageCoverWithButtons extends StatelessWidget {
     this.areFilesCorruptedCallback,
     this.allowListButton = false,
   });
+
+  /// Static factory method for creating simplified horizontal list item
+  static Widget listItem({
+    Key? key,
+    required BookModel book,
+    required ListItemModel item,
+    VoidCallback? onDelete,
+  }) {
+    return _BookPageCoverListItem(
+      key: key,
+      book: book,
+      item: item,
+      onDelete: onDelete,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -314,6 +332,163 @@ class _Image extends StatelessWidget {
               placeholder: (context, url) =>
                   Center(child: SvgPicture.asset(Images.logo)),
             ),
+    );
+  }
+}
+
+class _BookPageCoverListItem extends StatelessWidget {
+  final BookModel book;
+  final ListItemModel item;
+  final VoidCallback? onDelete;
+
+  const _BookPageCoverListItem({
+    super.key,
+    required this.book,
+    required this.item,
+    this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final hasAudiobook = book.hasAudiobook;
+    final canRead = book.children.isEmpty;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Dimensions.smallPadding),
+      child: BlocProvider(
+        create: (context) {
+          return SingleBookCubit(get.get(), get.get())
+            ..checkIfMediaAreDownloaded(book.slug);
+        },
+        child: InkWell(
+          onTap: () {
+            router.pushNamed(
+              bookPageConfig.name,
+              pathParameters: {'slug': book.slug},
+              extra: book,
+            );
+          },
+          borderRadius: BorderRadius.circular(Dimensions.smallBorderRadius),
+          child: Container(
+            height: 100,
+            padding: const EdgeInsets.all(Dimensions.smallPadding),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(Dimensions.smallBorderRadius),
+            ),
+            child: Row(
+              children: [
+                // Cover Image
+                AspectRatio(
+                  aspectRatio: Dimensions.coverAspectRatio,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.smallBorderRadius,
+                    ),
+                    child: _Image(coverUrl: book.coverUrl),
+                  ),
+                ),
+                const SizedBox(width: Dimensions.smallPadding),
+                // Title
+                Expanded(
+                  child: Text(
+                    book.title,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: Dimensions.smallPadding),
+                // Action Buttons - Compact Round Icons
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (canRead) _CompactReadButton(book: book),
+                    if (canRead && hasAudiobook)
+                      const SizedBox(width: Dimensions.smallPadding),
+                    if (hasAudiobook) _CompactListenButton(book: book),
+                  ],
+                ),
+                // Delete button
+                if (onDelete != null) ...[
+                  const SizedBox(width: Dimensions.smallPadding),
+                  CustomButton(
+                    semanticLabel: LocaleKeys.common_semantic_delete_book.tr(),
+                    icon: CustomIcons.delete_forever,
+                    onPressed: onDelete,
+                    backgroundColor: CustomColors.red,
+                    iconColor: CustomColors.white,
+                    size: 36,
+                    iconSize: 20,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CompactReadButton extends StatelessWidget {
+  final BookModel book;
+  const _CompactReadButton({required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return CustomButton(
+      semanticLabel: LocaleKeys.common_icon_button_read.tr(),
+      icon: CustomIcons.book_5,
+      backgroundColor: theme.colorScheme.surfaceContainer,
+      iconColor: CustomColors.black,
+      size: 36,
+      iconSize: 20,
+      onPressed: () {
+        router.pushNamed(
+          readingPageConfig.name,
+          pathParameters: {'slug': book.slug},
+          extra: book,
+        );
+      },
+    );
+  }
+}
+
+class _CompactListenButton extends StatelessWidget {
+  final BookModel book;
+  const _CompactListenButton({required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final audioCubit = BlocProvider.of<AudioCubit>(context);
+    final singleBookCubit = BlocProvider.of<SingleBookCubit>(context);
+
+    return CustomButton(
+      semanticLabel: LocaleKeys.common_icon_button_listen.tr(),
+      icon: CustomIcons.headphones,
+      backgroundColor: theme.colorScheme.surfaceContainer,
+      iconColor: CustomColors.black,
+      size: 36,
+      iconSize: 20,
+      onPressed: () {
+        AudioDialog.show(context: context, slug: book.slug);
+        if (audioCubit.state.isPlaying &&
+            audioCubit.state.book?.slug == book.slug) {
+          return;
+        }
+        singleBookCubit.getBookData(
+          slug: book.slug,
+          onFinished: (fetchedBook, isOffline) {
+            audioCubit.pickBook(fetchedBook, tryOffline: isOffline);
+          },
+        );
+      },
     );
   }
 }

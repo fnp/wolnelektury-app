@@ -4,9 +4,8 @@ import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
-import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_book_list_header.dart';
-import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_book.dart';
-import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_bookmark.dart';
+import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_element.dart';
+import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_header.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class MyLibraryList extends StatelessWidget {
@@ -44,55 +43,16 @@ class MyLibraryList extends StatelessWidget {
                         itemList: itemList,
                         isListOwner: isListOwner,
                       )
-                    : _HeaderByType(
-                        itemList: itemList,
-                        isCompact: isCompact,
+                    : MyLibraryListHeader(
+                        bookList: itemList,
                         isListOwner: isListOwner,
+                        isCompact: isCompact,
                         isOnListPage: isOnListPage,
                       ))
               : const SizedBox(width: double.infinity),
         );
       },
     );
-  }
-}
-
-class _HeaderByType extends StatelessWidget {
-  final bool isCompact;
-  final bool isListOwner;
-  final bool isOnListPage;
-  final ListModel itemList;
-  const _HeaderByType({
-    required this.itemList,
-    required this.isCompact,
-    required this.isListOwner,
-    required this.isOnListPage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final listType = itemList.listType;
-    switch (listType) {
-      case ListType.books:
-        return MyLibraryBookListHeader(
-          bookList: itemList,
-          isListOwner: isListOwner,
-          isCompact: isCompact,
-          isOnListPage: isOnListPage,
-        );
-      case ListType.bookmarks:
-        return SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return MyLibraryListBookmark(
-              key: ValueKey(itemList.bookmarks[index]),
-              bookmarkId: itemList.bookmarks[index].uuid ?? '',
-              listSlug: itemList.slug,
-              listName: itemList.name,
-              isListOwner: isListOwner,
-            );
-          }, childCount: itemList.bookmarks.length),
-        );
-    }
   }
 }
 
@@ -105,72 +65,93 @@ class _ScrollableList extends StatelessWidget {
   Widget build(BuildContext context) {
     final listCreatorCubit = context.read<ListCreatorCubit>();
 
-    return CustomScrollPage(
-      onLoadMore: () {
-        listCreatorCubit.getMoreListItems(itemList.slug);
-      },
-      builder: (scrollController) {
-        return CustomScrollView(
-          controller: scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            const SliverToBoxAdapter(
-              child: SizedBox(height: Dimensions.spacer / 2),
-            ),
-            SliverToBoxAdapter(
-              child: MyLibraryBookListHeader(
-                bookList: itemList,
-                isListOwner: isListOwner,
-                isCompact: false,
-                isOnListPage: true,
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: Dimensions.spacer / 2),
-            ),
-            _ListByType(itemList: itemList, isListOwner: isListOwner),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: Dimensions.spacer),
-            ),
-          ],
-        );
-      },
+    return Column(
+      children: [
+        const SizedBox(height: Dimensions.largePadding),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.mediumPadding,
+          ),
+          child: MyLibraryListHeader(
+            bookList: itemList,
+            isListOwner: isListOwner,
+            isCompact: false,
+            isOnListPage: true,
+          ),
+        ),
+        Expanded(
+          child: CustomScrollPage(
+            onLoadMore: () {
+              listCreatorCubit.getMoreListItems(itemList.slug);
+            },
+            builder: (scrollController) {
+              return CustomScrollView(
+                controller: scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: Dimensions.spacer / 2),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.mediumPadding,
+                    ),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final element = itemList.items[index];
+                          if (element.isBook) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: Dimensions.mediumPadding,
+                              ),
+                              child: MyLibraryListElement.book(
+                                key: ValueKey(element.uuid),
+                                item: element,
+                                listName: itemList.name,
+                                isListOwner: isListOwner,
+                              ),
+                            );
+                          }
+                          if (element.isBookmark) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: Dimensions.mediumPadding,
+                              ),
+                              child: MyLibraryListElement.bookmark(
+                                key: ValueKey(element.uuid),
+                                item: element,
+                                listName: itemList.name,
+                                isListOwner: isListOwner,
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                        childCount: itemList.items.length,
+                        findChildIndexCallback: (Key key) {
+                          if (key is ValueKey<String?>) {
+                            final uuid = key.value;
+                            return itemList.items.indexWhere(
+                              (item) => item.uuid == uuid,
+                            );
+                          }
+                          return null;
+                        },
+                        addAutomaticKeepAlives: false,
+                        addRepaintBoundaries: true,
+                      ),
+                    ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: Dimensions.spacer),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
     );
-  }
-}
-
-class _ListByType extends StatelessWidget {
-  final ListModel itemList;
-  final bool isListOwner;
-  const _ListByType({required this.itemList, required this.isListOwner});
-
-  @override
-  Widget build(BuildContext context) {
-    final listType = itemList.listType;
-    switch (listType) {
-      case ListType.books:
-        return SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return MyLibraryListBook(
-              key: ValueKey(itemList.books[index]),
-              item: itemList.items[index],
-              listName: itemList.name,
-              isListOwner: isListOwner,
-            );
-          }, childCount: itemList.books.length),
-        );
-      case ListType.bookmarks:
-        return SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return MyLibraryListBookmark(
-              key: ValueKey(itemList.bookmarks[index]),
-              bookmarkId: itemList.bookmarks[index].uuid ?? '',
-              listSlug: itemList.slug,
-              listName: itemList.name,
-              isListOwner: isListOwner,
-            );
-          }, childCount: itemList.bookmarks.length),
-        );
-    }
   }
 }

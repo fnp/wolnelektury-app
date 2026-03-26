@@ -13,6 +13,7 @@ import 'package:wolnelektury/src/features/common/widgets/button/custom_button.da
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
 import 'package:wolnelektury/src/features/lists/widgets/list_page_rename_dialog.dart';
+import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_add_dialog.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_delete_confirmation_dialog.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -22,12 +23,12 @@ import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
-class MyLibraryBookListHeader extends StatelessWidget {
+class MyLibraryListHeader extends StatelessWidget {
   final ListModel bookList;
   final bool isListOwner;
   final bool isCompact;
   final bool isOnListPage;
-  const MyLibraryBookListHeader({
+  const MyLibraryListHeader({
     super.key,
     required this.bookList,
     required this.isListOwner,
@@ -55,10 +56,10 @@ class MyLibraryBookListHeader extends StatelessWidget {
     );
   }
 
-  void _onAddPressed(BuildContext context) {
+  void _onAddBooks(BuildContext context, {required ListModel list}) {
     final listCubit = context.read<ListCreatorCubit>();
     final modeCubit = context.read<AppModeCubit>();
-    listCubit.setListAsEdited(bookList);
+    listCubit.setListAsEdited(list);
     modeCubit.changeMode(AppModeEnum.listCreationMode);
     router.pushNamed(cataloguePageConfig.name);
   }
@@ -166,7 +167,17 @@ class MyLibraryBookListHeader extends StatelessWidget {
                                           _AddButton(
                                             bookList: bookList,
                                             onAdd: () {
-                                              _onAddPressed(context);
+                                              MyLibraryListAddDialog.show(
+                                                context: context,
+                                                list: bookList,
+                                                onAddBooks: () {
+                                                  _onAddBooks(
+                                                    context,
+                                                    list: bookList,
+                                                  );
+                                                },
+                                                onAddBookmarks: () {},
+                                              );
                                             },
                                           ),
                                         ],
@@ -213,13 +224,19 @@ class MyLibraryBookListHeader extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextButtonWithIcon(
-                              nonActiveText: LocaleKeys
-                                  .my_library_lists_add_books
+                              nonActiveText: LocaleKeys.my_library_lists_add
                                   .tr(),
                               nonActiveIcon: CustomIcons.add,
                               isActive: false,
                               onPressed: () {
-                                _onAddPressed(context);
+                                MyLibraryListAddDialog.show(
+                                  context: context,
+                                  list: bookList,
+                                  onAddBooks: () {
+                                    _onAddBooks(context, list: bookList);
+                                  },
+                                  onAddBookmarks: () {},
+                                );
                               },
                             ),
                           ),
