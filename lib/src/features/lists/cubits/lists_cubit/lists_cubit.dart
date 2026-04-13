@@ -15,10 +15,6 @@ class ListsCubit extends SafeCubit<ListsState> {
   final ListsRepository _listsRepository;
   ListsCubit(this._listsRepository) : super(const ListsState());
 
-  // --------------------------
-
-  // -------- Fetching --------
-  // --------------------------
   Future<void> getLists({bool force = false}) async {
     if (state.allLists.isNotEmpty && !force) {
       return;
@@ -174,10 +170,20 @@ class ListsCubit extends SafeCubit<ListsState> {
     required String name,
     Function(ListModel list)? onSuccess,
   }) async {
-    // emit(state.copyWith(isDuplicateFailure: false));
     // Emit adding state before making API call
-    emit(state.copyWith(isAdding: true, isAddingFailure: false));
+    emit(
+      state.copyWith(
+        isAdding: true,
+        isAddingFailure: false,
+        isDuplicateFailure: false,
+      ),
+    );
     await Future.delayed(const Duration(milliseconds: 1));
+
+    if (state.allLists.any((e) => e.name == name)) {
+      emit(state.copyWith(isDuplicateFailure: true));
+      return;
+    }
     // Optimistically add the new list to the state with an empty slug until we get the real slug from the API
     emit(
       state.copyWith(
@@ -194,7 +200,13 @@ class ListsCubit extends SafeCubit<ListsState> {
         // On success, replace the optimistically added list with the real one from the API (with the correct slug)
         final newState = List<ListModel>.from(state.allLists);
         newState.insert(0, ListModel(name: name, slug: data));
-        emit(state.copyWith(isAdding: false, allLists: newState));
+        emit(
+          state.copyWith(
+            isAdding: false,
+            allLists: newState.toSet().toList(),
+            pendingList: null,
+          ),
+        );
         onSuccess?.call(ListModel(name: name, slug: data));
       },
       failure: (failure) {
@@ -273,7 +285,11 @@ class ListsCubit extends SafeCubit<ListsState> {
     required String listSlug,
     required String newName,
   }) async {
-    // emit(state.copyWith(isDuplicateFailure: false));
+    emit(state.copyWith(isDuplicateFailure: false));
+    if (state.allLists.any((e) => e.name == newName)) {
+      emit(state.copyWith(isDuplicateFailure: true));
+      return;
+    }
     emit(state.copyWith(isRenaming: true, isRenamingFailure: false));
     final result = await _listsRepository.renameList(
       listSlug: listSlug,
