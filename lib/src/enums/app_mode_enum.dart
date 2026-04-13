@@ -1,1 +1,5 @@
-enum AppModeEnum { defaultMode, listCreationMode }
+enum AppModeEnum {
+  defaultMode,
+  listCreationBooksMode,
+  listCreationBookmarksMode,
+}

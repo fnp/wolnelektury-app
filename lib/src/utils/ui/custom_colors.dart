@@ -12,4 +12,26 @@ class CustomColors {
   static const Color darkGrey = Color(0xFF212121);
   static const Color grey = Color(0xffCCCCCC);
   static const Color darkModeGrey = Color(0xff999999);
+  static const List<double> colorFilterMatrix = <double>[
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+  ];
 }

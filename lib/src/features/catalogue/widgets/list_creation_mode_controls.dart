@@ -5,7 +5,7 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -18,7 +18,7 @@ class ListCreationModeControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final creatorCubit = context.read<ListCreatorCubit>();
+    final editorCubit = context.read<ListEditorCubit>();
     return DecoratedBox(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -34,7 +34,7 @@ class ListCreationModeControls extends StatelessWidget {
           right: Dimensions.mediumPadding,
           bottom: Dimensions.modalsPadding,
         ),
-        child: BlocConsumer<ListCreatorCubit, ListCreatorState>(
+        child: BlocConsumer<ListEditorCubit, ListEditorState>(
           listenWhen: (p, c) => p.isSavingEditedList && !c.isSavingEditedList,
           listener: (context, state) {
             if (state.isSavingFailure) {
@@ -42,7 +42,9 @@ class ListCreationModeControls extends StatelessWidget {
                 context,
                 LocaleKeys.catalogue_list_creator_failure.tr(),
               );
-            } else if (state.editedList == null) {
+              return;
+            }
+            if (state.isSavingSuccess) {
               CustomSnackbar.success(
                 context,
                 LocaleKeys.catalogue_list_creator_success.tr(),
@@ -77,7 +79,7 @@ class ListCreationModeControls extends StatelessWidget {
                     backgroundColor: CustomColors.white,
                     iconColor: CustomColors.black,
                     onPressed: () {
-                      creatorCubit.restoreListToItsPreviousState();
+                      editorCubit.restoreListToItsPreviousState();
                     },
                   ),
                 ),
@@ -102,12 +104,12 @@ class _SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final creatorCubit = context.read<ListCreatorCubit>();
+    final editorCubit = context.read<ListEditorCubit>();
     final isDisabled = numberOfChanges == 0;
     return AnimatedSize(
       duration: const Duration(milliseconds: 200),
       curve: defaultCurve,
-      child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
+      child: BlocBuilder<ListEditorCubit, ListEditorState>(
         buildWhen: (p, c) {
           return p.isSavingEditedList != c.isSavingEditedList;
         },
@@ -119,7 +121,7 @@ class _SaveButton extends StatelessWidget {
             child: _Button(
               color: CustomColors.green,
               onTap: () {
-                creatorCubit.saveEditedList();
+                editorCubit.saveList();
               },
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),

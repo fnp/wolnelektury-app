@@ -5,7 +5,8 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/features/catalogue/widgets/buttons/book_overview_widget_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/auth_wrapper.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/features/lists/widgets/book_lists_sheet.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
@@ -35,14 +36,15 @@ class BookOverviewWidgetCreateListButton extends StatelessWidget {
               CustomSnackbar.loginRequired(context);
               return;
             }
-            final cubit = BlocProvider.of<ListCreatorCubit>(context);
+            final editorCubit = context.read<ListEditorCubit>();
+            final listsCubit = context.read<ListsCubit>();
 
-            cubit.getLists(force: true);
+            listsCubit.getLists(force: true);
             BookListsSheet.show(
               context: context,
               bookSlug: book.slug,
               onSave: () {
-                cubit.save();
+                editorCubit.saveList();
               },
             );
           },

@@ -11,7 +11,8 @@ import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.
 import 'package:wolnelektury/src/features/common/widgets/auth_wrapper.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/features/lists/widgets/list_page_rename_dialog.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_add_dialog.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_delete_confirmation_dialog.dart';
@@ -37,7 +38,7 @@ class MyLibraryListHeader extends StatelessWidget {
   });
 
   void _onDeletePressed(BuildContext context, {required String slug}) {
-    final cubit = context.read<ListCreatorCubit>();
+    final cubit = context.read<ListsCubit>();
     MyLibraryListDeleteConfirmationDialog.show(
       context: context,
       onDelete: () {
@@ -57,11 +58,19 @@ class MyLibraryListHeader extends StatelessWidget {
   }
 
   void _onAddBooks(BuildContext context, {required ListModel list}) {
-    final listCubit = context.read<ListCreatorCubit>();
+    final listEditorCubit = context.read<ListEditorCubit>();
     final modeCubit = context.read<AppModeCubit>();
-    listCubit.setListAsEdited(list);
-    modeCubit.changeMode(AppModeEnum.listCreationMode);
+    listEditorCubit.setListToEdit(list);
+    modeCubit.changeMode(AppModeEnum.listCreationBooksMode);
     router.pushNamed(cataloguePageConfig.name);
+  }
+
+  void _onAddBookmarks(BuildContext context, {required ListModel list}) {
+    final listEditorCubit = context.read<ListEditorCubit>();
+    final modeCubit = context.read<AppModeCubit>();
+    listEditorCubit.setListToEdit(list);
+    modeCubit.changeMode(AppModeEnum.listCreationBookmarksMode);
+    router.pushNamed(bookmarkListCreationPageConfig.name);
   }
 
   @override
@@ -176,7 +185,12 @@ class MyLibraryListHeader extends StatelessWidget {
                                                     list: bookList,
                                                   );
                                                 },
-                                                onAddBookmarks: () {},
+                                                onAddBookmarks: () {
+                                                  _onAddBookmarks(
+                                                    context,
+                                                    list: bookList,
+                                                  );
+                                                },
                                               );
                                             },
                                           ),
@@ -235,7 +249,9 @@ class MyLibraryListHeader extends StatelessWidget {
                                   onAddBooks: () {
                                     _onAddBooks(context, list: bookList);
                                   },
-                                  onAddBookmarks: () {},
+                                  onAddBookmarks: () {
+                                    _onAddBookmarks(context, list: bookList);
+                                  },
                                 );
                               },
                             ),
@@ -248,7 +264,7 @@ class MyLibraryListHeader extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
+            child: BlocBuilder<ListsCubit, ListsState>(
               buildWhen: (p, c) {
                 return (p.pendingList?.name != c.pendingList?.name) &&
                     (c.pendingList?.name == bookList.name);
@@ -287,8 +303,15 @@ class _AddButton extends StatelessWidget {
       semanticLabel: LocaleKeys.common_semantic_edit_list.tr(
         namedArgs: {'listName': bookList.name},
       ),
-      icon: CustomIcons.add,
-      onPressed: onAdd,
+      icon: Icons.arrow_forward,
+      iconSize: 18,
+      onPressed: () {
+        router.pushNamed(
+          listPageConfig.name,
+          pathParameters: {'slug': bookList.slug},
+          extra: true,
+        );
+      },
       backgroundColor: CustomColors.primaryYellowColor,
     );
   }
@@ -306,7 +329,7 @@ class _DeleteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+    return BlocBuilder<ListsCubit, ListsState>(
       buildWhen: (p, c) => p.deletingSlug != c.deletingSlug,
       builder: (context, state) {
         return AnimatedSwitcher(
@@ -365,7 +388,7 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ListCreatorCubit, ListCreatorState>(
+    return BlocConsumer<ListEditorCubit, ListEditorState>(
       listenWhen: (p, c) {
         return p.isSavingFailure != c.isSavingFailure ||
             p.isSavingEditedList != c.isSavingEditedList;
@@ -401,8 +424,8 @@ class _SaveButton extends StatelessWidget {
                       CustomSnackbar.loginRequired(context);
                       return;
                     }
-                    final listCreatorCubit = context.read<ListCreatorCubit>();
-                    listCreatorCubit.saveSharedList(bookList);
+                    final listEditorCubit = context.read<ListEditorCubit>();
+                    listEditorCubit.saveSharedList(bookList);
                   },
                   backgroundColor: CustomColors.white,
                 ),

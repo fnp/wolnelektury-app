@@ -7,7 +7,7 @@ import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -34,7 +34,7 @@ class ListPage extends StatelessWidget {
         key: ValueKey(slug!),
       );
     } else {
-      return const _EmptyWidget();
+      return const ListPageEmptyWidget();
     }
   }
 }
@@ -52,8 +52,8 @@ class ContentState extends State<Content> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: context.read<ListCreatorCubit>()..getListBySlug(widget.slug),
-      child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
+      value: context.read<ListsCubit>()..getListBySlug(widget.slug),
+      child: BlocBuilder<ListsCubit, ListsState>(
         buildWhen: (p, c) {
           return p.isLoading != c.isLoading ||
               p.fetchedSingleList?.name != c.fetchedSingleList?.name;
@@ -65,7 +65,7 @@ class ContentState extends State<Content> {
             switchInCurve: defaultCurve,
             switchOutCurve: defaultCurve,
             child: list == null
-                ? const _EmptyWidget()
+                ? const ListPageEmptyWidget()
                 : Align(
                     alignment: Alignment.topCenter,
                     child: _Body(
@@ -88,32 +88,23 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      switchInCurve: defaultCurve,
-      switchOutCurve: defaultCurve,
-      child: itemList.items.isEmpty
-          ? const _EmptyWidget()
-          : Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.mediumPadding,
-              ),
-              child: MyLibraryList(
-                itemList: itemList,
-                isCompact: false,
-                isListOwner: isListOwner,
-              ),
-            ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.mediumPadding),
+      child: MyLibraryList(
+        itemList: itemList,
+        isCompact: false,
+        isListOwner: isListOwner,
+      ),
     );
   }
 }
 
-class _EmptyWidget extends StatelessWidget {
-  const _EmptyWidget();
+class ListPageEmptyWidget extends StatelessWidget {
+  const ListPageEmptyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+    return BlocBuilder<ListsCubit, ListsState>(
       buildWhen: (p, c) {
         return p.isLoading != c.isLoading;
       },
@@ -125,6 +116,7 @@ class _EmptyWidget extends StatelessWidget {
           child: state.isLoading
               ? const CustomLoader()
               : EmptyWidget(
+                  isSliver: false,
                   image: Images.empty,
                   message: LocaleKeys.common_empty_lists_content_title.tr(),
                   onTap: () {

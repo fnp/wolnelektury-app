@@ -7,7 +7,7 @@ import 'package:wolnelektury/src/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/common/widgets/page_subtitle.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/features/lists/widgets/book_lists_create_widget.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_lists_section_listener.dart';
@@ -19,7 +19,7 @@ class MyLibraryListsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final listCubit = context.read<ListCreatorCubit>();
+    final listCubit = context.read<ListsCubit>();
     return BlocProvider.value(
       value: listCubit..getLists(),
       child: Padding(
@@ -34,7 +34,7 @@ class MyLibraryListsSection extends StatelessWidget {
               PageSubtitle(subtitle: MyLibraryEnum.lists.title),
               BookListsCreateWidget(
                 onSave: (text) {
-                  listCubit.addEmptyList(name: text);
+                  listCubit.createList(name: text);
                 },
               ),
               const SizedBox(height: Dimensions.largePadding),
@@ -47,7 +47,7 @@ class MyLibraryListsSection extends StatelessWidget {
                     listCubit.getMoreLists();
                   },
                   builder: (scrollController) {
-                    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+                    return BlocBuilder<ListsCubit, ListsState>(
                       buildWhen: (p, c) {
                         return p.isLoading != c.isLoading ||
                             p.isAdding != c.isAdding ||

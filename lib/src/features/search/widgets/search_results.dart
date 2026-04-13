@@ -41,7 +41,7 @@ class SearchResults extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
                   if ((state.generic?.author ?? []).isNotEmpty &&
-                      !modeState.isListCreation) ...[
+                      !modeState.isListBookCreation) ...[
                     SliverToBoxAdapter(
                       child: PageSubtitle(
                         subtitle: LocaleKeys.search_authors.tr().toUpperCase(),
@@ -76,7 +76,8 @@ class SearchResults extends StatelessWidget {
                     ),
                     BookList(isLoading: false, books: state.books),
                   ],
-                  if (state.texts.isNotEmpty && !modeState.isListCreation) ...[
+                  if (state.texts.isNotEmpty &&
+                      !modeState.isListBookCreation) ...[
                     SliverToBoxAdapter(
                       child: PageSubtitle(
                         subtitle: LocaleKeys.search_texts.tr().toUpperCase(),

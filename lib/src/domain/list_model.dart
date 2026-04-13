@@ -37,13 +37,29 @@ sealed class ListItemModel with _$ListItemModel {
 
   factory ListItemModel.fromJson(Map<String, dynamic> json) =>
       _$ListItemModelFromJson(json);
-}
 
-enum ListType { books, bookmarks }
+  /// Factory method for creating a book list item
+  factory ListItemModel.create({
+    required String listSlug,
+    String? bookSlug,
+    String? bookmarkUuid,
+    String? uuid,
+    String note = '',
+  }) => ListItemModel(
+    listSlug: listSlug,
+    bookSlug: bookSlug,
+    bookmark: bookmarkUuid,
+    uuid: uuid,
+    note: note,
+  );
+}
 
 extension ListItemModelX on ListItemModel {
   bool get isBook => bookSlug != null;
   bool get isBookmark => bookmark != null;
+
+  /// Returns the identifier (slug) of this item, whether it's a book or bookmark
+  String? get itemIdentifier => bookSlug ?? bookmark;
 
   Map<String, dynamic> toCleanJson() {
     return toJson()

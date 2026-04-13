@@ -9,7 +9,7 @@ import 'package:wolnelektury/src/features/catalogue/widgets/buttons/book_overvie
 import 'package:wolnelektury/src/features/catalogue/widgets/buttons/book_overview_widget_heart_button.dart';
 import 'package:wolnelektury/src/features/catalogue/widgets/buttons/book_overview_widget_list_creation_mode_button.dart';
 import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -31,17 +31,17 @@ class BookOverviewWidget extends StatelessWidget {
     final effectiveScale = 3 - gridNumber * 2 / 3;
 
     return BlocBuilder<AppModeCubit, AppModeState>(
-      buildWhen: (p, c) => p.mode != c.mode,
+      buildWhen: (p, c) => p.isListBookCreation != c.isListBookCreation,
       builder: (context, state) {
         return InkWell(
           onTap: () {
-            if (state.isListCreation) {
-              final creationCubit = BlocProvider.of<ListCreatorCubit>(context);
-              if (creationCubit.state.isBookInEditedList(book.slug)) {
-                creationCubit.removeBookFromEditedList(book.slug);
+            if (state.isListBookCreation) {
+              final editorCubit = context.read<ListEditorCubit>();
+              if (editorCubit.state.isItemInEditedList(book.slug)) {
+                editorCubit.removeElement(bookSlug: book.slug);
                 return;
               }
-              creationCubit.addBookToEditedList(book.slug);
+              editorCubit.addElement(bookSlug: book.slug);
               return;
             }
 
@@ -57,7 +57,7 @@ class BookOverviewWidget extends StatelessWidget {
               Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: getBorderRadius(state.isListCreation),
+                    borderRadius: getBorderRadius(state.isListBookCreation),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
                         if ((book.coverUrl ?? '').isEmpty) {
@@ -73,12 +73,12 @@ class BookOverviewWidget extends StatelessWidget {
                         return _ImageWithFilter(
                           book: book,
                           constraints: constraints,
-                          shouldFilter: state.isListCreation,
+                          shouldFilter: state.isListBookCreation,
                         );
                       },
                     ),
                   ),
-                  if (state.isListCreation)
+                  if (state.isListBookCreation)
                     Positioned(
                       right: 0,
                       bottom: 0,
@@ -144,8 +144,8 @@ class BookOverviewWidget extends StatelessWidget {
     );
   }
 
-  BorderRadius getBorderRadius(bool isListCreation) {
-    return isListCreation
+  BorderRadius getBorderRadius(bool isListBookCreation) {
+    return isListBookCreation
         ? const BorderRadius.only(
             bottomLeft: Radius.circular(Dimensions.smallBorderRadius),
             bottomRight: Radius.circular(Dimensions.elementHeight / 2),
@@ -190,37 +190,14 @@ class _ImageWithFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorFilterMatrix = <double>[
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-    ];
-
-    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+    return BlocBuilder<ListEditorCubit, ListEditorState>(
       buildWhen: (p, c) {
-        return p.isBookInEditedList(book.slug) !=
-            c.isBookInEditedList(book.slug);
+        return p.isItemInEditedList(book.slug) !=
+            c.isItemInEditedList(book.slug);
       },
       builder: (context, state) {
         final effShouldFilter =
-            state.isBookInEditedList(book.slug) && shouldFilter;
+            state.isItemInEditedList(book.slug) && shouldFilter;
 
         final child = CachedNetworkImage(
           imageUrl: book.coverUrl!,
@@ -239,7 +216,9 @@ class _ImageWithFilter extends StatelessWidget {
         if (effShouldFilter) {
           // Apply color filter only if the book is in the edited list
           return ColorFiltered(
-            colorFilter: ColorFilter.matrix(colorFilterMatrix),
+            colorFilter: const ColorFilter.matrix(
+              CustomColors.colorFilterMatrix,
+            ),
             child: child,
           );
         }

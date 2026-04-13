@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 
 class MyLibraryListsSectionListener extends StatelessWidget {
@@ -13,7 +13,7 @@ class MyLibraryListsSectionListener extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<ListCreatorCubit, ListCreatorState>(
+        BlocListener<ListsCubit, ListsState>(
           listenWhen: (p, c) {
             return p.isDuplicateFailure != c.isDuplicateFailure;
           },
@@ -27,7 +27,7 @@ class MyLibraryListsSectionListener extends StatelessWidget {
             }
           },
         ),
-        BlocListener<ListCreatorCubit, ListCreatorState>(
+        BlocListener<ListsCubit, ListsState>(
           listenWhen: (p, c) {
             return p.isAddingFailure != c.isAddingFailure ||
                 p.isDeleteFailure != c.isDeleteFailure ||

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -105,7 +105,7 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+    return BlocBuilder<ListsCubit, ListsState>(
       buildWhen: (p, c) {
         return p.isAdding != c.isAdding;
       },

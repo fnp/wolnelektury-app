@@ -9,7 +9,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/features/books/widgets/book_page_cover/book_page_cover_with_buttons.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 
 /// Base class for list elements with factory constructors
@@ -65,10 +65,10 @@ class _MyLibraryListBookElement extends MyLibraryListElement {
     required super.isListOwner,
   });
 
-  bool determineVisibility(ListCreatorState state) {
+  bool determineVisibility(ListsState state) {
     return !state.isBookInList(item.listSlug, item.bookSlug!) ||
-        (state.itemToRemoveFromList?.uuid == item.uuid &&
-            state.itemToRemoveFromList?.listSlug == item.listSlug);
+        (state.softDeletedItem?.uuid == item.uuid &&
+            state.softDeletedItem?.listSlug == item.listSlug);
   }
 
   @override
@@ -89,10 +89,10 @@ class _MyLibraryListBookElement extends MyLibraryListElement {
           if (!state.isLoading && state.book == null) {
             return const SizedBox.shrink();
           }
-          final cubit = BlocProvider.of<ListCreatorCubit>(context);
-          return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+          final listsCubit = context.read<ListsCubit>();
+          return BlocBuilder<ListsCubit, ListsState>(
             buildWhen: (p, c) {
-              return p.itemToRemoveFromList != c.itemToRemoveFromList ||
+              return p.softDeletedItem != c.softDeletedItem ||
                   p.isBookInList(item.listSlug, item.bookSlug!) !=
                       c.isBookInList(item.listSlug, item.bookSlug!);
             },
@@ -112,12 +112,12 @@ class _MyLibraryListBookElement extends MyLibraryListElement {
                           item: item,
                           onDelete: isListOwner
                               ? () {
-                                  cubit.removeItemFromList(item: item);
+                                  listsCubit.deleteItemFromList(item: item);
                                   CustomSnackbar.success(
                                     context,
                                     LocaleKeys.book_lists_sheet_delete.tr(),
                                     onRevert: () {
-                                      cubit.undoRemoveItemFromList();
+                                      listsCubit.undoSoftRemoval();
                                     },
                                   );
                                 }

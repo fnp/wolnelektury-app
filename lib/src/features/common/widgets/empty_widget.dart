@@ -9,6 +9,7 @@ class EmptyWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onRefresh;
   final bool hasConnection;
+  final bool isSliver;
   const EmptyWidget({
     super.key,
     required this.image,
@@ -17,6 +18,7 @@ class EmptyWidget extends StatelessWidget {
     this.onTap,
     this.onRefresh,
     this.hasConnection = true,
+    this.isSliver = true,
   });
 
   @override
@@ -24,36 +26,38 @@ class EmptyWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final size = MediaQuery.sizeOf(context);
 
+    final nonSliverChild = Padding(
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.2),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(image, width: size.width * 0.33),
+          const SizedBox(height: Dimensions.largePadding),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium,
+          ),
+          if (buttonText != null && onTap != null && hasConnection) ...[
+            const SizedBox(height: Dimensions.largePadding),
+            ElevatedButton(
+              onPressed: onTap,
+              style: blueElevatedButton,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Text(buttonText!),
+              ),
+            ),
+          ],
+          const SizedBox(height: Dimensions.spacer * 2),
+        ],
+      ),
+    );
+
     final sliverChild = SliverFillRemaining(
       hasScrollBody: false,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.2),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(image, width: size.width * 0.33),
-            const SizedBox(height: Dimensions.largePadding),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium,
-            ),
-            if (buttonText != null && onTap != null && hasConnection) ...[
-              const SizedBox(height: Dimensions.largePadding),
-              ElevatedButton(
-                onPressed: onTap,
-                style: blueElevatedButton,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.center,
-                  child: Text(buttonText!),
-                ),
-              ),
-            ],
-            const SizedBox(height: Dimensions.spacer * 2),
-          ],
-        ),
-      ),
+      child: nonSliverChild,
     );
 
     final child = CustomScrollView(
@@ -70,6 +74,6 @@ class EmptyWidget extends StatelessWidget {
       );
     }
 
-    return child;
+    return isSliver ? sliverChild : nonSliverChild;
   }
 }

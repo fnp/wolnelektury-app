@@ -11,7 +11,8 @@ import 'package:wolnelektury/src/features/common/cubits/download/download_cubit.
 import 'package:wolnelektury/src/features/common/cubits/likes/likes_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/scroll/scroll_cubit.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/features/my_library/cubits/synchronizer/synchronizer_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 
@@ -36,7 +37,8 @@ class DashboardListeners extends StatelessWidget {
     final likesCubit = context.read<LikesCubit>();
     final authCubit = context.read<AuthCubit>();
     final syncCubit = context.read<SynchronizerCubit>();
-    final listCreatorCubit = context.read<ListCreatorCubit>();
+    final listsCubit = context.read<ListsCubit>();
+    final listCreatorCubit = context.read<ListsCubit>();
     return MultiBlocListener(
       listeners: [
         // Login listener
@@ -60,6 +62,7 @@ class DashboardListeners extends StatelessWidget {
             return p.user != null && c.user == null;
           },
           listener: (context, state) {
+            listsCubit.resetState();
             listCreatorCubit.resetState();
             likesCubit.resetState();
             syncCubit.cleanupSyncData();
@@ -79,24 +82,29 @@ class DashboardListeners extends StatelessWidget {
               cataloguePageConfig.path,
               searchPageConfig.path,
               filtersPageConfig.path,
+              bookmarkListCreationPageConfig.path,
             ].contains(state.location)) {
               final modeCubit = context.read<AppModeCubit>();
-              if (modeCubit.state.mode == AppModeEnum.listCreationMode) {
+              if (!modeCubit.state.isDefault) {
                 modeCubit.changeMode(AppModeEnum.defaultMode);
               }
             }
           },
         ),
         // Global list creation success/failure listener
-        BlocListener<ListCreatorCubit, ListCreatorState>(
-          listenWhen: (p, c) => p.isSuccess != c.isSuccess,
+        BlocListener<ListEditorCubit, ListEditorState>(
+          listenWhen: (p, c) =>
+              p.isSavingFailure != c.isSavingFailure ||
+              p.isSavingSuccess != c.isSavingSuccess,
           listener: (context, state) {
-            if (state.isSuccess == true) {
+            if (state.isSavingSuccess) {
               CustomSnackbar.success(
                 context,
                 LocaleKeys.book_lists_sheet_success.tr(),
               );
-            } else if (state.isSuccess == false) {
+              return;
+            }
+            if (state.isSavingFailure) {
               CustomSnackbar.error(
                 context,
                 LocaleKeys.book_lists_sheet_error.tr(),

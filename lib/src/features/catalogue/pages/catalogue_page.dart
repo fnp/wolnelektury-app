@@ -25,7 +25,7 @@ class CataloguePage extends StatelessWidget {
             const _Body(),
 
             // If the app is in list creation mode, we show the controls at the bottom in Stack
-            if (state.isListCreation)
+            if (state.isListBookCreation)
               const Positioned(
                 left: 0,
                 right: 0,

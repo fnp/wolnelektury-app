@@ -1,12 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_element.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_list_header.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/images.dart';
 
 class MyLibraryList extends StatelessWidget {
   final ListModel itemList;
@@ -23,15 +29,13 @@ class MyLibraryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+    return BlocBuilder<ListsCubit, ListsState>(
       buildWhen: (p, c) {
         return p.doesLocalListExistsAlready(itemList.slug) !=
             c.doesLocalListExistsAlready(itemList.slug);
       },
       builder: (context, state) {
-        final isExisting =
-            state.doesLocalListExistsAlready(itemList.slug) ||
-            state.fetchedSingleList?.slug == itemList.slug;
+        final isExisting = state.doesLocalListExistsAlready(itemList.slug);
 
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
@@ -63,7 +67,7 @@ class _ScrollableList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final listCreatorCubit = context.read<ListCreatorCubit>();
+    final listsCubit = context.read<ListsCubit>();
 
     return Column(
       children: [
@@ -82,7 +86,7 @@ class _ScrollableList extends StatelessWidget {
         Expanded(
           child: CustomScrollPage(
             onLoadMore: () {
-              listCreatorCubit.getMoreListItems(itemList.slug);
+              listsCubit.getMoreListItems(itemList.slug);
             },
             builder: (scrollController) {
               return CustomScrollView(
@@ -92,6 +96,18 @@ class _ScrollableList extends StatelessWidget {
                   const SliverToBoxAdapter(
                     child: SizedBox(height: Dimensions.spacer / 2),
                   ),
+
+                  if (itemList.items.isEmpty)
+                    EmptyWidget(
+                      image: Images.empty,
+                      message: LocaleKeys.common_empty_lists_content_title.tr(),
+                      onTap: () {
+                        router.pushNamed(cataloguePageConfig.name);
+                      },
+                      buttonText: LocaleKeys.common_empty_search_in_catalogue
+                          .tr(),
+                    ),
+
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: Dimensions.mediumPadding,
@@ -101,29 +117,19 @@ class _ScrollableList extends StatelessWidget {
                         (context, index) {
                           final element = itemList.items[index];
                           if (element.isBook) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: Dimensions.mediumPadding,
-                              ),
-                              child: MyLibraryListElement.book(
-                                key: ValueKey(element.uuid),
-                                item: element,
-                                listName: itemList.name,
-                                isListOwner: isListOwner,
-                              ),
+                            return MyLibraryListElement.book(
+                              key: ValueKey(element.uuid),
+                              item: element,
+                              listName: itemList.name,
+                              isListOwner: isListOwner,
                             );
                           }
                           if (element.isBookmark) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: Dimensions.mediumPadding,
-                              ),
-                              child: MyLibraryListElement.bookmark(
-                                key: ValueKey(element.uuid),
-                                item: element,
-                                listName: itemList.name,
-                                isListOwner: isListOwner,
-                              ),
+                            return MyLibraryListElement.bookmark(
+                              key: ValueKey(element.uuid),
+                              item: element,
+                              listName: itemList.name,
+                              isListOwner: isListOwner,
                             );
                           }
                           return const SizedBox.shrink();

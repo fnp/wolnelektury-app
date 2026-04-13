@@ -6,7 +6,8 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/features/common/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/features/lists/widgets/book_lists_create_widget.dart';
 import 'package:wolnelektury/src/features/lists/widgets/book_lists_sheet_existing_lists.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -39,10 +40,11 @@ class BookListsSheet extends StatelessWidget {
         backgroundColor: Colors.transparent,
         bottomSheet: MultiBlocProvider(
           providers: [
-            BlocProvider.value(value: context.read<ListCreatorCubit>()),
+            BlocProvider.value(value: context.read<ListsCubit>()),
+            BlocProvider.value(value: context.read<ListEditorCubit>()),
             BlocProvider.value(value: context.read<ScrollCubit>()),
           ],
-          child: BlocListener<ListCreatorCubit, ListCreatorState>(
+          child: BlocListener<ListsCubit, ListsState>(
             listenWhen: (p, c) {
               return p.isDuplicateFailure != c.isDuplicateFailure;
             },
@@ -69,11 +71,12 @@ class BookListsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final availableHeight = MediaQuery.sizeOf(context).height / 2;
-    final cubit = BlocProvider.of<ListCreatorCubit>(context);
+    final cubit = context.read<ListsCubit>();
+    final editorCubit = context.read<ListEditorCubit>();
     return SafeArea(
       bottom: true,
       top: false,
-      child: BlocBuilder<ListCreatorCubit, ListCreatorState>(
+      child: BlocBuilder<ListsCubit, ListsState>(
         buildWhen: (p, c) {
           return p.allLists != c.allLists;
         },
@@ -104,7 +107,7 @@ class BookListsSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                      BlocBuilder<ListCreatorCubit, ListCreatorState>(
+                      BlocBuilder<ListEditorCubit, ListEditorState>(
                         buildWhen: (p, c) {
                           return p.itemsToAdd != c.itemsToAdd ||
                               p.itemsToRemove != c.itemsToRemove;
@@ -141,7 +144,16 @@ class BookListsSheet extends StatelessWidget {
                   const SizedBox(height: Dimensions.mediumPadding),
                   BookListsCreateWidget(
                     onSave: (String text) {
-                      cubit.newList(text, itemSlugs: [bookSlug]);
+                      cubit.createList(
+                        name: text,
+                        onSuccess: (list) {
+                          editorCubit.setListToEdit(list);
+                          editorCubit.addElement(
+                            bookSlug: bookSlug,
+                            listSlug: list.slug,
+                          );
+                        },
+                      );
                     },
                   ),
                   const SizedBox(height: Dimensions.spacer),

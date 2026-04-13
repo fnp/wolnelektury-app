@@ -206,7 +206,7 @@
             "save": "dodaj",
             "success": "Książki zostały zapisane",
             "error": "Nie udało się zapisać książek",
-            "delete": "Pomyślnie usunąłeś książkę z listy"
+            "delete": "Pomyślnie usunąłeś element z listy"
         }
     },
     "settings": {

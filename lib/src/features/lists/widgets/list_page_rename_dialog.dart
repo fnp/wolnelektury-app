@@ -7,7 +7,7 @@ import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_f
 import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_size.dart';
 import 'package:wolnelektury/src/features/common/widgets/dialog_wrapper.dart';
 import 'package:wolnelektury/src/features/common/widgets/textfield/text_field_validation_error.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -31,14 +31,12 @@ class ListPageRenameDialog extends StatefulWidget {
     showDialog(
       context: context,
       builder: (_) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: context.read<ListCreatorCubit>()),
-        ],
+        providers: [BlocProvider.value(value: context.read<ListsCubit>())],
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Builder(
             builder: (context) {
-              return BlocListener<ListCreatorCubit, ListCreatorState>(
+              return BlocListener<ListsCubit, ListsState>(
                 listenWhen: (p, c) {
                   return p.isRenaming && !c.isRenaming;
                 },
@@ -153,7 +151,7 @@ class _ListPageRenameDialogState extends State<ListPageRenameDialog> {
               spacing: Dimensions.mediumPadding,
               children: [
                 Expanded(
-                  child: BlocConsumer<ListCreatorCubit, ListCreatorState>(
+                  child: BlocConsumer<ListsCubit, ListsState>(
                     listenWhen: (p, c) {
                       return p.isRenamingFailure != c.isRenamingFailure ||
                           p.isDuplicateFailure != c.isDuplicateFailure;
@@ -184,7 +182,7 @@ class _ListPageRenameDialogState extends State<ListPageRenameDialog> {
                           if (state.isRenaming) return;
                           validate();
                           if (!showListNameError) {
-                            context.read<ListCreatorCubit>().renameList(
+                            context.read<ListsCubit>().renameList(
                               listSlug: widget.listSlug,
                               newName: _listNameController.text.trim(),
                             );

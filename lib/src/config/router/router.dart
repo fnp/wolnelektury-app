@@ -16,6 +16,7 @@ import 'package:wolnelektury/src/features/dashboard/pages/dashboard_wrapper.dart
 import 'package:wolnelektury/src/features/dashboard/pages/not_found_page.dart';
 import 'package:wolnelektury/src/features/dashboard/pages/splashscreen_page.dart';
 import 'package:wolnelektury/src/features/last_read/pages/last_read_page.dart';
+import 'package:wolnelektury/src/features/lists/pages/bookmark_list_creation_page.dart';
 import 'package:wolnelektury/src/features/lists/pages/list_page.dart';
 import 'package:wolnelektury/src/features/my_library/pages/my_library_page.dart';
 import 'package:wolnelektury/src/features/search/pages/search_page.dart';
@@ -142,6 +143,15 @@ final GoRouter router = GoRouter(
               child: _ColoredBackground(
                 child: BookPage(book: book, slug: slug),
               ),
+            );
+          },
+        ),
+        GoRoute(
+          path: bookmarkListCreationPageConfig.path,
+          name: bookmarkListCreationPageConfig.name,
+          pageBuilder: (context, state) {
+            return const MaterialPage(
+              child: _ColoredBackground(child: BookmarkListCreationPage()),
             );
           },
         ),

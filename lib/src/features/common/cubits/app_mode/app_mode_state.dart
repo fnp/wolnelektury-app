@@ -8,7 +8,11 @@ sealed class AppModeState with _$AppModeState {
 }
 
 extension AppModeStateX on AppModeState {
-  bool get isListCreation => mode == AppModeEnum.listCreationMode;
+  bool get isListBookCreation => mode == AppModeEnum.listCreationBooksMode;
+  bool get isListBookmarksCreation =>
+      mode == AppModeEnum.listCreationBookmarksMode;
+
   bool get isDefault => mode == AppModeEnum.defaultMode;
-  bool get shouldShowBottomBar => mode != AppModeEnum.listCreationMode;
+  bool get shouldShowBottomBar => isDefault;
+  bool get shouldShowTopBar => !isListBookmarksCreation;
 }

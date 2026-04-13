@@ -7,7 +7,8 @@ import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
@@ -25,15 +26,16 @@ class BookListsSheetExistingLists extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final creatorCubit = BlocProvider.of<ListCreatorCubit>(context);
+    final editorCubit = context.read<ListEditorCubit>();
+    final listsCubit = context.read<ListsCubit>();
 
     return CustomScrollPage(
       ignoreTopbar: true,
       onLoadMore: () {
-        creatorCubit.getMoreLists();
+        listsCubit.getMoreLists();
       },
       builder: (scrollController) {
-        return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+        return BlocBuilder<ListsCubit, ListsState>(
           buildWhen: (p, c) => p.isLoading != c.isLoading,
           builder: (context, state) {
             return AnimatedBoxFade(
@@ -59,15 +61,15 @@ class BookListsSheetExistingLists extends StatelessWidget {
                           listName: listName,
                           bookSlug: currentlyWorkingOnBookSlug,
                           onAdd: () {
-                            creatorCubit.addItemToListWithQueue(
-                              listSlug,
-                              currentlyWorkingOnBookSlug,
+                            editorCubit.addElement(
+                              bookSlug: currentlyWorkingOnBookSlug,
+                              listSlug: listSlug,
                             );
                           },
                           onRemove: () {
-                            creatorCubit.removeItemFromListWithQueue(
-                              listSlug,
-                              currentlyWorkingOnBookSlug,
+                            editorCubit.removeElement(
+                              bookSlug: currentlyWorkingOnBookSlug,
+                              listSlug: listSlug,
                             );
                           },
                         );
@@ -98,14 +100,13 @@ class _Element extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<ListCreatorCubit, ListCreatorState>(
+    return BlocBuilder<ListEditorCubit, ListEditorState>(
       buildWhen: (p, c) {
-        return p.isBookInList(listSlug, bookSlug) !=
-                c.isBookInList(listSlug, bookSlug) ||
-            p.allLists != c.allLists;
+        return p.isItemInGivenList(listSlug, bookSlug) !=
+            c.isItemInGivenList(listSlug, bookSlug);
       },
       builder: (context, state) {
-        final isBookInList = state.isBookInList(listSlug, bookSlug);
+        final isBookInList = state.isItemInGivenList(listSlug, bookSlug);
         return SizedBox(
           height: Dimensions.elementHeight,
           child: DecoratedBox(

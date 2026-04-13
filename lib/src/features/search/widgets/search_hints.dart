@@ -15,7 +15,7 @@ import 'package:wolnelektury/src/features/catalogue/widgets/buttons/book_overvie
 import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/page_subtitle.dart';
-import 'package:wolnelektury/src/features/lists/cubits/list_creator/list_creator_cubit.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
 import 'package:wolnelektury/src/features/search/cubits/search/search_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
@@ -71,7 +71,7 @@ class SearchHints extends StatelessWidget {
                         hint: hint,
                         key: ValueKey(hint.hashCode),
                         isInAddMode:
-                            modeState.mode == AppModeEnum.listCreationMode,
+                            modeState.mode == AppModeEnum.listCreationBooksMode,
                       );
                     },
                   );
@@ -101,7 +101,8 @@ class SearchHints extends StatelessWidget {
                             key: ValueKey(hint.hashCode),
                             fromLastSearched: true,
                             isInAddMode:
-                                modeState.mode == AppModeEnum.listCreationMode,
+                                modeState.mode ==
+                                AppModeEnum.listCreationBooksMode,
                           );
                         },
                       ),
@@ -147,12 +148,12 @@ class _HintElement extends StatelessWidget {
       case HintTypeEnum.book:
         if (hint.slug == null) return;
         if (isInAddMode) {
-          final c = context.read<ListCreatorCubit>();
-          if (c.state.isBookInEditedList(hint.slug!)) {
-            c.removeBookFromEditedList(hint.slug!);
+          final c = context.read<ListEditorCubit>();
+          if (c.state.isItemInEditedList(hint.slug!)) {
+            c.removeElement(bookSlug: hint.slug!);
             return;
           }
-          c.addBookToEditedList(hint.slug!);
+          c.addElement(bookSlug: hint.slug!);
           return;
         }
         router.pushNamed(

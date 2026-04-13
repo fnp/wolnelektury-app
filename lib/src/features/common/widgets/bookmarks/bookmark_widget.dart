@@ -9,14 +9,17 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
+import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/features/common/widgets/connectivity_wrapper.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class BookmarkWidget extends StatelessWidget {
   // The book related to the bookmark
@@ -94,6 +97,12 @@ class BookmarkWidget extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
+  static const borderRadius = BorderRadius.only(
+    topRight: Radius.circular(30),
+    bottomLeft: Radius.circular(30),
+    bottomRight: Radius.circular(30),
+  );
+
   final BookModel book;
   final BookmarkModel bookmark;
   final Color backgroundColor;
@@ -118,244 +127,285 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
+    final bookmarkCubit = context.read<BookmarksCubit>();
+    final isInListMode = context
+        .read<AppModeCubit>()
+        .state
+        .isListBookmarksCreation;
+
+    void onTap() {
+      final creationCubit = context.read<ListEditorCubit>();
+      if (creationCubit.state.isItemInEditedList(bookmark.uuid!)) {
+        creationCubit.removeElement(bookmarkUuid: bookmark.uuid!);
+        return;
+      }
+      creationCubit.addElement(bookmarkUuid: bookmark.uuid!);
+      return;
+    }
+
+    void onDeleteTap() {
+      bookmarkCubit.deleteBookmark(bookmark: bookmark);
+      CustomSnackbar.success(
+        context,
+        LocaleKeys.audio_dialog_delete_paragraph.tr(),
+        onRevert: () {
+          bookmarkCubit.undoDeletion();
+        },
+        messengerKey: messengerKey,
+      );
+    }
+
+    void onReadTap() {
+      if (messengerKey != null) {
+        Navigator.of(context).pop();
+      }
+      router.pushNamed(
+        readingPageConfigWithAnchor.name,
+        extra: book,
+        pathParameters: {
+          'slug': book.slug,
+          if (bookmark.anchor != null) 'anchor': bookmark.anchor!,
+        },
+      );
+    }
+
+    void onListenTap(bool isPlaying) {
+      onListen?.call(bookmark.audioTimestamp, isPlaying);
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: Dimensions.spacer),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(30),
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
-          ),
-          color: backgroundColor,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(Dimensions.mediumPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Semantics(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                            child: Semantics(
-                              child: Text(
-                                book.title,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: CustomColors.black,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: Semantics(
-                              child: Text(
-                                book.authors.map((e) => e.name).join(', '),
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: CustomColors.black,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (isDeletable)
+      child: BlocBuilder<ListEditorCubit, ListEditorState>(
+        buildWhen: (p, c) {
+          return p.isItemInEditedList(bookmark.uuid!) !=
+              c.isItemInEditedList(bookmark.uuid!);
+        },
+        builder: (context, state) {
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: borderRadius,
+              color: state.isItemInEditedList(bookmark.uuid!)
+                  ? CustomColors.green
+                  : backgroundColor,
+            ),
+            child: InkWellWrapper(
+              borderRadius: borderRadius,
+              onTap: !isInListMode ? null : onTap,
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.mediumPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: Dimensions.smallPadding,
-                      children: [
-                        CustomButton(
-                          semanticLabel: LocaleKeys
-                              .common_semantic_delete_bookmark
-                              .tr(),
-                          onPressed: () {
-                            bookmarkCubit.deleteBookmark(bookmark: bookmark);
-                            CustomSnackbar.success(
-                              context,
-                              LocaleKeys.audio_dialog_delete_paragraph.tr(),
-                              onRevert: () {
-                                bookmarkCubit.undoDeletion();
-                              },
-                              messengerKey: messengerKey,
-                            );
-                          },
-                          icon: CustomIcons.delete_forever,
-                          backgroundColor: CustomColors.red,
-                          iconColor: CustomColors.white,
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-              const SizedBox(height: Dimensions.mediumPadding),
-              if (bookmark.anchor != null)
-                SizedBox(
-                  width: double.infinity,
-                  child: DecoratedBox(
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        left: BorderSide(color: CustomColors.black),
-                        right: BorderSide(color: CustomColors.black),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.mediumPadding,
-                        horizontal: Dimensions.veryLargePadding,
-                      ),
-                      child: Text(
-                        LocaleKeys.audio_dialog_paragraph.tr(
-                          namedArgs: {
-                            'paragraph': (bookmark.anchor ?? '').toString(),
-                          },
-                        ),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: CustomColors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              SizedBox(
-                width: double.infinity,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.inverseSurface,
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: Dimensions.mediumPadding,
-                      bottom: Dimensions.mediumPadding,
-                      right: Dimensions.mediumPadding,
-                      left: Dimensions.veryLargePadding,
-                    ),
-                    child: ExcludeSemantics(
-                      child: _Note(note: bookmark.note, onEdit: onEdit),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: Dimensions.mediumPadding),
-              ConnectivityWrapper(
-                builder: (context, hasConnection) {
-                  final isReadingAvailable =
-                      bookmark.anchor != null &&
-                      (hasConnection || isReaderAvailableOffline);
-
-                  final isListeningAvailable =
-                      bookmark.audioTimestamp != null &&
-                      (hasConnection || isAudioAvailableOffline);
-                  return Semantics(
-                    container: true,
-                    child: Row(
-                      spacing: Dimensions.mediumPadding,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
                           child: Semantics(
-                            button: true,
-                            enabled: isReadingAvailable,
-                            label: LocaleKeys.common_icon_button_read.tr(),
-                            child: Opacity(
-                              opacity: isReadingAvailable ? 1.0 : 0.5,
-                              child: IgnorePointer(
-                                ignoring: !isReadingAvailable,
-                                child: ExcludeSemantics(
-                                  child: TextButtonWithIcon(
-                                    onPressed: () {
-                                      if (messengerKey != null) {
-                                        Navigator.of(context).pop();
-                                      }
-                                      router.pushNamed(
-                                        readingPageConfigWithAnchor.name,
-                                        extra: book,
-                                        pathParameters: {
-                                          'slug': book.slug,
-                                          if (bookmark.anchor != null)
-                                            'anchor': bookmark.anchor!,
-                                        },
-                                      );
-                                    },
-                                    nonActiveText: LocaleKeys
-                                        .common_icon_button_read
-                                        .tr(),
-                                    nonActiveIcon: CustomIcons.book_5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Semantics(
+                                    child: Text(
+                                      book.title,
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: CustomColors.black,
+                                          ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          child: Semantics(
-                            button: true,
-                            enabled: isListeningAvailable,
-                            label: LocaleKeys.common_icon_button_listen.tr(),
-                            child: Opacity(
-                              opacity: isListeningAvailable ? 1.0 : 0.5,
-                              child: IgnorePointer(
-                                ignoring: !isListeningAvailable,
-                                child: BlocBuilder<AudioCubit, AudioState>(
-                                  buildWhen: (p, c) =>
-                                      p.isPlaying != c.isPlaying,
-                                  builder: (context, state) {
-                                    return ExcludeSemantics(
-                                      child: TextButtonWithIcon(
-                                        onPressed: () {
-                                          onListen?.call(
-                                            bookmark.audioTimestamp,
-                                            state.isPlaying,
-                                          );
-                                        },
-                                        nonActiveText: LocaleKeys
-                                            .common_icon_button_listen
-                                            .tr(),
-                                        nonActiveIcon: CustomIcons.headphones,
-                                      ),
-                                    );
-                                  },
+                                Flexible(
+                                  child: Semantics(
+                                    child: Text(
+                                      book.authors
+                                          .map((e) => e.name)
+                                          .join(', '),
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(color: CustomColors.black),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                           ),
                         ),
-                        ExcludeSemantics(
-                          child: CustomButton(
-                            semanticLabel: LocaleKeys
-                                .common_semantic_share_bookmark
-                                .tr(),
-                            onPressed: () {
-                              ShareUtils.shareBookmark(bookmark);
-                            },
-                            icon: CustomIcons.ios_share,
-                            iconSize: 20,
-                            iconColor: CustomColors.black,
+                        if (isDeletable && !isInListMode)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: Dimensions.smallPadding,
+                            children: [
+                              CustomButton(
+                                semanticLabel: LocaleKeys
+                                    .common_semantic_delete_bookmark
+                                    .tr(),
+                                onPressed: onDeleteTap,
+                                icon: CustomIcons.delete_forever,
+                                backgroundColor: CustomColors.red,
+                                iconColor: CustomColors.white,
+                              ),
+                            ],
                           ),
-                        ),
                       ],
                     ),
-                  );
-                },
+                    const SizedBox(height: Dimensions.mediumPadding),
+                    if (bookmark.anchor != null)
+                      SizedBox(
+                        width: double.infinity,
+                        child: DecoratedBox(
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              left: BorderSide(color: CustomColors.black),
+                              right: BorderSide(color: CustomColors.black),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: Dimensions.mediumPadding,
+                              horizontal: Dimensions.veryLargePadding,
+                            ),
+                            child: Text(
+                              LocaleKeys.audio_dialog_paragraph.tr(
+                                namedArgs: {
+                                  'paragraph': (bookmark.anchor ?? '')
+                                      .toString(),
+                                },
+                              ),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: CustomColors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.inverseSurface,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: Dimensions.mediumPadding,
+                            bottom: Dimensions.mediumPadding,
+                            right: Dimensions.mediumPadding,
+                            left: Dimensions.veryLargePadding,
+                          ),
+                          child: ExcludeSemantics(
+                            child: _Note(note: bookmark.note, onEdit: onEdit),
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (!isInListMode) ...[
+                      const SizedBox(height: Dimensions.mediumPadding),
+                      ConnectivityWrapper(
+                        builder: (context, hasConnection) {
+                          final isReadingAvailable =
+                              bookmark.anchor != null &&
+                              (hasConnection || isReaderAvailableOffline);
+
+                          final isListeningAvailable =
+                              bookmark.audioTimestamp != null &&
+                              (hasConnection || isAudioAvailableOffline);
+                          return Semantics(
+                            container: true,
+                            child: Row(
+                              spacing: Dimensions.mediumPadding,
+                              children: [
+                                Flexible(
+                                  child: Semantics(
+                                    button: true,
+                                    enabled: isReadingAvailable,
+                                    label: LocaleKeys.common_icon_button_read
+                                        .tr(),
+                                    child: Opacity(
+                                      opacity: isReadingAvailable ? 1.0 : 0.5,
+                                      child: IgnorePointer(
+                                        ignoring: !isReadingAvailable,
+                                        child: ExcludeSemantics(
+                                          child: TextButtonWithIcon(
+                                            onPressed: onReadTap,
+                                            nonActiveText: LocaleKeys
+                                                .common_icon_button_read
+                                                .tr(),
+                                            nonActiveIcon: CustomIcons.book_5,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Semantics(
+                                    button: true,
+                                    enabled: isListeningAvailable,
+                                    label: LocaleKeys.common_icon_button_listen
+                                        .tr(),
+                                    child: Opacity(
+                                      opacity: isListeningAvailable ? 1.0 : 0.5,
+                                      child: IgnorePointer(
+                                        ignoring: !isListeningAvailable,
+                                        child:
+                                            BlocBuilder<AudioCubit, AudioState>(
+                                              buildWhen: (p, c) =>
+                                                  p.isPlaying != c.isPlaying,
+                                              builder: (context, state) {
+                                                return ExcludeSemantics(
+                                                  child: TextButtonWithIcon(
+                                                    onPressed: () =>
+                                                        onListenTap(
+                                                          state.isPlaying,
+                                                        ),
+                                                    nonActiveText: LocaleKeys
+                                                        .common_icon_button_listen
+                                                        .tr(),
+                                                    nonActiveIcon:
+                                                        CustomIcons.headphones,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ExcludeSemantics(
+                                  child: CustomButton(
+                                    semanticLabel: LocaleKeys
+                                        .common_semantic_share_bookmark
+                                        .tr(),
+                                    onPressed: () {
+                                      ShareUtils.shareBookmark(bookmark);
+                                    },
+                                    icon: CustomIcons.ios_share,
+                                    iconSize: 20,
+                                    iconColor: CustomColors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
