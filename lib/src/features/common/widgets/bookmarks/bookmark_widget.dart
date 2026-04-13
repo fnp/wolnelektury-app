@@ -184,7 +184,7 @@ class _Body extends StatelessWidget {
           return DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: borderRadius,
-              color: state.isItemInEditedList(bookmark.uuid!)
+              color: state.isItemInEditedList(bookmark.uuid!) && isInListMode
                   ? CustomColors.green
                   : backgroundColor,
             ),
