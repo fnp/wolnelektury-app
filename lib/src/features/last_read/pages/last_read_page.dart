@@ -90,7 +90,10 @@ class _SkeletonizedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<BookModel> list = List.generate(3, (index) => BookModel.empty());
+    final List<BookModel> list = List.generate(
+      3,
+      (index) => BookModel.skeleton(),
+    );
 
     return Skeletonizer(
       child: ListView.separated(

@@ -43,12 +43,12 @@ extension ListsStateX on ListsState {
 
   bool isBookInList(String listSlug, String itemSlug) {
     if (fetchedSingleList != null && fetchedSingleList!.slug == listSlug) {
-      return fetchedSingleList!.items.any((item) => item.bookSlug == itemSlug);
+      return fetchedSingleList!.items.any((item) => item.book?.slug == itemSlug);
     }
     return (allLists
                 .firstWhereOrNull((element) => element.slug == listSlug)
                 ?.items ??
             [])
-        .any((item) => item.bookSlug == itemSlug);
+        .any((item) => item.book?.slug == itemSlug);
   }
 }

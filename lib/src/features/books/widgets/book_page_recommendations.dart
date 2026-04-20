@@ -13,7 +13,7 @@ class BookPageRecommendations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final skeletonizedBooks = List.filled(3, BookModel.empty());
+    final skeletonizedBooks = List.filled(3, BookModel.skeleton());
     final availableWidth = MediaQuery.sizeOf(context).width;
     final theme = Theme.of(context);
     return BlocBuilder<SingleBookCubit, SingleBookState>(

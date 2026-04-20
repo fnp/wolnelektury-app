@@ -22,15 +22,7 @@ sealed class ListEditorState with _$ListEditorState {
 
 extension ListEditorStateX on ListEditorState {
   int get numberOfChangesInEditedList {
-    final editedSlugs = (editedList?.items ?? [])
-        .map((item) => item.itemIdentifier)
-        .toSet();
-    final editedToSaveSlugs = (editedListToSave?.items ?? [])
-        .map((item) => item.itemIdentifier)
-        .toSet();
-
-    return editedSlugs.difference(editedToSaveSlugs).length +
-        editedToSaveSlugs.difference(editedSlugs).length;
+    return itemsToAdd.length + itemsToRemove.length;
   }
 
   bool isItemInGivenList(String listSlug, String itemIdentifier) {

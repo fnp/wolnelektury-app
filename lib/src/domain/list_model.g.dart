@@ -32,10 +32,12 @@ _ListItemModel _$ListItemModelFromJson(Map<String, dynamic> json) =>
       timestamp: (json['timestamp'] as num?)?.toInt(),
       favorites: json['favorites'] as bool? ?? false,
       deleted: json['deleted'] as bool? ?? false,
-      bookSlug: json['book_slug'] as String?,
-      fragment: json['fragment'] as String?,
-      quote: json['quote'] as String?,
-      bookmark: json['bookmark'] as String?,
+      book: json['book'] == null
+          ? null
+          : BookModel.fromJson(json['book'] as Map<String, dynamic>),
+      bookmark: json['bookmark'] == null
+          ? null
+          : BookmarkModel.fromJson(json['bookmark'] as Map<String, dynamic>),
       note: json['note'] as String? ?? '',
     );
 
@@ -47,9 +49,7 @@ Map<String, dynamic> _$ListItemModelToJson(_ListItemModel instance) =>
       'timestamp': instance.timestamp,
       'favorites': instance.favorites,
       'deleted': instance.deleted,
-      'book_slug': instance.bookSlug,
-      'fragment': instance.fragment,
-      'quote': instance.quote,
+      'book': instance.book,
       'bookmark': instance.bookmark,
       'note': instance.note,
     };

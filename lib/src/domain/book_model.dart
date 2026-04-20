@@ -39,16 +39,12 @@ sealed class BookModel with _$BookModel {
     @JsonKey(name: 'has_mp3_file') @Default(false) bool hasAudiobook,
   }) = _BookModel;
 
-  factory BookModel.empty() => BookModel(
+  factory BookModel.skeleton() => BookModel(
     title: BoneMock.title,
     slug: '',
     authors: [AuthorModel(name: BoneMock.fullName, slug: '')],
     url: '',
-    fragment: const BookFragmentData(
-      title: '',
-      html:
-          'There is some long title, just for skeletonizor purposes. There is some long title, just for skeletonizor purposes. There is some long title, just for skeletonizor purposes.',
-    ),
+    fragment: BookFragmentData(title: '', html: BoneMock.longParagraph),
   );
 
   factory BookModel.fromJson(Map<String, dynamic> json) =>

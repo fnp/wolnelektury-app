@@ -38,7 +38,14 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
     final updatedItems = [...list.items, newItem];
     final updatedEditedList = list.copyWith(items: updatedItems);
     emit(state.copyWith(editedListToSave: updatedEditedList));
-    _addOrRemoveElementFromAddingQueue(newItem);
+    if (state.itemsToRemove.any((item) {
+      return item.itemIdentifier == bookSlug ||
+          item.itemIdentifier == bookmarkUuid;
+    })) {
+      _addOrRemoveElementFromRemovingQueue(newItem);
+    } else {
+      _addOrRemoveElementFromAddingQueue(newItem);
+    }
   }
 
   void removeElement({

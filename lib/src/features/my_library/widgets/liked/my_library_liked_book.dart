@@ -46,7 +46,7 @@ class MyLibraryLikedBook extends StatelessWidget {
                           ),
                           child: BookPageCoverWithButtons(
                             book: state.isLoading
-                                ? BookModel.empty()
+                                ? BookModel.skeleton()
                                 : state.book!,
                           ),
                         ),

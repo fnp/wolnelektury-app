@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/domain/bookmark_model.dart';
 
 part 'list_model.freezed.dart';
 part 'list_model.g.dart';
@@ -28,10 +30,10 @@ sealed class ListItemModel with _$ListItemModel {
     int? timestamp,
     @Default(false) bool favorites,
     @Default(false) bool deleted,
-    @JsonKey(name: 'book_slug') String? bookSlug,
-    String? fragment,
-    String? quote,
-    String? bookmark,
+    BookModel? book,
+    BookmarkModel? bookmark,
+    // String? fragment,
+    // String? quote,
     @Default('') String note,
   }) = _ListItemModel;
 
@@ -47,27 +49,46 @@ sealed class ListItemModel with _$ListItemModel {
     String note = '',
   }) => ListItemModel(
     listSlug: listSlug,
-    bookSlug: bookSlug,
-    bookmark: bookmarkUuid,
+    book: bookSlug != null
+        ? BookModel(title: '', slug: bookSlug, url: '')
+        : null,
+    bookmark: bookmarkUuid != null
+        ? BookmarkModel(
+            uuid: bookmarkUuid,
+            location: '',
+            slug: '',
+            note: '',
+            href: '',
+          )
+        : null,
     uuid: uuid,
     note: note,
   );
 }
 
 extension ListItemModelX on ListItemModel {
-  bool get isBook => bookSlug != null;
+  bool get isBook => book != null;
   bool get isBookmark => bookmark != null;
 
   /// Returns the identifier (slug) of this item, whether it's a book or bookmark
-  String? get itemIdentifier => bookSlug ?? bookmark;
+  String? get itemIdentifier => book?.slug ?? bookmark?.uuid;
 
   Map<String, dynamic> toCleanJson() {
-    return toJson()
-      ..remove('uuid')
-      ..remove('list_slug')
-      ..remove('order')
-      ..remove('timestamp')
-      ..remove('order')
-      ..remove('deleted');
+    final json = <String, dynamic>{};
+
+    // Add book slug if book exists
+    if (book != null) {
+      json['book_slug'] = book!.slug;
+    }
+
+    // Add bookmark uuid if bookmark exists
+    if (bookmark != null) {
+      json['bookmark'] = bookmark!.uuid;
+    }
+
+    // Add note
+    json['note'] = note;
+
+    return json;
   }
 }

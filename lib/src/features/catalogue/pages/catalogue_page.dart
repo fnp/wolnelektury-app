@@ -116,7 +116,7 @@ class _BooksList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final skeletonizedBooks = List.filled(9, BookModel.empty());
+    final skeletonizedBooks = List.filled(9, BookModel.skeleton());
 
     return SliverPadding(
       padding: const EdgeInsets.only(
