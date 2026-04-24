@@ -256,6 +256,8 @@ class ApiService {
 
   Future<ApiResponse> deleteRequest(
     String endpoint, {
+    dynamic data,
+    String? contentType,
     bool allowRetry = true,
     required bool isAnonymous,
   }) async {
@@ -267,7 +269,11 @@ class ApiService {
     try {
       final response = await _dio.delete(
         endpoint,
-        options: createOptions(accessToken: accessToken),
+        data: data,
+        options: createOptions(
+          accessToken: accessToken,
+          contentType: contentType,
+        ),
       );
 
       if ((response.statusCode ?? 0) >= 200 &&
@@ -288,6 +294,8 @@ class ApiService {
         if (refreshSuccess) {
           return await deleteRequest(
             endpoint,
+            data: data,
+            contentType: contentType,
             // Disallow retrying, this is already a retry
             allowRetry: false,
             isAnonymous: isAnonymous,

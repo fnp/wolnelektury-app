@@ -11,7 +11,7 @@ abstract class ListsRepository {
     required String listName,
     required List<ListItemModel> items,
   });
-  Future<DataState<List<ListItemModel>>> addItemsToList({
+  Future<DataState<void>> addItemsToList({
     required String listSlug,
     required List<ListItemModel> items,
   });
@@ -25,10 +25,6 @@ abstract class ListsRepository {
   });
 
   // Update
-  Future<DataState<ListItemModel>> updateListItem({
-    required String itemUuid,
-    required Map<String, dynamic> updates,
-  });
   Future<DataState<void>> renameList({
     required String listSlug,
     required String newName,
@@ -37,6 +33,7 @@ abstract class ListsRepository {
   // Delete
   Future<DataState<void>> deleteList({required String listSlug});
   Future<DataState<void>> deleteListItem({required String itemUuid});
+  Future<DataState<void>> deleteListItems({required List<String> itemUuids});
 }
 
 class ListsRepositoryImplementation extends ListsRepository {
@@ -49,6 +46,7 @@ class ListsRepositoryImplementation extends ListsRepository {
       '/lists/$listSlug/items/';
   static String _manageListItemEndpoint(String itemUuid) =>
       '/list-items/$itemUuid/';
+  static const String _manageListItemsBulkEndpoint = '/list-items/';
 
   @override
   Future<DataState<ListModel>> getListBySlug({required String slug}) async {
@@ -95,7 +93,7 @@ class ListsRepositoryImplementation extends ListsRepository {
   }
 
   @override
-  Future<DataState<List<ListItemModel>>> addItemsToList({
+  Future<DataState<void>> addItemsToList({
     required String listSlug,
     required List<ListItemModel> items,
   }) async {
@@ -108,39 +106,11 @@ class ListsRepositoryImplementation extends ListsRepository {
         isAnonymous: false,
       );
 
-      if (response.hasError || !response.hasData) {
+      if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
       }
 
-      final createdItems = (response.data as List)
-          .map((item) => ListItemModel.fromJson(item as Map<String, dynamic>))
-          .toList();
-
-      return DataState.success(data: createdItems);
-    } catch (e) {
-      return const DataState.failure(Failure.badResponse());
-    }
-  }
-
-  @override
-  Future<DataState<ListItemModel>> updateListItem({
-    required String itemUuid,
-    required Map<String, dynamic> updates,
-  }) async {
-    try {
-      final response = await _apiService.patchRequest(
-        _manageListItemEndpoint(itemUuid),
-        updates,
-        isAnonymous: false,
-      );
-
-      if (response.hasError || !response.hasData) {
-        return const DataState.failure(Failure.badResponse());
-      }
-
-      return DataState.success(
-        data: ListItemModel.fromJson(response.data!.first),
-      );
+      return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());
     }
@@ -179,6 +149,28 @@ class ListsRepositoryImplementation extends ListsRepository {
       if (response.hasError) {
         return const DataState.failure(Failure.badResponse());
       }
+      return const DataState.success(data: null);
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<void>> deleteListItems({
+    required List<String> itemUuids,
+  }) async {
+    try {
+      final response = await _apiService.deleteRequest(
+        _manageListItemsBulkEndpoint,
+        data: itemUuids,
+        contentType: 'application/json',
+        isAnonymous: false,
+      );
+
+      if (response.hasError) {
+        return const DataState.failure(Failure.badResponse());
+      }
+
       return const DataState.success(data: null);
     } catch (e) {
       return const DataState.failure(Failure.badResponse());

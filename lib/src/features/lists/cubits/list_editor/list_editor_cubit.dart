@@ -49,6 +49,7 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
   }
 
   void removeElement({
+    String? uuid,
     String? bookSlug,
     String? bookmarkUuid,
     String? listSlug,
@@ -60,7 +61,11 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
       return i.itemIdentifier != bookSlug && i.itemIdentifier != bookmarkUuid;
     }).toList();
     final updatedEditedList = list.copyWith(items: updatedItems);
+    final existingItemUuid = state.getItemUuidByIdentifier(
+      bookSlug ?? bookmarkUuid ?? '',
+    );
     final elementModel = ListItemModel.create(
+      uuid: existingItemUuid,
       listSlug: listSlug ?? list.slug,
       bookSlug: bookSlug,
       bookmarkUuid: bookmarkUuid,
@@ -105,15 +110,14 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
     final itemsToRemove = state.itemsToRemove;
 
     if (itemsToRemove.isNotEmpty) {
-      final removeResults = await Future.wait(
-        itemsToRemove.map((item) {
-          return _listsRepository.deleteListItem(
-            itemUuid: state.getItemUuidByIdentifier(item.itemIdentifier!)!,
-          );
-        }),
+      final removeResults = await _listsRepository.deleteListItems(
+        itemUuids: itemsToRemove
+            .where((item) => item.uuid != null)
+            .map((item) => item.uuid!)
+            .toList(),
       );
 
-      if (removeResults.any((result) => !result.isSuccess)) {
+      if (!removeResults.isSuccess) {
         emit(state.copyWith(isSavingEditedList: false, isSavingFailure: true));
         return;
       }
@@ -124,6 +128,8 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
         listSlug: state.editedListToSave!.slug,
         items: itemsToAdd,
       );
+
+      print(addResult);
 
       if (!addResult.isSuccess) {
         emit(state.copyWith(isSavingEditedList: false, isSavingFailure: true));
