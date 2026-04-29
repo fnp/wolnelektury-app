@@ -17,6 +17,13 @@ sealed class ListEditorState with _$ListEditorState {
     @Default(false) bool isSavingEditedList,
     @Default(false) bool isSavingFailure,
     @Default(false) bool isSavingSuccess,
+
+    // Book membership tracking
+    String? currentBookSlug,
+    @Default({}) Set<String> bookListMemberships,
+    @Default([]) List<ListItemModel> bookListMembershipItems,
+    @Default(false) bool isFetchingMemberships,
+    @Default(false) bool membershipsFetchFailure,
   }) = _ListEditorState;
 }
 
@@ -26,6 +33,31 @@ extension ListEditorStateX on ListEditorState {
   }
 
   bool isItemInGivenList(String listSlug, String itemIdentifier) {
+    // Check if this is for the current book being worked on
+    if (currentBookSlug != null && itemIdentifier == currentBookSlug) {
+      // Check base membership state
+      bool isInList = bookListMemberships.contains(listSlug);
+      // Apply optimistic updates from queues
+      final isInAddQueue = itemsToAdd.any((item) {
+        return item.itemIdentifier == itemIdentifier &&
+            item.listSlug == listSlug;
+      });
+      final isInRemoveQueue = itemsToRemove.any((item) {
+        return item.itemIdentifier == itemIdentifier &&
+            item.listSlug == listSlug;
+      });
+
+      if (isInAddQueue) {
+        return true;
+      }
+      if (isInRemoveQueue) {
+        return false;
+      }
+
+      return isInList;
+    }
+
+    // Fallback to original logic for other cases (e.g., bookmarks)
     return (editedListToSave?.items.any(
               (item) =>
                   item.itemIdentifier == itemIdentifier &&

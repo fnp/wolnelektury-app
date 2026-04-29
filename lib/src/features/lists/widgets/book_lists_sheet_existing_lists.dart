@@ -35,46 +35,57 @@ class BookListsSheetExistingLists extends StatelessWidget {
         listsCubit.getMoreLists();
       },
       builder: (scrollController) {
-        return BlocBuilder<ListsCubit, ListsState>(
-          buildWhen: (p, c) => p.isLoading != c.isLoading,
-          builder: (context, state) {
-            return AnimatedBoxFade(
-              collapsedChild: const Padding(
-                padding: EdgeInsets.only(bottom: Dimensions.spacer),
-                child: CustomLoader(),
-              ),
-              isChildVisible: state.isLoading == false,
-              child: state.isLoading
-                  ? const SizedBox.shrink()
-                  : ListView.separated(
-                      controller: scrollController,
-                      shrinkWrap: true,
-                      itemCount: effectiveList.length,
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: Dimensions.mediumPadding);
-                      },
-                      itemBuilder: (context, index) {
-                        final listSlug = effectiveList[index].slug;
-                        final listName = effectiveList[index].name;
-                        return _Element(
-                          listSlug: listSlug,
-                          listName: listName,
-                          bookSlug: currentlyWorkingOnBookSlug,
-                          onAdd: () {
-                            editorCubit.addElement(
-                              bookSlug: currentlyWorkingOnBookSlug,
-                              listSlug: listSlug,
+        return BlocBuilder<ListEditorCubit, ListEditorState>(
+          buildWhen: (p, c) {
+            return p.isFetchingMemberships != c.isFetchingMemberships;
+          },
+          builder: (context, outerState) {
+            return BlocBuilder<ListsCubit, ListsState>(
+              buildWhen: (p, c) => p.isLoading != c.isLoading,
+              builder: (context, state) {
+                return AnimatedBoxFade(
+                  collapsedChild: const Padding(
+                    padding: EdgeInsets.only(bottom: Dimensions.spacer),
+                    child: CustomLoader(),
+                  ),
+                  isChildVisible:
+                      state.isLoading == false &&
+                      outerState.isFetchingMemberships == false,
+                  child: state.isLoading || outerState.isFetchingMemberships
+                      ? const SizedBox.shrink()
+                      : ListView.separated(
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          itemCount: effectiveList.length,
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(
+                              height: Dimensions.mediumPadding,
                             );
                           },
-                          onRemove: () {
-                            editorCubit.removeElement(
-                              bookSlug: currentlyWorkingOnBookSlug,
+                          itemBuilder: (context, index) {
+                            final listSlug = effectiveList[index].slug;
+                            final listName = effectiveList[index].name;
+                            return _Element(
                               listSlug: listSlug,
+                              listName: listName,
+                              bookSlug: currentlyWorkingOnBookSlug,
+                              onAdd: () {
+                                editorCubit.addElement(
+                                  bookSlug: currentlyWorkingOnBookSlug,
+                                  listSlug: listSlug,
+                                );
+                              },
+                              onRemove: () {
+                                editorCubit.removeElement(
+                                  bookSlug: currentlyWorkingOnBookSlug,
+                                  listSlug: listSlug,
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                    ),
+                        ),
+                );
+              },
             );
           },
         );
@@ -103,7 +114,9 @@ class _Element extends StatelessWidget {
     return BlocBuilder<ListEditorCubit, ListEditorState>(
       buildWhen: (p, c) {
         return p.isItemInGivenList(listSlug, bookSlug) !=
-            c.isItemInGivenList(listSlug, bookSlug);
+                c.isItemInGivenList(listSlug, bookSlug) ||
+            p.itemsToAdd != c.itemsToAdd ||
+            p.itemsToRemove != c.itemsToRemove;
       },
       builder: (context, state) {
         final isBookInList = state.isItemInGivenList(listSlug, bookSlug);

@@ -19,7 +19,8 @@ mixin _$ListEditorState {
  ListModel? get editedList;// This is the list that is being edited and will be saved. It is updated with every change in the editor.
  ListModel? get editedListToSave;// Elements to add
  List<ListItemModel> get itemsToAdd;// Elements to remove
- List<ListItemModel> get itemsToRemove; ListItemModel? get softRemovedItem; bool get isSavingEditedList; bool get isSavingFailure; bool get isSavingSuccess;
+ List<ListItemModel> get itemsToRemove; ListItemModel? get softRemovedItem; bool get isSavingEditedList; bool get isSavingFailure; bool get isSavingSuccess;// Book membership tracking
+ String? get currentBookSlug; Set<String> get bookListMemberships; List<ListItemModel> get bookListMembershipItems; bool get isFetchingMemberships; bool get membershipsFetchFailure;
 /// Create a copy of ListEditorState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +31,16 @@ $ListEditorStateCopyWith<ListEditorState> get copyWith => _$ListEditorStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListEditorState&&(identical(other.editedList, editedList) || other.editedList == editedList)&&(identical(other.editedListToSave, editedListToSave) || other.editedListToSave == editedListToSave)&&const DeepCollectionEquality().equals(other.itemsToAdd, itemsToAdd)&&const DeepCollectionEquality().equals(other.itemsToRemove, itemsToRemove)&&(identical(other.softRemovedItem, softRemovedItem) || other.softRemovedItem == softRemovedItem)&&(identical(other.isSavingEditedList, isSavingEditedList) || other.isSavingEditedList == isSavingEditedList)&&(identical(other.isSavingFailure, isSavingFailure) || other.isSavingFailure == isSavingFailure)&&(identical(other.isSavingSuccess, isSavingSuccess) || other.isSavingSuccess == isSavingSuccess));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListEditorState&&(identical(other.editedList, editedList) || other.editedList == editedList)&&(identical(other.editedListToSave, editedListToSave) || other.editedListToSave == editedListToSave)&&const DeepCollectionEquality().equals(other.itemsToAdd, itemsToAdd)&&const DeepCollectionEquality().equals(other.itemsToRemove, itemsToRemove)&&(identical(other.softRemovedItem, softRemovedItem) || other.softRemovedItem == softRemovedItem)&&(identical(other.isSavingEditedList, isSavingEditedList) || other.isSavingEditedList == isSavingEditedList)&&(identical(other.isSavingFailure, isSavingFailure) || other.isSavingFailure == isSavingFailure)&&(identical(other.isSavingSuccess, isSavingSuccess) || other.isSavingSuccess == isSavingSuccess)&&(identical(other.currentBookSlug, currentBookSlug) || other.currentBookSlug == currentBookSlug)&&const DeepCollectionEquality().equals(other.bookListMemberships, bookListMemberships)&&const DeepCollectionEquality().equals(other.bookListMembershipItems, bookListMembershipItems)&&(identical(other.isFetchingMemberships, isFetchingMemberships) || other.isFetchingMemberships == isFetchingMemberships)&&(identical(other.membershipsFetchFailure, membershipsFetchFailure) || other.membershipsFetchFailure == membershipsFetchFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,editedList,editedListToSave,const DeepCollectionEquality().hash(itemsToAdd),const DeepCollectionEquality().hash(itemsToRemove),softRemovedItem,isSavingEditedList,isSavingFailure,isSavingSuccess);
+int get hashCode => Object.hash(runtimeType,editedList,editedListToSave,const DeepCollectionEquality().hash(itemsToAdd),const DeepCollectionEquality().hash(itemsToRemove),softRemovedItem,isSavingEditedList,isSavingFailure,isSavingSuccess,currentBookSlug,const DeepCollectionEquality().hash(bookListMemberships),const DeepCollectionEquality().hash(bookListMembershipItems),isFetchingMemberships,membershipsFetchFailure);
 
 @override
 String toString() {
-  return 'ListEditorState(editedList: $editedList, editedListToSave: $editedListToSave, itemsToAdd: $itemsToAdd, itemsToRemove: $itemsToRemove, softRemovedItem: $softRemovedItem, isSavingEditedList: $isSavingEditedList, isSavingFailure: $isSavingFailure, isSavingSuccess: $isSavingSuccess)';
+  return 'ListEditorState(editedList: $editedList, editedListToSave: $editedListToSave, itemsToAdd: $itemsToAdd, itemsToRemove: $itemsToRemove, softRemovedItem: $softRemovedItem, isSavingEditedList: $isSavingEditedList, isSavingFailure: $isSavingFailure, isSavingSuccess: $isSavingSuccess, currentBookSlug: $currentBookSlug, bookListMemberships: $bookListMemberships, bookListMembershipItems: $bookListMembershipItems, isFetchingMemberships: $isFetchingMemberships, membershipsFetchFailure: $membershipsFetchFailure)';
 }
 
 
@@ -50,7 +51,7 @@ abstract mixin class $ListEditorStateCopyWith<$Res>  {
   factory $ListEditorStateCopyWith(ListEditorState value, $Res Function(ListEditorState) _then) = _$ListEditorStateCopyWithImpl;
 @useResult
 $Res call({
- ListModel? editedList, ListModel? editedListToSave, List<ListItemModel> itemsToAdd, List<ListItemModel> itemsToRemove, ListItemModel? softRemovedItem, bool isSavingEditedList, bool isSavingFailure, bool isSavingSuccess
+ ListModel? editedList, ListModel? editedListToSave, List<ListItemModel> itemsToAdd, List<ListItemModel> itemsToRemove, ListItemModel? softRemovedItem, bool isSavingEditedList, bool isSavingFailure, bool isSavingSuccess, String? currentBookSlug, Set<String> bookListMemberships, List<ListItemModel> bookListMembershipItems, bool isFetchingMemberships, bool membershipsFetchFailure
 });
 
 
@@ -67,7 +68,7 @@ class _$ListEditorStateCopyWithImpl<$Res>
 
 /// Create a copy of ListEditorState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? editedList = freezed,Object? editedListToSave = freezed,Object? itemsToAdd = null,Object? itemsToRemove = null,Object? softRemovedItem = freezed,Object? isSavingEditedList = null,Object? isSavingFailure = null,Object? isSavingSuccess = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? editedList = freezed,Object? editedListToSave = freezed,Object? itemsToAdd = null,Object? itemsToRemove = null,Object? softRemovedItem = freezed,Object? isSavingEditedList = null,Object? isSavingFailure = null,Object? isSavingSuccess = null,Object? currentBookSlug = freezed,Object? bookListMemberships = null,Object? bookListMembershipItems = null,Object? isFetchingMemberships = null,Object? membershipsFetchFailure = null,}) {
   return _then(_self.copyWith(
 editedList: freezed == editedList ? _self.editedList : editedList // ignore: cast_nullable_to_non_nullable
 as ListModel?,editedListToSave: freezed == editedListToSave ? _self.editedListToSave : editedListToSave // ignore: cast_nullable_to_non_nullable
@@ -77,6 +78,11 @@ as List<ListItemModel>,softRemovedItem: freezed == softRemovedItem ? _self.softR
 as ListItemModel?,isSavingEditedList: null == isSavingEditedList ? _self.isSavingEditedList : isSavingEditedList // ignore: cast_nullable_to_non_nullable
 as bool,isSavingFailure: null == isSavingFailure ? _self.isSavingFailure : isSavingFailure // ignore: cast_nullable_to_non_nullable
 as bool,isSavingSuccess: null == isSavingSuccess ? _self.isSavingSuccess : isSavingSuccess // ignore: cast_nullable_to_non_nullable
+as bool,currentBookSlug: freezed == currentBookSlug ? _self.currentBookSlug : currentBookSlug // ignore: cast_nullable_to_non_nullable
+as String?,bookListMemberships: null == bookListMemberships ? _self.bookListMemberships : bookListMemberships // ignore: cast_nullable_to_non_nullable
+as Set<String>,bookListMembershipItems: null == bookListMembershipItems ? _self.bookListMembershipItems : bookListMembershipItems // ignore: cast_nullable_to_non_nullable
+as List<ListItemModel>,isFetchingMemberships: null == isFetchingMemberships ? _self.isFetchingMemberships : isFetchingMemberships // ignore: cast_nullable_to_non_nullable
+as bool,membershipsFetchFailure: null == membershipsFetchFailure ? _self.membershipsFetchFailure : membershipsFetchFailure // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -124,7 +130,7 @@ $ListItemModelCopyWith<$Res>? get softRemovedItem {
 
 
 class _ListEditorState implements ListEditorState {
-  const _ListEditorState({this.editedList, this.editedListToSave, final  List<ListItemModel> itemsToAdd = const [], final  List<ListItemModel> itemsToRemove = const [], this.softRemovedItem, this.isSavingEditedList = false, this.isSavingFailure = false, this.isSavingSuccess = false}): _itemsToAdd = itemsToAdd,_itemsToRemove = itemsToRemove;
+  const _ListEditorState({this.editedList, this.editedListToSave, final  List<ListItemModel> itemsToAdd = const [], final  List<ListItemModel> itemsToRemove = const [], this.softRemovedItem, this.isSavingEditedList = false, this.isSavingFailure = false, this.isSavingSuccess = false, this.currentBookSlug, final  Set<String> bookListMemberships = const {}, final  List<ListItemModel> bookListMembershipItems = const [], this.isFetchingMemberships = false, this.membershipsFetchFailure = false}): _itemsToAdd = itemsToAdd,_itemsToRemove = itemsToRemove,_bookListMemberships = bookListMemberships,_bookListMembershipItems = bookListMembershipItems;
   
 
 // This is original list that is being edited. It is used to compare with the edited list to determine if there are any changes.
@@ -153,6 +159,24 @@ class _ListEditorState implements ListEditorState {
 @override@JsonKey() final  bool isSavingEditedList;
 @override@JsonKey() final  bool isSavingFailure;
 @override@JsonKey() final  bool isSavingSuccess;
+// Book membership tracking
+@override final  String? currentBookSlug;
+ final  Set<String> _bookListMemberships;
+@override@JsonKey() Set<String> get bookListMemberships {
+  if (_bookListMemberships is EqualUnmodifiableSetView) return _bookListMemberships;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableSetView(_bookListMemberships);
+}
+
+ final  List<ListItemModel> _bookListMembershipItems;
+@override@JsonKey() List<ListItemModel> get bookListMembershipItems {
+  if (_bookListMembershipItems is EqualUnmodifiableListView) return _bookListMembershipItems;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_bookListMembershipItems);
+}
+
+@override@JsonKey() final  bool isFetchingMemberships;
+@override@JsonKey() final  bool membershipsFetchFailure;
 
 /// Create a copy of ListEditorState
 /// with the given fields replaced by the non-null parameter values.
@@ -164,16 +188,16 @@ _$ListEditorStateCopyWith<_ListEditorState> get copyWith => __$ListEditorStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListEditorState&&(identical(other.editedList, editedList) || other.editedList == editedList)&&(identical(other.editedListToSave, editedListToSave) || other.editedListToSave == editedListToSave)&&const DeepCollectionEquality().equals(other._itemsToAdd, _itemsToAdd)&&const DeepCollectionEquality().equals(other._itemsToRemove, _itemsToRemove)&&(identical(other.softRemovedItem, softRemovedItem) || other.softRemovedItem == softRemovedItem)&&(identical(other.isSavingEditedList, isSavingEditedList) || other.isSavingEditedList == isSavingEditedList)&&(identical(other.isSavingFailure, isSavingFailure) || other.isSavingFailure == isSavingFailure)&&(identical(other.isSavingSuccess, isSavingSuccess) || other.isSavingSuccess == isSavingSuccess));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListEditorState&&(identical(other.editedList, editedList) || other.editedList == editedList)&&(identical(other.editedListToSave, editedListToSave) || other.editedListToSave == editedListToSave)&&const DeepCollectionEquality().equals(other._itemsToAdd, _itemsToAdd)&&const DeepCollectionEquality().equals(other._itemsToRemove, _itemsToRemove)&&(identical(other.softRemovedItem, softRemovedItem) || other.softRemovedItem == softRemovedItem)&&(identical(other.isSavingEditedList, isSavingEditedList) || other.isSavingEditedList == isSavingEditedList)&&(identical(other.isSavingFailure, isSavingFailure) || other.isSavingFailure == isSavingFailure)&&(identical(other.isSavingSuccess, isSavingSuccess) || other.isSavingSuccess == isSavingSuccess)&&(identical(other.currentBookSlug, currentBookSlug) || other.currentBookSlug == currentBookSlug)&&const DeepCollectionEquality().equals(other._bookListMemberships, _bookListMemberships)&&const DeepCollectionEquality().equals(other._bookListMembershipItems, _bookListMembershipItems)&&(identical(other.isFetchingMemberships, isFetchingMemberships) || other.isFetchingMemberships == isFetchingMemberships)&&(identical(other.membershipsFetchFailure, membershipsFetchFailure) || other.membershipsFetchFailure == membershipsFetchFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,editedList,editedListToSave,const DeepCollectionEquality().hash(_itemsToAdd),const DeepCollectionEquality().hash(_itemsToRemove),softRemovedItem,isSavingEditedList,isSavingFailure,isSavingSuccess);
+int get hashCode => Object.hash(runtimeType,editedList,editedListToSave,const DeepCollectionEquality().hash(_itemsToAdd),const DeepCollectionEquality().hash(_itemsToRemove),softRemovedItem,isSavingEditedList,isSavingFailure,isSavingSuccess,currentBookSlug,const DeepCollectionEquality().hash(_bookListMemberships),const DeepCollectionEquality().hash(_bookListMembershipItems),isFetchingMemberships,membershipsFetchFailure);
 
 @override
 String toString() {
-  return 'ListEditorState(editedList: $editedList, editedListToSave: $editedListToSave, itemsToAdd: $itemsToAdd, itemsToRemove: $itemsToRemove, softRemovedItem: $softRemovedItem, isSavingEditedList: $isSavingEditedList, isSavingFailure: $isSavingFailure, isSavingSuccess: $isSavingSuccess)';
+  return 'ListEditorState(editedList: $editedList, editedListToSave: $editedListToSave, itemsToAdd: $itemsToAdd, itemsToRemove: $itemsToRemove, softRemovedItem: $softRemovedItem, isSavingEditedList: $isSavingEditedList, isSavingFailure: $isSavingFailure, isSavingSuccess: $isSavingSuccess, currentBookSlug: $currentBookSlug, bookListMemberships: $bookListMemberships, bookListMembershipItems: $bookListMembershipItems, isFetchingMemberships: $isFetchingMemberships, membershipsFetchFailure: $membershipsFetchFailure)';
 }
 
 
@@ -184,7 +208,7 @@ abstract mixin class _$ListEditorStateCopyWith<$Res> implements $ListEditorState
   factory _$ListEditorStateCopyWith(_ListEditorState value, $Res Function(_ListEditorState) _then) = __$ListEditorStateCopyWithImpl;
 @override @useResult
 $Res call({
- ListModel? editedList, ListModel? editedListToSave, List<ListItemModel> itemsToAdd, List<ListItemModel> itemsToRemove, ListItemModel? softRemovedItem, bool isSavingEditedList, bool isSavingFailure, bool isSavingSuccess
+ ListModel? editedList, ListModel? editedListToSave, List<ListItemModel> itemsToAdd, List<ListItemModel> itemsToRemove, ListItemModel? softRemovedItem, bool isSavingEditedList, bool isSavingFailure, bool isSavingSuccess, String? currentBookSlug, Set<String> bookListMemberships, List<ListItemModel> bookListMembershipItems, bool isFetchingMemberships, bool membershipsFetchFailure
 });
 
 
@@ -201,7 +225,7 @@ class __$ListEditorStateCopyWithImpl<$Res>
 
 /// Create a copy of ListEditorState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? editedList = freezed,Object? editedListToSave = freezed,Object? itemsToAdd = null,Object? itemsToRemove = null,Object? softRemovedItem = freezed,Object? isSavingEditedList = null,Object? isSavingFailure = null,Object? isSavingSuccess = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? editedList = freezed,Object? editedListToSave = freezed,Object? itemsToAdd = null,Object? itemsToRemove = null,Object? softRemovedItem = freezed,Object? isSavingEditedList = null,Object? isSavingFailure = null,Object? isSavingSuccess = null,Object? currentBookSlug = freezed,Object? bookListMemberships = null,Object? bookListMembershipItems = null,Object? isFetchingMemberships = null,Object? membershipsFetchFailure = null,}) {
   return _then(_ListEditorState(
 editedList: freezed == editedList ? _self.editedList : editedList // ignore: cast_nullable_to_non_nullable
 as ListModel?,editedListToSave: freezed == editedListToSave ? _self.editedListToSave : editedListToSave // ignore: cast_nullable_to_non_nullable
@@ -211,6 +235,11 @@ as List<ListItemModel>,softRemovedItem: freezed == softRemovedItem ? _self.softR
 as ListItemModel?,isSavingEditedList: null == isSavingEditedList ? _self.isSavingEditedList : isSavingEditedList // ignore: cast_nullable_to_non_nullable
 as bool,isSavingFailure: null == isSavingFailure ? _self.isSavingFailure : isSavingFailure // ignore: cast_nullable_to_non_nullable
 as bool,isSavingSuccess: null == isSavingSuccess ? _self.isSavingSuccess : isSavingSuccess // ignore: cast_nullable_to_non_nullable
+as bool,currentBookSlug: freezed == currentBookSlug ? _self.currentBookSlug : currentBookSlug // ignore: cast_nullable_to_non_nullable
+as String?,bookListMemberships: null == bookListMemberships ? _self._bookListMemberships : bookListMemberships // ignore: cast_nullable_to_non_nullable
+as Set<String>,bookListMembershipItems: null == bookListMembershipItems ? _self._bookListMembershipItems : bookListMembershipItems // ignore: cast_nullable_to_non_nullable
+as List<ListItemModel>,isFetchingMemberships: null == isFetchingMemberships ? _self.isFetchingMemberships : isFetchingMemberships // ignore: cast_nullable_to_non_nullable
+as bool,membershipsFetchFailure: null == membershipsFetchFailure ? _self.membershipsFetchFailure : membershipsFetchFailure // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

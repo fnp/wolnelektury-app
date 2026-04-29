@@ -23,6 +23,9 @@ abstract class ListsRepository {
     required String listSlug,
     String? url,
   });
+  Future<DataState<List<ListItemModel>>> getBookListMemberships({
+    required String bookSlug,
+  });
 
   // Update
   Future<DataState<void>> renameList({
@@ -47,6 +50,8 @@ class ListsRepositoryImplementation extends ListsRepository {
   static String _manageListItemEndpoint(String itemUuid) =>
       '/list-items/$itemUuid/';
   static const String _manageListItemsBulkEndpoint = '/list-items/';
+  static String _bookListMembershipsEndpoint(String bookSlug) =>
+      '/list-items/book/$bookSlug/';
 
   @override
   Future<DataState<ListModel>> getListBySlug({required String slug}) async {
@@ -235,6 +240,32 @@ class ListsRepositoryImplementation extends ListsRepository {
         response: response,
         converter: (data) {
           return serializer(data: data, serializer: ListModel.fromJson);
+        },
+      );
+    } catch (e) {
+      return const DataState.failure(Failure.badResponse());
+    }
+  }
+
+  @override
+  Future<DataState<List<ListItemModel>>> getBookListMemberships({
+    required String bookSlug,
+  }) async {
+    try {
+      final response = await _apiService.getRequest(
+        _bookListMembershipsEndpoint(bookSlug),
+        useCache: CacheEnum.ignore,
+        isAnonymous: false,
+      );
+
+      if (!response.hasData) {
+        return const DataState.success(data: []);
+      }
+
+      return DataState.fromApiResponse(
+        response: response,
+        converter: (data) {
+          return serializer(data: data, serializer: ListItemModel.fromJson);
         },
       );
     } catch (e) {

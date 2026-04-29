@@ -23,6 +23,7 @@ class BookListsSheet extends StatelessWidget {
     required String bookSlug,
     required VoidCallback onSave,
   }) {
+    final editorCubit = context.read<ListEditorCubit>();
     showModalBottomSheet(
       enableDrag: false,
       shape: const RoundedRectangleBorder(
@@ -41,29 +42,58 @@ class BookListsSheet extends StatelessWidget {
         bottomSheet: MultiBlocProvider(
           providers: [
             BlocProvider.value(value: context.read<ListsCubit>()),
-            BlocProvider.value(value: context.read<ListEditorCubit>()),
+            BlocProvider.value(
+              value: context.read<ListEditorCubit>()
+                ..fetchBookListMemberships(bookSlug),
+            ),
             BlocProvider.value(value: context.read<ScrollCubit>()),
           ],
-          child: BlocListener<ListsCubit, ListsState>(
-            listenWhen: (p, c) {
-              return p.isDuplicateFailure != c.isDuplicateFailure;
-            },
-            listener: (context, state) {
-              if (state.isDuplicateFailure) {
-                CustomSnackbar.error(
-                  context,
-                  LocaleKeys.my_library_lists_rename_dialog_duplicate_error
-                      .tr(),
-                  messengerKey: CustomSnackbar.scaffoldMessengerKey,
-                );
-              }
-            },
+          child: MultiBlocListener(
+            listeners: [
+              BlocListener<ListsCubit, ListsState>(
+                listenWhen: (p, c) {
+                  return p.isDuplicateFailure != c.isDuplicateFailure;
+                },
+                listener: (context, state) {
+                  if (state.isDuplicateFailure) {
+                    CustomSnackbar.error(
+                      context,
+                      LocaleKeys.my_library_lists_rename_dialog_duplicate_error
+                          .tr(),
+                      messengerKey: CustomSnackbar.scaffoldMessengerKey,
+                    );
+                  }
+                },
+              ),
+              BlocListener<ListEditorCubit, ListEditorState>(
+                listenWhen: (p, c) =>
+                    p.isSavingEditedList && !c.isSavingEditedList,
+                listener: (context, state) {
+                  if (state.isSavingFailure) {
+                    CustomSnackbar.error(
+                      context,
+                      LocaleKeys.catalogue_list_creator_failure.tr(),
+                      messengerKey: CustomSnackbar.scaffoldMessengerKey,
+                    );
+                    return;
+                  }
+                  if (state.isSavingSuccess) {
+                    CustomSnackbar.success(
+                      context,
+                      LocaleKeys.catalogue_list_creator_success.tr(),
+                      messengerKey: CustomSnackbar.scaffoldMessengerKey,
+                    );
+                  }
+                },
+              ),
+            ],
             child: BookListsSheet(bookSlug: bookSlug),
           ),
         ),
       ),
     ).then((_) {
       onSave.call();
+      editorCubit.clearBookContext();
     });
   }
 

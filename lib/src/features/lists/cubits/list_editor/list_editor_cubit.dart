@@ -25,22 +25,82 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
     );
   }
 
+  Future<void> fetchBookListMemberships(String bookSlug) async {
+    emit(
+      state.copyWith(
+        isFetchingMemberships: true,
+        membershipsFetchFailure: false,
+        currentBookSlug: bookSlug,
+      ),
+    );
+
+    final result = await _listsRepository.getBookListMemberships(
+      bookSlug: bookSlug,
+    );
+
+    result.handle(
+      success: (items, _) {
+        emit(
+          state.copyWith(
+            bookListMemberships: items.map((i) => i.listSlug).toSet(),
+            bookListMembershipItems: items,
+            isFetchingMemberships: false,
+          ),
+        );
+      },
+      failure: (_) {
+        emit(
+          state.copyWith(
+            isFetchingMemberships: false,
+            membershipsFetchFailure: true,
+            bookListMemberships: {},
+            bookListMembershipItems: [],
+          ),
+        );
+      },
+    );
+  }
+
+  void clearBookContext() {
+    emit(
+      state.copyWith(
+        currentBookSlug: null,
+        bookListMemberships: {},
+        bookListMembershipItems: [],
+        itemsToAdd: [],
+        itemsToRemove: [],
+        isFetchingMemberships: false,
+        membershipsFetchFailure: false,
+      ),
+    );
+  }
+
   void addElement({String? bookSlug, String? bookmarkUuid, String? listSlug}) {
-    final list = state.editedListToSave;
-    if (list == null) return;
+    // Determine effective listSlug: use parameter if provided, or fall back to editedListToSave
+    final effectiveListSlug = listSlug ?? state.editedListToSave?.slug;
+    if (effectiveListSlug == null) return;
 
     final newItem = ListItemModel.create(
-      listSlug: listSlug ?? list.slug,
+      listSlug: effectiveListSlug,
       bookSlug: bookSlug,
       bookmarkUuid: bookmarkUuid,
     );
 
-    final updatedItems = [...list.items, newItem];
-    final updatedEditedList = list.copyWith(items: updatedItems);
-    emit(state.copyWith(editedListToSave: updatedEditedList));
+    // Update editedListToSave only in Mode 1 (when editing a specific list)
+    if (state.editedListToSave != null) {
+      final updatedItems = [...state.editedListToSave!.items, newItem];
+      final updatedEditedList = state.editedListToSave!.copyWith(
+        items: updatedItems,
+      );
+      emit(state.copyWith(editedListToSave: updatedEditedList));
+    }
+
+    // Queue the item for adding (works in both Mode 1 and Mode 2)
+    // Check if this specific item (identifier + listSlug) is in remove queue
     if (state.itemsToRemove.any((item) {
-      return item.itemIdentifier == bookSlug ||
-          item.itemIdentifier == bookmarkUuid;
+      return (item.itemIdentifier == bookSlug ||
+              item.itemIdentifier == bookmarkUuid) &&
+          item.listSlug == effectiveListSlug;
     })) {
       _addOrRemoveElementFromRemovingQueue(newItem);
     } else {
@@ -54,26 +114,55 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
     String? bookmarkUuid,
     String? listSlug,
   }) {
-    final list = state.editedListToSave;
-    if (list == null) return;
+    // Determine effective listSlug: use parameter if provided, or fall back to editedListToSave
+    final effectiveListSlug = listSlug ?? state.editedListToSave?.slug;
+    if (effectiveListSlug == null) return;
 
-    final updatedItems = List<ListItemModel>.from(list.items).where((i) {
-      return i.itemIdentifier != bookSlug && i.itemIdentifier != bookmarkUuid;
-    }).toList();
-    final updatedEditedList = list.copyWith(items: updatedItems);
-    final existingItemUuid = state.getItemUuidByIdentifier(
-      bookSlug ?? bookmarkUuid ?? '',
-    );
+    // Update editedListToSave only in Mode 1 (when editing a specific list)
+    if (state.editedListToSave != null) {
+      final updatedItems =
+          List<ListItemModel>.from(state.editedListToSave!.items).where((i) {
+            return i.itemIdentifier != bookSlug &&
+                i.itemIdentifier != bookmarkUuid;
+          }).toList();
+      final updatedEditedList = state.editedListToSave!.copyWith(
+        items: updatedItems,
+      );
+      emit(state.copyWith(editedListToSave: updatedEditedList));
+    }
+
+    // Get existing item UUID if available
+    // In Mode 2, try to find UUID from bookListMembershipItems
+    String? existingItemUuid;
+    if (state.currentBookSlug != null) {
+      // Mode 2: Find UUID from membership items
+      existingItemUuid = state.bookListMembershipItems
+          .firstWhereOrNull(
+            (item) =>
+                item.listSlug == effectiveListSlug &&
+                item.itemIdentifier == (bookSlug ?? bookmarkUuid),
+          )
+          ?.uuid;
+    } else {
+      // Mode 1: Use existing method
+      existingItemUuid = state.getItemUuidByIdentifier(
+        bookSlug ?? bookmarkUuid ?? '',
+      );
+    }
+
     final elementModel = ListItemModel.create(
       uuid: existingItemUuid,
-      listSlug: listSlug ?? list.slug,
+      listSlug: effectiveListSlug,
       bookSlug: bookSlug,
       bookmarkUuid: bookmarkUuid,
     );
-    emit(state.copyWith(editedListToSave: updatedEditedList));
+
+    // Queue the item for removal (works in both Mode 1 and Mode 2)
+    // Check if this specific item (identifier + listSlug) is in add queue
     if (state.itemsToAdd.any((item) {
-      return item.itemIdentifier == bookSlug ||
-          item.itemIdentifier == bookmarkUuid;
+      return (item.itemIdentifier == bookSlug ||
+              item.itemIdentifier == bookmarkUuid) &&
+          item.listSlug == effectiveListSlug;
     })) {
       _addOrRemoveElementFromAddingQueue(elementModel);
     } else {
@@ -83,8 +172,17 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
 
   void _addOrRemoveElementFromAddingQueue(ListItemModel item) {
     final currentQueue = List<ListItemModel>.from(state.itemsToAdd);
-    if (currentQueue.any((i) => i.itemIdentifier == item.itemIdentifier)) {
-      currentQueue.removeWhere((i) => i.itemIdentifier == item.itemIdentifier);
+    // In Mode 2, same book can be on multiple lists - compare both identifier and listSlug
+    if (currentQueue.any(
+      (i) =>
+          i.itemIdentifier == item.itemIdentifier &&
+          i.listSlug == item.listSlug,
+    )) {
+      currentQueue.removeWhere(
+        (i) =>
+            i.itemIdentifier == item.itemIdentifier &&
+            i.listSlug == item.listSlug,
+      );
       emit(state.copyWith(itemsToAdd: currentQueue));
       return;
     }
@@ -94,8 +192,17 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
 
   void _addOrRemoveElementFromRemovingQueue(ListItemModel item) {
     final currentQueue = List<ListItemModel>.from(state.itemsToRemove);
-    if (currentQueue.any((i) => i.itemIdentifier == item.itemIdentifier)) {
-      currentQueue.removeWhere((i) => i.itemIdentifier == item.itemIdentifier);
+    // In Mode 2, same book can be on multiple lists - compare both identifier and listSlug
+    if (currentQueue.any(
+      (i) =>
+          i.itemIdentifier == item.itemIdentifier &&
+          i.listSlug == item.listSlug,
+    )) {
+      currentQueue.removeWhere(
+        (i) =>
+            i.itemIdentifier == item.itemIdentifier &&
+            i.listSlug == item.listSlug,
+      );
       emit(state.copyWith(itemsToRemove: currentQueue));
       return;
     }
@@ -104,11 +211,15 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
   }
 
   Future<void> saveList() async {
-    if (state.editedListToSave == null) return;
-    emit(state.copyWith(isSavingEditedList: true, isSavingFailure: false));
     final itemsToAdd = state.itemsToAdd;
     final itemsToRemove = state.itemsToRemove;
 
+    // Nothing to save if queues are empty
+    if (itemsToAdd.isEmpty && itemsToRemove.isEmpty) return;
+
+    emit(state.copyWith(isSavingEditedList: true, isSavingFailure: false));
+
+    // Handle removals (works for both Mode 1 and Mode 2)
     if (itemsToRemove.isNotEmpty) {
       final removeResults = await _listsRepository.deleteListItems(
         itemUuids: itemsToRemove
@@ -123,21 +234,59 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
       }
     }
 
+    // Handle additions - different logic for Mode 1 vs Mode 2
     if (itemsToAdd.isNotEmpty) {
-      final addResult = await _listsRepository.addItemsToList(
-        listSlug: state.editedListToSave!.slug,
-        items: itemsToAdd,
-      );
+      // Detect mode: Mode 2 = book editing (currentBookSlug is set)
+      final isMode2 = state.currentBookSlug != null;
 
-      print(addResult);
+      if (isMode2) {
+        // Mode 2: Group items by listSlug and add to each list separately
+        final itemsByList = itemsToAdd.groupListsBy((item) => item.listSlug);
 
-      if (!addResult.isSuccess) {
-        emit(state.copyWith(isSavingEditedList: false, isSavingFailure: true));
-        return;
+        for (final entry in itemsByList.entries) {
+          final addResult = await _listsRepository.addItemsToList(
+            listSlug: entry.key,
+            items: entry.value,
+          );
+
+          if (!addResult.isSuccess) {
+            emit(
+              state.copyWith(isSavingEditedList: false, isSavingFailure: true),
+            );
+            return;
+          }
+        }
+      } else {
+        // Mode 1: All items go to the same list
+        if (state.editedListToSave == null) {
+          emit(
+            state.copyWith(isSavingEditedList: false, isSavingFailure: true),
+          );
+          return;
+        }
+
+        final addResult = await _listsRepository.addItemsToList(
+          listSlug: state.editedListToSave!.slug,
+          items: itemsToAdd,
+        );
+
+        if (!addResult.isSuccess) {
+          emit(
+            state.copyWith(isSavingEditedList: false, isSavingFailure: true),
+          );
+          return;
+        }
       }
     }
 
-    emit(state.copyWith(isSavingEditedList: false, isSavingSuccess: true));
+    emit(
+      state.copyWith(
+        isSavingEditedList: false,
+        isSavingSuccess: true,
+        itemsToAdd: [],
+        itemsToRemove: [],
+      ),
+    );
   }
 
   Future<void> saveSharedList(ListModel sharedList) async {
