@@ -257,7 +257,7 @@
     },
     "common": {
         "bookmark_page_error": "Nie udało się pobrać zakładki, prawdopodobnie została usunięta 🙁",
-        "bookmark_page_title": "Udostępniona zakładka",
+        "bookmark_page_title": "Zakładka w książce {bookTitle}",
         "empty_page": "Zabłądziliśmy, nic tutaj nie ma 👀",
         "empty": {
             "search_in_catalogue": "Przeglądaj katalog",

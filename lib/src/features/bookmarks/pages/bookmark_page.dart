@@ -88,7 +88,9 @@ class BookmarkPage extends StatelessWidget {
                   return Column(
                     children: [
                       PageSubtitle(
-                        subtitle: LocaleKeys.common_bookmark_page_title.tr(),
+                        subtitle: LocaleKeys.common_bookmark_page_title.tr(
+                          namedArgs: {'bookTitle': state.book?.title ?? ''},
+                        ),
                       ),
                       BookmarkWidget(
                         isDeletable: false,

@@ -118,9 +118,8 @@ class BookPageCoverWithButtons extends StatelessWidget {
                         left: Dimensions.mediumPadding,
                         bottom: Dimensions.mediumPadding,
                         child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: theme.scaffoldBackgroundColor,
-                            borderRadius: const BorderRadius.all(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
                               Radius.circular(Dimensions.smallBorderRadius),
                             ),
                           ),
@@ -361,7 +360,7 @@ class _BookPageCoverListItem extends StatelessWidget {
           return SingleBookCubit(get.get(), get.get())
             ..checkIfMediaAreDownloaded(book.slug);
         },
-        child: InkWell(
+        child: InkWellWrapper(
           onTap: () {
             router.pushNamed(
               bookPageConfig.name,
@@ -374,7 +373,6 @@ class _BookPageCoverListItem extends StatelessWidget {
             height: 100,
             padding: const EdgeInsets.all(Dimensions.smallPadding),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(Dimensions.smallBorderRadius),
             ),
             child: Row(

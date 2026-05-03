@@ -43,12 +43,27 @@ extension ListsStateX on ListsState {
 
   bool isBookInList(String listSlug, String itemSlug) {
     if (fetchedSingleList != null && fetchedSingleList!.slug == listSlug) {
-      return fetchedSingleList!.items.any((item) => item.book?.slug == itemSlug);
+      return fetchedSingleList!.items.any(
+        (item) => item.book?.slug == itemSlug,
+      );
     }
     return (allLists
                 .firstWhereOrNull((element) => element.slug == listSlug)
                 ?.items ??
             [])
         .any((item) => item.book?.slug == itemSlug);
+  }
+
+  bool isBookmarkInList(String listSlug, String bookmarkUuid) {
+    if (fetchedSingleList != null && fetchedSingleList!.slug == listSlug) {
+      return fetchedSingleList!.items.any(
+        (item) => item.bookmark?.uuid == bookmarkUuid,
+      );
+    }
+    return (allLists
+                .firstWhereOrNull((element) => element.slug == listSlug)
+                ?.items ??
+            [])
+        .any((item) => item.bookmark?.uuid == bookmarkUuid);
   }
 }

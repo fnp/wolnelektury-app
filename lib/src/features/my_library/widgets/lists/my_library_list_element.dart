@@ -3,12 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
+import 'package:wolnelektury/src/config/router/router.dart';
+import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/books/widgets/book_page_cover/book_page_cover_with_buttons.dart';
+import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
+import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
+import 'package:wolnelektury/src/utils/ui/dimensions.dart';
+import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 /// Base class for list elements with factory constructors
 abstract class MyLibraryListElement extends StatelessWidget {
@@ -116,7 +123,7 @@ class _MyLibraryListBookElement extends MyLibraryListElement {
   }
 }
 
-/// Bookmark list element implementation (empty for now)
+/// Bookmark list element implementation
 class _MyLibraryListBookmarkElement extends MyLibraryListElement {
   const _MyLibraryListBookmarkElement({
     super.key,
@@ -125,21 +132,152 @@ class _MyLibraryListBookmarkElement extends MyLibraryListElement {
     required super.isListOwner,
   });
 
+  bool determineVisibility(ListsState state) {
+    return !state.isBookmarkInList(item.listSlug, item.bookmark?.uuid ?? '') ||
+        (state.softDeletedItem?.uuid == item.uuid &&
+            state.softDeletedItem?.listSlug == item.listSlug);
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: Implement bookmark list element
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 300),
-      curve: defaultCurve,
-      child: Skeletonizer(
-        enableSwitchAnimation: true,
-        enabled: false,
-        child: Container(
-          height: 100,
-          color: Colors.grey[200],
-          child: const Center(child: Text('Bookmark element - TODO')),
-        ),
-      ),
+    if (item.bookmark == null) {
+      return const SizedBox.shrink();
+    }
+
+    final bookmark = item.bookmark!;
+    final listsCubit = context.read<ListsCubit>();
+    final theme = Theme.of(context);
+
+    return BlocBuilder<ListsCubit, ListsState>(
+      buildWhen: (p, c) {
+        return p.softDeletedItem != c.softDeletedItem ||
+            p.isBookmarkInList(item.listSlug, bookmark.uuid ?? '') !=
+                c.isBookmarkInList(item.listSlug, bookmark.uuid ?? '');
+      },
+      builder: (context, state) {
+        final shouldHide = determineVisibility(state);
+
+        return AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: defaultCurve,
+          child: shouldHide
+              ? const SizedBox(width: double.infinity)
+              : Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: Dimensions.smallPadding,
+                  ),
+                  child: InkWellWrapper(
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.smallBorderRadius,
+                    ),
+                    onTap: () {
+                      if (bookmark.uuid != null) {
+                        router.pushNamed(
+                          bookmarkPageConfig.name,
+                          pathParameters: {'uuid': bookmark.uuid!},
+                        );
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(Dimensions.smallPadding),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          Dimensions.smallBorderRadius,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: Dimensions.mediumPadding),
+                          // Bookmark icon on the left
+                          const Icon(
+                            CustomIcons.bookmark,
+                            color: CustomColors.primaryYellowColor,
+                            size: 32,
+                          ),
+                          const SizedBox(width: Dimensions.largePadding),
+
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Book slug as title
+                                Text(
+                                  bookmark.slug,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+
+                                // Show anchor if available
+                                if (bookmark.anchor != null) ...[
+                                  const SizedBox(
+                                    height: Dimensions.smallPadding,
+                                  ),
+                                  Text(
+                                    LocaleKeys.audio_dialog_paragraph.tr(
+                                      namedArgs: {
+                                        'paragraph': bookmark.anchor!,
+                                      },
+                                    ),
+                                    style: theme.textTheme.bodySmall,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+
+                                // Show note if available
+                                if (bookmark.note.isNotEmpty) ...[
+                                  const SizedBox(
+                                    height: Dimensions.smallPadding,
+                                  ),
+                                  Text(
+                                    bookmark.note,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.textTheme.bodySmall?.color
+                                          ?.withOpacity(0.7),
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+
+                          // Delete button for list owners
+                          if (isListOwner) ...[
+                            const SizedBox(width: Dimensions.smallPadding),
+                            CustomButton(
+                              semanticLabel: LocaleKeys
+                                  .common_semantic_delete_bookmark
+                                  .tr(),
+                              onPressed: () {
+                                listsCubit.deleteItemFromList(item: item);
+                                CustomSnackbar.success(
+                                  context,
+                                  LocaleKeys.book_lists_sheet_delete.tr(),
+                                  onRevert: () {
+                                    listsCubit.undoSoftRemoval();
+                                  },
+                                );
+                              },
+                              icon: CustomIcons.delete_forever,
+                              backgroundColor: CustomColors.red,
+                              iconColor: CustomColors.white,
+                              size: 36,
+                              iconSize: 20,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+        );
+      },
     );
   }
 }
