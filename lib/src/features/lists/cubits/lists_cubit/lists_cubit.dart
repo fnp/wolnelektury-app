@@ -230,6 +230,7 @@ class ListsCubit extends SafeCubit<ListsState> {
     if (state.softDeletedItem != null) {
       await deleteItemFromList(
         item: state.softDeletedItem!,
+        removeFromUI: true,
         shouldHandle: false,
       );
     }
@@ -243,23 +244,29 @@ class ListsCubit extends SafeCubit<ListsState> {
       return;
     }
     // Otherwise, we proceed to remove the item from the list
-    deleteItemFromList(item: item);
+    deleteItemFromList(item: item, removeFromUI: true, shouldHandle: true);
   }
 
   Future<void> deleteItemFromList({
     required ListItemModel item,
+    bool removeFromUI = false,
     bool shouldHandle = false,
   }) async {
     final ListModel? singleList = state.fetchedSingleList;
-    emit(
-      state.copyWith(
-        fetchedSingleList: state.fetchedSingleList?.copyWith(
-          items: state.fetchedSingleList!.items
-              .where((listItem) => listItem.uuid != item.uuid)
-              .toList(),
+
+    // Only remove from UI if explicitly requested
+    if (removeFromUI) {
+      emit(
+        state.copyWith(
+          fetchedSingleList: state.fetchedSingleList?.copyWith(
+            items: state.fetchedSingleList!.items
+                .where((listItem) => listItem.uuid != item.uuid)
+                .toList(),
+          ),
         ),
-      ),
-    );
+      );
+    }
+
     // Make the API call to delete the item
     final response = await _listsRepository.deleteListItem(
       itemUuid: item.uuid!,

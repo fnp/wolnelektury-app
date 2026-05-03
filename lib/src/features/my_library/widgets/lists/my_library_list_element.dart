@@ -104,7 +104,7 @@ class _MyLibraryListBookElement extends MyLibraryListElement {
                     item: item,
                     onDelete: isListOwner
                         ? () {
-                            listsCubit.deleteItemFromList(item: item);
+                            listsCubit.removeItemFromList(item: item);
                             CustomSnackbar.success(
                               context,
                               LocaleKeys.book_lists_sheet_delete.tr(),
@@ -255,7 +255,7 @@ class _MyLibraryListBookmarkElement extends MyLibraryListElement {
                                   .common_semantic_delete_bookmark
                                   .tr(),
                               onPressed: () {
-                                listsCubit.deleteItemFromList(item: item);
+                                listsCubit.removeItemFromList(item: item);
                                 CustomSnackbar.success(
                                   context,
                                   LocaleKeys.book_lists_sheet_delete.tr(),
