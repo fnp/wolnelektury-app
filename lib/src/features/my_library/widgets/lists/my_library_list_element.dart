@@ -114,7 +114,9 @@ class _MyLibraryListBookElement extends MyLibraryListElement {
                             );
                           }
                         : null,
-                    book: state.isLoading ? BookModel.skeleton() : item.book!,
+                    book: state.isLoading
+                        ? BookModel.skeletonized()
+                        : item.book!,
                   ),
                 ),
         );

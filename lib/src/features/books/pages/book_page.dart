@@ -48,7 +48,7 @@ class BookPage extends StatelessWidget {
               );
             }
             final effectiveBook = state.isLoading
-                ? BookModel.skeleton()
+                ? BookModel.skeletonized()
                 : state.book;
 
             return Skeletonizer(

@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
+import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
@@ -20,6 +22,9 @@ class MyLibraryListsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final listCubit = context.read<ListsCubit>();
+    final skeletonizedLists = List.generate(5, (index) {
+      return ListModel.skeletonized();
+    });
     return BlocProvider.value(
       value: listCubit..getLists(),
       child: Padding(
@@ -39,68 +44,87 @@ class MyLibraryListsSection extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.largePadding),
               Expanded(
-                child: CustomScrollPage(
-                  onRefresh: () {
-                    return listCubit.getLists(force: true);
+                child: BlocSelector<ListsCubit, ListsState, bool>(
+                  selector: (state) {
+                    return state.isLoading;
                   },
-                  onLoadMore: () {
-                    listCubit.getMoreLists();
-                  },
-                  builder: (scrollController) {
-                    return BlocBuilder<ListsCubit, ListsState>(
-                      buildWhen: (p, c) {
-                        return p.isLoading != c.isLoading ||
-                            p.isAdding != c.isAdding ||
-                            p.pendingList != c.pendingList ||
-                            p.allLists.isNotEmpty && c.allLists.isEmpty ||
-                            p.allLists.isEmpty && c.allLists.isNotEmpty;
-                      },
-                      builder: (context, state) {
-                        final isPending = state.pendingList != null;
-                        final effLength = state.isAdding
-                            ? state.allLists.length + 1
-                            : state.allLists.length;
+                  builder: (context, isLoading) {
+                    return Skeletonizer(
+                      enabled: isLoading,
+                      enableSwitchAnimation: true,
+                      child: CustomScrollPage(
+                        onRefresh: () {
+                          return listCubit.getLists(force: true);
+                        },
+                        onLoadMore: () {
+                          listCubit.getMoreLists();
+                        },
+                        builder: (scrollController) {
+                          return BlocBuilder<ListsCubit, ListsState>(
+                            buildWhen: (p, c) {
+                              return p.isAdding != c.isAdding ||
+                                  p.pendingList != c.pendingList ||
+                                  p.allLists.isNotEmpty && c.allLists.isEmpty ||
+                                  p.allLists.isEmpty && c.allLists.isNotEmpty;
+                            },
+                            builder: (context, state) {
+                              final effectiveLists = isLoading
+                                  ? skeletonizedLists
+                                  : state.allLists;
+                              final isPending = state.pendingList != null;
+                              final effLength = state.isAdding
+                                  ? effectiveLists.length + 1
+                                  : effectiveLists.length;
 
-                        if (!state.isLoading && state.allLists.isEmpty) {
-                          return EmptyWidget(
-                            image: Images.empty,
-                            message: LocaleKeys.common_empty_lists_title.tr(),
-                            onRefresh: () {
-                              listCubit.getLists(force: true);
+                              if (!isLoading && state.allLists.isEmpty) {
+                                return EmptyWidget(
+                                  image: Images.empty,
+                                  message: LocaleKeys.common_empty_lists_title
+                                      .tr(),
+                                  onRefresh: () {
+                                    listCubit.getLists(force: true);
+                                  },
+                                );
+                              }
+                              return ListView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                controller: scrollController,
+                                itemCount: effLength,
+                                itemBuilder: (context, index) {
+                                  if (index == 0 && state.isAdding) {
+                                    return AnimatedSize(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: defaultCurve,
+                                      child: isPending
+                                          ? MyLibraryList(
+                                              key: ValueKey(
+                                                state.pendingList!.slug,
+                                              ),
+                                              itemList: state.pendingList!,
+                                              isCompact: true,
+                                            )
+                                          : const SizedBox(),
+                                    );
+                                  }
+
+                                  final effIndex = state.isAdding
+                                      ? index - 1
+                                      : index;
+                                  final list = effectiveLists[effIndex];
+
+                                  return MyLibraryList(
+                                    key: ValueKey(list.slug),
+                                    itemList: list,
+                                    isCompact: true,
+                                  );
+                                },
+                              );
                             },
                           );
-                        }
-
-                        return ListView.builder(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          controller: scrollController,
-                          itemCount: effLength,
-                          itemBuilder: (context, index) {
-                            if (index == 0 && state.isAdding) {
-                              return AnimatedSize(
-                                duration: const Duration(milliseconds: 300),
-                                curve: defaultCurve,
-                                child: isPending
-                                    ? MyLibraryList(
-                                        key: ValueKey(state.pendingList!.slug),
-                                        itemList: state.pendingList!,
-                                        isCompact: true,
-                                      )
-                                    : const SizedBox(),
-                              );
-                            }
-
-                            final effIndex = state.isAdding ? index - 1 : index;
-                            final list = state.allLists[effIndex];
-
-                            return MyLibraryList(
-                              key: ValueKey(list.slug),
-                              itemList: list,
-                              isCompact: true,
-                            );
-                          },
-                        );
-                      },
+                        },
+                      ),
                     );
                   },
                 ),

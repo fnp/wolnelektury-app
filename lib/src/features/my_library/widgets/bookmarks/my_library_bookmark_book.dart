@@ -82,7 +82,7 @@ class MyLibraryBookmarkBook extends HookWidget {
           if (!effectiveLoading && state.book == null) {
             return const SizedBox.shrink();
           }
-          final skeletonizedBook = BookModel.skeleton();
+          final skeletonizedBook = BookModel.skeletonized();
           return Skeletonizer(
             enableSwitchAnimation: true,
             enabled: effectiveLoading,

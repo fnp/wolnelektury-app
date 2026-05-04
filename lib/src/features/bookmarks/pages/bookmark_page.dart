@@ -81,7 +81,7 @@ class BookmarkPage extends StatelessWidget {
                   return p.book != c.book || p.isLoading != c.isLoading;
                 },
                 builder: (context, state) {
-                  final skeletonizedBook = BookModel.skeleton();
+                  final skeletonizedBook = BookModel.skeletonized();
                   if (!state.isLoading && state.book == null) {
                     return const _Failure();
                   }

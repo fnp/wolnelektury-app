@@ -92,7 +92,7 @@ class _SkeletonizedView extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<BookModel> list = List.generate(
       3,
-      (index) => BookModel.skeleton(),
+      (index) => BookModel.skeletonized(),
     );
 
     return Skeletonizer(

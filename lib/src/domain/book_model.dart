@@ -39,7 +39,7 @@ sealed class BookModel with _$BookModel {
     @JsonKey(name: 'has_mp3_file') @Default(false) bool hasAudiobook,
   }) = _BookModel;
 
-  factory BookModel.skeleton() => BookModel(
+  factory BookModel.skeletonized() => BookModel(
     title: BoneMock.title,
     slug: '',
     authors: [AuthorModel(name: BoneMock.fullName, slug: '')],

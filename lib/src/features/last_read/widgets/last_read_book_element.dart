@@ -30,7 +30,7 @@ class LastReadBookElement extends StatelessWidget {
                 child: shouldHide
                     ? const SizedBox.shrink()
                     : BookPageCoverWithButtons(
-                        book: state.book ?? BookModel.skeleton(),
+                        book: state.book ?? BookModel.skeletonized(),
                       ),
               );
             },

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 
@@ -15,6 +16,10 @@ sealed class ListModel with _$ListModel {
 
   factory ListModel.fromJson(Map<String, dynamic> json) =>
       _$BookListModelFromJson(json);
+
+  factory ListModel.skeletonized() {
+    return ListModel(name: BoneMock.title, slug: '', items: []);
+  }
 
   factory ListModel.empty() {
     return const ListModel(name: '', slug: '', items: []);

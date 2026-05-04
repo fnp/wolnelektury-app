@@ -19,7 +19,7 @@ class ListsCubit extends SafeCubit<ListsState> {
     if (state.allLists.isNotEmpty && !force) {
       return;
     }
-    emit(const ListsState().copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true));
     final response = await _listsRepository.getLists();
     response.handle(
       success: (lists, pagination) {
