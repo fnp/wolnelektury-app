@@ -25,6 +25,7 @@ class PageSubtitle extends StatelessWidget {
                 height: 1,
               ),
               overflow: TextOverflow.ellipsis,
+              maxLines: 2,
             ),
           ),
         ],
