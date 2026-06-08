@@ -61,7 +61,8 @@ sealed class ListItemModel with _$ListItemModel {
         ? BookmarkModel(
             uuid: bookmarkUuid,
             location: '',
-            slug: '',
+            book: BookModel.empty(slug: ''),
+            bookSlug: '',
             note: '',
             href: '',
           )

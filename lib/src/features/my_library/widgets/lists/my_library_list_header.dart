@@ -41,6 +41,7 @@ class MyLibraryListHeader extends StatelessWidget {
     final cubit = context.read<ListsCubit>();
     MyLibraryListDeleteConfirmationDialog.show(
       context: context,
+      listName: bookList.name,
       onDelete: () {
         cubit.deleteList(
           slug,
@@ -231,6 +232,8 @@ class MyLibraryListHeader extends StatelessWidget {
                                   .tr(),
                               nonActiveIcon: CustomIcons.delete_forever,
                               isActive: false,
+                              nonActiveColor: CustomColors.red,
+                              nonActiveTextColor: CustomColors.white,
                               onPressed: () {
                                 _onDeletePressed(context, slug: bookList.slug);
                               },
@@ -242,6 +245,7 @@ class MyLibraryListHeader extends StatelessWidget {
                                   .tr(),
                               nonActiveIcon: CustomIcons.add,
                               isActive: false,
+                              nonActiveColor: CustomColors.green,
                               onPressed: () {
                                 MyLibraryListAddDialog.show(
                                   context: context,

@@ -10,7 +10,8 @@ _BookmarkModel _$BookmarkModelFromJson(Map<String, dynamic> json) =>
     _BookmarkModel(
       uuid: json['uuid'] as String?,
       location: json['location'] as String,
-      slug: json['book'] as String,
+      book: BookModel.fromJson(json['book'] as Map<String, dynamic>),
+      bookSlug: json['book_slug'] as String?,
       audioTimestamp: (json['audio_timestamp'] as num?)?.toInt(),
       anchor: json['anchor'] as String?,
       note: json['note'] as String,
@@ -23,7 +24,8 @@ Map<String, dynamic> _$BookmarkModelToJson(_BookmarkModel instance) =>
     <String, dynamic>{
       'uuid': instance.uuid,
       'location': instance.location,
-      'book': instance.slug,
+      'book': instance.book,
+      'book_slug': instance.bookSlug,
       'audio_timestamp': instance.audioTimestamp,
       'anchor': instance.anchor,
       'note': instance.note,

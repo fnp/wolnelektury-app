@@ -38,6 +38,7 @@ sealed class ListsState with _$ListsState {
 extension ListsStateX on ListsState {
   bool doesLocalListExistsAlready(String listSlug) {
     return allLists.any((element) => element.slug == listSlug) ||
+        fetchedSingleList?.slug == listSlug ||
         pendingList?.slug == listSlug;
   }
 

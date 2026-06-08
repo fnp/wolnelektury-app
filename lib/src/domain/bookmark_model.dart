@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:wolnelektury/src/domain/book_model.dart';
 
 part 'bookmark_model.freezed.dart';
 part 'bookmark_model.g.dart';
@@ -9,7 +10,8 @@ sealed class BookmarkModel with _$BookmarkModel {
   const factory BookmarkModel({
     String? uuid,
     required String location,
-    @JsonKey(name: 'book') required String slug,
+    required BookModel book,
+    @JsonKey(name: 'book_slug') String? bookSlug,
     @JsonKey(name: 'audio_timestamp') int? audioTimestamp,
     String? anchor,
     required String note,
@@ -26,15 +28,16 @@ sealed class BookmarkModel with _$BookmarkModel {
   factory BookmarkModel.skeletonized() {
     return BookmarkModel(
       location: BoneMock.name,
-      slug: BoneMock.name,
+      bookSlug: BoneMock.name,
       note: BoneMock.name,
       anchor: BoneMock.name,
       href: BoneMock.name,
+      book: BookModel.skeletonized(),
     );
   }
 
   factory BookmarkModel.withLocation({
-    required String slug,
+    required BookModel book,
     String? anchor,
     int? audioTimestamp,
     String? note,
@@ -44,13 +47,14 @@ sealed class BookmarkModel with _$BookmarkModel {
       'Either anchor or audioTimestamp must be provided, but not both',
     );
     final location = anchor != null
-        ? '$slug/$anchor'
-        : '$slug/audio/$audioTimestamp';
+        ? '${book.slug}/$anchor'
+        : '${book.slug}/audio/$audioTimestamp';
 
     return BookmarkModel(
       location: location,
       audioTimestamp: audioTimestamp,
-      slug: slug,
+      book: book,
+      bookSlug: book.slug,
       note: note ?? '',
       anchor: anchor,
       href: '',

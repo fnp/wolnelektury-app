@@ -83,14 +83,14 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
       ).copyWith(textScaler: const TextScaler.linear(1)),
       child: ScrollablePositionedList.builder(
         itemScrollController: widget.itemScrollController,
-        itemCount: widget.state.book!.contents.length + 1,
+        itemCount: widget.state.readerBook!.contents.length + 1,
         itemPositionsListener: itemPositionsListener,
         itemBuilder: (context, index) {
           if (index == 0) {
             return _Header(state: widget.state);
           }
-          final element = widget.state.book!.contents[index - 1];
-          final isLast = index == widget.state.book!.contents.length;
+          final element = widget.state.readerBook!.contents[index - 1];
+          final isLast = index == widget.state.readerBook!.contents.length;
 
           return Padding(
             padding: EdgeInsets.only(bottom: isLast ? Dimensions.spacer : 0),
@@ -143,7 +143,7 @@ class _Header extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: Dimensions.veryLargePadding,
         children: [
-          if (state.book!.headerLeft != null)
+          if (state.readerBook!.headerLeft != null)
             Expanded(
               child: Text.rich(
                 TextSpan(
@@ -155,7 +155,7 @@ class _Header extends StatelessWidget {
                         ),
                       ),
                     ),
-                    element: state.book!.headerLeft!,
+                    element: state.readerBook!.headerLeft!,
                     fontFamily: state.fontType.familyName,
                     fontSize: state.getFontSize(theme) + 2,
                     fontHeight: state.getLineHeight(),
@@ -163,13 +163,13 @@ class _Header extends StatelessWidget {
                 ),
               ),
             ),
-          if (state.book!.headerRight != null)
+          if (state.readerBook!.headerRight != null)
             Expanded(
               child: Text.rich(
                 TextSpan(
                   children: buildReaderBase(
                     theme: Theme.of(context),
-                    element: state.book!.headerRight!,
+                    element: state.readerBook!.headerRight!,
                     fontFamily: state.fontType.familyName,
                     fontSize: state.getFontSize(theme) - 2,
                     fontHeight: state.getLineHeight(),

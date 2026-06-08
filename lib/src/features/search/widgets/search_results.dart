@@ -52,7 +52,7 @@ class SearchResults extends StatelessWidget {
                       ),
                     ),
                     SliverToBoxAdapter(
-                      child: ListView.builder(
+                      child: ListView.separated(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: state.generic!.author.length,
@@ -61,6 +61,8 @@ class SearchResults extends StatelessWidget {
                             author: state.generic!.author[index],
                           );
                         },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: Dimensions.smallPadding),
                       ),
                     ),
                   ],
@@ -119,7 +121,6 @@ class _TextElement extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Divider(color: theme.colorScheme.onPrimary, thickness: 1),
         Padding(
           padding: const EdgeInsets.all(Dimensions.mediumPadding),
           child: Column(

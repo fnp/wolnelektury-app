@@ -166,7 +166,7 @@ class _MyLibraryListBookmarkElement extends MyLibraryListElement {
               ? const SizedBox(width: double.infinity)
               : Padding(
                   padding: const EdgeInsets.only(
-                    bottom: Dimensions.smallPadding,
+                    bottom: Dimensions.largePadding,
                   ),
                   child: InkWellWrapper(
                     borderRadius: BorderRadius.circular(
@@ -203,9 +203,8 @@ class _MyLibraryListBookmarkElement extends MyLibraryListElement {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                // Book slug as title
                                 Text(
-                                  bookmark.slug,
+                                  bookmark.book.title,
                                   style: theme.textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -239,7 +238,7 @@ class _MyLibraryListBookmarkElement extends MyLibraryListElement {
                                     bookmark.note,
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       color: theme.textTheme.bodySmall?.color
-                                          ?.withOpacity(0.7),
+                                          ?.withValues(alpha: 0.7),
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/data/bookmarks_repository.dart';
+import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/enums/success_enum.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
@@ -30,7 +31,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
         final deduplicated = _deduplicateByAudioTimestamp(
           data,
           (b) => b.audioTimestamp,
-          (b) => b.slug,
+          (b) => b.book.slug,
         );
         emit(state.copyWith(bookmarks: deduplicated, isLoading: false));
       },
@@ -63,7 +64,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
         final deduplicated = _deduplicateByAudioTimestamp(
           data,
           (b) => b.audioTimestamp,
-          (b) => b.slug,
+          (b) => b.bookSlug ?? '',
         );
         emit(
           state.copyWith(
@@ -90,7 +91,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
         final deduplicated = _deduplicateByAudioTimestamp(
           data,
           (b) => b.audioTimestamp,
-          (b) => b.slug,
+          (b) => b.bookSlug ?? '',
         );
         emit(state.copyWith(isLoading: false, bookmarks: deduplicated));
       },
@@ -116,7 +117,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
       await _delete(
         location: state.bookmarkToDelete!.location,
         href: state.bookmarkToDelete!.href,
-        slug: state.bookmarkToDelete!.slug,
+        slug: state.bookmarkToDelete!.book.slug,
       );
     }
     emit(state.copyWith(bookmarkToDelete: bookmark));
@@ -126,7 +127,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
       await _delete(
         location: bookmark.location,
         href: bookmark.href,
-        slug: bookmark.slug,
+        slug: bookmark.book.slug,
         shouldHandle: true,
       );
     }
@@ -182,7 +183,7 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
     final response = await _bookmarksRepository.deleteBookmark(
       id: state.editingBookmark!.location,
       href: state.editingBookmark!.href,
-      slug: state.editingBookmark!.slug,
+      slug: state.editingBookmark!.book.slug,
     );
 
     response.handle(
@@ -210,13 +211,13 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   }
 
   Future<void> createTextBookmark({
-    required String slug,
+    required BookModel book,
     required String anchor,
     String? note,
   }) async {
     emit(state.copyWith(isBookmarkSuccess: null));
     final response = await _bookmarksRepository.createTextBookmark(
-      slug: slug,
+      book: book,
       anchor: anchor,
       note: note,
     );
@@ -237,13 +238,13 @@ class BookmarksCubit extends SafeCubit<BookmarksState> {
   }
 
   Future<void> createAudioBookmark({
-    required String slug,
+    required BookModel book,
     required int timestamp,
     String? note,
   }) async {
     emit(state.copyWith(isBookmarkSuccess: null));
     final response = await _bookmarksRepository.createAudioBookmark(
-      slug: slug,
+      book: book,
       timestamp: timestamp,
       note: note,
     );

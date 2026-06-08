@@ -84,12 +84,12 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
         await _getTextAudioSyncData(book.slug);
         emit(
           state.copyWith(
-            currentSlug: book.slug,
+            currentBook: book,
             textSizeFactor: settings.readingFontSize,
             fontType: readerFontTypeFromString(settings.readingFontType),
             fontHeightMultiplier: settings.readingFontHeight,
             isJsonLoading: false,
-            book: data,
+            readerBook: data,
             readTimeInSeconds: book.readTime ?? 0,
           ),
         );
@@ -150,15 +150,16 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
       });
       return;
     }
+    if (state.currentBook == null) return;
     // Fetch saved progress
     final progress = await _progressRepository.getProgressByBook(
-      slug: state.currentSlug!,
+      slug: state.currentBook!.slug,
     );
     progress.handle(
       success: (data, _) async {
         AppLogger.instance.d(
           'ReadingPageCubit',
-          'Retrieved progress of the book ${state.currentSlug} with anchor ${data.textAnchor}',
+          'Retrieved progress of the book ${state.currentBook!.slug} with anchor ${data.textAnchor}',
         );
         emit(state.copyWith(progress: data));
 
@@ -217,7 +218,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   Future<void> setProgress({required String? anchor}) async {
     // Haven't scrolled to the proper position yet
     if (!_readyToSetProgress) return;
-    if (state.currentSlug == null || anchor == null) return;
+    if (state.currentBook == null || anchor == null) return;
     if (state.progress?.textAnchor == anchor) return;
 
     final now = DateTime.now();
@@ -230,12 +231,12 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     _lastProgressSent = now;
     AppLogger.instance.d(
       'ReadingPageCubit',
-      'Setting progress of the book ${state.currentSlug} to $anchor',
+      'Setting progress of the book ${state.currentBook!.slug} to $anchor',
     );
     ProgressModel progress;
     if (state.progress == null) {
       progress = ProgressModel.fromText(
-        slug: state.currentSlug!,
+        slug: state.currentBook!.slug,
         textAnchor: anchor.toString(),
       );
     } else {
@@ -243,7 +244,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     }
 
     final newProgress = await _progressRepository.setProgress(
-      slug: state.currentSlug!,
+      slug: state.currentBook!.slug,
       progress: progress,
       type: ProgressType.text,
     );
@@ -330,7 +331,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
 
   /// Updates the visual reading progress (progress bar in UI).
   void setVisualProgress(int index) {
-    final maxLength = state.book?.contents.length ?? 1;
+    final maxLength = state.readerBook?.contents.length ?? 1;
     final progress = (index / maxLength * 100).clamp(0, 100).floor();
     if (progress == state.visualProgress) return;
     emit(

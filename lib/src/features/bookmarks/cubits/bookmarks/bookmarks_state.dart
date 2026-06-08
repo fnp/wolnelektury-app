@@ -32,7 +32,7 @@ extension BookmarksStateX on BookmarksState {
 
   bool bookmarkExists(String slug, String location) {
     return bookmarks.any(
-      (element) => element.location == location && element.slug == slug,
+      (element) => element.location == location && element.book.slug == slug,
     );
   }
 }

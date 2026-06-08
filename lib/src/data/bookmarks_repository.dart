@@ -8,6 +8,7 @@ import 'package:wolnelektury/src/application/app_logger.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_bookmarks_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_sync_service.dart';
 import 'package:wolnelektury/src/data/mixin/repository_helper_mixin.dart';
+import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/enums/cache_enum.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
@@ -26,13 +27,13 @@ abstract class BookmarksRepository {
   });
 
   Future<DataState<BookmarkModel>> createTextBookmark({
-    required String slug,
+    required BookModel book,
     required String anchor,
     String? note,
   });
 
   Future<DataState<BookmarkModel>> createAudioBookmark({
-    required String slug,
+    required BookModel book,
     required int timestamp,
     String? note,
   });
@@ -189,7 +190,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
       await _bookmarksStorage.upsertMultipleBookmarks([
         (
           id: updatedBookmark.location,
-          slug: updatedBookmark.slug,
+          slug: updatedBookmark.book.slug,
           bookmarkJson: jsonEncode(updatedBookmark.toJson()),
           timestamp: DateTime.now(),
           isDeleted: false,
@@ -216,13 +217,13 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
 
   @override
   Future<DataState<BookmarkModel>> createTextBookmark({
-    required String slug,
+    required BookModel book,
     required String anchor,
     String? note,
   }) async {
     try {
       final createdBookmark = BookmarkModel.withLocation(
-        slug: slug,
+        book: book,
         anchor: anchor,
         note: note ?? '',
       );
@@ -231,7 +232,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         await _bookmarksStorage.upsertMultipleBookmarks([
           (
             id: bookmark.location,
-            slug: slug,
+            slug: book.slug,
             bookmarkJson: jsonEncode(bookmark.toJson()),
             timestamp: DateTime.now(),
             isDeleted: false,
@@ -248,18 +249,18 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
       // Created text bookmark will have audio timestamp and vice versa.
       if (tryOnline) {
         final dbResult = await _createTextBookmarkInDb(
-          slug: slug,
+          slug: book.slug,
           anchor: anchor,
           note: note,
         );
-        dbResult.handle(
+        dbResult.asyncHandle(
           success: (data, _) async {
             await insertionFunction(data);
             await _syncStorage.updateSyncData(
               sentBookmarksSyncAt: DateTime.now(),
             );
           },
-          failure: (_) {},
+          failure: (_) async {},
         );
         return dbResult;
       }
@@ -272,13 +273,13 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
 
   @override
   Future<DataState<BookmarkModel>> createAudioBookmark({
-    required String slug,
+    required BookModel book,
     required int timestamp,
     String? note,
   }) async {
     try {
       final createdBookmark = BookmarkModel.withLocation(
-        slug: slug,
+        book: book,
         audioTimestamp: timestamp,
         note: note ?? '',
       );
@@ -287,7 +288,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         await _bookmarksStorage.upsertMultipleBookmarks([
           (
             id: bookmark.location,
-            slug: slug,
+            slug: book.slug,
             bookmarkJson: jsonEncode(bookmark.toJson()),
             timestamp: DateTime.now(),
             isDeleted: false,
@@ -304,18 +305,18 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
       // Created audio bookmark will have text anchor and vice versa.
       if (tryOnline) {
         final dbResult = await _createAudioBookmarkInDb(
-          slug: slug,
+          slug: book.slug,
           timestamp: timestamp,
           note: note,
         );
-        dbResult.handle(
+        dbResult.asyncHandle(
           success: (data, _) async {
             await insertionFunction(data);
             await _syncStorage.updateSyncData(
               sentBookmarksSyncAt: DateTime.now(),
             );
           },
-          failure: (_) {},
+          failure: (_) async {},
         );
         return dbResult;
       }
@@ -334,7 +335,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
     try {
       final response = await _apiService.postRequest(_bookmarksEndpoint, {
         'anchor': anchor,
-        'book': slug,
+        'book_slug': slug,
         'note': note,
       }, isAnonymous: false);
 
@@ -357,7 +358,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
     try {
       final response = await _apiService.postRequest(_bookmarksEndpoint, {
         'audio_timestamp': timestamp,
-        'book': slug,
+        'book_slug': slug,
         'note': note,
       }, isAnonymous: false);
 
@@ -379,7 +380,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
       final response = await _apiService
           .putRequest(updatedBookmark.href.removeApiUrl, {
             'note': updatedBookmark.note,
-            'book': updatedBookmark.slug,
+            'book_slug': updatedBookmark.book.slug,
             'anchor': updatedBookmark.anchor,
             'audio_timestamp': updatedBookmark.audioTimestamp,
           }, isAnonymous: false);
@@ -487,7 +488,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
             (e.timestamp ?? 0) * 1000,
           );
           return (
-            slug: e.slug,
+            slug: e.book.slug,
             id: e.location,
             bookmarkJson: jsonEncode(e.toJson()),
             isDeleted: e.isDeleted,

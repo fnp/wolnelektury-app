@@ -56,7 +56,7 @@
             },
             "delete_dialog": {
                 "title": "Usuwanie listy",
-                "content": "Czy na pewno chcesz usunąć tę listę wraz z jej zawartością?",
+                "content": "Czy na pewno chcesz usunąć listę {name} wraz z jej zawartością?",
                 "cancel": "Anuluj",
                 "delete": "Usuń"
             },

@@ -51,7 +51,7 @@ class AudioDialogBookmarks extends StatelessWidget {
                             final cubit = context.read<AudioCubit>();
                             final currentPosition = cubit.state.statePosition;
                             bookmarksCubit.createAudioBookmark(
-                              slug: cubit.state.book!.slug,
+                              book: cubit.state.book!,
                               timestamp: currentPosition,
                               note: note,
                             );
@@ -120,7 +120,6 @@ class _ListOfExistingBookmarks extends StatelessWidget {
                 ),
                 child: BookmarkWidget(
                   bookmark: effectiveBookmarks[index],
-                  book: book,
                   isLoading: state.isLoading,
                   backgroundColor: CustomColors.grey,
                   messengerKey: AudioDialog.messengerKey,

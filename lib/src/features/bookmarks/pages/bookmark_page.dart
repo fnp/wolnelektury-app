@@ -3,50 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
-import 'package:wolnelektury/src/domain/book_model.dart';
+import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
-import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
-import 'package:wolnelektury/src/features/audiobooks/widgets/audio_dialog.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
-import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/bookmarks/bookmark_widget.dart';
 import 'package:wolnelektury/src/features/common/widgets/page_subtitle.dart';
+import 'package:wolnelektury/src/utils/audio/on_listen.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
+import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class BookmarkPage extends StatelessWidget {
   final String? uuid;
   const BookmarkPage({super.key, required this.uuid});
-
-  void onListen({
-    required int? timestamp,
-    required bool isPlaying,
-    required BuildContext context,
-    required BookmarkModel bookmark,
-  }) {
-    if (timestamp == null) {
-      return;
-    }
-    final audioCubit = context.read<AudioCubit>();
-    AudioDialog.show(context: context, slug: bookmark.slug);
-    if (isPlaying && audioCubit.state.book?.slug == bookmark.slug) {
-      audioCubit.seekToLocallySelectedPosition(optionalSeconds: timestamp);
-    } else {
-      final singleBookCubit = context.read<SingleBookCubit>();
-      singleBookCubit
-        ..getBookData(
-          slug: bookmark.slug,
-          onFinished: (book, isOffline) {
-            audioCubit.pickBook(
-              book,
-              targetTimestamp: timestamp,
-              tryOffline: isOffline,
-            );
-          },
-        )
-        ..checkIfMediaAreDownloaded(bookmark.slug);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,53 +33,15 @@ class BookmarkPage extends StatelessWidget {
             return p.bookmarks != c.bookmarks || p.isLoading != c.isLoading;
           },
           builder: (context, state) {
-            if (state.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final bookmark = state.bookmarks.firstOrNull;
-            if (bookmark == null) {
-              return const _Failure();
-            }
-            return BlocProvider(
-              create: (context) {
-                return SingleBookCubit(get.get(), get.get())
-                  ..getBookData(slug: bookmark.slug);
-              },
-              child: BlocBuilder<SingleBookCubit, SingleBookState>(
-                buildWhen: (p, c) {
-                  return p.book != c.book || p.isLoading != c.isLoading;
-                },
-                builder: (context, state) {
-                  final skeletonizedBook = BookModel.skeletonized();
-                  if (!state.isLoading && state.book == null) {
-                    return const _Failure();
-                  }
-                  return Column(
-                    children: [
-                      PageSubtitle(
-                        subtitle: LocaleKeys.common_bookmark_page_title.tr(
-                          namedArgs: {'bookTitle': state.book?.title ?? ''},
-                        ),
-                      ),
-                      BookmarkWidget(
-                        isDeletable: false,
-                        bookmark: bookmark,
-                        book: state.book ?? skeletonizedBook,
-                        isLoading: state.isLoading,
-                        backgroundColor: CustomColors.primaryYellowColor,
-                        onListen: (int? timestamp, bool isPlaying) {
-                          onListen(
-                            timestamp: timestamp,
-                            isPlaying: isPlaying,
-                            context: context,
-                            bookmark: bookmark,
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ),
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              switchInCurve: defaultCurve,
+              switchOutCurve: defaultCurve,
+              child: state.isLoading
+                  ? const Center(child: CustomLoader())
+                  : state.bookmarks.isEmpty
+                  ? const _Failure()
+                  : _Body(bookmark: state.bookmarks.first),
             );
           },
         ),
@@ -134,6 +65,39 @@ class _Failure extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ),
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  final BookmarkModel bookmark;
+  const _Body({required this.bookmark});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        PageSubtitle(
+          subtitle: LocaleKeys.common_bookmark_page_title.tr(
+            namedArgs: {'bookTitle': bookmark.book.title},
+          ),
+        ),
+        BookmarkWidget(
+          isDeletable: false,
+          bookmark: bookmark,
+          isLoading: false,
+          backgroundColor: CustomColors.primaryYellowColor,
+          onListen: (int? timestamp, bool isPlaying) {
+            onListen(
+              timestamp: timestamp,
+              isPlaying: isPlaying,
+              context: context,
+              slug: bookmark.book.slug,
+              book: bookmark.book,
+            );
+          },
+        ),
+      ],
     );
   }
 }

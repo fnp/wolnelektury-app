@@ -28,6 +28,7 @@ class CustomDropdown<T> extends StatefulWidget {
     required this.label,
     required this.width,
     required this.highlightButton,
+    this.hintNextElements = false,
     this.maxElements,
   });
 
@@ -38,6 +39,7 @@ class CustomDropdown<T> extends StatefulWidget {
   final Function(T element) onSelected;
   final bool highlightButton;
   final int? maxElements;
+  final bool hintNextElements;
 
   @override
   State<CustomDropdown<T>> createState() => _CustomDropdownState<T>();
@@ -92,6 +94,14 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
           bottomRight: Radius.circular(20),
         );
 
+        double? effectiveHeight = widget.maxElements != null
+            ? widget.maxElements! * Dimensions.elementHeight
+            : null;
+
+        if (widget.hintNextElements && effectiveHeight != null) {
+          effectiveHeight = effectiveHeight + (Dimensions.elementHeight / 2);
+        }
+
         return Stack(
           children: [
             GestureDetector(
@@ -124,9 +134,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                         borderRadius: borderRadius,
                       ),
                       child: SizedBox(
-                        height: widget.maxElements != null
-                            ? widget.maxElements! * Dimensions.elementHeight
-                            : null,
+                        height: effectiveHeight,
                         child: ListView(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,

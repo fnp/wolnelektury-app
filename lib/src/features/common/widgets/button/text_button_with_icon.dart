@@ -15,6 +15,8 @@ class TextButtonWithIcon extends StatelessWidget {
     this.activeText,
     this.activeIcon,
     this.trailing,
+    this.activeTextColor,
+    this.nonActiveTextColor,
   }) : assert(
          nonActiveIcon != null || trailing != null,
          'Either nonActiveIcon or trailing must be provided',
@@ -25,6 +27,9 @@ class TextButtonWithIcon extends StatelessWidget {
 
   final String nonActiveText;
   final String? activeText;
+
+  final Color? activeTextColor;
+  final Color? nonActiveTextColor;
 
   final IconData? nonActiveIcon;
   final IconData? activeIcon;
@@ -67,7 +72,9 @@ class TextButtonWithIcon extends StatelessWidget {
                   child: Text(
                     isActive ? activeText ?? nonActiveText : nonActiveText,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: CustomColors.black,
+                      color:
+                          (isActive ? activeTextColor : nonActiveTextColor) ??
+                          CustomColors.black,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -94,6 +101,9 @@ class TextButtonWithIcon extends StatelessWidget {
                             : nonActiveIcon!,
                       ),
                       size: 22,
+                      color:
+                          (isActive ? activeTextColor : nonActiveTextColor) ??
+                          CustomColors.black,
                     ),
                   ),
                 ),

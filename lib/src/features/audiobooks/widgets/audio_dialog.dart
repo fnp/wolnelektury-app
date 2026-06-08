@@ -16,6 +16,7 @@ import 'package:wolnelektury/src/features/common/cubits/auth/auth_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/router/router_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/scroll/scroll_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_fade.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_loader.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -36,6 +37,7 @@ class AudioDialog extends StatelessWidget {
             BlocProvider.value(value: context.read<ScrollCubit>()),
             BlocProvider.value(value: context.read<AuthCubit>()),
             BlocProvider.value(value: context.read<RouterCubit>()),
+            BlocProvider.value(value: context.read<ListEditorCubit>()),
             BlocProvider.value(
               value: context.read<AudioCubit>()..toggleBookmarks(false),
             ),

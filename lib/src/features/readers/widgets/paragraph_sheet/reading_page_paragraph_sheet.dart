@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
-import 'package:wolnelektury/src/features/audiobooks/widgets/audio_dialog.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_cubit.dart';
 import 'package:wolnelektury/src/features/common/cubits/auth/auth_cubit.dart';
@@ -16,6 +15,7 @@ import 'package:wolnelektury/src/features/common/widgets/bookmarks/create_bookma
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/features/common/widgets/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/utils/audio/on_listen.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -61,33 +61,6 @@ class ReadingPageParagraphSheet extends StatelessWidget {
     });
   }
 
-  void onListen({
-    required int timestamp,
-    required BuildContext context,
-    required String slug,
-  }) {
-    final audioCubit = context.read<AudioCubit>();
-    final isPlaying = audioCubit.state.isPlaying;
-    AudioDialog.show(context: context, slug: slug);
-    if (isPlaying && audioCubit.state.book?.slug == slug) {
-      audioCubit.seekToLocallySelectedPosition(optionalSeconds: timestamp);
-    } else {
-      final singleBookCubit = context.read<SingleBookCubit>();
-      singleBookCubit
-        ..getBookData(
-          slug: slug,
-          onFinished: (book, isOffline) {
-            audioCubit.pickBook(
-              book,
-              targetTimestamp: timestamp,
-              tryOffline: isOffline,
-            );
-          },
-        )
-        ..checkIfMediaAreDownloaded(slug);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
@@ -124,14 +97,6 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const SizedBox(height: Dimensions.veryLargePadding),
-                        //todo
-                        // TextButtonWithIcon(
-                        //   nonActiveText: 'przetłumacz (todo)',
-                        //   nonActiveIcon: Icons.translate,
-                        //   onPressed: () {},
-                        //   activeColor: CustomColors.white,
-                        // ),
-                        // const SizedBox(height: Dimensions.mediumPadding),
                         _BookmarksWrapper(
                           child: (isAuth) {
                             return Column(
@@ -190,7 +155,15 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                                   onListen(
                                     timestamp: timestamp.floor(),
                                     context: context,
-                                    slug: readingPageCubit.state.currentSlug!,
+                                    book: readingPageCubit.state.currentBook!,
+                                    slug: readingPageCubit
+                                        .state
+                                        .currentBook!
+                                        .slug,
+                                    isPlaying: context
+                                        .read<AudioCubit>()
+                                        .state
+                                        .isPlaying,
                                   );
                                 },
                                 activeColor: CustomColors.white,
@@ -205,7 +178,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                           onPressed: () {
                             ShareUtils.shareParagraph(
                               selectedParagraph?.id ?? '',
-                              readingPageCubit.state.currentSlug ?? '',
+                              readingPageCubit.state.currentBook?.slug ?? '',
                             );
                           },
                           activeColor: CustomColors.white,
@@ -232,7 +205,7 @@ class _BookmarkNote extends StatelessWidget {
     final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
     final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
     final anchorId = readingPageCubit.state.selectedParagraph?.id;
-    final slug = readingPageCubit.state.currentSlug;
+    final book = readingPageCubit.state.currentBook;
     return CreateBookmarkWidget(
       lines: 5,
       bookmark: bookmarkCubit.state.editingBookmark,
@@ -243,11 +216,11 @@ class _BookmarkNote extends StatelessWidget {
         bookmarkCubit.deleteBookmarkInstantly();
       },
       onCreate: (note) {
-        if (anchorId == null || slug == null) {
+        if (anchorId == null || book == null) {
           return;
         }
         bookmarkCubit.createTextBookmark(
-          slug: slug,
+          book: book,
           anchor: anchorId,
           note: note,
         );

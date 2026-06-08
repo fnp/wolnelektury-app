@@ -134,10 +134,10 @@ class _Body extends StatelessWidget {
                           duration: const Duration(milliseconds: 400),
                           isChildVisible: !state.isJsonLoading,
                           collapsedChild: const _SkeletonPlaceholder(),
-                          child: state.book == null
+                          child: state.readerBook == null
                               ? const SizedBox.shrink()
                               : _HighlightedParagraphListener(
-                                  bookSlug: state.currentSlug,
+                                  bookSlug: state.currentBook?.slug,
                                   itemScrollController: itemScrollController,
                                   child: ReaderListViewBuilder(
                                     state: state,
@@ -169,7 +169,7 @@ class _Body extends StatelessWidget {
                 onPressed: () {
                   ReadingPageSettingsSheet.show(
                     context: context,
-                    slug: cubit.state.currentSlug!,
+                    slug: cubit.state.currentBook!.slug,
                     onClosed: () {
                       cubit.saveSettings();
                     },

@@ -47,6 +47,9 @@ sealed class BookModel with _$BookModel {
     fragment: BookFragmentData(title: '', html: BoneMock.longParagraph),
   );
 
+  factory BookModel.empty({required String slug}) =>
+      BookModel(title: slug, slug: slug, url: slug);
+
   factory BookModel.fromJson(Map<String, dynamic> json) =>
       _$BookModelFromJson(json);
 }

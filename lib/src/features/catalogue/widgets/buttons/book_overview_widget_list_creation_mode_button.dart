@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
-import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -22,11 +21,13 @@ class BookOverviewWidgetListCreationModeButton extends StatelessWidget {
       builder: (context, state) {
         final isItemInEditedList = state.isItemInEditedList(slug);
         return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          switchOutCurve: defaultCurve,
-          switchInCurve: defaultCurve,
-          transitionBuilder: (child, animation) =>
-              ScaleTransition(scale: animation, child: child),
+          duration: const Duration(milliseconds: 550),
+          reverseDuration: const Duration(milliseconds: 150),
+          switchOutCurve: Curves.easeIn,
+          switchInCurve: Curves.elasticOut,
+          transitionBuilder: (child, animation) {
+            return ScaleTransition(scale: animation, child: child);
+          },
           child: CustomButton(
             semanticLabel: isItemInEditedList
                 ? LocaleKeys.common_semantic_remove_from_edited_list.tr()

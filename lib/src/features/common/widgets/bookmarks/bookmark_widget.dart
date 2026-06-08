@@ -5,7 +5,6 @@ import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
-import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
@@ -22,9 +21,6 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class BookmarkWidget extends StatelessWidget {
-  // The book related to the bookmark
-  final BookModel book;
-
   // The bookmark to display
   final BookmarkModel bookmark;
 
@@ -50,7 +46,6 @@ class BookmarkWidget extends StatelessWidget {
   const BookmarkWidget({
     super.key,
     required this.bookmark,
-    required this.book,
     required this.isLoading,
     required this.backgroundColor,
     this.isReaderAvailableOffline = false,
@@ -66,13 +61,13 @@ class BookmarkWidget extends StatelessWidget {
     return BlocBuilder<BookmarksCubit, BookmarksState>(
       buildWhen: (p, c) {
         return p.bookmarkToDelete?.location != c.bookmarkToDelete?.location ||
-            p.bookmarkExists(bookmark.slug, bookmark.location) !=
-                c.bookmarkExists(bookmark.slug, bookmark.location);
+            p.bookmarkExists(bookmark.book.slug, bookmark.location) !=
+                c.bookmarkExists(bookmark.book.slug, bookmark.location);
       },
       builder: (context, state) {
         final shouldHide =
             (state.bookmarkToDelete?.location == bookmark.location ||
-                !state.bookmarkExists(bookmark.slug, bookmark.location)) &&
+                !state.bookmarkExists(bookmark.book.slug, bookmark.location)) &&
             !isLoading;
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),
@@ -80,7 +75,6 @@ class BookmarkWidget extends StatelessWidget {
           child: shouldHide
               ? const SizedBox(width: double.infinity)
               : _Body(
-                  book: book,
                   bookmark: bookmark,
                   backgroundColor: backgroundColor,
                   messengerKey: messengerKey,
@@ -103,7 +97,6 @@ class _Body extends StatelessWidget {
     bottomRight: Radius.circular(30),
   );
 
-  final BookModel book;
   final BookmarkModel bookmark;
   final Color backgroundColor;
   final GlobalKey<ScaffoldMessengerState>? messengerKey;
@@ -113,7 +106,6 @@ class _Body extends StatelessWidget {
   final bool isAudioAvailableOffline;
   final bool isDeletable;
   const _Body({
-    required this.book,
     required this.bookmark,
     required this.backgroundColor,
     this.isReaderAvailableOffline = false,
@@ -161,9 +153,9 @@ class _Body extends StatelessWidget {
       }
       router.pushNamed(
         readingPageConfigWithAnchor.name,
-        extra: book,
+        extra: bookmark.book,
         pathParameters: {
-          'slug': book.slug,
+          'slug': bookmark.book.slug,
           if (bookmark.anchor != null) 'anchor': bookmark.anchor!,
         },
       );
@@ -181,227 +173,291 @@ class _Body extends StatelessWidget {
               c.isItemInEditedList(bookmark.uuid!);
         },
         builder: (context, state) {
-          return DecoratedBox(
+          final bool selectedToAdd =
+              state.isItemInEditedList(bookmark.uuid!) && isInListMode;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: defaultCurve,
             decoration: BoxDecoration(
               borderRadius: borderRadius,
-              color: state.isItemInEditedList(bookmark.uuid!) && isInListMode
-                  ? CustomColors.green
-                  : backgroundColor,
+              color: selectedToAdd ? CustomColors.grey : backgroundColor,
             ),
             child: InkWellWrapper(
               borderRadius: borderRadius,
               onTap: !isInListMode ? null : onTap,
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.mediumPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Semantics(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
+              child: Stack(
+                children: [
+                  Opacity(
+                    opacity: selectedToAdd ? 0.4 : 1.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(Dimensions.mediumPadding),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              router.pushNamed(
+                                bookPageConfig.name,
+                                pathParameters: {'slug': bookmark.book.slug},
+                                extra: bookmark.book,
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
                                   child: Semantics(
-                                    child: Text(
-                                      book.title,
-                                      style: theme.textTheme.bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: CustomColors.black,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Flexible(
+                                          child: Semantics(
+                                            child: Text(
+                                              bookmark.book.title,
+                                              style: theme.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: CustomColors.black,
+                                                  ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Flexible(
+                                          child: Semantics(
+                                            child: Text(
+                                              bookmark.book.authors
+                                                  .map((e) => e.name)
+                                                  .join(', '),
+                                              style: theme.textTheme.bodySmall
+                                                  ?.copyWith(
+                                                    color: CustomColors.black,
+                                                  ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                                Flexible(
-                                  child: Semantics(
-                                    child: Text(
-                                      book.authors
-                                          .map((e) => e.name)
-                                          .join(', '),
-                                      style: theme.textTheme.bodySmall
-                                          ?.copyWith(color: CustomColors.black),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                if (isDeletable && !isInListMode)
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    spacing: Dimensions.smallPadding,
+                                    children: [
+                                      CustomButton(
+                                        semanticLabel: LocaleKeys
+                                            .common_semantic_delete_bookmark
+                                            .tr(),
+                                        onPressed: onDeleteTap,
+                                        icon: CustomIcons.delete_forever,
+                                        backgroundColor: CustomColors.red,
+                                        iconColor: CustomColors.white,
+                                      ),
+                                    ],
                                   ),
-                                ),
                               ],
                             ),
                           ),
-                        ),
-                        if (isDeletable && !isInListMode)
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            spacing: Dimensions.smallPadding,
-                            children: [
-                              CustomButton(
-                                semanticLabel: LocaleKeys
-                                    .common_semantic_delete_bookmark
-                                    .tr(),
-                                onPressed: onDeleteTap,
-                                icon: CustomIcons.delete_forever,
-                                backgroundColor: CustomColors.red,
-                                iconColor: CustomColors.white,
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: Dimensions.mediumPadding),
-                    if (bookmark.anchor != null)
-                      SizedBox(
-                        width: double.infinity,
-                        child: DecoratedBox(
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              left: BorderSide(color: CustomColors.black),
-                              right: BorderSide(color: CustomColors.black),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: Dimensions.mediumPadding,
-                              horizontal: Dimensions.veryLargePadding,
-                            ),
-                            child: Text(
-                              LocaleKeys.audio_dialog_paragraph.tr(
-                                namedArgs: {
-                                  'paragraph': (bookmark.anchor ?? '')
-                                      .toString(),
-                                },
-                              ),
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: CustomColors.black,
+                          const SizedBox(height: Dimensions.mediumPadding),
+                          if (bookmark.anchor != null)
+                            SizedBox(
+                              width: double.infinity,
+                              child: DecoratedBox(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    left: BorderSide(color: CustomColors.black),
+                                    right: BorderSide(
+                                      color: CustomColors.black,
+                                    ),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: Dimensions.mediumPadding,
+                                    horizontal: Dimensions.veryLargePadding,
+                                  ),
+                                  child: Text(
+                                    LocaleKeys.audio_dialog_paragraph.tr(
+                                      namedArgs: {
+                                        'paragraph': (bookmark.anchor ?? '')
+                                            .toString(),
+                                      },
+                                    ),
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: CustomColors.black,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.inverseSurface,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  top: Dimensions.mediumPadding,
+                                  bottom: Dimensions.mediumPadding,
+                                  right: Dimensions.mediumPadding,
+                                  left: Dimensions.veryLargePadding,
+                                ),
+                                child: ExcludeSemantics(
+                                  child: _Note(
+                                    note: bookmark.note,
+                                    onEdit: onEdit,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.inverseSurface,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: Dimensions.mediumPadding,
-                            bottom: Dimensions.mediumPadding,
-                            right: Dimensions.mediumPadding,
-                            left: Dimensions.veryLargePadding,
-                          ),
-                          child: ExcludeSemantics(
-                            child: _Note(note: bookmark.note, onEdit: onEdit),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (!isInListMode) ...[
-                      const SizedBox(height: Dimensions.mediumPadding),
-                      ConnectivityWrapper(
-                        builder: (context, hasConnection) {
-                          final isReadingAvailable =
-                              bookmark.anchor != null &&
-                              (hasConnection || isReaderAvailableOffline);
+                          if (!isInListMode) ...[
+                            const SizedBox(height: Dimensions.mediumPadding),
+                            ConnectivityWrapper(
+                              builder: (context, hasConnection) {
+                                final isReadingAvailable =
+                                    bookmark.anchor != null &&
+                                    (hasConnection || isReaderAvailableOffline);
 
-                          final isListeningAvailable =
-                              bookmark.audioTimestamp != null &&
-                              (hasConnection || isAudioAvailableOffline);
-                          return Semantics(
-                            container: true,
-                            child: Row(
-                              spacing: Dimensions.mediumPadding,
-                              children: [
-                                Flexible(
-                                  child: Semantics(
-                                    button: true,
-                                    enabled: isReadingAvailable,
-                                    label: LocaleKeys.common_icon_button_read
-                                        .tr(),
-                                    child: Opacity(
-                                      opacity: isReadingAvailable ? 1.0 : 0.5,
-                                      child: IgnorePointer(
-                                        ignoring: !isReadingAvailable,
-                                        child: ExcludeSemantics(
-                                          child: TextButtonWithIcon(
-                                            onPressed: onReadTap,
-                                            nonActiveText: LocaleKeys
-                                                .common_icon_button_read
-                                                .tr(),
-                                            nonActiveIcon: CustomIcons.book_5,
+                                final isListeningAvailable =
+                                    bookmark.audioTimestamp != null &&
+                                    (hasConnection || isAudioAvailableOffline);
+                                return Semantics(
+                                  container: true,
+                                  child: Row(
+                                    spacing: Dimensions.mediumPadding,
+                                    children: [
+                                      Flexible(
+                                        child: Semantics(
+                                          button: true,
+                                          enabled: isReadingAvailable,
+                                          label: LocaleKeys
+                                              .common_icon_button_read
+                                              .tr(),
+                                          child: Opacity(
+                                            opacity: isReadingAvailable
+                                                ? 1.0
+                                                : 0.5,
+                                            child: IgnorePointer(
+                                              ignoring: !isReadingAvailable,
+                                              child: ExcludeSemantics(
+                                                child: TextButtonWithIcon(
+                                                  onPressed: onReadTap,
+                                                  nonActiveText: LocaleKeys
+                                                      .common_icon_button_read
+                                                      .tr(),
+                                                  nonActiveIcon:
+                                                      CustomIcons.book_5,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Semantics(
-                                    button: true,
-                                    enabled: isListeningAvailable,
-                                    label: LocaleKeys.common_icon_button_listen
-                                        .tr(),
-                                    child: Opacity(
-                                      opacity: isListeningAvailable ? 1.0 : 0.5,
-                                      child: IgnorePointer(
-                                        ignoring: !isListeningAvailable,
-                                        child:
-                                            BlocBuilder<AudioCubit, AudioState>(
-                                              buildWhen: (p, c) =>
-                                                  p.isPlaying != c.isPlaying,
-                                              builder: (context, state) {
-                                                return ExcludeSemantics(
-                                                  child: TextButtonWithIcon(
-                                                    onPressed: () =>
-                                                        onListenTap(
-                                                          state.isPlaying,
-                                                        ),
-                                                    nonActiveText: LocaleKeys
-                                                        .common_icon_button_listen
-                                                        .tr(),
-                                                    nonActiveIcon:
-                                                        CustomIcons.headphones,
-                                                  ),
-                                                );
-                                              },
+                                      Flexible(
+                                        child: Semantics(
+                                          button: true,
+                                          enabled: isListeningAvailable,
+                                          label: LocaleKeys
+                                              .common_icon_button_listen
+                                              .tr(),
+                                          child: Opacity(
+                                            opacity: isListeningAvailable
+                                                ? 1.0
+                                                : 0.5,
+                                            child: IgnorePointer(
+                                              ignoring: !isListeningAvailable,
+                                              child: BlocBuilder<AudioCubit, AudioState>(
+                                                buildWhen: (p, c) =>
+                                                    p.isPlaying != c.isPlaying,
+                                                builder: (context, state) {
+                                                  return ExcludeSemantics(
+                                                    child: TextButtonWithIcon(
+                                                      onPressed: () =>
+                                                          onListenTap(
+                                                            state.isPlaying,
+                                                          ),
+                                                      nonActiveText: LocaleKeys
+                                                          .common_icon_button_listen
+                                                          .tr(),
+                                                      nonActiveIcon: CustomIcons
+                                                          .headphones,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
                                             ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      ExcludeSemantics(
+                                        child: CustomButton(
+                                          semanticLabel: LocaleKeys
+                                              .common_semantic_share_bookmark
+                                              .tr(),
+                                          onPressed: () {
+                                            ShareUtils.shareBookmark(bookmark);
+                                          },
+                                          icon: CustomIcons.ios_share,
+                                          iconSize: 20,
+                                          iconColor: CustomColors.black,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                ExcludeSemantics(
-                                  child: CustomButton(
-                                    semanticLabel: LocaleKeys
-                                        .common_semantic_share_bookmark
-                                        .tr(),
-                                    onPressed: () {
-                                      ShareUtils.shareBookmark(bookmark);
-                                    },
-                                    icon: CustomIcons.ios_share,
-                                    iconSize: 20,
-                                    iconColor: CustomColors.black,
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
                             ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (isInListMode)
+                    Positioned(
+                      top: Dimensions.mediumPadding,
+                      right: Dimensions.mediumPadding,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 550),
+                        reverseDuration: const Duration(milliseconds: 150),
+                        switchOutCurve: Curves.easeIn,
+                        switchInCurve: Curves.elasticOut,
+                        transitionBuilder: (child, animation) {
+                          return ScaleTransition(
+                            scale: animation,
+                            child: child,
                           );
                         },
+                        child: CustomButton(
+                          semanticLabel: selectedToAdd
+                              ? LocaleKeys
+                                    .common_semantic_remove_from_edited_list
+                                    .tr()
+                              : LocaleKeys.common_semantic_add_to_edited_list
+                                    .tr(),
+                          key: ValueKey(selectedToAdd),
+                          icon: selectedToAdd ? Icons.check : CustomIcons.add,
+                          backgroundColor: selectedToAdd
+                              ? CustomColors.green
+                              : CustomColors.white,
+                          iconColor: CustomColors.black,
+                          onPressed: onTap,
+                        ),
                       ),
-                    ],
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
           );

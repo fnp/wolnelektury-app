@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,8 @@ class AudioDialogTopBar extends StatelessWidget {
               return SizedBox(
                 width: 200,
                 child: CustomDropdown<int>(
-                  maxElements: 5,
+                  maxElements: min(state.audiobook?.parts.length ?? 5, 5),
+                  hintNextElements: (state.audiobook?.parts.length ?? 0) > 5,
                   highlightButton: false,
                   width: 200,
                   items:

@@ -3,14 +3,14 @@ part of 'reading_page_cubit.dart';
 @freezed
 sealed class ReadingPageState with _$ReadingPageState {
   const factory ReadingPageState({
-    String? currentSlug,
+    BookModel? currentBook,
+    ReaderBookModel? readerBook,
     @Default(0.5) double textSizeFactor,
     @Default(ReaderFontType.sans) ReaderFontType fontType,
     @Default(0) double fontHeightMultiplier,
 
     @Default(false) bool isJsonLoading,
     @Default(false) bool isJsonLoadingError,
-    ReaderBookModel? book,
 
     // Audio sync pairs
     @Default([]) List<BookTextAudioSyncModel> audioSyncPairs,
@@ -34,8 +34,8 @@ sealed class ReadingPageState with _$ReadingPageState {
 
 extension ReadingPageStateX on ReadingPageState {
   int? findElementIndexByElementId(String elementId) {
-    if (book == null) return null;
-    final int index = book!.contents.indexWhere(
+    if (readerBook == null) return null;
+    final int index = readerBook!.contents.indexWhere(
       (element) => element.containsElementId(elementId),
     );
 
@@ -49,7 +49,7 @@ extension ReadingPageStateX on ReadingPageState {
 
   bool shouldRebuild(ReadingPageState state) {
     return textSizeFactor != state.textSizeFactor ||
-        book != state.book ||
+        readerBook != state.readerBook ||
         fontType != state.fontType ||
         fontHeightMultiplier != state.fontHeightMultiplier ||
         isJsonLoading != state.isJsonLoading;

@@ -9,18 +9,24 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
 class MyLibraryListDeleteConfirmationDialog extends StatelessWidget {
   final VoidCallback onDelete;
+  final String listName;
   const MyLibraryListDeleteConfirmationDialog({
     super.key,
     required this.onDelete,
+    required this.listName,
   });
 
   static void show({
     required BuildContext context,
     required VoidCallback onDelete,
+    required String listName,
   }) {
     showDialog(
       context: context,
-      builder: (_) => MyLibraryListDeleteConfirmationDialog(onDelete: onDelete),
+      builder: (_) => MyLibraryListDeleteConfirmationDialog(
+        onDelete: onDelete,
+        listName: listName,
+      ),
     );
   }
 
@@ -35,7 +41,9 @@ class MyLibraryListDeleteConfirmationDialog extends StatelessWidget {
         spacing: Dimensions.veryLargePadding,
         children: [
           Text(
-            LocaleKeys.my_library_lists_delete_dialog_content.tr(),
+            LocaleKeys.my_library_lists_delete_dialog_content.tr(
+              namedArgs: {'name': listName},
+            ),
             style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w500,
             ),

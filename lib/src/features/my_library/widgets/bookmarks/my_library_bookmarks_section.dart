@@ -42,6 +42,7 @@ class MyLibraryBookmarksSection extends StatelessWidget {
                   child: !state.isLoading && state.bookmarks.isEmpty
                       ? const _EmptyWidget()
                       : CustomScrollPage(
+                          key: ValueKey(state.bookmarks.length),
                           onRefresh: () {
                             return cubit.getMyLibraryBookmarks();
                           },
