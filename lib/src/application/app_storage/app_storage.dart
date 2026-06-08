@@ -105,13 +105,21 @@ class AppStorage extends _$AppStorage {
   }
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onUpgrade: (m, from, to) async {
       if (from < 2) {
         await m.addColumn(readerSettings, readerSettings.readingFontHeight);
+      }
+      if (from < 3) {
+        await (update(syncInfo)..where((_) => const Constant(true))).write(
+          const SyncInfoCompanion(
+            receivedBookmarksSyncAt: Value<DateTime?>(null),
+            sentBookmarksSyncAt: Value<DateTime?>(null),
+          ),
+        );
       }
     },
   );

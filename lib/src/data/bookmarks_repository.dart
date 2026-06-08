@@ -423,6 +423,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
         bookmarks.map((e) {
           final model = BookmarkModel.fromJson(jsonDecode(e.bookmarkJson));
           return model.copyWith(
+            bookSlug: e.slug,
             timestamp: (e.updatedAt.millisecondsSinceEpoch) ~/ 1000,
           );
         }).toList(),
