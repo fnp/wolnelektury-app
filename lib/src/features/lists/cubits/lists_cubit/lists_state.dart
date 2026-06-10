@@ -4,15 +4,17 @@ part of 'lists_cubit.dart';
 sealed class ListsState with _$ListsState {
   const factory ListsState({
     // Existing lists from the db
-    @Default(false) bool isLoading,
-    @Default(false) bool isLoadingMore,
+    @Default(false) bool isLoadingLists,
+    @Default(false) bool isLoadingMoreLists,
+    // Existing items from the db
+    @Default(false) bool isLoadingSingleList,
+    @Default(false) bool isLoadingMoreSingleList,
     @Default([]) List<ListModel> allLists,
     ListModel? fetchedSingleList,
     @Default(ApiResponsePagination()) ApiResponsePagination pagination,
 
     // Pagination for items within a single list
     @Default(ApiResponsePagination()) ApiResponsePagination itemsPagination,
-    @Default(false) bool isLoadingMoreItems,
 
     // Adding list
     @Default(false) bool isAdding,

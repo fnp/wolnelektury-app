@@ -19,13 +19,13 @@ class ListsCubit extends SafeCubit<ListsState> {
     if (state.allLists.isNotEmpty && !force) {
       return;
     }
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoadingLists: true));
     final response = await _listsRepository.getLists();
     response.handle(
       success: (lists, pagination) {
         emit(
           state.copyWith(
-            isLoading: false,
+            isLoadingLists: false,
             allLists: lists,
             pagination: pagination ?? state.pagination,
           ),
@@ -34,10 +34,10 @@ class ListsCubit extends SafeCubit<ListsState> {
       failure: (error) {
         error.handle(
           notFound: () {
-            emit(state.copyWith(allLists: [], isLoading: false));
+            emit(state.copyWith(allLists: [], isLoadingLists: false));
           },
           orElse: () {
-            emit(state.copyWith(isLoading: false));
+            emit(state.copyWith(isLoadingLists: false));
           },
         );
       },
@@ -47,7 +47,7 @@ class ListsCubit extends SafeCubit<ListsState> {
   Future<void> getMoreLists() async {
     if (state.pagination.next == null) return;
 
-    emit(state.copyWith(isLoadingMore: true));
+    emit(state.copyWith(isLoadingMoreLists: true));
     final lists = await _listsRepository.getLists(
       url: state.pagination.next!.removeApiUrl,
     );
@@ -58,12 +58,12 @@ class ListsCubit extends SafeCubit<ListsState> {
           state.copyWith(
             allLists: [...state.allLists, ...newLists],
             pagination: pagination ?? state.pagination,
-            isLoadingMore: false,
+            isLoadingMoreLists: false,
           ),
         );
       },
       failure: (failure) {
-        emit(state.copyWith(isLoadingMore: false));
+        emit(state.copyWith(isLoadingMoreLists: false));
       },
     );
   }
@@ -71,7 +71,7 @@ class ListsCubit extends SafeCubit<ListsState> {
   Future<void> getListBySlug(String listSlug) async {
     emit(
       state.copyWith(
-        isLoading: true,
+        isLoadingSingleList: true,
         fetchedSingleList: null,
         itemsPagination: const ApiResponsePagination(),
       ),
@@ -86,28 +86,35 @@ class ListsCubit extends SafeCubit<ListsState> {
             final completeList = list.copyWith(items: listItems);
             emit(
               state.copyWith(
-                isLoading: false,
+                isLoadingSingleList: false,
                 fetchedSingleList: completeList,
                 itemsPagination: pagination ?? state.itemsPagination,
               ),
             );
           },
           failure: (failure) {
-            emit(state.copyWith(isLoading: false, fetchedSingleList: list));
+            emit(
+              state.copyWith(
+                isLoadingSingleList: false,
+                fetchedSingleList: list,
+              ),
+            );
           },
         );
       },
       failure: (failure) {
-        emit(state.copyWith(isLoading: false, fetchedSingleList: null));
+        emit(
+          state.copyWith(isLoadingSingleList: false, fetchedSingleList: null),
+        );
       },
     );
   }
 
   Future<void> getMoreListItems(String listSlug) async {
     if (state.itemsPagination.next == null) return;
-    if (state.isLoadingMoreItems) return;
+    if (state.isLoadingMoreSingleList) return;
 
-    emit(state.copyWith(isLoadingMoreItems: true));
+    emit(state.copyWith(isLoadingMoreSingleList: true));
     final items = await _listsRepository.getListItems(
       listSlug: listSlug,
       url: state.itemsPagination.next!.removeApiUrl,
@@ -116,7 +123,7 @@ class ListsCubit extends SafeCubit<ListsState> {
     items.handle(
       success: (newItems, pagination) {
         if (state.fetchedSingleList == null) {
-          emit(state.copyWith(isLoadingMoreItems: false));
+          emit(state.copyWith(isLoadingMoreSingleList: false));
           return;
         }
 
@@ -132,12 +139,12 @@ class ListsCubit extends SafeCubit<ListsState> {
           state.copyWith(
             fetchedSingleList: updatedList,
             itemsPagination: pagination ?? state.itemsPagination,
-            isLoadingMoreItems: false,
+            isLoadingMoreSingleList: false,
           ),
         );
       },
       failure: (failure) {
-        emit(state.copyWith(isLoadingMoreItems: false));
+        emit(state.copyWith(isLoadingMoreSingleList: false));
       },
     );
   }

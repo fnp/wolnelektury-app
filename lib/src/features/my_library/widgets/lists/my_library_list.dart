@@ -36,7 +36,8 @@ class MyLibraryList extends StatelessWidget {
       },
       builder: (context, state) {
         final isExisting =
-            state.doesLocalListExistsAlready(itemList.slug) || state.isLoading;
+            state.doesLocalListExistsAlready(itemList.slug) ||
+            state.isLoadingSingleList;
 
         return AnimatedSize(
           duration: const Duration(milliseconds: 300),

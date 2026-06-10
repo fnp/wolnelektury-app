@@ -41,7 +41,7 @@ class BookListsSheetExistingLists extends StatelessWidget {
           },
           builder: (context, outerState) {
             return BlocBuilder<ListsCubit, ListsState>(
-              buildWhen: (p, c) => p.isLoading != c.isLoading,
+              buildWhen: (p, c) => p.isLoadingLists != c.isLoadingLists,
               builder: (context, state) {
                 return AnimatedBoxFade(
                   collapsedChild: const Padding(
@@ -49,9 +49,10 @@ class BookListsSheetExistingLists extends StatelessWidget {
                     child: CustomLoader(),
                   ),
                   isChildVisible:
-                      state.isLoading == false &&
+                      state.isLoadingLists == false &&
                       outerState.isFetchingMemberships == false,
-                  child: state.isLoading || outerState.isFetchingMemberships
+                  child:
+                      state.isLoadingLists || outerState.isFetchingMemberships
                       ? const SizedBox.shrink()
                       : ListView.separated(
                           controller: scrollController,

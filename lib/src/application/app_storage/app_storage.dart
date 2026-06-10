@@ -120,6 +120,7 @@ class AppStorage extends _$AppStorage {
             sentBookmarksSyncAt: Value<DateTime?>(null),
           ),
         );
+        await delete(bookmarks).go();
       }
     },
   );

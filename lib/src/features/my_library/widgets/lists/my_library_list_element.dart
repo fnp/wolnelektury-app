@@ -98,7 +98,7 @@ class _MyLibraryListBookElement extends MyLibraryListElement {
               ? const SizedBox(width: double.infinity)
               : Skeletonizer(
                   enableSwitchAnimation: true,
-                  enabled: state.isLoading,
+                  enabled: state.isLoadingLists,
                   child: BookPageCoverWithButtons.listItem(
                     key: ValueKey(item.book?.slug),
                     item: item,
@@ -114,7 +114,7 @@ class _MyLibraryListBookElement extends MyLibraryListElement {
                             );
                           }
                         : null,
-                    book: state.isLoading
+                    book: state.isLoadingLists
                         ? BookModel.skeletonized()
                         : item.book!,
                   ),

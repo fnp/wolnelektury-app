@@ -46,7 +46,7 @@ class MyLibraryListsSection extends StatelessWidget {
               Expanded(
                 child: BlocSelector<ListsCubit, ListsState, bool>(
                   selector: (state) {
-                    return state.isLoading;
+                    return state.isLoadingLists;
                   },
                   builder: (context, isLoading) {
                     return Skeletonizer(

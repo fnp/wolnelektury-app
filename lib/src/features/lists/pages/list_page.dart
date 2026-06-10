@@ -55,7 +55,7 @@ class ContentState extends State<Content> {
       value: context.read<ListsCubit>()..getListBySlug(widget.slug),
       child: BlocBuilder<ListsCubit, ListsState>(
         buildWhen: (p, c) {
-          return p.isLoading != c.isLoading ||
+          return p.isLoadingSingleList != c.isLoadingSingleList ||
               p.fetchedSingleList?.name != c.fetchedSingleList?.name;
         },
         builder: (context, state) {
@@ -106,14 +106,14 @@ class ListPageEmptyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ListsCubit, ListsState>(
       buildWhen: (p, c) {
-        return p.isLoading != c.isLoading;
+        return p.isLoadingSingleList != c.isLoadingSingleList;
       },
       builder: (context, state) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           switchInCurve: defaultCurve,
           switchOutCurve: defaultCurve,
-          child: state.isLoading
+          child: state.isLoadingSingleList
               ? const CustomLoader()
               : EmptyWidget(
                   isSliver: false,
