@@ -308,9 +308,10 @@ class ListsCubit extends SafeCubit<ListsState> {
           state.copyWith(
             fetchedSingleList: state.fetchedSingleList!.copyWith(name: newName),
             isRenaming: false,
+            allLists: [],
           ),
         );
-        // getLists(force: true);
+        getLists(force: true);
       },
       failure: (failure) {
         emit(state.copyWith(isRenaming: false, isRenamingFailure: true));

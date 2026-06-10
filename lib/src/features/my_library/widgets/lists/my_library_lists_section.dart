@@ -64,8 +64,7 @@ class MyLibraryListsSection extends StatelessWidget {
                             buildWhen: (p, c) {
                               return p.isAdding != c.isAdding ||
                                   p.pendingList != c.pendingList ||
-                                  p.allLists.isNotEmpty && c.allLists.isEmpty ||
-                                  p.allLists.isEmpty && c.allLists.isNotEmpty;
+                                  p.allLists != c.allLists;
                             },
                             builder: (context, state) {
                               final effectiveLists = isLoading
