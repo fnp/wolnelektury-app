@@ -7,6 +7,7 @@ import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
+import 'package:wolnelektury/src/features/common/cubits/app_mode/app_mode_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_scroll_page.dart';
 import 'package:wolnelektury/src/features/common/widgets/empty_widget.dart';
 import 'package:wolnelektury/src/features/common/widgets/page_subtitle.dart';
@@ -66,6 +67,17 @@ class MyLibraryBookmarksSection extends StatelessWidget {
                 );
               },
             ),
+          ),
+          BlocBuilder<AppModeCubit, AppModeState>(
+            buildWhen: (p, c) {
+              return p.mode != c.mode;
+            },
+            builder: (context, state) {
+              if (state.isListBookmarksCreation) {
+                return const SizedBox(height: Dimensions.spacer * 3);
+              }
+              return const SizedBox.shrink();
+            },
           ),
         ],
       ),
