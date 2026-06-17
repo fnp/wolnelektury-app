@@ -77,7 +77,6 @@ class SettingsPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   PageHeader(title: LocaleKeys.settings_title.tr()),
-                  const SizedBox(height: Dimensions.spacer),
                   if (isAuthorized)
                     _SettingsContainer(
                       text: LocaleKeys.settings_notifications.tr(),

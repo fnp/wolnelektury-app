@@ -90,9 +90,13 @@ class TextButtonWithIcon extends StatelessWidget {
                     right: Dimensions.mediumPadding,
                   ),
                   child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    transitionBuilder: (child, animation) =>
-                        ScaleTransition(scale: animation, child: child),
+                    duration: const Duration(milliseconds: 550),
+                    reverseDuration: const Duration(milliseconds: 150),
+                    switchOutCurve: Curves.easeIn,
+                    switchInCurve: Curves.elasticOut,
+                    transitionBuilder: (child, animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
                     child: Icon(
                       isActive ? activeIcon ?? nonActiveIcon : nonActiveIcon,
                       key: ValueKey<IconData>(

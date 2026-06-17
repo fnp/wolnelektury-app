@@ -120,6 +120,7 @@ class BookPageCoverWithButtons extends StatelessWidget {
                             borderRadius: BorderRadius.all(
                               Radius.circular(Dimensions.smallBorderRadius),
                             ),
+                            color: CustomColors.white,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(

@@ -496,6 +496,7 @@ class _NoteState extends State<_Note> {
         if (widget.onEdit != null)
           CustomButton(
             icon: CustomIcons.stylus_note,
+            iconColor: theme.colorScheme.onSurface,
             backgroundColor: Colors.transparent,
             semanticLabel: LocaleKeys.common_semantic_edit_bookmark.tr(),
             onPressed: widget.onEdit,
