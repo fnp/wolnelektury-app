@@ -27,6 +27,7 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
 
   bool showUsernameError = false;
   bool showPasswordError = false;
+  bool _showPassword = false;
 
   @override
   void dispose() {
@@ -117,7 +118,7 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                   FocusScope.of(context).unfocus();
                 },
                 textInputAction: TextInputAction.go,
-                obscureText: true,
+                obscureText: !_showPassword,
                 enableSuggestions: false,
                 autocorrect: false,
                 autofillHints: const [AutofillHints.password],
@@ -140,39 +141,41 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                   }
                 },
                 decoration: InputDecoration(
-                  suffixIcon: Semantics(
-                    label: LocaleKeys.login_forgot.tr(),
-                    button: true,
-                    enabled: true,
-                    onTap: () {
-                      MyLibraryForgotPasswordDialog.show(context: context);
-                    },
-                    child: GestureDetector(
-                      onTap: () {
-                        MyLibraryForgotPasswordDialog.show(context: context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          right: Dimensions.veryLargePadding,
-                          left: Dimensions.mediumPadding,
-                        ),
-                        child: SizedBox(
-                          width: 110,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              LocaleKeys.login_forgot,
-                              textAlign: TextAlign.center,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                decoration: TextDecoration.underline,
-                                color: CustomColors.black,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ).tr(),
-                          ),
-                        ),
-                      ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _showPassword ? Icons.visibility_off : Icons.visibility,
+                      size: 20,
                     ),
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Semantics(
+                label: LocaleKeys.login_forgot.tr(),
+                button: true,
+                child: GestureDetector(
+                  onTap: () {
+                    MyLibraryForgotPasswordDialog.show(context: context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: Dimensions.smallPadding,
+                    ),
+                    child: Text(
+                      LocaleKeys.login_forgot,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        decoration: TextDecoration.underline,
+                        color: CustomColors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ).tr(),
                   ),
                 ),
               ),
@@ -232,7 +235,7 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                           duration: const Duration(milliseconds: 200),
                           child: state.isLoading
                               ? const CustomLoader(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   size: 15,
                                   strokeWidth: 2,
                                 )

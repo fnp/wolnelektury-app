@@ -54,6 +54,8 @@ class _FormState extends State<_Form> {
   bool showEmailError = false;
   bool showAgreementError = false;
   bool showConfirmPasswordError = false;
+  bool _showPassword = false;
+  bool _showConfirmPassword = false;
 
   bool get isAnyError =>
       showPasswordError ||
@@ -185,7 +187,7 @@ class _FormState extends State<_Form> {
                   FocusScope.of(context).unfocus();
                 },
                 textInputAction: TextInputAction.go,
-                obscureText: true,
+                obscureText: !_showPassword,
                 enableSuggestions: false,
                 autocorrect: false,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -197,6 +199,19 @@ class _FormState extends State<_Form> {
                     _validate(context);
                   }
                 },
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _showPassword ? Icons.visibility_off : Icons.visibility,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: Dimensions.mediumPadding),
@@ -226,7 +241,7 @@ class _FormState extends State<_Form> {
                   FocusScope.of(context).unfocus();
                 },
                 textInputAction: TextInputAction.go,
-                obscureText: true,
+                obscureText: !_showConfirmPassword,
                 enableSuggestions: false,
                 autocorrect: false,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -238,6 +253,21 @@ class _FormState extends State<_Form> {
                     _validate(context);
                   }
                 },
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _showConfirmPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showConfirmPassword = !_showConfirmPassword;
+                      });
+                    },
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: Dimensions.mediumPadding),

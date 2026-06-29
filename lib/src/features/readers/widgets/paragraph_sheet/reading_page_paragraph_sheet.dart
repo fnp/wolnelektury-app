@@ -14,6 +14,7 @@ import 'package:wolnelektury/src/features/common/widgets/auth_wrapper.dart';
 import 'package:wolnelektury/src/features/common/widgets/bookmarks/create_bookmark_widget.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/features/common/widgets/connectivity_wrapper.dart';
+import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
 import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
 import 'package:wolnelektury/src/utils/audio/on_listen.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
@@ -47,6 +48,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
             BlocProvider.value(value: context.read<ScrollCubit>()),
             BlocProvider.value(value: context.read<AuthCubit>()),
             BlocProvider.value(value: context.read<RouterCubit>()),
+            BlocProvider.value(value: context.read<ListEditorCubit>()),
             BlocProvider(
               create: (context) {
                 return SingleBookCubit(get.get(), get.get());

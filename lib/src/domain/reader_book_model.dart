@@ -9,6 +9,7 @@ enum ReaderBookTag {
   a,
   div,
   em,
+  img,
   unknown;
 
   static ReaderBookTag fromString(String value) {

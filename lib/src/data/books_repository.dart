@@ -105,7 +105,6 @@ class BooksRepositoryImplementation extends BooksRepository {
         }
         return const DataState.failure(Failure.notFound());
       }
-
       final response = await _apiService.getRequest(
         '$_booksEndpoint/$slug.json',
         isAnonymous: true,

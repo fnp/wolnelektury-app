@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_bottom_sheet.dart';
+import 'package:wolnelektury/src/features/readers/widgets/reader/reader_image_dialog.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_master_level_modifiers.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_tag_level_modifiers.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -46,6 +48,27 @@ List<InlineSpan> buildReaderBase({
       theme: theme,
       isRecursive: isRecursive,
     );
+  }
+
+  if (element.attr?['src'] != null) {
+    final src = element.attr!['src']!;
+    spans.addAll([
+      WidgetSpan(
+        child: GestureDetector(
+          onTap: () => ReaderImageDialog.show(imageUrl: src),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: CachedNetworkImage(fit: BoxFit.contain, imageUrl: src),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    ]);
   }
 
   switch (element.attr?['class']) {
@@ -110,20 +133,24 @@ List<InlineSpan> buildReaderBase({
       break;
 
     default:
-      spans = element.contents.asMap().entries.expand((entry) {
-        final index = entry.key;
-        final item = entry.value;
-        final nextSibling = index + 1 < element.contents.length
-            ? element.contents[index + 1]
-            : null;
-        final prevSibling = index - 1 >= 0 ? element.contents[index - 1] : null;
+      spans.addAll(
+        element.contents.asMap().entries.expand((entry) {
+          final index = entry.key;
+          final item = entry.value;
+          final nextSibling = index + 1 < element.contents.length
+              ? element.contents[index + 1]
+              : null;
+          final prevSibling = index - 1 >= 0
+              ? element.contents[index - 1]
+              : null;
 
-        return getSpans(
-          item,
-          nextSibling: nextSibling,
-          prevSibling: prevSibling,
-        );
-      }).toList();
+          return getSpans(
+            item,
+            nextSibling: nextSibling,
+            prevSibling: prevSibling,
+          );
+        }).toList(),
+      );
   }
 
   return spans;

@@ -47,16 +47,22 @@ class LastReadPage extends StatelessWidget {
                         }
 
                         if (!state.isLoading && state.progresses.isEmpty) {
-                          return EmptyWidget(
-                            image: Images.empty,
-                            message: LocaleKeys.common_empty_last_read_title
-                                .tr(),
-                            buttonText: LocaleKeys
-                                .common_empty_search_in_catalogue
-                                .tr(),
-                            onTap: () {
-                              router.goNamed(cataloguePageConfig.name);
-                            },
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              EmptyWidget(
+                                image: Images.empty,
+                                message: LocaleKeys.common_empty_last_read_title
+                                    .tr(),
+                                buttonText: LocaleKeys
+                                    .common_empty_search_in_catalogue
+                                    .tr(),
+                                isSliver: false,
+                                onTap: () {
+                                  router.goNamed(cataloguePageConfig.name);
+                                },
+                              ),
+                            ],
                           );
                         }
 
