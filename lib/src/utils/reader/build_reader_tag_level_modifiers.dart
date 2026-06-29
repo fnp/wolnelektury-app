@@ -35,16 +35,6 @@ class BuildReaderTagLevelModifiers {
 
     switch (element.tag) {
       case ReaderBookTag.img:
-        spans.addAll([
-          spacer(10),
-          WidgetSpan(
-            child: Image.network(
-              element.attr?['src'] ?? '',
-              fit: BoxFit.contain,
-            ),
-          ),
-          spacer(10),
-        ]);
         break;
       case ReaderBookTag.h2:
         spans.addAll([
