@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +33,7 @@ class ReaderListViewBuilder extends StatefulWidget {
 class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+  final FocusNode _selectionFocusNode = FocusNode();
 
   late ReaderPageCubit cubit;
 
@@ -50,6 +53,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
   @override
   void dispose() {
     itemPositionsListener.itemPositions.removeListener(() => listener(cubit));
+    _selectionFocusNode.dispose();
     super.dispose();
   }
 
@@ -81,50 +85,64 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
       data: MediaQuery.of(
         context,
       ).copyWith(textScaler: const TextScaler.linear(1)),
-      child: ScrollablePositionedList.builder(
-        itemScrollController: widget.itemScrollController,
-        itemCount: widget.state.readerBook!.contents.length + 1,
-        itemPositionsListener: itemPositionsListener,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return _Header(state: widget.state);
-          }
-          final element = widget.state.readerBook!.contents[index - 1];
-          final isLast = index == widget.state.readerBook!.contents.length;
-
-          return Padding(
-            padding: EdgeInsets.only(bottom: isLast ? Dimensions.spacer : 0),
-            child: InkWellWrapper(
-              onLongPress: () => onLongPress(
-                cubit: cubit,
-                bookmarksCubit: bookmarksCubit,
-                context: context,
-                index: index,
-                element: element,
-              ),
-              child: VisibilityDetector(
-                key: ValueKey(element.hashCode),
-                onVisibilityChanged: (info) {
-                  if (info.visibleFraction > 0) {
-                    cubit.setProgress(anchor: element.id);
-                  }
-                },
-                child: Stack(
-                  children: [
-                    ReaderYellowBackground(index: index),
-                    ReaderBreathingBackground(index: index - 1),
-                    ReaderParagraph(
-                      element: element,
-                      fontFamily: widget.state.fontType.familyName,
-                      fontSize: widget.state.getFontSize(theme),
-                      fontHeight: widget.state.getLineHeight(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
+      child: SelectionArea(
+        onSelectionChanged: (v) {
+          log(v.toString());
         },
+        focusNode: _selectionFocusNode,
+        child: NotificationListener<ScrollStartNotification>(
+          onNotification: (_) {
+            _selectionFocusNode.unfocus();
+            return false;
+          },
+          child: ScrollablePositionedList.builder(
+            itemScrollController: widget.itemScrollController,
+            itemCount: widget.state.readerBook!.contents.length + 1,
+            itemPositionsListener: itemPositionsListener,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return _Header(state: widget.state);
+              }
+              final element = widget.state.readerBook!.contents[index - 1];
+              final isLast = index == widget.state.readerBook!.contents.length;
+
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: isLast ? Dimensions.spacer : 0,
+                ),
+                child: InkWellWrapper(
+                  // onLongPress: () => onLongPress(
+                  //   cubit: cubit,
+                  //   bookmarksCubit: bookmarksCubit,
+                  //   context: context,
+                  //   index: index,
+                  //   element: element,
+                  // ),
+                  child: VisibilityDetector(
+                    key: ValueKey(element.hashCode),
+                    onVisibilityChanged: (info) {
+                      if (info.visibleFraction > 0) {
+                        cubit.setProgress(anchor: element.id);
+                      }
+                    },
+                    child: Stack(
+                      children: [
+                        ReaderYellowBackground(index: index),
+                        ReaderBreathingBackground(index: index - 1),
+                        ReaderParagraph(
+                          element: element,
+                          fontFamily: widget.state.fontType.familyName,
+                          fontSize: widget.state.getFontSize(theme),
+                          fontHeight: widget.state.getLineHeight(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
