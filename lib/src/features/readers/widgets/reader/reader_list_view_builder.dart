@@ -9,7 +9,7 @@ import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_c
 import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
 import 'package:wolnelektury/src/features/readers/widgets/paragraph_sheet/reader_page_paragraph_sheet.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_breathing_background.dart';
-import 'package:wolnelektury/src/features/readers/widgets/reader/reader_spans_wrapper.dart';
+import 'package:wolnelektury/src/features/readers/widgets/reader/reader_paragraph.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_yellow_background.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -113,7 +113,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
                   children: [
                     ReaderYellowBackground(index: index),
                     ReaderBreathingBackground(index: index - 1),
-                    ReaderSpansWrapper(
+                    ReaderParagraph(
                       element: element,
                       fontFamily: widget.state.fontType.familyName,
                       fontSize: widget.state.getFontSize(theme),

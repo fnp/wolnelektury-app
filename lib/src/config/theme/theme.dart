@@ -28,7 +28,7 @@ ThemeData get lightTheme => _baseTheme.copyWith(
   scaffoldBackgroundColor: CustomColors.lightGrey,
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: CustomColors.black,
-    selectionColor: CustomColors.white.withValues(alpha: 0.5),
+    selectionColor: CustomColors.primaryYellowColor.withValues(alpha: 0.5),
     selectionHandleColor: CustomColors.black,
   ),
   colorScheme: const ColorScheme(

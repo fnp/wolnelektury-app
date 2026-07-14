@@ -9,12 +9,12 @@ import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_indent.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
-class ReaderSpansWrapper extends StatelessWidget {
+class ReaderParagraph extends StatelessWidget {
   final ReaderBookModelContent element;
   final String fontFamily;
   final double fontSize;
   final double fontHeight;
-  const ReaderSpansWrapper({
+  const ReaderParagraph({
     required this.element,
     required this.fontFamily,
     required this.fontSize,
@@ -27,26 +27,28 @@ class ReaderSpansWrapper extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 40,
-          child: element.visibleNumber != null
-              ? Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    '${element.visibleNumber}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: CustomColors.darkModeGrey,
+        SelectionContainer.disabled(
+          child: SizedBox(
+            width: 40,
+            child: element.visibleNumber != null
+                ? Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${element.visibleNumber}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: CustomColors.darkModeGrey,
+                      ),
                     ),
-                  ),
-                )
-              : null,
+                  )
+                : null,
+          ),
         ),
         Expanded(
           child: Padding(
             padding: _getPaddingByTag(element.tag),
-            child: RichText(
-              text: TextSpan(
+            child: Text.rich(
+              TextSpan(
                 children: [
                   if (element.paragraphIndex != null)
                     const TextSpan(text: BuildReaderIndent.textIndent),

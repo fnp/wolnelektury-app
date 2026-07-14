@@ -12,8 +12,8 @@ WidgetSpan buildMasterLevelRow({
       child: Row(
         children: [
           Expanded(
-            child: RichText(
-              text: TextSpan(style: style, children: children),
+            child: Text.rich(
+              TextSpan(style: style, children: children),
               textAlign: textAlign,
             ),
           ),

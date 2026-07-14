@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -301,7 +302,10 @@ InlineSpan _handleLinkTags({
             ),
             behavior: HitTestBehavior.opaque,
             child: Padding(
-              padding: const EdgeInsets.only(left: 2),
+              padding: EdgeInsets.only(
+                left: 2,
+                bottom: max((fontSize * 0.5) - 5, 0),
+              ),
               child: Icon(
                 iconData.$1,
                 size: fontSize + fontSize * 0.2,
