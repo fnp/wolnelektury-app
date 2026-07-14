@@ -155,32 +155,36 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Semantics(
-                label: LocaleKeys.login_forgot.tr(),
-                button: true,
-                child: GestureDetector(
-                  onTap: () {
-                    MyLibraryForgotPasswordDialog.show(context: context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: Dimensions.smallPadding,
-                    ),
-                    child: Text(
-                      LocaleKeys.login_forgot,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        decoration: TextDecoration.underline,
-                        color: CustomColors.black,
-                        fontWeight: FontWeight.w500,
+            const SizedBox(height: Dimensions.smallPadding),
+            Padding(
+              padding: const EdgeInsets.only(right: Dimensions.smallPadding),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Semantics(
+                  label: LocaleKeys.login_forgot.tr(),
+                  button: true,
+                  child: GestureDetector(
+                    onTap: () {
+                      MyLibraryForgotPasswordDialog.show(context: context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: Dimensions.smallPadding,
                       ),
-                    ).tr(),
+                      child: Text(
+                        LocaleKeys.login_forgot,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          decoration: TextDecoration.underline,
+                          color: CustomColors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ).tr(),
+                    ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: Dimensions.largePadding),
             Row(
               children: [
                 Expanded(
