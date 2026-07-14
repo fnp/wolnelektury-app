@@ -18,25 +18,6 @@
         "last_searched": "Ostatnio wyszukiwane",
         "show_all": "Pokaż wszystkie wyniki"
     },
-    "reading": {
-        "sheet": {
-            "bookmark_add": "dodaj zakładkę",
-            "bookmark_adding": "dodawanie zakładki",
-            "bookmark_edit": "edytuj zakładkę",
-            "bookmark_editing": "edycja zakładki",
-            "listen": "słuchaj",
-            "share": "udostępnij"
-        },
-        "snackbar": {
-            "bookmark_added_success": "Zakładka dodana",
-            "bookmark_edited_success": "Zakładka edytowana",
-            "bookmark_deleted_success": "Zakładka usunięta",
-            "bookmark_add_error": "Nie udało się dodać zakładki",
-            "bookmark_edit_error": "Nie udało się edytować zakładki",
-            "bookmark_delete_error": "Nie udało się usunąć zakładki",
-            "reader_loading_error": "Nie udało się wczytać treści książki"
-        }
-    },
     "my_library": {
         "wifi_dialog": {
             "title": "Brak połączenia Wi-Fi",
@@ -177,6 +158,23 @@
         "title": "Ostatnio czytane"
     },
     "reader": {
+        "sheet": {
+            "bookmark_add": "dodaj zakładkę",
+            "bookmark_adding": "dodawanie zakładki",
+            "bookmark_edit": "edytuj zakładkę",
+            "bookmark_editing": "edycja zakładki",
+            "listen": "słuchaj",
+            "share": "udostępnij"
+        },
+        "snackbar": {
+            "bookmark_added_success": "Zakładka dodana",
+            "bookmark_edited_success": "Zakładka edytowana",
+            "bookmark_deleted_success": "Zakładka usunięta",
+            "bookmark_add_error": "Nie udało się dodać zakładki",
+            "bookmark_edit_error": "Nie udało się edytować zakładki",
+            "bookmark_delete_error": "Nie udało się usunąć zakładki",
+            "reader_loading_error": "Nie udało się wczytać treści książki"
+        },
         "progress": {
             "left": "Pozostało ok. {minutes} min"
         },

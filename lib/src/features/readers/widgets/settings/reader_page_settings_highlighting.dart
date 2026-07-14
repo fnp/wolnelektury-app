@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ReadingPageSettingsSheetHighlighting extends StatelessWidget {
-  const ReadingPageSettingsSheetHighlighting({super.key});
+class ReaderPageSettingsSheetHighlighting extends StatelessWidget {
+  const ReaderPageSettingsSheetHighlighting({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class ReadingPageSettingsSheetHighlighting extends StatelessWidget {
                 ),
               ),
             ),
-            BlocBuilder<ReadingPageCubit, ReadingPageState>(
+            BlocBuilder<ReaderPageCubit, ReaderPageState>(
               buildWhen: (p, c) =>
                   p.isEnabledHighlighting != c.isEnabledHighlighting,
               builder: (context, state) {
@@ -55,7 +55,7 @@ class ReadingPageSettingsSheetHighlighting extends StatelessWidget {
                   padding: 5,
                   value: state.isEnabledHighlighting,
                   onToggle: (value) {
-                    context.read<ReadingPageCubit>().enableHighlighting(value);
+                    context.read<ReaderPageCubit>().enableHighlighting(value);
                   },
                 );
               },

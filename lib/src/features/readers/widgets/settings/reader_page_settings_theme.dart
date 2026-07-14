@@ -8,8 +8,8 @@ import 'package:wolnelektury/src/features/settings/widgets/theme_toggle_switch.d
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ReadingPageSettingsSheetTheme extends StatelessWidget {
-  const ReadingPageSettingsSheetTheme({super.key});
+class ReaderPageSettingsSheetTheme extends StatelessWidget {
+  const ReaderPageSettingsSheetTheme({super.key});
 
   @override
   Widget build(BuildContext context) {

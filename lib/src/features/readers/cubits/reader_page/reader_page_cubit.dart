@@ -14,17 +14,17 @@ import 'package:wolnelektury/src/domain/book_text_audio_sync_model.dart';
 import 'package:wolnelektury/src/domain/progress_model.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/enums/reader_font_type.dart';
-import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_font_height.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reader_page_settings_font_height.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
-part 'reading_page_cubit.freezed.dart';
-part 'reading_page_state.dart';
+part 'reader_page_cubit.freezed.dart';
+part 'reader_page_state.dart';
 
-/// Cubit managing the state of the book reading page.
-/// Handles content loading, reading progress management,
+/// Cubit managing the state of the book reader page.
+/// Handles content loading, reader progress management,
 /// audio-text synchronization, and appearance customization.
-class ReadingPageCubit extends SafeCubit<ReadingPageState> {
+class ReaderPageCubit extends SafeCubit<ReaderPageState> {
   // ------------------------------------------
   // Private fields
   // ------------------------------------------
@@ -36,7 +36,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   /// Timestamp of last progress sent (for debouncing)
   DateTime? _lastProgressSent;
 
-  /// Flag indicating whether reading progress can be saved
+  /// Flag indicating whether reader progress can be saved
   bool _readyToSetProgress = false;
 
   final AppStorageSettingsService _settingsStorage;
@@ -46,17 +46,17 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   // ------------------------------------------
   // Constructor
   // ------------------------------------------
-  ReadingPageCubit(
+  ReaderPageCubit(
     this._settingsStorage,
     this._booksRepository,
     this._progressRepository,
-  ) : super(const ReadingPageState());
+  ) : super(const ReaderPageState());
 
   // ------------------------------------------
   // Initialization
   // ------------------------------------------
 
-  /// Initializes the book reading page.
+  /// Initializes the book reader page.
   ///
   /// [book] - book model to display
   /// [itemScrollController] - scroll controller for the list of elements
@@ -121,7 +121,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     );
   }
 
-  /// Retrieves and sets the reading progress for the book.
+  /// Retrieves and sets the reader progress for the book.
   ///
   /// If [targetAnchor] is provided, scrolls to that anchor
   /// instead of the saved progress.
@@ -159,7 +159,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     progress.handle(
       success: (data, _) async {
         AppLogger.instance.d(
-          'ReadingPageCubit',
+          'ReaderPageCubit',
           'Retrieved progress of the book ${state.currentBook!.slug} with anchor ${data.textAnchor}',
         );
         emit(state.copyWith(progress: data));
@@ -213,7 +213,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   // Progress management
   // ------------------------------------------
 
-  /// Saves reading progress to the server.
+  /// Saves reader progress to the server.
   ///
   /// Implements debouncing (4 seconds) to limit the number of requests.
   Future<void> setProgress({required String? anchor}) async {
@@ -231,7 +231,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
 
     _lastProgressSent = now;
     AppLogger.instance.d(
-      'ReadingPageCubit',
+      'ReaderPageCubit',
       'Setting progress of the book ${state.currentBook!.slug} to $anchor',
     );
     ProgressModel progress;
@@ -330,7 +330,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
     emit(state.copyWith(isEnabledHighlighting: value));
   }
 
-  /// Updates the visual reading progress (progress bar in UI).
+  /// Updates the visual reader progress (progress bar in UI).
   void setVisualProgress(int index) {
     final maxLength = state.readerBook?.contents.length ?? 1;
     final progress = (index / maxLength * 100).clamp(0, 100).floor();

@@ -7,7 +7,7 @@ import 'package:wolnelektury/src/enums/my_library_enum.dart';
 import 'package:wolnelektury/src/features/authors/pages/author_page.dart';
 import 'package:wolnelektury/src/features/bookmarks/pages/bookmark_page.dart';
 import 'package:wolnelektury/src/features/books/pages/book_page.dart';
-import 'package:wolnelektury/src/features/books/pages/reading_page.dart';
+import 'package:wolnelektury/src/features/books/pages/reader_page.dart';
 import 'package:wolnelektury/src/features/catalogue/pages/catalogue_page.dart';
 import 'package:wolnelektury/src/features/catalogue/pages/filters_page.dart';
 import 'package:wolnelektury/src/features/common/cubits/connectivity/connectivity_cubit.dart';
@@ -45,8 +45,8 @@ final mainPathsOrder = [
 ];
 
 final availableOfflineNames = [
-  readingPageConfig.name,
-  readingPageConfigWithAnchor.name,
+  ReaderPageConfig.name,
+  ReaderPageConfigWithAnchor.name,
   myLibraryPageConfig.name,
   settingsPageConfig.name,
 ];
@@ -196,32 +196,28 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
-          path: readingPageConfigWithAnchor.path,
-          name: readingPageConfigWithAnchor.name,
+          path: ReaderPageConfigWithAnchor.path,
+          name: ReaderPageConfigWithAnchor.name,
           pageBuilder: (context, state) {
             final book = state.extra as BookModel?;
             final anchor = state.pathParameters['anchor'];
             final slug = state.pathParameters['slug'];
             return MaterialPage(
               child: _ColoredBackground(
-                child: ReadingPage(
-                  book: book,
-                  targetAnchor: anchor,
-                  slug: slug,
-                ),
+                child: ReaderPage(book: book, targetAnchor: anchor, slug: slug),
               ),
             );
           },
         ),
         GoRoute(
-          path: readingPageConfig.path,
-          name: readingPageConfig.name,
+          path: ReaderPageConfig.path,
+          name: ReaderPageConfig.name,
           pageBuilder: (context, state) {
             final book = state.extra as BookModel?;
             final slug = state.pathParameters['slug'];
             return MaterialPage(
               child: _ColoredBackground(
-                child: ReadingPage(book: book, slug: slug),
+                child: ReaderPage(book: book, slug: slug),
               ),
             );
           },

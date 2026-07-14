@@ -1,8 +1,8 @@
-part of 'reading_page_cubit.dart';
+part of 'reader_page_cubit.dart';
 
 @freezed
-sealed class ReadingPageState with _$ReadingPageState {
-  const factory ReadingPageState({
+sealed class ReaderPageState with _$ReaderPageState {
+  const factory ReaderPageState({
     BookModel? currentBook,
     ReaderBookModel? readerBook,
     @Default(0.5) double textSizeFactor,
@@ -29,10 +29,10 @@ sealed class ReadingPageState with _$ReadingPageState {
     @Default(0) int readTimeInSeconds,
     @Default(0) int visualProgress,
     @Default(false) bool isVisualProgressIncreasing,
-  }) = _ReadingPageState;
+  }) = _ReaderPageState;
 }
 
-extension ReadingPageStateX on ReadingPageState {
+extension ReaderPageStateX on ReaderPageState {
   int? findElementIndexByElementId(String elementId) {
     if (readerBook == null) return null;
     final int index = readerBook!.contents.indexWhere(
@@ -47,7 +47,7 @@ extension ReadingPageStateX on ReadingPageState {
     return pair?.timestamp;
   }
 
-  bool shouldRebuild(ReadingPageState state) {
+  bool shouldRebuild(ReaderPageState state) {
     return textSizeFactor != state.textSizeFactor ||
         readerBook != state.readerBook ||
         fontType != state.fontType ||
@@ -57,12 +57,12 @@ extension ReadingPageStateX on ReadingPageState {
 
   double getFontSize(ThemeData theme) =>
       theme.textTheme.bodyMedium!.fontSize! * textSizeFactor +
-      ReadingPageCubit._fontSizeMultiplier;
+      ReaderPageCubit._fontSizeMultiplier;
 
   double getLineHeight() {
     double effectiveFontHeight =
-        ReadingPageCubit._baseFontHeight +
-        (fontHeightMultiplier - ReadingPageSettingsFontHeight.minThreshold) / 2;
+        ReaderPageCubit._baseFontHeight +
+        (fontHeightMultiplier - ReaderPageSettingsFontHeight.minThreshold) / 2;
     return effectiveFontHeight;
   }
 

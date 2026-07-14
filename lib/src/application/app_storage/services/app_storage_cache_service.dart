@@ -68,7 +68,7 @@ class AppStorageCacheService {
         statusCode: 200,
       );
     } catch (e) {
-      AppLogger.instance.e('AppStorageService', 'Error reading cache: $e');
+      AppLogger.instance.e('AppStorageService', 'Error reader cache: $e');
       return null;
     }
   }

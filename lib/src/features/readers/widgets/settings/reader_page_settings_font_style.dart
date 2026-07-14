@@ -4,17 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
 import 'package:wolnelektury/src/enums/reader_font_type.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
-class ReadingPageSettingsSheetFontStyle extends StatelessWidget {
-  const ReadingPageSettingsSheetFontStyle({super.key});
+class ReaderPageSettingsSheetFontStyle extends StatelessWidget {
+  const ReaderPageSettingsSheetFontStyle({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<ReadingPageCubit>(context);
+    final cubit = BlocProvider.of<ReaderPageCubit>(context);
     final theme = Theme.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -35,7 +35,7 @@ class ReadingPageSettingsSheetFontStyle extends StatelessWidget {
                   ),
                 ),
               ),
-              BlocBuilder<ReadingPageCubit, ReadingPageState>(
+              BlocBuilder<ReaderPageCubit, ReaderPageState>(
                 buildWhen: (p, c) => p.fontType != c.fontType,
                 builder: (context, state) {
                   return AnimatedPositioned(
@@ -62,7 +62,7 @@ class ReadingPageSettingsSheetFontStyle extends StatelessWidget {
                   );
                 },
               ),
-              BlocBuilder<ReadingPageCubit, ReadingPageState>(
+              BlocBuilder<ReaderPageCubit, ReaderPageState>(
                 buildWhen: (p, c) => p.fontType != c.fontType,
                 builder: (context, state) {
                   return Positioned.fill(

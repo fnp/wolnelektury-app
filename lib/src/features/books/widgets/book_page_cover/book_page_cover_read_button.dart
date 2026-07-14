@@ -51,7 +51,7 @@ class BookPageCoverReadButton extends StatelessWidget {
                     return;
                   }
                   router.pushNamed(
-                    readingPageConfig.name,
+                    ReaderPageConfig.name,
                     pathParameters: {'slug': book.slug},
                     extra: book,
                   );

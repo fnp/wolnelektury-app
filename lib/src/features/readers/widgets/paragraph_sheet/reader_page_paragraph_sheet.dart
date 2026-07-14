@@ -15,15 +15,15 @@ import 'package:wolnelektury/src/features/common/widgets/bookmarks/create_bookma
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/features/common/widgets/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
 import 'package:wolnelektury/src/utils/audio/on_listen.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ReadingPageParagraphSheet extends StatelessWidget {
-  const ReadingPageParagraphSheet({super.key});
+class ReaderPageParagraphSheet extends StatelessWidget {
+  const ReaderPageParagraphSheet({super.key});
 
   static void show({required BuildContext context, VoidCallback? onClosed}) {
     showModalBottomSheet(
@@ -42,7 +42,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
         ),
         child: MultiBlocProvider(
           providers: [
-            BlocProvider.value(value: context.read<ReadingPageCubit>()),
+            BlocProvider.value(value: context.read<ReaderPageCubit>()),
             BlocProvider.value(value: context.read<BookmarksCubit>()),
             BlocProvider.value(value: context.read<AudioCubit>()),
             BlocProvider.value(value: context.read<ScrollCubit>()),
@@ -55,7 +55,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
               },
             ),
           ],
-          child: const ReadingPageParagraphSheet(),
+          child: const ReaderPageParagraphSheet(),
         ),
       ),
     ).then((_) {
@@ -65,9 +65,9 @@ class ReadingPageParagraphSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
+    final readerPageCubit = BlocProvider.of<ReaderPageCubit>(context);
     final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
-    final selectedParagraph = readingPageCubit.state.selectedParagraph;
+    final selectedParagraph = readerPageCubit.state.selectedParagraph;
     return SafeArea(
       bottom: true,
       top: false,
@@ -78,13 +78,13 @@ class ReadingPageParagraphSheet extends StatelessWidget {
           listenWhen: (p, c) => p.isBookmarkSuccess != c.isBookmarkSuccess,
           listener: (context, state) {
             if (state.isBookmarkSuccess?.$2 == true) {
-              readingPageCubit.toggleIsAddingBookmark();
-              readingPageCubit.selectParagraph();
+              readerPageCubit.toggleIsAddingBookmark();
+              readerPageCubit.selectParagraph();
               bookmarkCubit.setEditingBookmark(null);
               Navigator.of(context).pop();
             }
           },
-          child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
+          child: BlocBuilder<ReaderPageCubit, ReaderPageState>(
             buildWhen: (p, c) => p.isAddingBookmark != c.isAddingBookmark,
             builder: (context, state) {
               return AnimatedBoxFade(
@@ -106,7 +106,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                               children: [
                                 TextButtonWithIcon(
                                   nonActiveText: LocaleKeys
-                                      .reading_sheet_bookmark_add
+                                      .reader_sheet_bookmark_add
                                       .tr(),
                                   nonActiveIcon: Icons.bookmark_add_rounded,
                                   onPressed: () {
@@ -116,7 +116,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                                       return;
                                     }
 
-                                    readingPageCubit.toggleIsAddingBookmark();
+                                    readerPageCubit.toggleIsAddingBookmark();
                                     final isBookmarked = bookmarkCubit.state
                                         .isSelectedParagraphBookmarked(
                                           selectedParagraph?.id,
@@ -139,7 +139,7 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               TextButtonWithIcon(
-                                nonActiveText: LocaleKeys.reading_sheet_listen
+                                nonActiveText: LocaleKeys.reader_sheet_listen
                                     .tr(),
                                 nonActiveIcon: Icons.headphones,
                                 onPressed: () {
@@ -152,16 +152,14 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                                   if (timestamp == null) {
                                     return;
                                   }
-                                  readingPageCubit.enableHighlighting(true);
+                                  readerPageCubit.enableHighlighting(true);
                                   Navigator.of(context).pop();
                                   onListen(
                                     timestamp: timestamp.floor(),
                                     context: context,
-                                    book: readingPageCubit.state.currentBook!,
-                                    slug: readingPageCubit
-                                        .state
-                                        .currentBook!
-                                        .slug,
+                                    book: readerPageCubit.state.currentBook!,
+                                    slug:
+                                        readerPageCubit.state.currentBook!.slug,
                                     isPlaying: context
                                         .read<AudioCubit>()
                                         .state
@@ -175,12 +173,12 @@ class ReadingPageParagraphSheet extends StatelessWidget {
                           ),
                         ),
                         TextButtonWithIcon(
-                          nonActiveText: LocaleKeys.reading_sheet_share.tr(),
+                          nonActiveText: LocaleKeys.reader_sheet_share.tr(),
                           nonActiveIcon: Icons.ios_share,
                           onPressed: () {
                             ShareUtils.shareParagraph(
                               selectedParagraph?.id ?? '',
-                              readingPageCubit.state.currentBook?.slug ?? '',
+                              readerPageCubit.state.currentBook?.slug ?? '',
                             );
                           },
                           activeColor: CustomColors.white,
@@ -205,14 +203,14 @@ class _BookmarkNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
-    final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
-    final anchorId = readingPageCubit.state.selectedParagraph?.id;
-    final book = readingPageCubit.state.currentBook;
+    final readerPageCubit = BlocProvider.of<ReaderPageCubit>(context);
+    final anchorId = readerPageCubit.state.selectedParagraph?.id;
+    final book = readerPageCubit.state.currentBook;
     return CreateBookmarkWidget(
       lines: 5,
       bookmark: bookmarkCubit.state.editingBookmark,
       onGoBack: () {
-        readingPageCubit.toggleIsAddingBookmark();
+        readerPageCubit.toggleIsAddingBookmark();
       },
       onDelete: () {
         bookmarkCubit.deleteBookmarkInstantly();
@@ -245,7 +243,7 @@ class _ListeningWrapper extends StatelessWidget {
         if (!hasConnection) {
           return const SizedBox.shrink();
         }
-        return BlocBuilder<ReadingPageCubit, ReadingPageState>(
+        return BlocBuilder<ReaderPageCubit, ReaderPageState>(
           buildWhen: (p, c) {
             return p.audioSyncPairs != c.audioSyncPairs;
           },

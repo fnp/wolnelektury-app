@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
-import 'package:wolnelektury/src/features/readers/widgets/paragraph_sheet/reading_page_paragraph_sheet.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/widgets/paragraph_sheet/reader_page_paragraph_sheet.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_base.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_indent.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -99,16 +99,16 @@ class _Bookmark extends StatelessWidget {
         if (bookmark == null) {
           return const SizedBox.shrink();
         }
-        final readingPageCubit = BlocProvider.of<ReadingPageCubit>(context);
+        final readerPageCubit = BlocProvider.of<ReaderPageCubit>(context);
         final bookmarkCubit = BlocProvider.of<BookmarksCubit>(context);
         return GestureDetector(
           onTap: () {
             bookmarkCubit.setEditingBookmark(bookmark);
-            readingPageCubit.toggleIsAddingBookmark();
-            ReadingPageParagraphSheet.show(
+            readerPageCubit.toggleIsAddingBookmark();
+            ReaderPageParagraphSheet.show(
               context: context,
               onClosed: () {
-                readingPageCubit.selectParagraph();
+                readerPageCubit.selectParagraph();
               },
             );
           },

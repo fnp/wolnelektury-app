@@ -1,19 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/features/common/widgets/custom_slider.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
-class ReadingPageSettingsSheetFontSize extends StatelessWidget {
-  static const double _minThreshold = 0.08;
+class ReaderPageSettingsFontHeight extends StatelessWidget {
+  static const double minThreshold = 0.08;
   static const double _maxThreshold = 0.9;
-  const ReadingPageSettingsSheetFontSize({super.key});
+  const ReaderPageSettingsFontHeight({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<ReadingPageCubit>(context);
-    return BlocBuilder<ReadingPageCubit, ReadingPageState>(
-      buildWhen: (p, c) => p.textSizeFactor != c.textSizeFactor,
+    final cubit = BlocProvider.of<ReaderPageCubit>(context);
+    return BlocBuilder<ReaderPageCubit, ReaderPageState>(
+      buildWhen: (p, c) => p.fontHeightMultiplier != c.fontHeightMultiplier,
       builder: (context, state) {
         return CustomSlider(
           fill: false,
@@ -22,7 +24,7 @@ class ReadingPageSettingsSheetFontSize extends StatelessWidget {
             top: 0,
             bottom: 0,
             child: Icon(
-              Icons.text_increase,
+              Icons.format_line_spacing,
               color: CustomColors.black,
               size: 17,
             ),
@@ -32,7 +34,7 @@ class ReadingPageSettingsSheetFontSize extends StatelessWidget {
             top: 0,
             bottom: 0,
             child: Icon(
-              Icons.text_decrease,
+              Icons.format_line_spacing,
               color: CustomColors.black,
               size: 17,
             ),
@@ -46,26 +48,26 @@ class ReadingPageSettingsSheetFontSize extends StatelessWidget {
               ),
             ),
           ),
-          slideDoubleValue: state.textSizeFactor,
+          slideDoubleValue: max(state.fontHeightMultiplier, minThreshold),
           onPointerMove: (localPosition, maxWidth) {
             final value = localPosition / maxWidth;
-            if (value < _minThreshold) {
+            if (value < minThreshold) {
               return;
             }
             if (value > _maxThreshold) {
               return;
             }
-            cubit.changeTextSize(value);
+            cubit.changeFontHeight(value);
           },
           onPointerDown: (localPosition, maxWidth) {
             final value = localPosition / maxWidth;
-            if (value < _minThreshold) {
+            if (value < minThreshold) {
               return;
             }
             if (value > _maxThreshold) {
               return;
             }
-            cubit.changeTextSize(value);
+            cubit.changeFontHeight(value);
           },
         );
       },

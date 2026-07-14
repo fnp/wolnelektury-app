@@ -39,14 +39,14 @@ const authorPageConfig = _RouteConfig(
   path: '/authorPage/:slug',
 );
 
-const readingPageConfig = _RouteConfig(
-  name: 'readingPage',
-  path: '/readingPage/:slug',
+const ReaderPageConfig = _RouteConfig(
+  name: 'ReaderPage',
+  path: '/ReaderPage/:slug',
 );
 
-const readingPageConfigWithAnchor = _RouteConfig(
-  name: 'readingPageWithAnchor',
-  path: '/readingPage/:slug/:anchor',
+const ReaderPageConfigWithAnchor = _RouteConfig(
+  name: 'ReaderPageWithAnchor',
+  path: '/ReaderPage/:slug/:anchor',
 );
 
 const searchPageConfig = _RouteConfig(name: 'searchPage', path: '/searchPage');

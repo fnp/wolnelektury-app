@@ -41,13 +41,13 @@ class BookmarkListener extends StatelessWidget {
         if (state.$2) {
           CustomSnackbar.success(
             context,
-            LocaleKeys.reading_snackbar_bookmark_edited_success.tr(),
+            LocaleKeys.reader_snackbar_bookmark_edited_success.tr(),
             messengerKey: scaffoldMessengerKey,
           );
         } else {
           CustomSnackbar.error(
             context,
-            LocaleKeys.reading_snackbar_bookmark_edit_error.tr(),
+            LocaleKeys.reader_snackbar_bookmark_edit_error.tr(),
             messengerKey: scaffoldMessengerKey,
           );
         }
@@ -56,13 +56,13 @@ class BookmarkListener extends StatelessWidget {
         if (state.$2) {
           CustomSnackbar.success(
             context,
-            LocaleKeys.reading_snackbar_bookmark_deleted_success.tr(),
+            LocaleKeys.reader_snackbar_bookmark_deleted_success.tr(),
             messengerKey: scaffoldMessengerKey,
           );
         } else {
           CustomSnackbar.error(
             context,
-            LocaleKeys.reading_snackbar_bookmark_delete_error.tr(),
+            LocaleKeys.reader_snackbar_bookmark_delete_error.tr(),
             messengerKey: scaffoldMessengerKey,
           );
         }
@@ -71,13 +71,13 @@ class BookmarkListener extends StatelessWidget {
         if (state.$2) {
           CustomSnackbar.success(
             context,
-            LocaleKeys.reading_snackbar_bookmark_added_success.tr(),
+            LocaleKeys.reader_snackbar_bookmark_added_success.tr(),
             messengerKey: scaffoldMessengerKey,
           );
         } else {
           CustomSnackbar.error(
             context,
-            LocaleKeys.reading_snackbar_bookmark_add_error.tr(),
+            LocaleKeys.reader_snackbar_bookmark_add_error.tr(),
             messengerKey: scaffoldMessengerKey,
           );
         }

@@ -95,7 +95,7 @@ class _AppLinksHandlerState extends State<AppLinksHandler>
         final slug = nonEmptySegments[nonEmptySegments.length - 2];
 
         router.pushNamed(
-          readingPageConfigWithAnchor.name,
+          ReaderPageConfigWithAnchor.name,
           pathParameters: {'slug': slug, 'anchor': paragraphId.toString()},
         );
       }

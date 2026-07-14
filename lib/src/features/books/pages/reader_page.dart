@@ -14,29 +14,29 @@ import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_c
 import 'package:wolnelektury/src/features/common/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_list_view_builder.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_page_progress_indicator.dart';
-import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_sheet.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reader_page_settings_sheet.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ReadingPage extends StatefulWidget {
+class ReaderPage extends StatefulWidget {
   final BookModel? book;
   final String? slug;
   final String? targetAnchor;
-  const ReadingPage({super.key, this.book, this.slug, this.targetAnchor})
+  const ReaderPage({super.key, this.book, this.slug, this.targetAnchor})
     : assert(
         book != null || slug != null,
         'Either book or slug must be provided',
       );
 
   @override
-  State<ReadingPage> createState() => _ReadingPageState();
+  State<ReaderPage> createState() => _ReaderPageState();
 }
 
-class _ReadingPageState extends State<ReadingPage> {
+class _ReaderPageState extends State<ReaderPage> {
   final ItemScrollController itemScrollController = ItemScrollController();
 
   @override
@@ -52,7 +52,7 @@ class _ReadingPageState extends State<ReadingPage> {
       providers: [
         BlocProvider(
           create: (context) {
-            final cubit = ReadingPageCubit(get.get(), get.get(), get.get());
+            final cubit = ReaderPageCubit(get.get(), get.get(), get.get());
             if (widget.book != null) {
               cubit.init(
                 book: widget.book!,
@@ -79,7 +79,7 @@ class _ReadingPageState extends State<ReadingPage> {
               return SingleBookCubit(get.get(), get.get())..getBookData(
                 slug: slug!,
                 onFinished: (book, isOffline) {
-                  context.read<ReadingPageCubit>().init(
+                  context.read<ReaderPageCubit>().init(
                     book: book,
                     itemScrollController: itemScrollController,
                     targetAnchor: widget.targetAnchor,
@@ -103,22 +103,22 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<ReadingPageCubit>(context);
-    return BlocListener<ReadingPageCubit, ReadingPageState>(
+    final cubit = BlocProvider.of<ReaderPageCubit>(context);
+    return BlocListener<ReaderPageCubit, ReaderPageState>(
       listenWhen: (p, c) {
         return !p.isJsonLoadingError && c.isJsonLoadingError;
       },
       listener: (context, state) {
         CustomSnackbar.error(
           context,
-          LocaleKeys.reading_snackbar_reader_loading_error.tr(),
+          LocaleKeys.reader_snackbar_reader_loading_error.tr(),
         );
       },
       child: BookmarkListener(
         child: Stack(
           children: [
             Positioned.fill(
-              child: BlocSelector<ReadingPageCubit, ReadingPageState, bool>(
+              child: BlocSelector<ReaderPageCubit, ReaderPageState, bool>(
                 selector: (state) {
                   return state.isVisualProgressIncreasing;
                 },
@@ -127,7 +127,7 @@ class _Body extends StatelessWidget {
                     duration: const Duration(milliseconds: 300),
                     curve: defaultCurve,
                     padding: EdgeInsets.only(top: !expanded ? 25 : 5),
-                    child: BlocBuilder<ReadingPageCubit, ReadingPageState>(
+                    child: BlocBuilder<ReaderPageCubit, ReaderPageState>(
                       buildWhen: (p, c) => c.shouldRebuild(p),
                       builder: (context, state) {
                         return AnimatedBoxFade(
@@ -155,7 +155,7 @@ class _Body extends StatelessWidget {
               top: 0,
               left: 0,
               right: 0,
-              child: ReadingPageProgressIndicator(),
+              child: ReaderPageProgressIndicator(),
             ),
             Positioned(
               bottom: Dimensions.modalsPadding,
@@ -167,7 +167,7 @@ class _Body extends StatelessWidget {
                 backgroundColor: CustomColors.primaryYellowColor,
                 icon: Icons.tune,
                 onPressed: () {
-                  ReadingPageSettingsSheet.show(
+                  ReaderPageSettingsSheet.show(
                     context: context,
                     slug: cubit.state.currentBook!.slug,
                     onClosed: () {
@@ -223,8 +223,8 @@ class _HighlightedParagraphListener extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final readingCubit = context.read<ReadingPageCubit>();
-    return BlocSelector<ReadingPageCubit, ReadingPageState, bool>(
+    final readingCubit = context.read<ReaderPageCubit>();
+    return BlocSelector<ReaderPageCubit, ReaderPageState, bool>(
       selector: (state) {
         return state.isEnabledHighlighting;
       },

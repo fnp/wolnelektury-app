@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 
 class ReaderBreathingBackground extends StatefulWidget {
@@ -39,7 +39,7 @@ class _ReaderBreathingBackgroundState extends State<ReaderBreathingBackground>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReadingPageCubit, ReadingPageState>(
+    return BlocBuilder<ReaderPageCubit, ReaderPageState>(
       buildWhen: (p, c) {
         return p.highlightedIndex != c.highlightedIndex ||
             p.isEnabledHighlighting != c.isEnabledHighlighting;

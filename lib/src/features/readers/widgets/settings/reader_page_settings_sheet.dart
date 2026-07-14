@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
-import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_font_height.dart';
-import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_font_size.dart';
-import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_font_style.dart';
-import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_highlighting.dart';
-import 'package:wolnelektury/src/features/readers/widgets/settings/reading_page_settings_theme.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reader_page_settings_font_height.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reader_page_settings_font_size.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reader_page_settings_font_style.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reader_page_settings_highlighting.dart';
+import 'package:wolnelektury/src/features/readers/widgets/settings/reader_page_settings_theme.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ReadingPageSettingsSheet extends StatelessWidget {
+class ReaderPageSettingsSheet extends StatelessWidget {
   final String slug;
   static const double _height = 320;
-  const ReadingPageSettingsSheet({super.key, required this.slug});
+  const ReaderPageSettingsSheet({super.key, required this.slug});
 
   static void show({
     required BuildContext context,
@@ -31,10 +31,10 @@ class ReadingPageSettingsSheet extends StatelessWidget {
       ),
       builder: (_) => MultiBlocProvider(
         providers: [
-          BlocProvider.value(value: context.read<ReadingPageCubit>()),
+          BlocProvider.value(value: context.read<ReaderPageCubit>()),
           BlocProvider.value(value: context.read<AudioCubit>()),
         ],
-        child: ReadingPageSettingsSheet(slug: slug),
+        child: ReaderPageSettingsSheet(slug: slug),
       ),
     ).then((_) {
       onClosed.call();
@@ -47,16 +47,16 @@ class ReadingPageSettingsSheet extends StatelessWidget {
       top: false,
       bottom: true,
       child: SizedBox(
-        height: ReadingPageSettingsSheet._height,
+        height: ReaderPageSettingsSheet._height,
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.mediumPadding),
           child: Column(
             spacing: Dimensions.mediumPadding,
             children: [
-              const ReadingPageSettingsFontHeight(),
-              const ReadingPageSettingsSheetFontSize(),
-              const ReadingPageSettingsSheetFontStyle(),
-              const ReadingPageSettingsSheetTheme(),
+              const ReaderPageSettingsFontHeight(),
+              const ReaderPageSettingsSheetFontSize(),
+              const ReaderPageSettingsSheetFontStyle(),
+              const ReaderPageSettingsSheetTheme(),
               BlocBuilder<AudioCubit, AudioState>(
                 buildWhen: (p, c) {
                   return p.isPlaying != c.isPlaying || p.book != c.book;
@@ -67,7 +67,7 @@ class ReadingPageSettingsSheet extends StatelessWidget {
                     opacity: disable ? 0.5 : 1,
                     child: AbsorbPointer(
                       absorbing: disable,
-                      child: const ReadingPageSettingsSheetHighlighting(),
+                      child: const ReaderPageSettingsSheetHighlighting(),
                     ),
                   );
                 },

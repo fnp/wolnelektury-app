@@ -152,7 +152,7 @@ class _Body extends StatelessWidget {
         Navigator.of(context).pop();
       }
       router.pushNamed(
-        readingPageConfigWithAnchor.name,
+        ReaderPageConfigWithAnchor.name,
         extra: bookmark.book,
         pathParameters: {
           'slug': bookmark.book.slug,

@@ -11,7 +11,7 @@ class ApiService {
   final AppStorageCacheService _cacheStorage;
   ApiService(this._dio, this._cacheStorage);
 
-  // Token reading and setting
+  // Token reader and setting
   // --------------------------------
   Future<String?> handleAccessToken() async {
     try {

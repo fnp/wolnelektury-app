@@ -6,8 +6,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
 import 'package:wolnelektury/src/enums/reader_font_type.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
-import 'package:wolnelektury/src/features/readers/widgets/paragraph_sheet/reading_page_paragraph_sheet.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/widgets/paragraph_sheet/reader_page_paragraph_sheet.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_breathing_background.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_spans_wrapper.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_yellow_background.dart';
@@ -16,7 +16,7 @@ import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
 class ReaderListViewBuilder extends StatefulWidget {
-  final ReadingPageState state;
+  final ReaderPageState state;
   final ItemScrollController itemScrollController;
   const ReaderListViewBuilder({
     super.key,
@@ -32,9 +32,9 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
-  late ReadingPageCubit cubit;
+  late ReaderPageCubit cubit;
 
-  void listener(ReadingPageCubit cubit) {
+  void listener(ReaderPageCubit cubit) {
     cubit.setVisualProgress(
       itemPositionsListener.itemPositions.value.lastOrNull?.index ?? 0,
     );
@@ -43,7 +43,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
   @override
   void initState() {
     super.initState();
-    cubit = context.read<ReadingPageCubit>();
+    cubit = context.read<ReaderPageCubit>();
     itemPositionsListener.itemPositions.addListener(() => listener(cubit));
   }
 
@@ -54,7 +54,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
   }
 
   void onLongPress({
-    required ReadingPageCubit cubit,
+    required ReaderPageCubit cubit,
     required BookmarksCubit bookmarksCubit,
     required BuildContext context,
     int? index,
@@ -62,7 +62,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
   }) {
     HapticFeedback.selectionClick();
     cubit.selectParagraph(index: index, element: element);
-    ReadingPageParagraphSheet.show(
+    ReaderPageParagraphSheet.show(
       context: context,
       onClosed: () {
         bookmarksCubit.setEditingBookmark(null);
@@ -73,7 +73,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<ReadingPageCubit>(context);
+    final cubit = BlocProvider.of<ReaderPageCubit>(context);
     final bookmarksCubit = BlocProvider.of<BookmarksCubit>(context);
     final theme = Theme.of(context);
 
@@ -131,7 +131,7 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
 }
 
 class _Header extends StatelessWidget {
-  final ReadingPageState state;
+  final ReaderPageState state;
   const _Header({required this.state});
 
   @override

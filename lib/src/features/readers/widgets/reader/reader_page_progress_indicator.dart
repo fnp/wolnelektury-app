@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/theme/theme.dart';
-import 'package:wolnelektury/src/features/readers/cubits/reading_page/reading_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 
-class ReadingPageProgressIndicator extends StatelessWidget {
-  const ReadingPageProgressIndicator({super.key});
+class ReaderPageProgressIndicator extends StatelessWidget {
+  const ReaderPageProgressIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cubit = context.read<ReadingPageCubit>();
-    return BlocBuilder<ReadingPageCubit, ReadingPageState>(
+    final cubit = context.read<ReaderPageCubit>();
+    return BlocBuilder<ReaderPageCubit, ReaderPageState>(
       buildWhen: (previous, current) {
         return previous.visualProgress != current.visualProgress ||
             previous.isVisualProgressIncreasing !=

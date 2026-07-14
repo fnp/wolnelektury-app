@@ -152,7 +152,7 @@ class _TextElement extends StatelessWidget {
                         'Navigating to book: ${textSearch.book.slug} with anchor: ${snippet.anchor}',
                       );
                       router.pushNamed(
-                        readingPageConfigWithAnchor.name,
+                        ReaderPageConfigWithAnchor.name,
                         extra: textSearch.book,
                         pathParameters: {
                           'slug': textSearch.book.slug,

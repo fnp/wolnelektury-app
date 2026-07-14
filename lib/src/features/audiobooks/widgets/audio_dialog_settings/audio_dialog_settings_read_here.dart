@@ -61,7 +61,7 @@ class AudioDialogSettingsReadHere extends StatelessWidget {
                         audioCubit.toggleSettings(false);
                         Navigator.of(context).pop();
                         router.pushNamed(
-                          readingPageConfigWithAnchor.name,
+                          ReaderPageConfigWithAnchor.name,
                           pathParameters: {
                             'slug': state.book!.slug,
                             'anchor': id!,
