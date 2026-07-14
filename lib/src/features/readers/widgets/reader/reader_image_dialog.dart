@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
@@ -26,10 +28,9 @@ class ReaderImageDialog extends StatelessWidget {
             maxScale: 4.0,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.contain,
-              ),
+              child: imageUrl.startsWith('/')
+                  ? Image.file(File(imageUrl), fit: BoxFit.contain)
+                  : CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.contain),
             ),
           ),
           Positioned(

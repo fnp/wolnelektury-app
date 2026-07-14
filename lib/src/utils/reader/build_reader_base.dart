@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +63,12 @@ List<InlineSpan> buildReaderBase({
               const SizedBox(height: 20),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: CachedNetworkImage(fit: BoxFit.contain, imageUrl: src),
+                child: src != null && src.startsWith('/')
+                    ? Image.file(File(src), fit: BoxFit.contain)
+                    : CachedNetworkImage(
+                        fit: BoxFit.contain,
+                        imageUrl: src ?? '',
+                      ),
               ),
               const SizedBox(height: 20),
             ],

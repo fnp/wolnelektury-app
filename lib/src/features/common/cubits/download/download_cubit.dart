@@ -11,6 +11,7 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/offline_book_model.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
+import 'package:wolnelektury/src/utils/reader/reader_images_service.dart';
 
 part 'download_cubit.freezed.dart';
 part 'download_state.dart';
@@ -72,12 +73,41 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     response.handle(
       success: (data, _) async {
         try {
+          // Download the book cover so it's available offline.
+          final localCoverPath = await ReaderImagesService.downloadBookCover(
+            book,
+          );
+          final effectiveBook = localCoverPath != null
+              ? book.copyWith(coverUrl: localCoverPath)
+              : book;
+
+          // Download images referenced in the book and replace their src with
+          // local file paths so they are available offline.
+          final imageUrls = ReaderImagesService.extractImageUrls(
+            data.masterContent,
+          );
+          final urlToLocalPath = await ReaderImagesService.downloadImages(
+            imageUrls,
+            book.slug,
+          );
+          final readerWithLocalImages =
+              ReaderImagesService.rebuildModelWithLocalPaths(
+                data,
+                urlToLocalPath,
+              );
+
           final existingBook = await _getLocalBook(book.slug);
           // If the book already exists, we update the reader data
           // Otherwise, we create a new OfflineBookModel with the book and reader data
           final bookToSave = existingBook != null
-              ? existingBook.copyWith(reader: data)
-              : OfflineBookModel(book: book, reader: data);
+              ? existingBook.copyWith(
+                  book: effectiveBook,
+                  reader: readerWithLocalImages,
+                )
+              : OfflineBookModel(
+                  book: effectiveBook,
+                  reader: readerWithLocalImages,
+                );
 
           // Save the book with the reader data to the app storage
           await _offlineStorage.saveOfflineBook(book.slug, bookToSave);
@@ -159,6 +189,12 @@ class DownloadCubit extends SafeCubit<DownloadState> {
     required BookModel book,
     required List<AudioBookPart> parts,
   }) async {
+    // Download the book cover so it's available offline.
+    final localCoverPath = await ReaderImagesService.downloadBookCover(book);
+    final effectiveBook = localCoverPath != null
+        ? book.copyWith(coverUrl: localCoverPath)
+        : book;
+
     // Total number of parts to save
     final total = parts.length;
     // Currently saved offline info about the book
@@ -219,7 +255,7 @@ class DownloadCubit extends SafeCubit<DownloadState> {
       currentParts.add(effectivePart);
 
       existingBook = await saveAudiobook(
-        book: book,
+        book: effectiveBook,
         parts: currentParts,
         isLastPart: isLastPart,
       );

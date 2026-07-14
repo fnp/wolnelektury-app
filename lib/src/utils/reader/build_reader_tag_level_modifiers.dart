@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wolnelektury/src/domain/reader_book_model.dart';
+import 'package:wolnelektury/src/features/readers/widgets/reader/reader_image_dialog.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_class_level_modifiers.dart';
 import 'package:wolnelektury/src/utils/reader/build_reader_indent.dart';
 
@@ -18,6 +22,7 @@ class BuildReaderTagLevelModifiers {
   }) {
     final parentClassName = parent?.attr?['class'];
     final className = element.attr?['class'];
+    final src = element.attr?['src'];
     final spans = <InlineSpan>[];
 
     // Helper for vertical spacing
@@ -35,7 +40,28 @@ class BuildReaderTagLevelModifiers {
 
     switch (element.tag) {
       case ReaderBookTag.img:
-        break;
+        spans.addAll([
+          WidgetSpan(
+            child: GestureDetector(
+              onTap: () => ReaderImageDialog.show(imageUrl: src),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: src != null && src.startsWith('/')
+                        ? Image.file(File(src), fit: BoxFit.contain)
+                        : CachedNetworkImage(
+                            fit: BoxFit.contain,
+                            imageUrl: src ?? '',
+                          ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+        ]);
       case ReaderBookTag.h2:
         spans.addAll([
           spacer(40),

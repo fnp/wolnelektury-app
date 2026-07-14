@@ -133,6 +133,7 @@ class ReadingPageCubit extends SafeCubit<ReadingPageState> {
   }) async {
     // Override progress with provided anchor
     if (targetAnchor != null) {
+      print('Overriding progress with anchor: $targetAnchor');
       // First reset any highlighting
       stopHighlighting();
       await _scrollToAnchor(

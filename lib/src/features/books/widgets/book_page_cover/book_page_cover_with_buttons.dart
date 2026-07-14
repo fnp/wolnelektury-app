@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -319,6 +321,13 @@ class _Image extends StatelessWidget {
       child: (coverUrl ?? '').isEmpty
           ? Container(
               color: theme.colorScheme.surface,
+              height: double.infinity,
+              width: double.infinity,
+            )
+          : coverUrl!.startsWith('/')
+          ? Image.file(
+              File(coverUrl!),
+              fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
             )

@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_offline_service.dart';
 import 'package:wolnelektury/src/domain/offline_book_model.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
+import 'package:wolnelektury/src/utils/reader/reader_images_service.dart';
 
 part 'offline_cubit.freezed.dart';
 part 'offline_state.dart';
@@ -61,6 +62,12 @@ class OfflineCubit extends SafeCubit<OfflineState> {
       ..removeWhere((e) => e.book.slug == book.book.slug);
     emit(state.copyWith(readers: newReaders));
 
+    await ReaderImagesService.deleteImages(book.book.slug);
+    // Only delete the cover when the audiobook is also absent (nothing left offline)
+    if (book.audiobook == null) {
+      await ReaderImagesService.deleteBookCover(book.book.slug);
+    }
+
     if (book.audiobook == null) {
       await _offlineStorage.removeOfflineBook(book.book.slug);
     } else {
@@ -97,6 +104,10 @@ class OfflineCubit extends SafeCubit<OfflineState> {
           book.audiobook?.parts.map((e) => e.url).toList() ??
           [],
     );
+    // Only delete the cover when the reader is also absent (nothing left offline)
+    if (book.reader == null) {
+      await ReaderImagesService.deleteBookCover(book.book.slug);
+    }
 
     final initAudiobooks = List<OfflineBookModel>.from(state.audiobooks);
     final newAudiobooks = initAudiobooks

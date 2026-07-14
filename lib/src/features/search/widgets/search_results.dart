@@ -148,6 +148,9 @@ class _TextElement extends StatelessWidget {
                   return InkWellWrapper(
                     borderRadius: BorderRadius.circular(8),
                     onTap: () {
+                      print(
+                        'Navigating to book: ${textSearch.book.slug} with anchor: ${snippet.anchor}',
+                      );
                       router.pushNamed(
                         readingPageConfigWithAnchor.name,
                         extra: textSearch.book,
