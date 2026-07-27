@@ -1,14 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/router/router.dart';
 import 'package:wolnelektury/src/config/router/router_config.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/tag_model.dart';
 import 'package:wolnelektury/src/features/catalogue/cubits/filtering/filtering_cubit.dart';
-import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
 import 'package:wolnelektury/src/utils/ui/ink_well_wrapper.dart';
 
@@ -83,20 +81,20 @@ class BookPageDetailsTable extends StatelessWidget {
               ),
             ],
           ),
-          if (book.elevenReaderLink != null)
-            _BookPageDetailsTableRow(
-              title: LocaleKeys.book_available_in.tr(),
-              pills: [
-                _Pill(
-                  backgroundColor: CustomColors.secondaryBlueColor,
-                  textColor: CustomColors.white,
-                  onTap: () {
-                    launchUrlString(book.elevenReaderLink!);
-                  },
-                  label: 'ElevenReader',
-                ),
-              ],
-            ),
+          // if (book.elevenReaderLink != null)
+          //   _BookPageDetailsTableRow(
+          //     title: LocaleKeys.book_available_in.tr(),
+          //     pills: [
+          //       _Pill(
+          //         backgroundColor: CustomColors.secondaryBlueColor,
+          //         textColor: CustomColors.white,
+          //         onTap: () {
+          //           launchUrlString(book.elevenReaderLink!);
+          //         },
+          //         label: 'ElevenReader',
+          //       ),
+          //     ],
+          //   ),
         ],
       ],
     );

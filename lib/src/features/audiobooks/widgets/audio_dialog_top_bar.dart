@@ -51,6 +51,7 @@ class AudioDialogTopBar extends StatelessWidget {
                 child: CustomDropdown<int>(
                   maxElements: min(state.audiobook?.parts.length ?? 5, 5),
                   hintNextElements: (state.audiobook?.parts.length ?? 0) > 5,
+                  scrollToElement: state.currentlyPlayingPart,
                   highlightButton: false,
                   width: 200,
                   items:
@@ -60,6 +61,7 @@ class AudioDialogTopBar extends StatelessWidget {
                             namedArgs: {'part': (index + 1).toString()},
                           ),
                           element: index,
+                          isSelected: index == state.currentlyPlayingPart,
                         );
                       }).toList() ??
                       [],

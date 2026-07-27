@@ -30,6 +30,7 @@ class CustomDropdown<T> extends StatefulWidget {
     required this.highlightButton,
     this.hintNextElements = false,
     this.maxElements,
+    this.scrollToElement,
   });
 
   final double width;
@@ -40,6 +41,7 @@ class CustomDropdown<T> extends StatefulWidget {
   final bool highlightButton;
   final int? maxElements;
   final bool hintNextElements;
+  final T? scrollToElement;
 
   @override
   State<CustomDropdown<T>> createState() => _CustomDropdownState<T>();
@@ -53,6 +55,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
 
   late AnimationController _animationController;
   late Animation<double> _heightAnimation;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -71,6 +74,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
   @override
   void dispose() {
     _animationController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -137,6 +141,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
                         height: effectiveHeight,
                         child: ListView(
                           padding: EdgeInsets.zero,
+                          controller: _scrollController,
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           children: widget.items.map((item) {
@@ -208,6 +213,21 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
     setState(() {
       _isDropdownOpen = true;
     });
+
+    if (widget.scrollToElement != null) {
+      Future.delayed(_animationController.duration!, () {
+        final index = widget.items.indexWhere(
+          (item) => item.element == widget.scrollToElement,
+        );
+        if (index > 0 && _scrollController.hasClients) {
+          _scrollController.animateTo(
+            index * Dimensions.elementHeight,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
   }
 
   void _closeDropdown() {

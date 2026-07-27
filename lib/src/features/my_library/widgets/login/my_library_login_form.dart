@@ -144,6 +144,7 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       _showPassword ? Icons.visibility_off : Icons.visibility,
+                      color: CustomColors.black,
                       size: 20,
                     ),
                     onPressed: () {
@@ -175,7 +176,6 @@ class _MyLibraryLoginFormState extends State<MyLibraryLoginForm> {
                         LocaleKeys.login_forgot,
                         style: theme.textTheme.bodySmall?.copyWith(
                           decoration: TextDecoration.underline,
-                          color: CustomColors.black,
                           fontWeight: FontWeight.w500,
                         ),
                       ).tr(),
