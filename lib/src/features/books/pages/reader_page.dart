@@ -14,7 +14,9 @@ import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_c
 import 'package:wolnelektury/src/features/common/cubits/connectivity/connectivity_cubit.dart';
 import 'package:wolnelektury/src/features/common/widgets/animated/animated_box_fade.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
+import 'package:wolnelektury/src/features/readers/cubits/quotes/quotes_cubit.dart';
 import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/widgets/quote_listener.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_list_view_builder.dart';
 import 'package:wolnelektury/src/features/readers/widgets/reader/reader_page_progress_indicator.dart';
 import 'package:wolnelektury/src/features/readers/widgets/settings/reader_page_settings_sheet.dart';
@@ -72,6 +74,7 @@ class _ReaderPageState extends State<ReaderPage> {
             return BookmarksCubit(get.get())..getBookBookmarks(slug: slug!);
           },
         ),
+        BlocProvider(create: (context) => QuotesCubit(get.get())),
         if (widget.book == null)
           BlocProvider(
             lazy: false,
@@ -114,70 +117,74 @@ class _Body extends StatelessWidget {
           LocaleKeys.reader_snackbar_reader_loading_error.tr(),
         );
       },
-      child: BookmarkListener(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: BlocSelector<ReaderPageCubit, ReaderPageState, bool>(
-                selector: (state) {
-                  return state.isVisualProgressIncreasing;
-                },
-                builder: (context, expanded) {
-                  return AnimatedPadding(
-                    duration: const Duration(milliseconds: 300),
-                    curve: defaultCurve,
-                    padding: EdgeInsets.only(top: !expanded ? 25 : 5),
-                    child: BlocBuilder<ReaderPageCubit, ReaderPageState>(
-                      buildWhen: (p, c) => c.shouldRebuild(p),
-                      builder: (context, state) {
-                        return AnimatedBoxFade(
-                          duration: const Duration(milliseconds: 400),
-                          isChildVisible: !state.isJsonLoading,
-                          collapsedChild: const _SkeletonPlaceholder(),
-                          child: state.readerBook == null
-                              ? const SizedBox.shrink()
-                              : _HighlightedParagraphListener(
-                                  bookSlug: state.currentBook?.slug,
-                                  itemScrollController: itemScrollController,
-                                  child: ReaderListViewBuilder(
-                                    state: state,
+      child: QuoteListener(
+        child: BookmarkListener(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: BlocSelector<ReaderPageCubit, ReaderPageState, bool>(
+                  selector: (state) {
+                    return state.isVisualProgressIncreasing;
+                  },
+                  builder: (context, expanded) {
+                    return AnimatedPadding(
+                      duration: const Duration(milliseconds: 300),
+                      curve: defaultCurve,
+                      padding: EdgeInsets.only(top: !expanded ? 25 : 5),
+                      child: BlocBuilder<ReaderPageCubit, ReaderPageState>(
+                        buildWhen: (p, c) => c.shouldRebuild(p),
+                        builder: (context, state) {
+                          return AnimatedBoxFade(
+                            duration: const Duration(milliseconds: 400),
+                            isChildVisible: !state.isJsonLoading,
+                            collapsedChild: const _SkeletonPlaceholder(),
+                            child: state.readerBook == null
+                                ? const SizedBox.shrink()
+                                : _HighlightedParagraphListener(
+                                    bookSlug: state.currentBook?.slug,
                                     itemScrollController: itemScrollController,
+                                    child: ReaderListViewBuilder(
+                                      state: state,
+                                      itemScrollController:
+                                          itemScrollController,
+                                    ),
                                   ),
-                                ),
-                        );
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: ReaderPageProgressIndicator(),
+              ),
+              Positioned(
+                bottom: Dimensions.modalsPadding,
+                right: Dimensions.modalsPadding,
+                child: CustomButton(
+                  semanticLabel: LocaleKeys
+                      .reader_settings_open_reading_settings
+                      .tr(),
+                  size: Dimensions.elementHeight,
+                  backgroundColor: CustomColors.primaryYellowColor,
+                  icon: Icons.tune,
+                  onPressed: () {
+                    ReaderPageSettingsSheet.show(
+                      context: context,
+                      slug: cubit.state.currentBook!.slug,
+                      onClosed: () {
+                        cubit.saveSettings();
                       },
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-            const Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: ReaderPageProgressIndicator(),
-            ),
-            Positioned(
-              bottom: Dimensions.modalsPadding,
-              right: Dimensions.modalsPadding,
-              child: CustomButton(
-                semanticLabel: LocaleKeys.reader_settings_open_reading_settings
-                    .tr(),
-                size: Dimensions.elementHeight,
-                backgroundColor: CustomColors.primaryYellowColor,
-                icon: Icons.tune,
-                onPressed: () {
-                  ReaderPageSettingsSheet.show(
-                    context: context,
-                    slug: cubit.state.currentBook!.slug,
-                    onClosed: () {
-                      cubit.saveSettings();
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

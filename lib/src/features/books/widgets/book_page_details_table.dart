@@ -140,21 +140,14 @@ class _BookPageDetailsTableRow extends StatelessWidget {
 class _Pill extends StatelessWidget {
   final VoidCallback onTap;
   final String label;
-  final Color? backgroundColor;
-  final Color? textColor;
-  const _Pill({
-    required this.onTap,
-    required this.label,
-    this.backgroundColor,
-    this.textColor,
-  });
+  const _Pill({required this.onTap, required this.label});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: backgroundColor ?? theme.colorScheme.tertiaryContainer,
+        color: theme.colorScheme.tertiaryContainer,
         borderRadius: BorderRadius.circular(Dimensions.borderRadiusOfCircle),
       ),
       child: InkWellWrapper(
@@ -171,7 +164,6 @@ class _Pill extends StatelessWidget {
               label,
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
-                color: textColor,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

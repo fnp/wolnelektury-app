@@ -10,7 +10,9 @@ import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/list_model.dart';
 import 'package:wolnelektury/src/features/books/widgets/book_page_cover/book_page_cover_with_buttons.dart';
 import 'package:wolnelektury/src/features/common/widgets/button/custom_button.dart';
+import 'package:wolnelektury/src/features/common/widgets/quotes/quote_widget.dart';
 import 'package:wolnelektury/src/features/lists/cubits/lists_cubit/lists_cubit.dart';
+import 'package:wolnelektury/src/features/my_library/widgets/quotes/my_library_quote_dialog.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/custom_icons.dart';
 import 'package:wolnelektury/src/utils/ui/custom_snackbar.dart';
@@ -53,6 +55,21 @@ abstract class MyLibraryListElement extends StatelessWidget {
     required bool isListOwner,
   }) {
     return _MyLibraryListBookmarkElement(
+      key: key,
+      item: item,
+      listName: listName,
+      isListOwner: isListOwner,
+    );
+  }
+
+  /// Factory for quote list items
+  factory MyLibraryListElement.quote({
+    Key? key,
+    required ListItemModel item,
+    required String listName,
+    required bool isListOwner,
+  }) {
+    return _MyLibraryListQuoteElement(
       key: key,
       item: item,
       listName: listName,
@@ -254,6 +271,110 @@ class _MyLibraryListBookmarkElement extends MyLibraryListElement {
                             CustomButton(
                               semanticLabel: LocaleKeys
                                   .common_semantic_delete_bookmark
+                                  .tr(),
+                              onPressed: () {
+                                listsCubit.removeItemFromList(item: item);
+                                CustomSnackbar.success(
+                                  context,
+                                  LocaleKeys.book_lists_sheet_delete.tr(),
+                                  onRevert: () {
+                                    listsCubit.undoSoftRemoval();
+                                  },
+                                );
+                              },
+                              icon: CustomIcons.delete_forever,
+                              backgroundColor: CustomColors.red,
+                              iconColor: CustomColors.white,
+                              size: 36,
+                              iconSize: 20,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+        );
+      },
+    );
+  }
+}
+
+/// Quote list element implementation
+class _MyLibraryListQuoteElement extends MyLibraryListElement {
+  const _MyLibraryListQuoteElement({
+    super.key,
+    required super.item,
+    required super.listName,
+    required super.isListOwner,
+  });
+
+  bool determineVisibility(ListsState state) {
+    return !state.isQuoteInList(item.listSlug, item.quote?.uuid ?? '') ||
+        (state.softDeletedItem?.uuid == item.uuid &&
+            state.softDeletedItem?.listSlug == item.listSlug);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (item.quote == null) {
+      return const SizedBox.shrink();
+    }
+
+    final quote = item.quote!;
+    final listsCubit = context.read<ListsCubit>();
+
+    return BlocBuilder<ListsCubit, ListsState>(
+      buildWhen: (p, c) {
+        return p.softDeletedItem != c.softDeletedItem ||
+            p.isQuoteInList(item.listSlug, quote.uuid ?? '') !=
+                c.isQuoteInList(item.listSlug, quote.uuid ?? '');
+      },
+      builder: (context, state) {
+        final shouldHide = determineVisibility(state);
+
+        return AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: defaultCurve,
+          child: shouldHide
+              ? const SizedBox(width: double.infinity)
+              : Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: Dimensions.largePadding,
+                  ),
+                  child: InkWellWrapper(
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.smallBorderRadius,
+                    ),
+                    onTap: () {
+                      MyLibraryQuoteDialog.show(context: context, quote: quote);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(Dimensions.smallPadding),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          Dimensions.smallBorderRadius,
+                        ),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(width: Dimensions.mediumPadding),
+                          const Icon(
+                            Icons.format_quote,
+                            color: CustomColors.secondaryBlueColor,
+                            size: 32,
+                          ),
+                          const SizedBox(width: Dimensions.largePadding),
+
+                          Expanded(child: QuoteWidget(quote: quote)),
+
+                          // Delete button for list owners
+                          if (isListOwner) ...[
+                            const SizedBox(width: Dimensions.smallPadding),
+                            CustomButton(
+                              semanticLabel: LocaleKeys
+                                  .common_semantic_delete_quote
                                   .tr(),
                               onPressed: () {
                                 listsCubit.removeItemFromList(item: item);

@@ -93,7 +93,9 @@ class _ReaderListViewBuilderState extends State<ReaderListViewBuilder> {
           final isLast = index == widget.state.readerBook!.contents.length;
 
           return Padding(
-            padding: EdgeInsets.only(bottom: isLast ? Dimensions.spacer : 0),
+            padding: EdgeInsets.only(
+              bottom: isLast ? Dimensions.spacer * 4 : 0,
+            ),
             child: InkWellWrapper(
               onLongPress: () => onLongPress(
                 cubit: cubit,

@@ -33,7 +33,8 @@
             "add_dialog": {
                 "title": "Wybierz typ elementu",
                 "books": "Książki",
-                "bookmarks": "Zakładki"
+                "bookmarks": "Zakładki",
+                "quotes": "Cytaty"
             },
             "delete_dialog": {
                 "title": "Usuwanie listy",
@@ -51,6 +52,10 @@
                 "duplicate_error": "Lista o tej nazwie już istnieje",
                 "success": "Lista została przemianowana"
             }
+        },
+        "quote_dialog": {
+            "title": "Cytat",
+            "go_to_text": "Przejdź do tekstu"
         },
         "offline": {
             "corrupted_audiobook": {
@@ -164,7 +169,12 @@
             "bookmark_edit": "edytuj zakładkę",
             "bookmark_editing": "edycja zakładki",
             "listen": "słuchaj",
-            "share": "udostępnij"
+            "share": "udostępnij",
+            "quote_create": "utwórz cytat"
+        },
+        "quote_sheet": {
+            "save": "zapisz cytat",
+            "hint": "Zaznacz fragment tekstu, z którego chcesz utworzyć cytat"
         },
         "snackbar": {
             "bookmark_added_success": "Zakładka dodana",
@@ -173,6 +183,9 @@
             "bookmark_add_error": "Nie udało się dodać zakładki",
             "bookmark_edit_error": "Nie udało się edytować zakładki",
             "bookmark_delete_error": "Nie udało się usunąć zakładki",
+            "quote_added_success": "Cytat dodany",
+            "quote_add_error": "Nie udało się dodać cytatu",
+            "quote_deleted_success": "Cytat usunięty",
             "reader_loading_error": "Nie udało się wczytać treści książki"
         },
         "progress": {
@@ -262,6 +275,7 @@
             "last_read_title": "Nie czytano jeszcze żadnych książek",
             "audiobooks_title": "Nie pobrano jeszcze żadnych audiobooków",
             "bookmarks_title": "Nie dodano jeszcze żadnych zakładek",
+            "quotes_title": "Nie utworzono jeszcze żadnych cytatów",
             "liked_title": "Nie polubiono jeszcze żadnych książek",
             "lists_title": "Nie utworzono jeszcze żadnych list",
             "lists_content_title": "Dodaj książki do swoich list, aby je tutaj zobaczyć",
@@ -312,6 +326,7 @@
             "save_bookmark_changes": "Zapisz zmiany w zakładce",
             "create_bookmark": "Utwórz zakładkę",
             "delete_bookmark": "Usuń zakładkę",
+            "delete_quote": "Usuń cytat",
             "share_bookmark": "Udostępnij zakładkę",
             "remove_book_from_list": "Usuń książkę z listy {listName}",
             "add_book_to_list": "Dodaj książkę do listy {listName}",

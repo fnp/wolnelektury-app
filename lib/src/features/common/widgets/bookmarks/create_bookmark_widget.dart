@@ -95,11 +95,14 @@ class _CreateBookmarkWidgetState extends State<CreateBookmarkWidget> {
                   ),
                   const Spacer(),
                   Flexible(
+                    flex: 2,
                     child: TextButtonWithIcon(
                       nonActiveText: isEditing
                           ? LocaleKeys.reader_sheet_bookmark_editing.tr()
                           : LocaleKeys.reader_sheet_bookmark_adding.tr(),
-                      nonActiveIcon: Icons.bookmark_add_rounded,
+                      nonActiveIcon: isEditing
+                          ? Icons.edit
+                          : Icons.bookmark_add_rounded,
                       activeColor: CustomColors.white,
                     ),
                   ),

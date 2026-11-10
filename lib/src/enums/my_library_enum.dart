@@ -1,4 +1,12 @@
-enum MyLibraryEnum { lists, liked, bookmarks, audiobooks, readers, login }
+enum MyLibraryEnum {
+  lists,
+  liked,
+  bookmarks,
+  quotes,
+  audiobooks,
+  readers,
+  login,
+}
 
 extension MyLibraryEnumExtension on MyLibraryEnum {
   String get title {
@@ -9,6 +17,8 @@ extension MyLibraryEnumExtension on MyLibraryEnum {
         return 'Książki';
       case MyLibraryEnum.bookmarks:
         return 'Moje zakładki';
+      case MyLibraryEnum.quotes:
+        return 'Moje cytaty';
       case MyLibraryEnum.liked:
         return 'Polubione';
       case MyLibraryEnum.lists:
@@ -30,6 +40,7 @@ List<MyLibraryEnum> get availableOnlineAuthEnums {
     MyLibraryEnum.lists,
     MyLibraryEnum.liked,
     MyLibraryEnum.bookmarks,
+    MyLibraryEnum.quotes,
   ];
 }
 

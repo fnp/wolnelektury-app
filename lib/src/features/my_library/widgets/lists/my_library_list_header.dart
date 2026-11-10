@@ -74,6 +74,14 @@ class MyLibraryListHeader extends StatelessWidget {
     router.pushNamed(bookmarkListCreationPageConfig.name);
   }
 
+  void _onAddQuotes(BuildContext context, {required ListModel list}) {
+    final listEditorCubit = context.read<ListEditorCubit>();
+    final modeCubit = context.read<AppModeCubit>();
+    listEditorCubit.setListToEdit(list);
+    modeCubit.changeMode(AppModeEnum.listCreationQuotesMode);
+    router.pushNamed(quoteListCreationPageConfig.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -192,6 +200,12 @@ class MyLibraryListHeader extends StatelessWidget {
                                                     list: bookList,
                                                   );
                                                 },
+                                                onAddQuotes: () {
+                                                  _onAddQuotes(
+                                                    context,
+                                                    list: bookList,
+                                                  );
+                                                },
                                               );
                                             },
                                           ),
@@ -255,6 +269,9 @@ class MyLibraryListHeader extends StatelessWidget {
                                   },
                                   onAddBookmarks: () {
                                     _onAddBookmarks(context, list: bookList);
+                                  },
+                                  onAddQuotes: () {
+                                    _onAddQuotes(context, list: bookList);
                                   },
                                 );
                               },

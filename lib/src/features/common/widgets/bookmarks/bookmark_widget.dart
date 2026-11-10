@@ -196,13 +196,18 @@ class _Body extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              router.pushNamed(
-                                bookPageConfig.name,
-                                pathParameters: {'slug': bookmark.book.slug},
-                                extra: bookmark.book,
-                              );
-                            },
+                            behavior: HitTestBehavior.opaque,
+                            onTap: isInListMode
+                                ? onTap
+                                : () {
+                                    router.pushNamed(
+                                      bookPageConfig.name,
+                                      pathParameters: {
+                                        'slug': bookmark.book.slug,
+                                      },
+                                      extra: bookmark.book,
+                                    );
+                                  },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

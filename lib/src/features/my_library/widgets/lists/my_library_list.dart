@@ -134,6 +134,14 @@ class _ScrollableList extends StatelessWidget {
                               isListOwner: isListOwner,
                             );
                           }
+                          if (element.isQuote) {
+                            return MyLibraryListElement.quote(
+                              key: ValueKey(element.uuid),
+                              item: element,
+                              listName: itemList.name,
+                              isListOwner: isListOwner,
+                            );
+                          }
                           return const SizedBox.shrink();
                         },
                         childCount: itemList.items.length,

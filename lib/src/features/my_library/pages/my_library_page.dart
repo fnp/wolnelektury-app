@@ -13,6 +13,8 @@ import 'package:wolnelektury/src/features/common/widgets/auth_wrapper.dart';
 import 'package:wolnelektury/src/features/common/widgets/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/audiobooks/my_library_audiobooks_section.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/bookmarks/my_library_bookmarks_section.dart';
+import 'package:wolnelektury/src/features/my_library/widgets/quotes/my_library_quotes_section.dart';
+import 'package:wolnelektury/src/features/readers/cubits/quotes/quotes_cubit.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/liked/my_library_liked_section.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/lists/my_library_lists_section.dart';
 import 'package:wolnelektury/src/features/my_library/widgets/login/my_library_login_forms.dart';
@@ -186,6 +188,11 @@ class _BodyState extends State<_Body> {
                     return BookmarksCubit(get.get())..getMyLibraryBookmarks();
                   },
                 ),
+                BlocProvider(
+                  create: (context) {
+                    return QuotesCubit(get.get())..getMyLibraryQuotes();
+                  },
+                ),
               ],
               child: PageView(
                 onPageChanged: (value) {
@@ -220,6 +227,8 @@ class _BodyState extends State<_Body> {
         return const MyLibraryLikedSection();
       case MyLibraryEnum.bookmarks:
         return const MyLibraryBookmarksSection();
+      case MyLibraryEnum.quotes:
+        return const MyLibraryQuotesSection();
       case MyLibraryEnum.audiobooks:
         return const MyLibraryAudiobooksSection();
       case MyLibraryEnum.readers:

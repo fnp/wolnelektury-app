@@ -136,26 +136,22 @@ class _ReaderBottomSheetState extends State<ReaderBottomSheet> {
         ),
         child:
             child ??
-            Padding(
+            SingleChildScrollView(
               padding: const EdgeInsets.all(Dimensions.spacer),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text.rich(
-                      TextSpan(
-                        children: buildReaderBase(
-                          theme: Theme.of(context),
-                          element: widget.linkContent,
-                          parent: widget.element,
-                          fontFamily: widget.fontFamily,
-                          fontSize: widget.fontSize,
-                          fontHeight: widget.fontHeight,
-                        ),
-                      ),
+              child: SizedBox(
+                width: double.infinity,
+                child: Text.rich(
+                  TextSpan(
+                    children: buildReaderBase(
+                      theme: Theme.of(context),
+                      element: widget.linkContent,
+                      parent: widget.element,
+                      fontFamily: widget.fontFamily,
+                      fontSize: widget.fontSize,
+                      fontHeight: widget.fontHeight,
                     ),
                   ),
-                ],
+                ),
               ),
             ),
       ),

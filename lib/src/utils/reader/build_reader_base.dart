@@ -31,6 +31,7 @@ List<InlineSpan> buildReaderBase({
   required double fontHeight,
   required ThemeData theme,
   bool isRecursive = false,
+  bool ignoreIcons = false,
 }) {
   List<InlineSpan> spans = [];
 
@@ -50,6 +51,7 @@ List<InlineSpan> buildReaderBase({
       fontHeight: fontHeight,
       theme: theme,
       isRecursive: isRecursive,
+      ignoreIcons: ignoreIcons,
     );
   }
 
@@ -175,10 +177,12 @@ List<InlineSpan> _getSpans({
   required double fontHeight,
   required ThemeData theme,
   required bool isRecursive,
+  required bool ignoreIcons,
 }) {
   if (item is ReaderBookModelContent) {
     // Handle <a> (links / footnotes / references)
     if (item.tag == ReaderBookTag.a) {
+      if (ignoreIcons) return [];
       return [
         _handleLinkTags(
           element: element,
@@ -200,6 +204,7 @@ List<InlineSpan> _getSpans({
       fontHeight: fontHeight,
       theme: theme,
       isRecursive: true,
+      ignoreIcons: ignoreIcons,
     );
   }
 

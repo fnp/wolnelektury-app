@@ -17,7 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$BookmarkModel {
 
  String? get uuid; String get location; BookModel get book;@JsonKey(name: 'book_slug') String? get bookSlug;@JsonKey(name: 'audio_timestamp') int? get audioTimestamp; String? get anchor; String get note; String get href;// This field is optional and used for syncing purposes.
- int? get timestamp; bool get isDeleted;
+ int? get timestamp; bool get deleted;
 /// Create a copy of BookmarkModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +30,16 @@ $BookmarkModelCopyWith<BookmarkModel> get copyWith => _$BookmarkModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookmarkModel&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.location, location) || other.location == location)&&(identical(other.book, book) || other.book == book)&&(identical(other.bookSlug, bookSlug) || other.bookSlug == bookSlug)&&(identical(other.audioTimestamp, audioTimestamp) || other.audioTimestamp == audioTimestamp)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.note, note) || other.note == note)&&(identical(other.href, href) || other.href == href)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookmarkModel&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.location, location) || other.location == location)&&(identical(other.book, book) || other.book == book)&&(identical(other.bookSlug, bookSlug) || other.bookSlug == bookSlug)&&(identical(other.audioTimestamp, audioTimestamp) || other.audioTimestamp == audioTimestamp)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.note, note) || other.note == note)&&(identical(other.href, href) || other.href == href)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.deleted, deleted) || other.deleted == deleted));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uuid,location,book,bookSlug,audioTimestamp,anchor,note,href,timestamp,isDeleted);
+int get hashCode => Object.hash(runtimeType,uuid,location,book,bookSlug,audioTimestamp,anchor,note,href,timestamp,deleted);
 
 @override
 String toString() {
-  return 'BookmarkModel(uuid: $uuid, location: $location, book: $book, bookSlug: $bookSlug, audioTimestamp: $audioTimestamp, anchor: $anchor, note: $note, href: $href, timestamp: $timestamp, isDeleted: $isDeleted)';
+  return 'BookmarkModel(uuid: $uuid, location: $location, book: $book, bookSlug: $bookSlug, audioTimestamp: $audioTimestamp, anchor: $anchor, note: $note, href: $href, timestamp: $timestamp, deleted: $deleted)';
 }
 
 
@@ -50,7 +50,7 @@ abstract mixin class $BookmarkModelCopyWith<$Res>  {
   factory $BookmarkModelCopyWith(BookmarkModel value, $Res Function(BookmarkModel) _then) = _$BookmarkModelCopyWithImpl;
 @useResult
 $Res call({
- String? uuid, String location, BookModel book,@JsonKey(name: 'book_slug') String? bookSlug,@JsonKey(name: 'audio_timestamp') int? audioTimestamp, String? anchor, String note, String href, int? timestamp, bool isDeleted
+ String? uuid, String location, BookModel book,@JsonKey(name: 'book_slug') String? bookSlug,@JsonKey(name: 'audio_timestamp') int? audioTimestamp, String? anchor, String note, String href, int? timestamp, bool deleted
 });
 
 
@@ -67,7 +67,7 @@ class _$BookmarkModelCopyWithImpl<$Res>
 
 /// Create a copy of BookmarkModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? uuid = freezed,Object? location = null,Object? book = null,Object? bookSlug = freezed,Object? audioTimestamp = freezed,Object? anchor = freezed,Object? note = null,Object? href = null,Object? timestamp = freezed,Object? isDeleted = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? uuid = freezed,Object? location = null,Object? book = null,Object? bookSlug = freezed,Object? audioTimestamp = freezed,Object? anchor = freezed,Object? note = null,Object? href = null,Object? timestamp = freezed,Object? deleted = null,}) {
   return _then(_self.copyWith(
 uuid: freezed == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non_nullable
 as String?,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
@@ -78,7 +78,7 @@ as int?,anchor: freezed == anchor ? _self.anchor : anchor // ignore: cast_nullab
 as String?,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,href: null == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
 as String,timestamp: freezed == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
-as int?,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
+as int?,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -99,7 +99,7 @@ $BookModelCopyWith<$Res> get book {
 @JsonSerializable()
 
 class _BookmarkModel implements BookmarkModel {
-  const _BookmarkModel({this.uuid, required this.location, required this.book, @JsonKey(name: 'book_slug') this.bookSlug, @JsonKey(name: 'audio_timestamp') this.audioTimestamp, this.anchor, required this.note, required this.href, this.timestamp, this.isDeleted = false});
+  const _BookmarkModel({this.uuid, required this.location, required this.book, @JsonKey(name: 'book_slug') this.bookSlug, @JsonKey(name: 'audio_timestamp') this.audioTimestamp, this.anchor, required this.note, required this.href, this.timestamp, this.deleted = false});
   factory _BookmarkModel.fromJson(Map<String, dynamic> json) => _$BookmarkModelFromJson(json);
 
 @override final  String? uuid;
@@ -112,7 +112,7 @@ class _BookmarkModel implements BookmarkModel {
 @override final  String href;
 // This field is optional and used for syncing purposes.
 @override final  int? timestamp;
-@override@JsonKey() final  bool isDeleted;
+@override@JsonKey() final  bool deleted;
 
 /// Create a copy of BookmarkModel
 /// with the given fields replaced by the non-null parameter values.
@@ -127,16 +127,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookmarkModel&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.location, location) || other.location == location)&&(identical(other.book, book) || other.book == book)&&(identical(other.bookSlug, bookSlug) || other.bookSlug == bookSlug)&&(identical(other.audioTimestamp, audioTimestamp) || other.audioTimestamp == audioTimestamp)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.note, note) || other.note == note)&&(identical(other.href, href) || other.href == href)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookmarkModel&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.location, location) || other.location == location)&&(identical(other.book, book) || other.book == book)&&(identical(other.bookSlug, bookSlug) || other.bookSlug == bookSlug)&&(identical(other.audioTimestamp, audioTimestamp) || other.audioTimestamp == audioTimestamp)&&(identical(other.anchor, anchor) || other.anchor == anchor)&&(identical(other.note, note) || other.note == note)&&(identical(other.href, href) || other.href == href)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.deleted, deleted) || other.deleted == deleted));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uuid,location,book,bookSlug,audioTimestamp,anchor,note,href,timestamp,isDeleted);
+int get hashCode => Object.hash(runtimeType,uuid,location,book,bookSlug,audioTimestamp,anchor,note,href,timestamp,deleted);
 
 @override
 String toString() {
-  return 'BookmarkModel(uuid: $uuid, location: $location, book: $book, bookSlug: $bookSlug, audioTimestamp: $audioTimestamp, anchor: $anchor, note: $note, href: $href, timestamp: $timestamp, isDeleted: $isDeleted)';
+  return 'BookmarkModel(uuid: $uuid, location: $location, book: $book, bookSlug: $bookSlug, audioTimestamp: $audioTimestamp, anchor: $anchor, note: $note, href: $href, timestamp: $timestamp, deleted: $deleted)';
 }
 
 
@@ -147,7 +147,7 @@ abstract mixin class _$BookmarkModelCopyWith<$Res> implements $BookmarkModelCopy
   factory _$BookmarkModelCopyWith(_BookmarkModel value, $Res Function(_BookmarkModel) _then) = __$BookmarkModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? uuid, String location, BookModel book,@JsonKey(name: 'book_slug') String? bookSlug,@JsonKey(name: 'audio_timestamp') int? audioTimestamp, String? anchor, String note, String href, int? timestamp, bool isDeleted
+ String? uuid, String location, BookModel book,@JsonKey(name: 'book_slug') String? bookSlug,@JsonKey(name: 'audio_timestamp') int? audioTimestamp, String? anchor, String note, String href, int? timestamp, bool deleted
 });
 
 
@@ -164,7 +164,7 @@ class __$BookmarkModelCopyWithImpl<$Res>
 
 /// Create a copy of BookmarkModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? uuid = freezed,Object? location = null,Object? book = null,Object? bookSlug = freezed,Object? audioTimestamp = freezed,Object? anchor = freezed,Object? note = null,Object? href = null,Object? timestamp = freezed,Object? isDeleted = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? uuid = freezed,Object? location = null,Object? book = null,Object? bookSlug = freezed,Object? audioTimestamp = freezed,Object? anchor = freezed,Object? note = null,Object? href = null,Object? timestamp = freezed,Object? deleted = null,}) {
   return _then(_BookmarkModel(
 uuid: freezed == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non_nullable
 as String?,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
@@ -175,7 +175,7 @@ as int?,anchor: freezed == anchor ? _self.anchor : anchor // ignore: cast_nullab
 as String?,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,href: null == href ? _self.href : href // ignore: cast_nullable_to_non_nullable
 as String,timestamp: freezed == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
-as int?,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
+as int?,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

@@ -75,7 +75,12 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
     );
   }
 
-  void addElement({String? bookSlug, String? bookmarkUuid, String? listSlug}) {
+  void addElement({
+    String? bookSlug,
+    String? bookmarkUuid,
+    String? quoteUuid,
+    String? listSlug,
+  }) {
     // Determine effective listSlug: use parameter if provided, or fall back to editedListToSave
     final effectiveListSlug = listSlug ?? state.editedListToSave?.slug;
     if (effectiveListSlug == null) return;
@@ -84,6 +89,7 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
       listSlug: effectiveListSlug,
       bookSlug: bookSlug,
       bookmarkUuid: bookmarkUuid,
+      quoteUuid: quoteUuid,
     );
 
     // Update editedListToSave only in Mode 1 (when editing a specific list)
@@ -99,7 +105,8 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
     // Check if this specific item (identifier + listSlug) is in remove queue
     if (state.itemsToRemove.any((item) {
       return (item.itemIdentifier == bookSlug ||
-              item.itemIdentifier == bookmarkUuid) &&
+              item.itemIdentifier == bookmarkUuid ||
+              item.itemIdentifier == quoteUuid) &&
           item.listSlug == effectiveListSlug;
     })) {
       _addOrRemoveElementFromRemovingQueue(newItem);
@@ -112,6 +119,7 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
     String? uuid,
     String? bookSlug,
     String? bookmarkUuid,
+    String? quoteUuid,
     String? listSlug,
   }) {
     // Determine effective listSlug: use parameter if provided, or fall back to editedListToSave
@@ -123,7 +131,8 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
       final updatedItems =
           List<ListItemModel>.from(state.editedListToSave!.items).where((i) {
             return i.itemIdentifier != bookSlug &&
-                i.itemIdentifier != bookmarkUuid;
+                i.itemIdentifier != bookmarkUuid &&
+                i.itemIdentifier != quoteUuid;
           }).toList();
       final updatedEditedList = state.editedListToSave!.copyWith(
         items: updatedItems,
@@ -140,13 +149,13 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
           .firstWhereOrNull(
             (item) =>
                 item.listSlug == effectiveListSlug &&
-                item.itemIdentifier == (bookSlug ?? bookmarkUuid),
+                item.itemIdentifier == (bookSlug ?? bookmarkUuid ?? quoteUuid),
           )
           ?.uuid;
     } else {
       // Mode 1: Use existing method
       existingItemUuid = state.getItemUuidByIdentifier(
-        bookSlug ?? bookmarkUuid ?? '',
+        bookSlug ?? bookmarkUuid ?? quoteUuid ?? '',
       );
     }
 
@@ -155,13 +164,15 @@ class ListEditorCubit extends SafeCubit<ListEditorState> {
       listSlug: effectiveListSlug,
       bookSlug: bookSlug,
       bookmarkUuid: bookmarkUuid,
+      quoteUuid: quoteUuid,
     );
 
     // Queue the item for removal (works in both Mode 1 and Mode 2)
     // Check if this specific item (identifier + listSlug) is in add queue
     if (state.itemsToAdd.any((item) {
       return (item.itemIdentifier == bookSlug ||
-              item.itemIdentifier == bookmarkUuid) &&
+              item.itemIdentifier == bookmarkUuid ||
+              item.itemIdentifier == quoteUuid) &&
           item.listSlug == effectiveListSlug;
     })) {
       _addOrRemoveElementFromAddingQueue(elementModel);

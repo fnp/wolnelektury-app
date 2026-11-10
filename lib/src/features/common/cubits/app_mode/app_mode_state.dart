@@ -11,8 +11,10 @@ extension AppModeStateX on AppModeState {
   bool get isListBookCreation => mode == AppModeEnum.listCreationBooksMode;
   bool get isListBookmarksCreation =>
       mode == AppModeEnum.listCreationBookmarksMode;
+  bool get isListQuotesCreation => mode == AppModeEnum.listCreationQuotesMode;
 
   bool get isDefault => mode == AppModeEnum.defaultMode;
   bool get shouldShowBottomBar => isDefault;
-  bool get shouldShowTopBar => !isListBookmarksCreation;
+  bool get shouldShowTopBar =>
+      !isListBookmarksCreation && !isListQuotesCreation;
 }

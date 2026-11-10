@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:wolnelektury/src/application/api_service.dart';
 import 'package:wolnelektury/src/application/app_storage/app_storage.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_bookmarks_service.dart';
+import 'package:wolnelektury/src/application/app_storage/services/app_storage_quotes_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_cache_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_likes_service.dart';
 import 'package:wolnelektury/src/application/app_storage/services/app_storage_offline_service.dart';
@@ -40,6 +41,9 @@ Future<void> initializeServices({required GetIt getIt}) async {
   );
   getIt.registerSingleton<AppStorageBookmarksService>(
     AppStorageBookmarksService(appStorage),
+  );
+  getIt.registerSingleton<AppStorageQuotesService>(
+    AppStorageQuotesService(appStorage),
   );
   getIt.registerSingleton<AppStorageSearchService>(
     AppStorageSearchService(appStorage),

@@ -492,7 +492,7 @@ class BookmarksRepositoryImplementation extends BookmarksRepository
             slug: e.book.slug,
             id: e.location,
             bookmarkJson: jsonEncode(e.toJson()),
-            isDeleted: e.isDeleted,
+            isDeleted: e.deleted,
             timestamp: updatedAt,
           );
         }).toList(),

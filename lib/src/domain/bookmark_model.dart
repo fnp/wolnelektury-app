@@ -19,7 +19,7 @@ sealed class BookmarkModel with _$BookmarkModel {
 
     // This field is optional and used for syncing purposes.
     int? timestamp,
-    @Default(false) bool isDeleted,
+    @Default(false) bool deleted,
   }) = _BookmarkModel;
 
   factory BookmarkModel.fromJson(Map<String, dynamic> json) =>

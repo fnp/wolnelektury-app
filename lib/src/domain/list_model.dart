@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/domain/bookmark_model.dart';
+import 'package:wolnelektury/src/domain/quote_model.dart';
 
 part 'list_model.freezed.dart';
 part 'list_model.g.dart';
@@ -37,8 +38,9 @@ sealed class ListItemModel with _$ListItemModel {
     @Default(false) bool deleted,
     BookModel? book,
     BookmarkModel? bookmark,
+    QuoteModel? quote,
+
     // String? fragment,
-    // String? quote,
     @Default('') String note,
   }) = _ListItemModel;
 
@@ -50,6 +52,7 @@ sealed class ListItemModel with _$ListItemModel {
     required String listSlug,
     String? bookSlug,
     String? bookmarkUuid,
+    String? quoteUuid,
     String? uuid,
     String note = '',
   }) => ListItemModel(
@@ -67,6 +70,13 @@ sealed class ListItemModel with _$ListItemModel {
             href: '',
           )
         : null,
+    quote: quoteUuid != null
+        ? QuoteModel(
+            uuid: quoteUuid,
+            book: BookModel.empty(slug: ''),
+            href: '',
+          )
+        : null,
     uuid: uuid,
     note: note,
   );
@@ -75,9 +85,10 @@ sealed class ListItemModel with _$ListItemModel {
 extension ListItemModelX on ListItemModel {
   bool get isBook => book != null;
   bool get isBookmark => bookmark != null;
+  bool get isQuote => quote != null;
 
   /// Returns the identifier (slug) of this item, whether it's a book or bookmark
-  String? get itemIdentifier => book?.slug ?? bookmark?.uuid;
+  String? get itemIdentifier => book?.slug ?? bookmark?.uuid ?? quote?.uuid;
 
   Map<String, dynamic> toCleanJson() {
     final json = <String, dynamic>{};
@@ -90,6 +101,11 @@ extension ListItemModelX on ListItemModel {
     // Add bookmark uuid if bookmark exists
     if (bookmark != null) {
       json['bookmark'] = bookmark!.uuid;
+    }
+
+    // Add quote uuid if quote exists
+    if (quote != null) {
+      json['quote'] = quote!.uuid;
     }
 
     // Add note

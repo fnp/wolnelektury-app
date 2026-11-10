@@ -69,4 +69,17 @@ extension ListsStateX on ListsState {
             [])
         .any((item) => item.bookmark?.uuid == bookmarkUuid);
   }
+
+  bool isQuoteInList(String listSlug, String quoteUuid) {
+    if (fetchedSingleList != null && fetchedSingleList!.slug == listSlug) {
+      return fetchedSingleList!.items.any(
+        (item) => item.quote?.uuid == quoteUuid,
+      );
+    }
+    return (allLists
+                .firstWhereOrNull((element) => element.slug == listSlug)
+                ?.items ??
+            [])
+        .any((item) => item.quote?.uuid == quoteUuid);
+  }
 }

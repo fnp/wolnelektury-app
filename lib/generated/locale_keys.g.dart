@@ -38,6 +38,8 @@ abstract class LocaleKeys {
       'my_library.lists.add_dialog.books';
   static const my_library_lists_add_dialog_bookmarks =
       'my_library.lists.add_dialog.bookmarks';
+  static const my_library_lists_add_dialog_quotes =
+      'my_library.lists.add_dialog.quotes';
   static const my_library_lists_add_dialog = 'my_library.lists.add_dialog';
   static const my_library_lists_delete_dialog_title =
       'my_library.lists.delete_dialog.title';
@@ -68,6 +70,10 @@ abstract class LocaleKeys {
   static const my_library_lists_rename_dialog =
       'my_library.lists.rename_dialog';
   static const my_library_lists = 'my_library.lists';
+  static const my_library_quote_dialog_title = 'my_library.quote_dialog.title';
+  static const my_library_quote_dialog_go_to_text =
+      'my_library.quote_dialog.go_to_text';
+  static const my_library_quote_dialog = 'my_library.quote_dialog';
   static const my_library_offline_corrupted_audiobook_title =
       'my_library.offline.corrupted_audiobook.title';
   static const my_library_offline_corrupted_audiobook_content =
@@ -190,7 +196,11 @@ abstract class LocaleKeys {
   static const reader_sheet_bookmark_editing = 'reader.sheet.bookmark_editing';
   static const reader_sheet_listen = 'reader.sheet.listen';
   static const reader_sheet_share = 'reader.sheet.share';
+  static const reader_sheet_quote_create = 'reader.sheet.quote_create';
   static const reader_sheet = 'reader.sheet';
+  static const reader_quote_sheet_save = 'reader.quote_sheet.save';
+  static const reader_quote_sheet_hint = 'reader.quote_sheet.hint';
+  static const reader_quote_sheet = 'reader.quote_sheet';
   static const reader_snackbar_bookmark_added_success =
       'reader.snackbar.bookmark_added_success';
   static const reader_snackbar_bookmark_edited_success =
@@ -203,6 +213,12 @@ abstract class LocaleKeys {
       'reader.snackbar.bookmark_edit_error';
   static const reader_snackbar_bookmark_delete_error =
       'reader.snackbar.bookmark_delete_error';
+  static const reader_snackbar_quote_added_success =
+      'reader.snackbar.quote_added_success';
+  static const reader_snackbar_quote_add_error =
+      'reader.snackbar.quote_add_error';
+  static const reader_snackbar_quote_deleted_success =
+      'reader.snackbar.quote_deleted_success';
   static const reader_snackbar_reader_loading_error =
       'reader.snackbar.reader_loading_error';
   static const reader_snackbar = 'reader.snackbar';
@@ -222,15 +238,6 @@ abstract class LocaleKeys {
   static const book_kind = 'book.kind';
   static const book_genre = 'book.genre';
   static const book_available_in = 'book.available_in';
-  static const book_partner_redirect_dialog_title =
-      'book.partner_redirect_dialog.title';
-  static const book_partner_redirect_dialog_content =
-      'book.partner_redirect_dialog.content';
-  static const book_partner_redirect_dialog_confirm =
-      'book.partner_redirect_dialog.confirm';
-  static const book_partner_redirect_dialog_cancel =
-      'book.partner_redirect_dialog.cancel';
-  static const book_partner_redirect_dialog = 'book.partner_redirect_dialog';
   static const book_content_warning = 'book.content_warning';
   static const book_content_audiences = 'book.content_audiences';
   static const book_read_more = 'book.read_more';
@@ -307,6 +314,7 @@ abstract class LocaleKeys {
   static const common_empty_last_read_title = 'common.empty.last_read_title';
   static const common_empty_audiobooks_title = 'common.empty.audiobooks_title';
   static const common_empty_bookmarks_title = 'common.empty.bookmarks_title';
+  static const common_empty_quotes_title = 'common.empty.quotes_title';
   static const common_empty_liked_title = 'common.empty.liked_title';
   static const common_empty_lists_title = 'common.empty.lists_title';
   static const common_empty_lists_content_title =
@@ -370,6 +378,7 @@ abstract class LocaleKeys {
       'common.semantic.create_bookmark';
   static const common_semantic_delete_bookmark =
       'common.semantic.delete_bookmark';
+  static const common_semantic_delete_quote = 'common.semantic.delete_quote';
   static const common_semantic_share_bookmark =
       'common.semantic.share_bookmark';
   static const common_semantic_remove_book_from_list =

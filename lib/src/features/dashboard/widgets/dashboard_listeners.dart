@@ -83,6 +83,7 @@ class DashboardListeners extends StatelessWidget {
               searchPageConfig.path,
               filtersPageConfig.path,
               bookmarkListCreationPageConfig.path,
+              quoteListCreationPageConfig.path,
             ].contains(state.location)) {
               final modeCubit = context.read<AppModeCubit>();
               if (!modeCubit.state.isDefault) {

@@ -17,7 +17,7 @@ _BookmarkModel _$BookmarkModelFromJson(Map<String, dynamic> json) =>
       note: json['note'] as String,
       href: json['href'] as String,
       timestamp: (json['timestamp'] as num?)?.toInt(),
-      isDeleted: json['isDeleted'] as bool? ?? false,
+      deleted: json['deleted'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$BookmarkModelToJson(_BookmarkModel instance) =>
@@ -31,5 +31,5 @@ Map<String, dynamic> _$BookmarkModelToJson(_BookmarkModel instance) =>
       'note': instance.note,
       'href': instance.href,
       'timestamp': instance.timestamp,
-      'isDeleted': instance.isDeleted,
+      'deleted': instance.deleted,
     };

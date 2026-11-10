@@ -1339,6 +1339,29 @@ class $SyncInfoTable extends SyncInfo
         type: DriftSqlType.dateTime,
         requiredDuringInsert: false,
       );
+  static const VerificationMeta _receivedQuotesSyncAtMeta =
+      const VerificationMeta('receivedQuotesSyncAt');
+  @override
+  late final GeneratedColumn<DateTime> receivedQuotesSyncAt =
+      GeneratedColumn<DateTime>(
+        'received_quotes_sync_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _sentQuotesSyncAtMeta = const VerificationMeta(
+    'sentQuotesSyncAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> sentQuotesSyncAt =
+      GeneratedColumn<DateTime>(
+        'sent_quotes_sync_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1348,6 +1371,8 @@ class $SyncInfoTable extends SyncInfo
     sentLikesSyncAt,
     receivedBookmarksSyncAt,
     sentBookmarksSyncAt,
+    receivedQuotesSyncAt,
+    sentQuotesSyncAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1418,6 +1443,24 @@ class $SyncInfoTable extends SyncInfo
         ),
       );
     }
+    if (data.containsKey('received_quotes_sync_at')) {
+      context.handle(
+        _receivedQuotesSyncAtMeta,
+        receivedQuotesSyncAt.isAcceptableOrUnknown(
+          data['received_quotes_sync_at']!,
+          _receivedQuotesSyncAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sent_quotes_sync_at')) {
+      context.handle(
+        _sentQuotesSyncAtMeta,
+        sentQuotesSyncAt.isAcceptableOrUnknown(
+          data['sent_quotes_sync_at']!,
+          _sentQuotesSyncAtMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1455,6 +1498,14 @@ class $SyncInfoTable extends SyncInfo
         DriftSqlType.dateTime,
         data['${effectivePrefix}sent_bookmarks_sync_at'],
       ),
+      receivedQuotesSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}received_quotes_sync_at'],
+      ),
+      sentQuotesSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}sent_quotes_sync_at'],
+      ),
     );
   }
 
@@ -1472,6 +1523,8 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
   final DateTime? sentLikesSyncAt;
   final DateTime? receivedBookmarksSyncAt;
   final DateTime? sentBookmarksSyncAt;
+  final DateTime? receivedQuotesSyncAt;
+  final DateTime? sentQuotesSyncAt;
   const SyncInfoData({
     required this.id,
     this.receivedProgressSyncAt,
@@ -1480,6 +1533,8 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     this.sentLikesSyncAt,
     this.receivedBookmarksSyncAt,
     this.sentBookmarksSyncAt,
+    this.receivedQuotesSyncAt,
+    this.sentQuotesSyncAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1507,6 +1562,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     if (!nullToAbsent || sentBookmarksSyncAt != null) {
       map['sent_bookmarks_sync_at'] = Variable<DateTime>(sentBookmarksSyncAt);
     }
+    if (!nullToAbsent || receivedQuotesSyncAt != null) {
+      map['received_quotes_sync_at'] = Variable<DateTime>(receivedQuotesSyncAt);
+    }
+    if (!nullToAbsent || sentQuotesSyncAt != null) {
+      map['sent_quotes_sync_at'] = Variable<DateTime>(sentQuotesSyncAt);
+    }
     return map;
   }
 
@@ -1531,6 +1592,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       sentBookmarksSyncAt: sentBookmarksSyncAt == null && nullToAbsent
           ? const Value.absent()
           : Value(sentBookmarksSyncAt),
+      receivedQuotesSyncAt: receivedQuotesSyncAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receivedQuotesSyncAt),
+      sentQuotesSyncAt: sentQuotesSyncAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sentQuotesSyncAt),
     );
   }
 
@@ -1557,6 +1624,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       sentBookmarksSyncAt: serializer.fromJson<DateTime?>(
         json['sentBookmarksSyncAt'],
       ),
+      receivedQuotesSyncAt: serializer.fromJson<DateTime?>(
+        json['receivedQuotesSyncAt'],
+      ),
+      sentQuotesSyncAt: serializer.fromJson<DateTime?>(
+        json['sentQuotesSyncAt'],
+      ),
     );
   }
   @override
@@ -1574,6 +1647,10 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
         receivedBookmarksSyncAt,
       ),
       'sentBookmarksSyncAt': serializer.toJson<DateTime?>(sentBookmarksSyncAt),
+      'receivedQuotesSyncAt': serializer.toJson<DateTime?>(
+        receivedQuotesSyncAt,
+      ),
+      'sentQuotesSyncAt': serializer.toJson<DateTime?>(sentQuotesSyncAt),
     };
   }
 
@@ -1585,6 +1662,8 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     Value<DateTime?> sentLikesSyncAt = const Value.absent(),
     Value<DateTime?> receivedBookmarksSyncAt = const Value.absent(),
     Value<DateTime?> sentBookmarksSyncAt = const Value.absent(),
+    Value<DateTime?> receivedQuotesSyncAt = const Value.absent(),
+    Value<DateTime?> sentQuotesSyncAt = const Value.absent(),
   }) => SyncInfoData(
     id: id ?? this.id,
     receivedProgressSyncAt: receivedProgressSyncAt.present
@@ -1605,6 +1684,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     sentBookmarksSyncAt: sentBookmarksSyncAt.present
         ? sentBookmarksSyncAt.value
         : this.sentBookmarksSyncAt,
+    receivedQuotesSyncAt: receivedQuotesSyncAt.present
+        ? receivedQuotesSyncAt.value
+        : this.receivedQuotesSyncAt,
+    sentQuotesSyncAt: sentQuotesSyncAt.present
+        ? sentQuotesSyncAt.value
+        : this.sentQuotesSyncAt,
   );
   SyncInfoData copyWithCompanion(SyncInfoCompanion data) {
     return SyncInfoData(
@@ -1627,6 +1712,12 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
       sentBookmarksSyncAt: data.sentBookmarksSyncAt.present
           ? data.sentBookmarksSyncAt.value
           : this.sentBookmarksSyncAt,
+      receivedQuotesSyncAt: data.receivedQuotesSyncAt.present
+          ? data.receivedQuotesSyncAt.value
+          : this.receivedQuotesSyncAt,
+      sentQuotesSyncAt: data.sentQuotesSyncAt.present
+          ? data.sentQuotesSyncAt.value
+          : this.sentQuotesSyncAt,
     );
   }
 
@@ -1639,7 +1730,9 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
           ..write('receivedLikesSyncAt: $receivedLikesSyncAt, ')
           ..write('sentLikesSyncAt: $sentLikesSyncAt, ')
           ..write('receivedBookmarksSyncAt: $receivedBookmarksSyncAt, ')
-          ..write('sentBookmarksSyncAt: $sentBookmarksSyncAt')
+          ..write('sentBookmarksSyncAt: $sentBookmarksSyncAt, ')
+          ..write('receivedQuotesSyncAt: $receivedQuotesSyncAt, ')
+          ..write('sentQuotesSyncAt: $sentQuotesSyncAt')
           ..write(')'))
         .toString();
   }
@@ -1653,6 +1746,8 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
     sentLikesSyncAt,
     receivedBookmarksSyncAt,
     sentBookmarksSyncAt,
+    receivedQuotesSyncAt,
+    sentQuotesSyncAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -1664,7 +1759,9 @@ class SyncInfoData extends DataClass implements Insertable<SyncInfoData> {
           other.receivedLikesSyncAt == this.receivedLikesSyncAt &&
           other.sentLikesSyncAt == this.sentLikesSyncAt &&
           other.receivedBookmarksSyncAt == this.receivedBookmarksSyncAt &&
-          other.sentBookmarksSyncAt == this.sentBookmarksSyncAt);
+          other.sentBookmarksSyncAt == this.sentBookmarksSyncAt &&
+          other.receivedQuotesSyncAt == this.receivedQuotesSyncAt &&
+          other.sentQuotesSyncAt == this.sentQuotesSyncAt);
 }
 
 class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
@@ -1675,6 +1772,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
   final Value<DateTime?> sentLikesSyncAt;
   final Value<DateTime?> receivedBookmarksSyncAt;
   final Value<DateTime?> sentBookmarksSyncAt;
+  final Value<DateTime?> receivedQuotesSyncAt;
+  final Value<DateTime?> sentQuotesSyncAt;
   const SyncInfoCompanion({
     this.id = const Value.absent(),
     this.receivedProgressSyncAt = const Value.absent(),
@@ -1683,6 +1782,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     this.sentLikesSyncAt = const Value.absent(),
     this.receivedBookmarksSyncAt = const Value.absent(),
     this.sentBookmarksSyncAt = const Value.absent(),
+    this.receivedQuotesSyncAt = const Value.absent(),
+    this.sentQuotesSyncAt = const Value.absent(),
   });
   SyncInfoCompanion.insert({
     this.id = const Value.absent(),
@@ -1692,6 +1793,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     this.sentLikesSyncAt = const Value.absent(),
     this.receivedBookmarksSyncAt = const Value.absent(),
     this.sentBookmarksSyncAt = const Value.absent(),
+    this.receivedQuotesSyncAt = const Value.absent(),
+    this.sentQuotesSyncAt = const Value.absent(),
   });
   static Insertable<SyncInfoData> custom({
     Expression<int>? id,
@@ -1701,6 +1804,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     Expression<DateTime>? sentLikesSyncAt,
     Expression<DateTime>? receivedBookmarksSyncAt,
     Expression<DateTime>? sentBookmarksSyncAt,
+    Expression<DateTime>? receivedQuotesSyncAt,
+    Expression<DateTime>? sentQuotesSyncAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1715,6 +1820,9 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
         'received_bookmarks_sync_at': receivedBookmarksSyncAt,
       if (sentBookmarksSyncAt != null)
         'sent_bookmarks_sync_at': sentBookmarksSyncAt,
+      if (receivedQuotesSyncAt != null)
+        'received_quotes_sync_at': receivedQuotesSyncAt,
+      if (sentQuotesSyncAt != null) 'sent_quotes_sync_at': sentQuotesSyncAt,
     });
   }
 
@@ -1726,6 +1834,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
     Value<DateTime?>? sentLikesSyncAt,
     Value<DateTime?>? receivedBookmarksSyncAt,
     Value<DateTime?>? sentBookmarksSyncAt,
+    Value<DateTime?>? receivedQuotesSyncAt,
+    Value<DateTime?>? sentQuotesSyncAt,
   }) {
     return SyncInfoCompanion(
       id: id ?? this.id,
@@ -1737,6 +1847,8 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
       receivedBookmarksSyncAt:
           receivedBookmarksSyncAt ?? this.receivedBookmarksSyncAt,
       sentBookmarksSyncAt: sentBookmarksSyncAt ?? this.sentBookmarksSyncAt,
+      receivedQuotesSyncAt: receivedQuotesSyncAt ?? this.receivedQuotesSyncAt,
+      sentQuotesSyncAt: sentQuotesSyncAt ?? this.sentQuotesSyncAt,
     );
   }
 
@@ -1774,6 +1886,14 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
         sentBookmarksSyncAt.value,
       );
     }
+    if (receivedQuotesSyncAt.present) {
+      map['received_quotes_sync_at'] = Variable<DateTime>(
+        receivedQuotesSyncAt.value,
+      );
+    }
+    if (sentQuotesSyncAt.present) {
+      map['sent_quotes_sync_at'] = Variable<DateTime>(sentQuotesSyncAt.value);
+    }
     return map;
   }
 
@@ -1786,7 +1906,9 @@ class SyncInfoCompanion extends UpdateCompanion<SyncInfoData> {
           ..write('receivedLikesSyncAt: $receivedLikesSyncAt, ')
           ..write('sentLikesSyncAt: $sentLikesSyncAt, ')
           ..write('receivedBookmarksSyncAt: $receivedBookmarksSyncAt, ')
-          ..write('sentBookmarksSyncAt: $sentBookmarksSyncAt')
+          ..write('sentBookmarksSyncAt: $sentBookmarksSyncAt, ')
+          ..write('receivedQuotesSyncAt: $receivedQuotesSyncAt, ')
+          ..write('sentQuotesSyncAt: $sentQuotesSyncAt')
           ..write(')'))
         .toString();
   }
@@ -2417,6 +2539,364 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   }
 }
 
+class $QuotesTable extends Quotes with TableInfo<$QuotesTable, Quote> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $QuotesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _slugMeta = const VerificationMeta('slug');
+  @override
+  late final GeneratedColumn<String> slug = GeneratedColumn<String>(
+    'slug',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _quoteJsonMeta = const VerificationMeta(
+    'quoteJson',
+  );
+  @override
+  late final GeneratedColumn<String> quoteJson = GeneratedColumn<String>(
+    'quote_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    slug,
+    quoteJson,
+    isDeleted,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'quotes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Quote> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('slug')) {
+      context.handle(
+        _slugMeta,
+        slug.isAcceptableOrUnknown(data['slug']!, _slugMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_slugMeta);
+    }
+    if (data.containsKey('quote_json')) {
+      context.handle(
+        _quoteJsonMeta,
+        quoteJson.isAcceptableOrUnknown(data['quote_json']!, _quoteJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_quoteJsonMeta);
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Quote map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Quote(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      slug: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}slug'],
+      )!,
+      quoteJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}quote_json'],
+      )!,
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $QuotesTable createAlias(String alias) {
+    return $QuotesTable(attachedDatabase, alias);
+  }
+}
+
+class Quote extends DataClass implements Insertable<Quote> {
+  final String id;
+  final String slug;
+  final String quoteJson;
+  final bool isDeleted;
+  final DateTime updatedAt;
+  const Quote({
+    required this.id,
+    required this.slug,
+    required this.quoteJson,
+    required this.isDeleted,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['slug'] = Variable<String>(slug);
+    map['quote_json'] = Variable<String>(quoteJson);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  QuotesCompanion toCompanion(bool nullToAbsent) {
+    return QuotesCompanion(
+      id: Value(id),
+      slug: Value(slug),
+      quoteJson: Value(quoteJson),
+      isDeleted: Value(isDeleted),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory Quote.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Quote(
+      id: serializer.fromJson<String>(json['id']),
+      slug: serializer.fromJson<String>(json['slug']),
+      quoteJson: serializer.fromJson<String>(json['quoteJson']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'slug': serializer.toJson<String>(slug),
+      'quoteJson': serializer.toJson<String>(quoteJson),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  Quote copyWith({
+    String? id,
+    String? slug,
+    String? quoteJson,
+    bool? isDeleted,
+    DateTime? updatedAt,
+  }) => Quote(
+    id: id ?? this.id,
+    slug: slug ?? this.slug,
+    quoteJson: quoteJson ?? this.quoteJson,
+    isDeleted: isDeleted ?? this.isDeleted,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  Quote copyWithCompanion(QuotesCompanion data) {
+    return Quote(
+      id: data.id.present ? data.id.value : this.id,
+      slug: data.slug.present ? data.slug.value : this.slug,
+      quoteJson: data.quoteJson.present ? data.quoteJson.value : this.quoteJson,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Quote(')
+          ..write('id: $id, ')
+          ..write('slug: $slug, ')
+          ..write('quoteJson: $quoteJson, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, slug, quoteJson, isDeleted, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Quote &&
+          other.id == this.id &&
+          other.slug == this.slug &&
+          other.quoteJson == this.quoteJson &&
+          other.isDeleted == this.isDeleted &&
+          other.updatedAt == this.updatedAt);
+}
+
+class QuotesCompanion extends UpdateCompanion<Quote> {
+  final Value<String> id;
+  final Value<String> slug;
+  final Value<String> quoteJson;
+  final Value<bool> isDeleted;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const QuotesCompanion({
+    this.id = const Value.absent(),
+    this.slug = const Value.absent(),
+    this.quoteJson = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  QuotesCompanion.insert({
+    required String id,
+    required String slug,
+    required String quoteJson,
+    this.isDeleted = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       slug = Value(slug),
+       quoteJson = Value(quoteJson);
+  static Insertable<Quote> custom({
+    Expression<String>? id,
+    Expression<String>? slug,
+    Expression<String>? quoteJson,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (slug != null) 'slug': slug,
+      if (quoteJson != null) 'quote_json': quoteJson,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  QuotesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? slug,
+    Value<String>? quoteJson,
+    Value<bool>? isDeleted,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return QuotesCompanion(
+      id: id ?? this.id,
+      slug: slug ?? this.slug,
+      quoteJson: quoteJson ?? this.quoteJson,
+      isDeleted: isDeleted ?? this.isDeleted,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (slug.present) {
+      map['slug'] = Variable<String>(slug.value);
+    }
+    if (quoteJson.present) {
+      map['quote_json'] = Variable<String>(quoteJson.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuotesCompanion(')
+          ..write('id: $id, ')
+          ..write('slug: $slug, ')
+          ..write('quoteJson: $quoteJson, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $LastSearchedTable extends LastSearched
     with TableInfo<$LastSearchedTable, LastSearchedData> {
   @override
@@ -2675,6 +3155,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
   late final $SyncInfoTable syncInfo = $SyncInfoTable(this);
   late final $LikesTable likes = $LikesTable(this);
   late final $BookmarksTable bookmarks = $BookmarksTable(this);
+  late final $QuotesTable quotes = $QuotesTable(this);
   late final $LastSearchedTable lastSearched = $LastSearchedTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -2689,6 +3170,7 @@ abstract class _$AppStorage extends GeneratedDatabase {
     syncInfo,
     likes,
     bookmarks,
+    quotes,
     lastSearched,
   ];
 }
@@ -3474,6 +3956,8 @@ typedef $$SyncInfoTableCreateCompanionBuilder =
       Value<DateTime?> sentLikesSyncAt,
       Value<DateTime?> receivedBookmarksSyncAt,
       Value<DateTime?> sentBookmarksSyncAt,
+      Value<DateTime?> receivedQuotesSyncAt,
+      Value<DateTime?> sentQuotesSyncAt,
     });
 typedef $$SyncInfoTableUpdateCompanionBuilder =
     SyncInfoCompanion Function({
@@ -3484,6 +3968,8 @@ typedef $$SyncInfoTableUpdateCompanionBuilder =
       Value<DateTime?> sentLikesSyncAt,
       Value<DateTime?> receivedBookmarksSyncAt,
       Value<DateTime?> sentBookmarksSyncAt,
+      Value<DateTime?> receivedQuotesSyncAt,
+      Value<DateTime?> sentQuotesSyncAt,
     });
 
 class $$SyncInfoTableFilterComposer
@@ -3527,6 +4013,16 @@ class $$SyncInfoTableFilterComposer
 
   ColumnFilters<DateTime> get sentBookmarksSyncAt => $composableBuilder(
     column: $table.sentBookmarksSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get receivedQuotesSyncAt => $composableBuilder(
+    column: $table.receivedQuotesSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get sentQuotesSyncAt => $composableBuilder(
+    column: $table.sentQuotesSyncAt,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -3574,6 +4070,16 @@ class $$SyncInfoTableOrderingComposer
     column: $table.sentBookmarksSyncAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get receivedQuotesSyncAt => $composableBuilder(
+    column: $table.receivedQuotesSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get sentQuotesSyncAt => $composableBuilder(
+    column: $table.sentQuotesSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SyncInfoTableAnnotationComposer
@@ -3617,6 +4123,16 @@ class $$SyncInfoTableAnnotationComposer
     column: $table.sentBookmarksSyncAt,
     builder: (column) => column,
   );
+
+  GeneratedColumn<DateTime> get receivedQuotesSyncAt => $composableBuilder(
+    column: $table.receivedQuotesSyncAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get sentQuotesSyncAt => $composableBuilder(
+    column: $table.sentQuotesSyncAt,
+    builder: (column) => column,
+  );
 }
 
 class $$SyncInfoTableTableManager
@@ -3657,6 +4173,8 @@ class $$SyncInfoTableTableManager
                 Value<DateTime?> sentLikesSyncAt = const Value.absent(),
                 Value<DateTime?> receivedBookmarksSyncAt = const Value.absent(),
                 Value<DateTime?> sentBookmarksSyncAt = const Value.absent(),
+                Value<DateTime?> receivedQuotesSyncAt = const Value.absent(),
+                Value<DateTime?> sentQuotesSyncAt = const Value.absent(),
               }) => SyncInfoCompanion(
                 id: id,
                 receivedProgressSyncAt: receivedProgressSyncAt,
@@ -3665,6 +4183,8 @@ class $$SyncInfoTableTableManager
                 sentLikesSyncAt: sentLikesSyncAt,
                 receivedBookmarksSyncAt: receivedBookmarksSyncAt,
                 sentBookmarksSyncAt: sentBookmarksSyncAt,
+                receivedQuotesSyncAt: receivedQuotesSyncAt,
+                sentQuotesSyncAt: sentQuotesSyncAt,
               ),
           createCompanionCallback:
               ({
@@ -3675,6 +4195,8 @@ class $$SyncInfoTableTableManager
                 Value<DateTime?> sentLikesSyncAt = const Value.absent(),
                 Value<DateTime?> receivedBookmarksSyncAt = const Value.absent(),
                 Value<DateTime?> sentBookmarksSyncAt = const Value.absent(),
+                Value<DateTime?> receivedQuotesSyncAt = const Value.absent(),
+                Value<DateTime?> sentQuotesSyncAt = const Value.absent(),
               }) => SyncInfoCompanion.insert(
                 id: id,
                 receivedProgressSyncAt: receivedProgressSyncAt,
@@ -3683,6 +4205,8 @@ class $$SyncInfoTableTableManager
                 sentLikesSyncAt: sentLikesSyncAt,
                 receivedBookmarksSyncAt: receivedBookmarksSyncAt,
                 sentBookmarksSyncAt: sentBookmarksSyncAt,
+                receivedQuotesSyncAt: receivedQuotesSyncAt,
+                sentQuotesSyncAt: sentQuotesSyncAt,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -4059,6 +4583,199 @@ typedef $$BookmarksTableProcessedTableManager =
       Bookmark,
       PrefetchHooks Function()
     >;
+typedef $$QuotesTableCreateCompanionBuilder =
+    QuotesCompanion Function({
+      required String id,
+      required String slug,
+      required String quoteJson,
+      Value<bool> isDeleted,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+typedef $$QuotesTableUpdateCompanionBuilder =
+    QuotesCompanion Function({
+      Value<String> id,
+      Value<String> slug,
+      Value<String> quoteJson,
+      Value<bool> isDeleted,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$QuotesTableFilterComposer extends Composer<_$AppStorage, $QuotesTable> {
+  $$QuotesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get quoteJson => $composableBuilder(
+    column: $table.quoteJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$QuotesTableOrderingComposer
+    extends Composer<_$AppStorage, $QuotesTable> {
+  $$QuotesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get slug => $composableBuilder(
+    column: $table.slug,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get quoteJson => $composableBuilder(
+    column: $table.quoteJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$QuotesTableAnnotationComposer
+    extends Composer<_$AppStorage, $QuotesTable> {
+  $$QuotesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get slug =>
+      $composableBuilder(column: $table.slug, builder: (column) => column);
+
+  GeneratedColumn<String> get quoteJson =>
+      $composableBuilder(column: $table.quoteJson, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$QuotesTableTableManager
+    extends
+        RootTableManager<
+          _$AppStorage,
+          $QuotesTable,
+          Quote,
+          $$QuotesTableFilterComposer,
+          $$QuotesTableOrderingComposer,
+          $$QuotesTableAnnotationComposer,
+          $$QuotesTableCreateCompanionBuilder,
+          $$QuotesTableUpdateCompanionBuilder,
+          (Quote, BaseReferences<_$AppStorage, $QuotesTable, Quote>),
+          Quote,
+          PrefetchHooks Function()
+        > {
+  $$QuotesTableTableManager(_$AppStorage db, $QuotesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$QuotesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$QuotesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$QuotesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> slug = const Value.absent(),
+                Value<String> quoteJson = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => QuotesCompanion(
+                id: id,
+                slug: slug,
+                quoteJson: quoteJson,
+                isDeleted: isDeleted,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String slug,
+                required String quoteJson,
+                Value<bool> isDeleted = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => QuotesCompanion.insert(
+                id: id,
+                slug: slug,
+                quoteJson: quoteJson,
+                isDeleted: isDeleted,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$QuotesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppStorage,
+      $QuotesTable,
+      Quote,
+      $$QuotesTableFilterComposer,
+      $$QuotesTableOrderingComposer,
+      $$QuotesTableAnnotationComposer,
+      $$QuotesTableCreateCompanionBuilder,
+      $$QuotesTableUpdateCompanionBuilder,
+      (Quote, BaseReferences<_$AppStorage, $QuotesTable, Quote>),
+      Quote,
+      PrefetchHooks Function()
+    >;
 typedef $$LastSearchedTableCreateCompanionBuilder =
     LastSearchedCompanion Function({
       Value<int> id,
@@ -4235,6 +4952,8 @@ class $AppStorageManager {
       $$LikesTableTableManager(_db, _db.likes);
   $$BookmarksTableTableManager get bookmarks =>
       $$BookmarksTableTableManager(_db, _db.bookmarks);
+  $$QuotesTableTableManager get quotes =>
+      $$QuotesTableTableManager(_db, _db.quotes);
   $$LastSearchedTableTableManager get lastSearched =>
       $$LastSearchedTableTableManager(_db, _db.lastSearched);
 }

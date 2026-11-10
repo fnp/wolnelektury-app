@@ -38,6 +38,9 @@ _ListItemModel _$ListItemModelFromJson(Map<String, dynamic> json) =>
       bookmark: json['bookmark'] == null
           ? null
           : BookmarkModel.fromJson(json['bookmark'] as Map<String, dynamic>),
+      quote: json['quote'] == null
+          ? null
+          : QuoteModel.fromJson(json['quote'] as Map<String, dynamic>),
       note: json['note'] as String? ?? '',
     );
 
@@ -51,5 +54,6 @@ Map<String, dynamic> _$ListItemModelToJson(_ListItemModel instance) =>
       'deleted': instance.deleted,
       'book': instance.book,
       'bookmark': instance.bookmark,
+      'quote': instance.quote,
       'note': instance.note,
     };

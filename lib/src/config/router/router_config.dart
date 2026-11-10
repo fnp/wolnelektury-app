@@ -64,3 +64,8 @@ const bookmarkListCreationPageConfig = _RouteConfig(
   name: 'bookmarkListCreationPage',
   path: '/bookmarkListCreationPage',
 );
+
+const quoteListCreationPageConfig = _RouteConfig(
+  name: 'quoteListCreationPage',
+  path: '/quoteListCreationPage',
+);

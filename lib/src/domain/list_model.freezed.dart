@@ -168,8 +168,7 @@ as List<ListItemModel>,
 /// @nodoc
 mixin _$ListItemModel {
 
- String? get uuid;@JsonKey(name: 'list_slug') String get listSlug; int? get order; int? get timestamp; bool get favorites; bool get deleted; BookModel? get book; BookmarkModel? get bookmark;// String? fragment,
-// String? quote,
+ String? get uuid;@JsonKey(name: 'list_slug') String get listSlug; int? get order; int? get timestamp; bool get favorites; bool get deleted; BookModel? get book; BookmarkModel? get bookmark; QuoteModel? get quote;// String? fragment,
  String get note;
 /// Create a copy of ListItemModel
 /// with the given fields replaced by the non-null parameter values.
@@ -183,16 +182,16 @@ $ListItemModelCopyWith<ListItemModel> get copyWith => _$ListItemModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListItemModel&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.listSlug, listSlug) || other.listSlug == listSlug)&&(identical(other.order, order) || other.order == order)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.deleted, deleted) || other.deleted == deleted)&&(identical(other.book, book) || other.book == book)&&(identical(other.bookmark, bookmark) || other.bookmark == bookmark)&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListItemModel&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.listSlug, listSlug) || other.listSlug == listSlug)&&(identical(other.order, order) || other.order == order)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.deleted, deleted) || other.deleted == deleted)&&(identical(other.book, book) || other.book == book)&&(identical(other.bookmark, bookmark) || other.bookmark == bookmark)&&(identical(other.quote, quote) || other.quote == quote)&&(identical(other.note, note) || other.note == note));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uuid,listSlug,order,timestamp,favorites,deleted,book,bookmark,note);
+int get hashCode => Object.hash(runtimeType,uuid,listSlug,order,timestamp,favorites,deleted,book,bookmark,quote,note);
 
 @override
 String toString() {
-  return 'ListItemModel(uuid: $uuid, listSlug: $listSlug, order: $order, timestamp: $timestamp, favorites: $favorites, deleted: $deleted, book: $book, bookmark: $bookmark, note: $note)';
+  return 'ListItemModel(uuid: $uuid, listSlug: $listSlug, order: $order, timestamp: $timestamp, favorites: $favorites, deleted: $deleted, book: $book, bookmark: $bookmark, quote: $quote, note: $note)';
 }
 
 
@@ -203,11 +202,11 @@ abstract mixin class $ListItemModelCopyWith<$Res>  {
   factory $ListItemModelCopyWith(ListItemModel value, $Res Function(ListItemModel) _then) = _$ListItemModelCopyWithImpl;
 @useResult
 $Res call({
- String? uuid,@JsonKey(name: 'list_slug') String listSlug, int? order, int? timestamp, bool favorites, bool deleted, BookModel? book, BookmarkModel? bookmark, String note
+ String? uuid,@JsonKey(name: 'list_slug') String listSlug, int? order, int? timestamp, bool favorites, bool deleted, BookModel? book, BookmarkModel? bookmark, QuoteModel? quote, String note
 });
 
 
-$BookModelCopyWith<$Res>? get book;$BookmarkModelCopyWith<$Res>? get bookmark;
+$BookModelCopyWith<$Res>? get book;$BookmarkModelCopyWith<$Res>? get bookmark;$QuoteModelCopyWith<$Res>? get quote;
 
 }
 /// @nodoc
@@ -220,7 +219,7 @@ class _$ListItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ListItemModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? uuid = freezed,Object? listSlug = null,Object? order = freezed,Object? timestamp = freezed,Object? favorites = null,Object? deleted = null,Object? book = freezed,Object? bookmark = freezed,Object? note = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? uuid = freezed,Object? listSlug = null,Object? order = freezed,Object? timestamp = freezed,Object? favorites = null,Object? deleted = null,Object? book = freezed,Object? bookmark = freezed,Object? quote = freezed,Object? note = null,}) {
   return _then(_self.copyWith(
 uuid: freezed == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non_nullable
 as String?,listSlug: null == listSlug ? _self.listSlug : listSlug // ignore: cast_nullable_to_non_nullable
@@ -230,7 +229,8 @@ as int?,favorites: null == favorites ? _self.favorites : favorites // ignore: ca
 as bool,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
 as bool,book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
 as BookModel?,bookmark: freezed == bookmark ? _self.bookmark : bookmark // ignore: cast_nullable_to_non_nullable
-as BookmarkModel?,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as BookmarkModel?,quote: freezed == quote ? _self.quote : quote // ignore: cast_nullable_to_non_nullable
+as QuoteModel?,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -258,6 +258,18 @@ $BookmarkModelCopyWith<$Res>? get bookmark {
   return $BookmarkModelCopyWith<$Res>(_self.bookmark!, (value) {
     return _then(_self.copyWith(bookmark: value));
   });
+}/// Create a copy of ListItemModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$QuoteModelCopyWith<$Res>? get quote {
+    if (_self.quote == null) {
+    return null;
+  }
+
+  return $QuoteModelCopyWith<$Res>(_self.quote!, (value) {
+    return _then(_self.copyWith(quote: value));
+  });
 }
 }
 
@@ -266,7 +278,7 @@ $BookmarkModelCopyWith<$Res>? get bookmark {
 @JsonSerializable()
 
 class _ListItemModel implements ListItemModel {
-  const _ListItemModel({this.uuid, @JsonKey(name: 'list_slug') required this.listSlug, this.order, this.timestamp, this.favorites = false, this.deleted = false, this.book, this.bookmark, this.note = ''});
+  const _ListItemModel({this.uuid, @JsonKey(name: 'list_slug') required this.listSlug, this.order, this.timestamp, this.favorites = false, this.deleted = false, this.book, this.bookmark, this.quote, this.note = ''});
   factory _ListItemModel.fromJson(Map<String, dynamic> json) => _$ListItemModelFromJson(json);
 
 @override final  String? uuid;
@@ -277,8 +289,8 @@ class _ListItemModel implements ListItemModel {
 @override@JsonKey() final  bool deleted;
 @override final  BookModel? book;
 @override final  BookmarkModel? bookmark;
+@override final  QuoteModel? quote;
 // String? fragment,
-// String? quote,
 @override@JsonKey() final  String note;
 
 /// Create a copy of ListItemModel
@@ -294,16 +306,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListItemModel&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.listSlug, listSlug) || other.listSlug == listSlug)&&(identical(other.order, order) || other.order == order)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.deleted, deleted) || other.deleted == deleted)&&(identical(other.book, book) || other.book == book)&&(identical(other.bookmark, bookmark) || other.bookmark == bookmark)&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListItemModel&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.listSlug, listSlug) || other.listSlug == listSlug)&&(identical(other.order, order) || other.order == order)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.deleted, deleted) || other.deleted == deleted)&&(identical(other.book, book) || other.book == book)&&(identical(other.bookmark, bookmark) || other.bookmark == bookmark)&&(identical(other.quote, quote) || other.quote == quote)&&(identical(other.note, note) || other.note == note));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uuid,listSlug,order,timestamp,favorites,deleted,book,bookmark,note);
+int get hashCode => Object.hash(runtimeType,uuid,listSlug,order,timestamp,favorites,deleted,book,bookmark,quote,note);
 
 @override
 String toString() {
-  return 'ListItemModel(uuid: $uuid, listSlug: $listSlug, order: $order, timestamp: $timestamp, favorites: $favorites, deleted: $deleted, book: $book, bookmark: $bookmark, note: $note)';
+  return 'ListItemModel(uuid: $uuid, listSlug: $listSlug, order: $order, timestamp: $timestamp, favorites: $favorites, deleted: $deleted, book: $book, bookmark: $bookmark, quote: $quote, note: $note)';
 }
 
 
@@ -314,11 +326,11 @@ abstract mixin class _$ListItemModelCopyWith<$Res> implements $ListItemModelCopy
   factory _$ListItemModelCopyWith(_ListItemModel value, $Res Function(_ListItemModel) _then) = __$ListItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? uuid,@JsonKey(name: 'list_slug') String listSlug, int? order, int? timestamp, bool favorites, bool deleted, BookModel? book, BookmarkModel? bookmark, String note
+ String? uuid,@JsonKey(name: 'list_slug') String listSlug, int? order, int? timestamp, bool favorites, bool deleted, BookModel? book, BookmarkModel? bookmark, QuoteModel? quote, String note
 });
 
 
-@override $BookModelCopyWith<$Res>? get book;@override $BookmarkModelCopyWith<$Res>? get bookmark;
+@override $BookModelCopyWith<$Res>? get book;@override $BookmarkModelCopyWith<$Res>? get bookmark;@override $QuoteModelCopyWith<$Res>? get quote;
 
 }
 /// @nodoc
@@ -331,7 +343,7 @@ class __$ListItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ListItemModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? uuid = freezed,Object? listSlug = null,Object? order = freezed,Object? timestamp = freezed,Object? favorites = null,Object? deleted = null,Object? book = freezed,Object? bookmark = freezed,Object? note = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? uuid = freezed,Object? listSlug = null,Object? order = freezed,Object? timestamp = freezed,Object? favorites = null,Object? deleted = null,Object? book = freezed,Object? bookmark = freezed,Object? quote = freezed,Object? note = null,}) {
   return _then(_ListItemModel(
 uuid: freezed == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non_nullable
 as String?,listSlug: null == listSlug ? _self.listSlug : listSlug // ignore: cast_nullable_to_non_nullable
@@ -341,7 +353,8 @@ as int?,favorites: null == favorites ? _self.favorites : favorites // ignore: ca
 as bool,deleted: null == deleted ? _self.deleted : deleted // ignore: cast_nullable_to_non_nullable
 as bool,book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
 as BookModel?,bookmark: freezed == bookmark ? _self.bookmark : bookmark // ignore: cast_nullable_to_non_nullable
-as BookmarkModel?,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as BookmarkModel?,quote: freezed == quote ? _self.quote : quote // ignore: cast_nullable_to_non_nullable
+as QuoteModel?,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -369,6 +382,18 @@ $BookmarkModelCopyWith<$Res>? get bookmark {
 
   return $BookmarkModelCopyWith<$Res>(_self.bookmark!, (value) {
     return _then(_self.copyWith(bookmark: value));
+  });
+}/// Create a copy of ListItemModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$QuoteModelCopyWith<$Res>? get quote {
+    if (_self.quote == null) {
+    return null;
+  }
+
+  return $QuoteModelCopyWith<$Res>(_self.quote!, (value) {
+    return _then(_self.copyWith(quote: value));
   });
 }
 }

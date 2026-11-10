@@ -98,6 +98,7 @@ class MyApp extends StatelessWidget {
               get.get(),
               get.get(),
               get.get(),
+              get.get(),
             );
           },
         ),

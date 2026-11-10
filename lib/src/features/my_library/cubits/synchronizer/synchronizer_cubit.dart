@@ -6,6 +6,7 @@ import 'package:wolnelektury/src/application/app_storage/services/app_storage_sy
 import 'package:wolnelektury/src/data/bookmarks_repository.dart';
 import 'package:wolnelektury/src/data/likes_repository.dart';
 import 'package:wolnelektury/src/data/progress_repository.dart';
+import 'package:wolnelektury/src/data/quotes_repository.dart';
 import 'package:wolnelektury/src/utils/cubit/safe_cubit.dart';
 import 'package:wolnelektury/src/utils/data_state/data_state.dart';
 
@@ -16,16 +17,19 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
   final ProgressRepository _progressRepository;
   final LikesRepository _likesRepository;
   final BookmarksRepository _bookmarksRepository;
+  final QuotesRepository _quotesRepository;
   final AppStorageSyncService _syncStorage;
   SynchronizerCubit(
     this._progressRepository,
     this._likesRepository,
     this._bookmarksRepository,
+    this._quotesRepository,
     this._syncStorage,
   ) : super(const SynchronizerState());
 
   Future<void> cleanupSyncData() async {
     await _bookmarksRepository.reset();
+    await _quotesRepository.reset();
     await _likesRepository.reset();
     await _syncStorage.clearSyncData();
   }
@@ -35,16 +39,19 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
     final likesCompleter = Completer<void>();
     final progressCompleter = Completer<void>();
     final bookmarksCompleter = Completer<void>();
+    final quotesCompleter = Completer<void>();
 
     sendOutLikesSync(completer: likesCompleter, emitState: false);
     sentOutProgressSync(completer: progressCompleter, emitState: false);
     sendOutBookmarksSync(completer: bookmarksCompleter, emitState: false);
+    sendOutQuotesSync(completer: quotesCompleter, emitState: false);
 
     try {
       await Future.wait([
         likesCompleter.future,
         progressCompleter.future,
         bookmarksCompleter.future,
+        quotesCompleter.future,
       ], eagerError: true).timeout(
         const Duration(seconds: 30),
         onTimeout: () {
@@ -175,6 +182,47 @@ class SynchronizerCubit extends SafeCubit<SynchronizerState> {
 
   Future<void> _receiveInBookmarksSync({bool emitState = true}) async {
     final result = await _bookmarksRepository.receiveInBookmarksSync();
+    result.handle(
+      success: (_, _) {
+        if (emitState) {
+          emit(state.copyWith(isLoading: false));
+        }
+      },
+      failure: (failure) {
+        if (emitState) {
+          emit(state.copyWith(isLoading: false, isError: true));
+        }
+      },
+    );
+  }
+
+  Future<void> sendOutQuotesSync({
+    Completer<void>? completer,
+    bool emitState = true,
+  }) async {
+    if (emitState) {
+      emit(state.copyWith(isLoading: true, isError: false));
+    }
+    final result = await _quotesRepository.sendOutQuotesSync();
+    result.handle(
+      success: (data, _) async {
+        await _receiveInQuotesSync(emitState: emitState);
+        if (emitState) {
+          emit(state.copyWith(isLoading: false));
+        }
+        completer?.complete();
+      },
+      failure: (failure) {
+        if (emitState) {
+          emit(state.copyWith(isLoading: false, isError: true));
+        }
+        completer?.complete();
+      },
+    );
+  }
+
+  Future<void> _receiveInQuotesSync({bool emitState = true}) async {
+    final result = await _quotesRepository.receiveInQuotesSync();
     result.handle(
       success: (_, _) {
         if (emitState) {

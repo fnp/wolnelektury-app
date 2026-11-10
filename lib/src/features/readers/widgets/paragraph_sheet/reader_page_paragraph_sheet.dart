@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/config/getter.dart';
+import 'package:wolnelektury/src/enums/reader_font_type.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
 import 'package:wolnelektury/src/features/bookmarks/cubits/bookmarks/bookmarks_cubit.dart';
 import 'package:wolnelektury/src/features/books/cubits/single_book/single_book_cubit.dart';
@@ -15,7 +16,9 @@ import 'package:wolnelektury/src/features/common/widgets/bookmarks/create_bookma
 import 'package:wolnelektury/src/features/common/widgets/button/text_button_with_icon.dart';
 import 'package:wolnelektury/src/features/common/widgets/connectivity_wrapper.dart';
 import 'package:wolnelektury/src/features/lists/cubits/list_editor/list_editor_cubit.dart';
+import 'package:wolnelektury/src/features/readers/cubits/quotes/quotes_cubit.dart';
 import 'package:wolnelektury/src/features/readers/cubits/reader_page/reader_page_cubit.dart';
+import 'package:wolnelektury/src/features/readers/widgets/paragraph_sheet/reader_quote_creator_sheet.dart';
 import 'package:wolnelektury/src/utils/audio/on_listen.dart';
 import 'package:wolnelektury/src/utils/share/share_utils.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
@@ -44,6 +47,7 @@ class ReaderPageParagraphSheet extends StatelessWidget {
           providers: [
             BlocProvider.value(value: context.read<ReaderPageCubit>()),
             BlocProvider.value(value: context.read<BookmarksCubit>()),
+            BlocProvider.value(value: context.read<QuotesCubit>()),
             BlocProvider.value(value: context.read<AudioCubit>()),
             BlocProvider.value(value: context.read<ScrollCubit>()),
             BlocProvider.value(value: context.read<AuthCubit>()),
@@ -183,6 +187,69 @@ class ReaderPageParagraphSheet extends StatelessWidget {
                           },
                           activeColor: CustomColors.white,
                         ),
+                        const SizedBox(height: Dimensions.mediumPadding),
+                        _QuotesWrapper(
+                          child: (isAuth) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextButtonWithIcon(
+                                  nonActiveText: LocaleKeys
+                                      .reader_sheet_quote_create
+                                      .tr(),
+                                  nonActiveIcon: Icons.format_quote,
+                                  onPressed: () {
+                                    if (!isAuth) {
+                                      Navigator.of(context).pop();
+                                      CustomSnackbar.loginRequired(context);
+                                      return;
+                                    }
+                                    final readerState = readerPageCubit.state;
+                                    final element =
+                                        readerState.selectedParagraph;
+                                    final book = readerState.currentBook;
+                                    final quotesCubit = context
+                                        .read<QuotesCubit>();
+                                    if (element == null || book == null) return;
+                                    // selectedIndex is the raw list-view index
+                                    // (offset by the header at index 0), so
+                                    // contents index is selectedIndex - 1.
+                                    final contents =
+                                        readerState.readerBook?.contents ?? [];
+                                    final contentIndex =
+                                        (readerState.selectedIndex ?? 0) - 1;
+                                    final previousElement = contentIndex > 0
+                                        ? contents[contentIndex - 1]
+                                        : null;
+                                    final nextElement =
+                                        contentIndex >= 0 &&
+                                            contentIndex < contents.length - 1
+                                        ? contents[contentIndex + 1]
+                                        : null;
+                                    Navigator.of(context).pop();
+                                    ReaderQuoteCreatorSheet.show(
+                                      previousElement: previousElement,
+                                      element: element,
+                                      nextElement: nextElement,
+                                      book: book,
+                                      quotesCubit: quotesCubit,
+                                      fontFamily:
+                                          readerState.fontType.familyName,
+                                      fontSize: readerState.getFontSize(
+                                        Theme.of(context),
+                                      ),
+                                      fontHeight: readerState.getLineHeight(),
+                                    );
+                                  },
+                                  activeColor: CustomColors.white,
+                                ),
+                                const SizedBox(
+                                  height: Dimensions.mediumPadding,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                         const SizedBox(height: Dimensions.spacer * 2),
                       ],
                     ),
@@ -262,6 +329,27 @@ class _ListeningWrapper extends StatelessWidget {
 class _BookmarksWrapper extends StatelessWidget {
   final Widget Function(bool isAuthenticated) child;
   const _BookmarksWrapper({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConnectivityWrapper(
+      builder: (context, hasConnection) {
+        if (!hasConnection) {
+          return const SizedBox.shrink();
+        }
+        return AuthWrapper(
+          child: (isAuthenticated) {
+            return child(isAuthenticated);
+          },
+        );
+      },
+    );
+  }
+}
+
+class _QuotesWrapper extends StatelessWidget {
+  final Widget Function(bool isAuthenticated) child;
+  const _QuotesWrapper({required this.child});
 
   @override
   Widget build(BuildContext context) {

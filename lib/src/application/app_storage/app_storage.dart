@@ -69,6 +69,18 @@ class Bookmarks extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class Quotes extends Table {
+  // Server uuid, or a locally generated id until the quote is synced.
+  TextColumn get id => text()();
+  TextColumn get slug => text()();
+  TextColumn get quoteJson => text()();
+  BoolColumn get isDeleted => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 class SyncInfo extends Table {
   IntColumn get id => integer().autoIncrement()();
   //
@@ -80,6 +92,9 @@ class SyncInfo extends Table {
   //
   DateTimeColumn get receivedBookmarksSyncAt => dateTime().nullable()();
   DateTimeColumn get sentBookmarksSyncAt => dateTime().nullable()();
+  //
+  DateTimeColumn get receivedQuotesSyncAt => dateTime().nullable()();
+  DateTimeColumn get sentQuotesSyncAt => dateTime().nullable()();
 }
 
 @DriftDatabase(
@@ -92,6 +107,7 @@ class SyncInfo extends Table {
     SyncInfo,
     Likes,
     Bookmarks,
+    Quotes,
     LastSearched,
   ],
 )
@@ -105,7 +121,7 @@ class AppStorage extends _$AppStorage {
   }
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -121,6 +137,11 @@ class AppStorage extends _$AppStorage {
           ),
         );
         await delete(bookmarks).go();
+      }
+      if (from < 4) {
+        await m.createTable(quotes);
+        await m.addColumn(syncInfo, syncInfo.receivedQuotesSyncAt);
+        await m.addColumn(syncInfo, syncInfo.sentQuotesSyncAt);
       }
     },
   );

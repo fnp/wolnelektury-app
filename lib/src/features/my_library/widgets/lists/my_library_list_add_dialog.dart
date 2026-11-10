@@ -11,11 +11,13 @@ class MyLibraryListAddDialog extends StatelessWidget {
   final ListModel list;
   final VoidCallback onAddBooks;
   final VoidCallback onAddBookmarks;
+  final VoidCallback onAddQuotes;
   const MyLibraryListAddDialog({
     super.key,
     required this.list,
     required this.onAddBooks,
     required this.onAddBookmarks,
+    required this.onAddQuotes,
   });
 
   static void show({
@@ -23,6 +25,7 @@ class MyLibraryListAddDialog extends StatelessWidget {
     required ListModel list,
     required VoidCallback onAddBooks,
     required VoidCallback onAddBookmarks,
+    required VoidCallback onAddQuotes,
   }) {
     showDialog(
       context: context,
@@ -31,6 +34,7 @@ class MyLibraryListAddDialog extends StatelessWidget {
           list: list,
           onAddBooks: onAddBooks,
           onAddBookmarks: onAddBookmarks,
+          onAddQuotes: onAddQuotes,
         );
       },
     );
@@ -44,6 +48,11 @@ class MyLibraryListAddDialog extends StatelessWidget {
   void _onAddBookmarks(BuildContext context) {
     Navigator.of(context).pop();
     onAddBookmarks();
+  }
+
+  void _onAddQuotes(BuildContext context) {
+    Navigator.of(context).pop();
+    onAddQuotes();
   }
 
   @override
@@ -64,6 +73,12 @@ class MyLibraryListAddDialog extends StatelessWidget {
             icon: CustomIcons.bookmark,
             title: LocaleKeys.my_library_lists_add_dialog_bookmarks.tr(),
             onTap: () => _onAddBookmarks(context),
+          ),
+          const SizedBox(height: Dimensions.smallPadding),
+          _AddOption(
+            icon: Icons.format_quote,
+            title: LocaleKeys.my_library_lists_add_dialog_quotes.tr(),
+            onTap: () => _onAddQuotes(context),
           ),
         ],
       ),
