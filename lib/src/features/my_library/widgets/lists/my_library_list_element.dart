@@ -356,44 +356,49 @@ class _MyLibraryListQuoteElement extends MyLibraryListElement {
                           Dimensions.smallBorderRadius,
                         ),
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: Dimensions.mediumPadding),
-                          const Icon(
-                            Icons.format_quote,
-                            color: CustomColors.secondaryBlueColor,
-                            size: 32,
-                          ),
-                          const SizedBox(width: Dimensions.largePadding),
-
-                          Expanded(child: QuoteWidget(quote: quote)),
-
-                          // Delete button for list owners
-                          if (isListOwner) ...[
-                            const SizedBox(width: Dimensions.smallPadding),
-                            CustomButton(
-                              semanticLabel: LocaleKeys
-                                  .common_semantic_delete_quote
-                                  .tr(),
-                              onPressed: () {
-                                listsCubit.removeItemFromList(item: item);
-                                CustomSnackbar.success(
-                                  context,
-                                  LocaleKeys.book_lists_sheet_delete.tr(),
-                                  onRevert: () {
-                                    listsCubit.undoSoftRemoval();
-                                  },
-                                );
-                              },
-                              icon: CustomIcons.delete_forever,
-                              backgroundColor: CustomColors.red,
-                              iconColor: CustomColors.white,
-                              size: 36,
-                              iconSize: 20,
+                      child: IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(width: Dimensions.mediumPadding),
+                            const Icon(
+                              Icons.format_quote,
+                              color: CustomColors.secondaryBlueColor,
+                              size: 32,
                             ),
+                            const SizedBox(width: Dimensions.largePadding),
+
+                            Expanded(child: QuoteWidget(quote: quote)),
+
+                            // Delete button for list owners
+                            if (isListOwner) ...[
+                              const SizedBox(width: Dimensions.smallPadding),
+                              Align(
+                                alignment: Alignment.center,
+                                child: CustomButton(
+                                  semanticLabel: LocaleKeys
+                                      .common_semantic_delete_quote
+                                      .tr(),
+                                  onPressed: () {
+                                    listsCubit.removeItemFromList(item: item);
+                                    CustomSnackbar.success(
+                                      context,
+                                      LocaleKeys.book_lists_sheet_delete.tr(),
+                                      onRevert: () {
+                                        listsCubit.undoSoftRemoval();
+                                      },
+                                    );
+                                  },
+                                  icon: CustomIcons.delete_forever,
+                                  backgroundColor: CustomColors.red,
+                                  iconColor: CustomColors.white,
+                                  size: 36,
+                                  iconSize: 20,
+                                ),
+                              ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
                     ),
                   ),

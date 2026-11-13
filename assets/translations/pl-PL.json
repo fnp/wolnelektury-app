@@ -122,6 +122,7 @@
     },
     "audio_dialog": {
         "part": "Rozdział {part}",
+        "narrator": "Czyta: {narrator}",
         "error": "Nie udało się odtworzyć audiobooku",
         "paragraph": "Akapit {paragraph}",
         "delete_paragraph": "Pomyślnie usunąłeś zakładkę",

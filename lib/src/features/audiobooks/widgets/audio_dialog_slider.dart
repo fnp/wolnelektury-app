@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolnelektury/generated/locale_keys.g.dart';
 import 'package:wolnelektury/src/domain/book_model.dart';
 import 'package:wolnelektury/src/features/audiobooks/cubits/audio/audio_cubit.dart';
+import 'package:wolnelektury/src/features/audiobooks/widgets/audio_dialog_narrator.dart';
 import 'package:wolnelektury/src/utils/duration/format_time.dart';
 import 'package:wolnelektury/src/utils/ui/custom_colors.dart';
 import 'package:wolnelektury/src/utils/ui/dimensions.dart';
@@ -61,6 +62,10 @@ class AudioDialogSlider extends StatelessWidget {
               ),
             ],
           ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: Dimensions.modalsPadding),
+          child: AudioDialogNarrator(),
         ),
         const SizedBox(height: Dimensions.smallPadding),
         const Padding(

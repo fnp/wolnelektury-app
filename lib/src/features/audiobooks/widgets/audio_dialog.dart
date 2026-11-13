@@ -188,15 +188,15 @@ class AudioDialog extends StatelessWidget {
                                       ] else ...[
                                         AudioDialogSlider(book: state.book!),
                                         const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal:
-                                                Dimensions.modalsPadding -
+                                          padding: EdgeInsets.fromLTRB(
+                                            Dimensions.modalsPadding -
                                                 Dimensions.smallPadding * 2,
+                                            0,
+                                            Dimensions.modalsPadding -
+                                                Dimensions.smallPadding * 2,
+                                            Dimensions.largePadding,
                                           ),
                                           child: AudioDialogControls(),
-                                        ),
-                                        const SizedBox(
-                                          height: Dimensions.spacer,
                                         ),
                                       ],
                                     ],
